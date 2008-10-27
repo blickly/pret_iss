@@ -1,0 +1,10 @@
+## Variable that points to SystemC installation path
+#SYSTEMC = /Users/isaacliu/Tools/systemc-2.2.0
+#SYSTEMC = /cygdrive/c/workspace/systemc
+SYSTEMC = /usr/local/systemc-2.2
+
+
+TARGET_ARCH = linux
+#TARGET_ARCH = cygwin
+
+

@@ -1,0 +1,8 @@
+SystemC Simulation
+int                    : 22
+unsigned hexdecimal int: 16
+double                    : 22.200000
+float                     : 22.222000
+char                      : a
+char *                    : PRET is cool
+

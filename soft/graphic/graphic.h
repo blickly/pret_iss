@@ -1,0 +1,67 @@
+#ifndef GRAPHIC_H
+#define GRAPHIC_H
+
+#include "types.h"
+
+#define N_MAX_GRAPHIC_COMMAND_ARG 10
+
+#define GRAPHIC_SPRITE_WIDTH    64
+#define GRAPHIC_SPRITE_HEIGHT    64
+#define N_GRAPHIC_PIXELS_PER_DWORD   16
+
+
+#define GRAPHIC_COLOR_BLACK   0x00
+#define GRAPHIC_COLOR_RED   0x01
+#define GRAPHIC_COLOR_GREEN   0x02
+#define GRAPHIC_COLOR_WHITE   0x03
+#define GRAPHIC_COLOR_TRANSPARENT 0x04
+
+typedef enum {
+    GRAPHIC_COMMAND_PLOT_DOT,
+    GRAPHIC_COMMAND_PLOT_LINE,
+    GRAPHIC_COMMAND_MOVE_DIRECT,
+    GRAPHIC_COMMAND_MOVE_VECTOR,
+    GRAPHIC_COMMAND_MOVE_ARC,
+    GRAPHIC_COMMAND_UPDATE_SCREEN,
+    N_GRAPHIC_COMMAND,
+    GRAPHIC_COMMAND_SENTINEL = 0xFFFFFFFF // not for use, making the type 4 bytes
+} GRAPHIC_COMMAND_TYPE;
+
+typedef enum {
+    ID_GRAPHIC_LAYER_BACKGROUND,
+    ID_GRAPHIC_LAYER_SPRITE_0,
+    ID_GRAPHIC_LAYER_SPRITE_1,
+    ID_GRAPHIC_LAYER_SPRITE_2,
+    ID_GRAPHIC_LAYER_SPRITE_3,
+    ID_GRAPHIC_LAYER_SPRITE_4,
+    ID_GRAPHIC_LAYER_SPRITE_5,
+    ID_GRAPHIC_LAYER_SPRITE_6,
+    ID_GRAPHIC_LAYER_SPRITE_7,
+    N_ID_GRAPHIC_LAYER,
+    ID_GRAPHIC_LAYER_SENTINEL = 0xFFFFFFFF // not for use, making the type 4 bytes
+} ID_GRAPHIC_LAYER;
+
+
+struct Graphic_command_list {
+    struct Graphic_command_list * next;
+    GRAPHIC_COMMAND_TYPE command_type;
+    DWORD arg[ N_MAX_GRAPHIC_COMMAND_ARG ];
+};
+
+struct Graphic_layer {
+    BOOL is_activated;
+    DWORD pos_x;
+    DWORD pos_y;
+    DWORD pixel[ GRAPHIC_SPRITE_HEIGHT ][ GRAPHIC_SPRITE_WIDTH / N_GRAPHIC_PIXELS_PER_DWORD ];
+};
+
+struct Sprite {
+    DWORD width;
+    DWORD height;
+    DWORD pos_x;
+    DWORD pos_y;
+    BYTE * pixel;
+};
+
+
+#endif // GRAPHIC_H

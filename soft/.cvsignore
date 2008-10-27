@@ -1,0 +1,4 @@
+*.srec
+*.dump
+*.pyc
+prom.h

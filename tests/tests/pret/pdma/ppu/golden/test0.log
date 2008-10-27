@@ -1,0 +1,8 @@
+SystemC Simulation
+Load 255 bytes from 0x0 in main mem to 0x0 in scratchpad
+Switch:
+	0x40000000 => 0x24
+	0xfffffffc => 0x7fff
+Load 255 bytes from 0x40000000 in main mem to 0x100 in scratchpad
+Load 255 bytes from 0x40000100 in main mem to 0x0 in scratchpad
+End test 0

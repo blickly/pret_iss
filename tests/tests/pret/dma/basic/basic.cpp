@@ -1,0 +1,91 @@
+/*
+  Copyright (c) 2007-2008 The Regents of the University of California.
+  All rights reserved.
+
+  Permission is hereby granted, without written agreement and without
+  license or royalty fees, to use, copy, modify, and distribute this
+  software and its documentation for any purpose, provided that the
+  above copyright notice and the following two paragraphs appear in all
+  copies of this software.
+
+  IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY
+  FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+  ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+  THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF
+  SUCH DAMAGE.
+
+  THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE
+  PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
+  CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
+  ENHANCEMENTS, OR MODIFICATIONS.
+
+  PT_COPYRIGHT_VERSION_2
+  COPYRIGHTENDKEY
+*/
+#ifndef _NO_SYSTEMC_
+#include "systemc.h"
+#endif
+
+#include "core.h"
+
+/* This include file is automatically generated when running make
+   regression. This is a hack to get the PRET_ISS path for the
+   following files that are used below. */
+#include "regression.h"
+
+#define USE_CSIM 1
+
+#ifndef _NO_SYSTEMC_
+int
+sc_main(int argc, char *argv[])
+#else
+int main(int argc, char *argv[])
+#endif
+{
+#ifdef _NO_SYSTEMC_
+    cout << "SystemC Simulation" << endl;
+#else
+    sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
+#endif
+
+    /* Setup the strings for filenames
+
+       file_name : This is the file that has the location of the tests.
+    */
+
+    string cmd_file = "/tests/tests/pret/dma/basic/basic.cmd";
+    string file_name = "/tests/tests/pret/dma/basic/basic/";
+    string otxt_name = "rbasic.txt";
+    string txt_name;
+    string load_file;
+    /* Ensure that the include/regression.h set the PRET_ISS path
+       correctly */
+    if (pret_iss_path != "") {
+        load_file = pret_iss_path + file_name;
+        /* Generate the SREC files*/
+        string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str();
+        //cout << "compile command: " << compile_srec << endl;
+#ifdef USE_CSIM
+        system(compile_srec.c_str());
+        string csim_cmd = pret_iss_path + "/scripts/csim.py " + load_file.c_str() + " <" + pret_iss_path + cmd_file;
+        // cout << "Command: " << csim_cmd.c_str() << endl;
+        system(csim_cmd.c_str());
+#else
+
+        core db(otxt_name.c_str());
+        db.run(-1);
+#endif /* USE_CSIM */
+
+    } else {
+        cout << "Error: regression.h has not set the pret_iss_path string correctly" << endl;
+    }
+
+    return(0);
+
+
+}
+
+
+

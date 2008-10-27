@@ -1,0 +1,72 @@
+# For machine-local definitions, create or edit local.defs
+include ../local.defs
+
+INCDIR = -I. -I.. -I../include -I$(SYSTEMC)/include
+LIBDIR = -L. -L.. -L$(SYSTEMC)/lib-$(TARGET_ARCH)
+
+LIBS   =  -lsystemc -lm $(EXTRA_LIBS)
+
+
+EXE    = $(MODULE).x
+LIB    = libpret.a
+PYMOD_SRC = python_wrapper.cpp
+TSTFLAGS = -DDBG_REG -DDBG_PIPE -DDBG_INST_TRACE
+
+ifeq ($(TARGET_ARCH),cygwin)
+  PYMOD  = pret.dll
+else
+  PYMOD  = pret.so
+endif
+
+.SUFFIXES: .cc .cpp .o .x
+
+all: $(EXE) $(LIB) $(PYMOD)
+
+shell: $(PYMOD)
+
+sim: $(EXE)
+
+
+
+help:
+	@echo "----------------------------------------------------"	
+	@echo "         Authors: PRET Group at U. C. Berkeley"
+	@echo "----------------------------------------------------"
+	@echo "make <command>";
+	@echo "";
+	@echo "command:";
+	@echo "	help : Command list that you are looking at :)";
+	@echo "	shell: Compile only Python shell"; 
+	@echo "	sim  : Compile only SystemC simulator"; 
+	@echo "	all  : Compile simulator and Python shell"; 
+
+$(PYMOD): $(LIB) $(PYMOD_SRC)
+	SYSTEMC="$(SYSTEMC)" TARGET_ARCH="$(TARGET_ARCH)" python setup.py build
+	cp build/lib*/$(PYMOD) .
+	$(RM) -R build
+
+$(LIB): $(OBJS)
+	$(AR) cru $@ $(OBJS)
+	ranlib $@
+
+$(EXE): $(OBJS) $(SYSTEMC)/lib-$(TARGET_ARCH)/libsystemc.a 
+	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
+
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCDIR) -c $<
+
+.cc.o:
+	$(CC) $(CFLAGS) $(INCDIR) -c $<
+
+clean::
+	rm -f $(OBJS) *~ $(EXE)* core
+	$(RM) $(LIB) $(PYMOD)
+	$(RM) -R build
+
+ultraclean: clean
+	rm -f Makefile.deps
+
+Makefile.deps:
+#	$(CC) $(CFLAGS) $(INCDIR) -M $(SRCS) >> Makefile.deps
+
+#include Makefile.deps
