@@ -78,7 +78,10 @@ def compile_c_file(thread_num, options, outfile, delete_exe=True):
       
 def make_c_file(thread_num, options):
    os.putenv('CFLAGS', options)
-   system('make -f thread%d.makefile' % thread_num)
+   if quiet:
+      system('make -f thread%d.makefile > /dev/null' % thread_num)
+   else:
+      system('make -f thread%d.makefile' % thread_num)
 
 def system(command, abort_on_fail=True):
    """Runs a system call and checks for errors"""
