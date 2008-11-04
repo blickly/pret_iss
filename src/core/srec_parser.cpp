@@ -28,6 +28,7 @@
 */
 
 #include <sstream>
+#include <assert.h>
 #include "srec_parser.h"
 #include "memory_unit.h"
 #include "memory_controller.h"
@@ -79,23 +80,23 @@ int srec_parser::_readline(FILE* const srec_file) {
         return EOF;
     }
     //cout << "s_type: " << s_type << endl;
-    fscanf(srec_file, "%2x", &remaining_bytes);
+    assert(fscanf(srec_file, "%2x", &remaining_bytes) == 1);
     //cout << "remaining_bytes: " << dec << remaining_bytes << endl;
 
     switch (s_type[1]) {
     case '1':
     case '9':
-        fscanf(srec_file, "%4x", &current_addr);
+        assert(fscanf(srec_file, "%4x", &current_addr) == 1);
         remaining_bytes -= 2;
         break;
     case '2':
     case '8':
-        fscanf(srec_file, "%6x", &current_addr);
+        assert(fscanf(srec_file, "%6x", &current_addr) == 1);
         remaining_bytes -= 3;
         break;
     case '3':
     case '7':
-        fscanf(srec_file, "%8x", &current_addr);
+        assert(fscanf(srec_file, "%8x", &current_addr) == 1);
         remaining_bytes -= 4;
         break;
     default:
@@ -121,7 +122,7 @@ int srec_parser::_readline(FILE* const srec_file) {
     int next_word;
     while (remaining_bytes != 1) {
         remaining_bytes -= 4;
-        fscanf(srec_file, "%8x", &next_word);
+        assert(fscanf(srec_file, "%8x", &next_word) == 1);
         _mem->add_address(current_addr, next_word);
         /* If spm_alloc has a map then allocate it to SPM as well. */
         current_addr += MEMORY_ALIGNMENT;

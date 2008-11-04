@@ -30,6 +30,7 @@
 
 #include "hw_thread_controller.h"
 #include <sstream>
+#include <stdlib.h>
 
 #define MAX(x,y) (((x)>(y))?(x):(y))
 
