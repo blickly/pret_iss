@@ -78,7 +78,7 @@ AC_CHECK_FUNCS([gettimeofday])
 
 # Setup some environment flags
 AC_SUBST(CXXFLAGS)
-CXXFLAGS="-g -Wall -Werror -O3"
+CXXFLAGS="-g -Wall -O3"
 AC_SUBST(CFLAGS)
 CFLAGS="${CFLAGS=}"
 AC_SUBST(LDFLAGS)
