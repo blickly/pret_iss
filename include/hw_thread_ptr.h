@@ -116,11 +116,7 @@ public:
      * @param thread_address Hardware thread pointer object.
      */
     inline friend ostream& operator<< (ostream& out, const hw_thread_ptr& thread_address) {
-#ifdef _USE_SYSTEMC_
       out << "hw_thread_ptr: " << thread_address._handle << endl;
-#else
-        out << "hw_thread_ptr: " << thread_address.get_handle() << endl;
-#endif /* _USE_SYSTEMC_ */
         return out;
     }
 private:
