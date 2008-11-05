@@ -35,6 +35,10 @@ fetch::fetch(): module_base() {
 fetch::fetch(const sc_module_name& name): module_base(name) {
 }
 
+fetch::~fetch() {
+
+}
+
 #ifdef _NO_SYSTEMC_
 void fetch::behavior(const hw_thread_ptr& input_thread, hw_thread_ptr& output_thread) {
 #else

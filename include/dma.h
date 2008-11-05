@@ -27,13 +27,15 @@
 #ifndef _DMA_H_
 #define _DMA_H_
 
+#include "defines.h"
+
 #ifdef _NO_SYSTEMC_
 #include "no_systemc.h"
 #else
 #include <systemc>
 #endif /* _NO_SYSTEMC_ */
 
-#include "defines.h"
+
 #include "module_base.h"
 #include "hw_thread_ptr.h"
 #include "wheeled_mem.h"

@@ -92,13 +92,16 @@ core::core(const string& ftxt) {
     _memory_controller->clk(*_clock);
 
     srec_parser* _srec_parser = new srec_parser();
-    _srec_parser->set_memory_controller(_memory_controller);
+    //_srec_parser->set_memory_controller(_memory_controller);
+    _srec_parser->set_memory_unit(_memory_controller->get_main_mem_loc(0x3FFFFFFF).mem);
+    
     static_bound_parser* _static_bound_parser = new static_bound_parser();
     _static_bound_parser->set_memory_controller(_memory_controller);
 
     _dma_controller = new dma("blocking_dma");
     _dma_controller->clk(*_clock);
-    _dma_controller->register_memory_wheel(*dynamic_cast<wheeled_mem*>(_memory_controller->_main_mem));
+    _dma_controller->register_memory_wheel(*dynamic_cast<wheeled_mem*>(&_memory_controller->get_main_mem_loc(0x3FFFFFFF)));
+    //    _dma_controller->register_memory_wheel(*dynamic_cast<wheeled_mem*>(_memory_controller->_main_mem));
     _dma_controller->register_inst_spm(_instruction_spm);
     _memory_controller->blocking_dma(*_dma_controller);
     _thread_controller = new hw_thread_controller("thread_control_unit");
@@ -115,7 +118,7 @@ core::core(const string& ftxt) {
     _fetch_stage->clk(*_clock);
     _fetch_stage->in(_pool_to_f);
     _fetch_stage->out(_f_to_d);
-    _fetch_stage->instruction_mem(*_memory_controller);
+    _fetch_stage->instruction_memory(*_memory_controller);
     //    _fetch_stage->blocking_dma(*_dma_controller);
 
     _decode_stage = new decode("decode_stage");

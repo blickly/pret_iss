@@ -29,6 +29,10 @@
 #ifndef _MODULE_BASE_H_
 #define _MODULE_BASE_H_
 
+/* This must be before the _NO_SYSTEMC_. This is because it defines
+   _USE_SYSTEMC_. */
+#include "defines.h"
+
 #ifdef _NO_SYSTEMC_
 #include "no_systemc.h"
 #else
@@ -58,6 +62,9 @@ public:
      *  @param str Unique string identifying the process.
      */
     module_base(const sc_module_name& name);
+    /** Destroy the objects correctly if the mapped to the base class and destroyed.
+     */
+    virtual ~module_base();
 
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///

@@ -43,10 +43,10 @@ module_base::module_base(const string& name): _name(name) {
 }
 #endif /* _NO_SYSTEMC_ */
 
-#ifdef _NO_SYSTEMC_
+//#ifdef _NO_SYSTEMC_
 module_base::~module_base() {
 }
-#endif /* _NO_SYSTEMC_ */
+//#endif /* _NO_SYSTEMC_ */
 
 #ifdef _USE_SYSTEMC_
 void module_base::behavior() {

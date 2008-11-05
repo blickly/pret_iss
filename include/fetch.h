@@ -60,6 +60,7 @@ public:
      */
     fetch(const sc_module_name& name);
 
+    virtual ~fetch();
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///
 public:
