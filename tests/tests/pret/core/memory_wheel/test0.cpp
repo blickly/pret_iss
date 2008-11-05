@@ -32,7 +32,7 @@
 #else
 #include "systemc.h"
 #endif /* _NO_SYSTEMC_ */
-
+using namespace std;
 #include "regression.h"
 #include "wheeled_mem.h"
 
@@ -66,9 +66,11 @@ int sc_main(int argc, char *argv[]) {
     cout << wmem.mem << endl;
 
     cout << "Request instructions: address (0-9) for tid 0." << endl;
+#ifdef _NO_SYSTEMC_
     bool stalled[6];
     int tid = 0;
     unsigned int addr = 0;
+
     unsigned int count = 0;
     uint32_t data[6];
 
@@ -106,7 +108,11 @@ int sc_main(int argc, char *argv[]) {
 
         }
     }
+#endif /* _NO_SYSTEMC_ */
 
+#ifndef _NO_SYSTEMC_
+    sc_start(6);
+#endif
     return(0);
 
 }
