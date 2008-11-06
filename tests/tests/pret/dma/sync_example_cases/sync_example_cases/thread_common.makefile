@@ -5,7 +5,6 @@ DUMP=bare_thread$(THREAD_NUM).dump
 CC=sparc-elf-gcc
 LD=sparc-elf-ld
 
-
 thread$(THREAD_NUM)_all: $(SREC) $(DUMP)
 
 $(SREC): $(EXE)
@@ -16,7 +15,7 @@ $(DUMP): $(EXE)
 
 $(EXE): $(C_FILES:.c=.o) 
 	# This is more lightweight by not linking in any libraries
-	$(LD) $(LDFLAGS) $(LIBDIR) $(LIBS) $^ -o $@ -e main
+	$(LD) $^ -o $@ -e main
 	# This is a normal configuration that supports libraries
 #	$(CC) $(CCFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
 
