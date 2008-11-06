@@ -51,6 +51,7 @@
 /* -------------- Memory specifics ---------------- */
 #define MEM_DELAY 15
 #define SCRATCH_DELAY 1
+#define SCRATCH_SIZE 0x10000 /* Normal size (0x10000 = 64 KB) */
 #define PDMA_DELAY 4
 
 /* -------------- Register window specifics ---------------- */
