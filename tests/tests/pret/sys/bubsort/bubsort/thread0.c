@@ -20,9 +20,6 @@
 /* A read from this address will result in an unknown value */
 #define UNKNOWN_VALUE (int)(*((char *)0x80200003))
 
-
-#include <sys/types.h>
-#include <sys/times.h>
 #include <stdio.h>
 
 #define WORSTCASE 1
@@ -60,21 +57,6 @@ int main()
 #endif
    END_SIM;
 return 0;
-}
-
-
-int ttime()
-/*
- * This function returns in milliseconds the amount of compiler time
- * used prior to it being called.
- */
-{
-   struct tms buffer;
-   int utime;
-
-   /*   times(&buffer);  not implemented */
-   utime = (buffer.tms_utime / 60.0) * 1000.0;
-   return(utime);
 }
 
 
