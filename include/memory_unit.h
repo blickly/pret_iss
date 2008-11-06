@@ -99,7 +99,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private methods                            ///
-private:
     /** Checks if an address has an assigned value in the memory unit.
      *  @param addr The address in the memory unit.
      *  @return True if the address has previously been assigned a value
@@ -107,6 +106,7 @@ private:
      */
     bool _has_address(const uint32_t& addr) const;
 
+private:
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
     /** STL map<> datastructure to store the key and value pair of address and data.

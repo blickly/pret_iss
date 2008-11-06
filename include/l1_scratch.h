@@ -39,30 +39,36 @@
 
 class l1_scratch : public mem_location {
 public:
-    void add_addr(uint32_t mem_addr, uint32_t spm_addr, uint32_t inst);
+
+    l1_scratch();
     virtual void behavior();
+
+    /* Normal memory location interfaces. */
     virtual bool is_stalled(int tid, uint32_t addr);
     virtual uint32_t read(int tid, uint32_t addr, bool& stalled);
-    void remove_addr(uint32_t rm);
 
-    bool is_addr_in_spm(uint32_t mmem_addr);
-    map<uint32_t, uint32_t>::iterator find_spm_addr(uint32_t spm_addr);
-
-    void update_addr(uint32_t mem_addr, uint32_t inst) ;
+    /* Scratchpad management interfaces. */
+    void add_addr(uint32_t mem_addr, uint32_t spm_addr, uint32_t data);
+    bool is_addr_in_spm(uint32_t mem_addr);
+    void update_addr(uint32_t mem_addr, uint32_t data);
 
     /* Debug members */
     void _dbg_print_mem_contents();
     void dbg_print_valid_addr();
 
 protected:
-    /* mem_location contains the memory unit for the l1_scratch. This
-       structure contains the physical address of main memory and the
-       data associated with it (instruction). We need to add another
-       list that identifies which physical address is valid in the SPM. */
+    bool in_spm_range(uint32_t spm_addr);
 
-    /* Addresses valid in the scratchpad. Indexed by virtual address
-       (Main Mem) */
-    map< uint32_t, uint32_t > valid_addr;
+    /** Map of scratchpad addresses to main memory adresses.
+     * mem_location already contains a memory unit for the l1_scratch. 
+     * This contains the physical address of main memory and the
+     * data associated with it. We also need a list that identifies 
+     * which SPM addresses correspond to which main memory addresses.
+     * This is that list.
+     */
+    uint32_t main_memory_address[SCRATCH_SIZE/4];
+
+
 
 };
 

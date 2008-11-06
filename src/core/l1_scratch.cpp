@@ -32,35 +32,32 @@
 #include "l1_scratch.h"
 #include "assert.h"
 
-void l1_scratch::behavior() {
-
+l1_scratch::l1_scratch() {
+    uint32_t spm_addr;
+    for (spm_addr = 0; spm_addr < SCRATCH_SIZE; spm_addr += 4) {
+        main_memory_address[spm_addr/4] = (uint32_t) NULL;
+    }
 }
 
-bool l1_scratch::is_stalled(int tid, uint32_t addr) {
+void l1_scratch::behavior() {}
+
+bool l1_scratch::is_stalled(int tid, uint32_t mem_addr) {
 #ifdef USE_PDMA
-    return (!is_addr_in_spm(addr));
+    return (!is_addr_in_spm(mem_addr));
 #else
     // For simplicity, never make scratchpads stall when not using PDMA.
     return false;
 #endif
 }
+
 /*
  * Return the data that is stored at the given memory location,
  * as well as a boolean for whether the read needs to stall for
  * longer before the memory can be accessed.
  */
-uint32_t l1_scratch::read(int tid, uint32_t addr, bool& stalled) {
-    stalled = is_stalled(tid, addr);
-    return mem[addr];
-}
-
-void l1_scratch::remove_addr(uint32_t mem_addr) {
-    /* This virtual address is no longer allocated to the SPM */
-    valid_addr.erase(mem_addr);
-    /* It's data is scratched too for now. Note that this operation is
-       not necessary if we add a member that simply replaces the data at
-       that address.  */
-    mem.remove_address(mem_addr);
+uint32_t l1_scratch::read(int tid, uint32_t mem_addr, bool& stalled) {
+    stalled = is_stalled(tid, mem_addr);
+    return mem[mem_addr];
 }
 
 
@@ -69,55 +66,44 @@ void l1_scratch::update_addr(uint32_t mem_addr, uint32_t inst) {
     mem.add_address(mem_addr,  inst);
 }
 
-map<uint32_t, uint32_t>::iterator l1_scratch::find_spm_addr(uint32_t spm_addr) {
-    map<uint32_t, uint32_t>::iterator it = valid_addr.end();
-
-    for (it = valid_addr.begin(); it != valid_addr.end(); it++) {
-        if (it->second == spm_addr)
-            break;
+bool l1_scratch::in_spm_range(uint32_t spm_addr) {
+    if (spm_addr % 4 == 0 && spm_addr < SCRATCH_SIZE) {
+       return true;
+    } else {
+       return false;
     }
-
-    return it;
 }
 
 void l1_scratch::add_addr(uint32_t mem_addr, uint32_t spm_addr,
-                          uint32_t inst) {
-    map<uint32_t, uint32_t>::iterator it = find_spm_addr(spm_addr);
-    if (it != valid_addr.end()) {
-        /* key is a const, so we must delete it and readd it */
-        remove_addr(it->first);
-        /* Iterator it is invalid now */
-    }
-    /* Add the instruction into the valid address table and replace the
-       memory contents. */
-    it = valid_addr.find(mem_addr);
-    /* Virtual address not found */
-    if (it == valid_addr.end()) {
-        valid_addr.insert(pair<uint32_t, uint32_t>(mem_addr, spm_addr));
-    } else {
-        /* Virtual address already has been allocated. Overwrite it */
-        valid_addr[mem_addr] = spm_addr;
+                          uint32_t data) {
+    if (!in_spm_range(spm_addr)) {
+       cerr << "Error: Request made to invalid scratchpad address 0x" 
+            << hex << spm_addr << endl;
+       return;
     }
 
-    /* Add the instruction to the SPM */
-    mem.add_address(mem_addr,  inst);
+    /* The value being overwritten must be removed first. */
+    uint32_t old_mem_addr = main_memory_address[spm_addr/4];
+    mem.remove_address(old_mem_addr);
+
+    /* Add the data to the SPM */
+    main_memory_address[spm_addr/4] = mem_addr;
+    mem.add_address(mem_addr,  data);
 }
 
 
 bool l1_scratch::is_addr_in_spm(uint32_t mem_addr) {
-    map<uint32_t, uint32_t>::iterator it = valid_addr.find(mem_addr);
-
-    if (it != valid_addr.end()) {
-        return true;
+    if (mem_addr == (uint32_t) NULL) {
+        return false;
     }
-    return false;
+    return mem._has_address(mem_addr);
 }
 
 void l1_scratch::dbg_print_valid_addr() {
     cout << "\t [mem_addr] = spm_addr" << endl;
-    map<uint32_t, uint32_t>::iterator it;
-    for (it = valid_addr.begin(); it != valid_addr.end(); it++) {
-        cout << "valid_addr[" << it->first << "] = " << it->second << endl;
+    for (spm_addr = 0; spm_addr < SCRATCH_SIZE; spm_addr += 4) {
+        cout << "valid_addr[" << spm_addr << "] = "
+             << main_memory_address[spm_addr/4] << endl;
     }
 }
 
