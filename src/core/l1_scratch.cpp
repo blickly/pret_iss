@@ -96,12 +96,12 @@ bool l1_scratch::is_addr_in_spm(uint32_t mem_addr) {
     if (mem_addr == (uint32_t) NULL) {
         return false;
     }
-    return mem._has_address(mem_addr);
+    return mem.has_address(mem_addr);
 }
 
 void l1_scratch::dbg_print_valid_addr() {
     cout << "\t [mem_addr] = spm_addr" << endl;
-    for (spm_addr = 0; spm_addr < SCRATCH_SIZE; spm_addr += 4) {
+    for (uint32_t spm_addr = 0; spm_addr < SCRATCH_SIZE; spm_addr += 4) {
         cout << "valid_addr[" << spm_addr << "] = "
              << main_memory_address[spm_addr/4] << endl;
     }

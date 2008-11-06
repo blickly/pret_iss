@@ -97,18 +97,16 @@ public:
      */
     void remove_address(const uint32_t& addr);
 
-///////////////////////////////////////////////////////////////////////
-///                      private methods                            ///
     /** Checks if an address has an assigned value in the memory unit.
      *  @param addr The address in the memory unit.
      *  @return True if the address has previously been assigned a value
      *  otherwise false.
      */
-    bool _has_address(const uint32_t& addr) const;
+    bool has_address(const uint32_t& addr) const;
 
-private:
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
+private:
     /** STL map<> datastructure to store the key and value pair of address and data.
      */
     map< uint32_t, uint32_t > _mem;

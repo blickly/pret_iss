@@ -36,7 +36,7 @@ void memory_unit::add_address(const uint32_t& addr, const uint32_t& data) {
     _mem[addr] = data;
 }
 
-bool memory_unit::_has_address(const uint32_t& addr) const {
+bool memory_unit::has_address(const uint32_t& addr) const {
     if (_mem.find(addr) == _mem.end()) {
         return false;
     } else {
@@ -45,7 +45,7 @@ bool memory_unit::_has_address(const uint32_t& addr) const {
 }
 
 uint32_t memory_unit::operator[](const uint32_t& addr) {
-    if (_has_address(addr) == false) {
+    if (has_address(addr) == false) {
         //        _mem[addr] = 0x0;
         return 0;
     }
@@ -53,7 +53,7 @@ uint32_t memory_unit::operator[](const uint32_t& addr) {
 }
 
 void memory_unit::remove_address(const uint32_t& addr) {
-    if (_has_address(addr)) {
+    if (has_address(addr)) {
         map<uint32_t, uint32_t>::iterator it = _mem.find(addr);
         _mem.erase(it);
     }
