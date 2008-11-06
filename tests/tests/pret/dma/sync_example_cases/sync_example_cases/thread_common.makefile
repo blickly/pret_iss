@@ -1,3 +1,4 @@
+LDFLAGS=$(CFLAGS)
 CCFLAGS=$(CFLAGS) -msoft-float
 SREC=bare_thread$(THREAD_NUM).srec
 EXE=bare_thread$(THREAD_NUM).exe
@@ -15,7 +16,7 @@ $(DUMP): $(EXE)
 
 $(EXE): $(C_FILES:.c=.o) 
 	# This is more lightweight by not linking in any libraries
-	$(LD) $^ -o $@ -e main
+	$(LD) $(LDFLAGS) $^ -o $@ -e main
 	# This is a normal configuration that supports libraries
 #	$(CC) $(CCFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
 
