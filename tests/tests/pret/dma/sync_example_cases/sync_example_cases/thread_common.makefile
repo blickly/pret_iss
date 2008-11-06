@@ -1,4 +1,3 @@
-LDFLAGS=$(CFLAGS)
 CCFLAGS=$(CFLAGS) -msoft-float
 SREC=bare_thread$(THREAD_NUM).srec
 EXE=bare_thread$(THREAD_NUM).exe
