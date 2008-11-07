@@ -57,9 +57,8 @@ bool l1_scratch::is_stalled(int tid, uint32_t mem_addr) {
  */
 uint32_t l1_scratch::read(int tid, uint32_t mem_addr, bool& stalled) {
     if (!is_addr_in_spm(mem_addr)) {
-        // FIXME: Use this error when address not in scrachpad.
-        //cerr << "Cannot read address not in scratchpad: 0x"
-        //     << hex << mem_addr << endl;
+        cerr << "Cannot read address not in scratchpad: 0x"
+             << hex << mem_addr << endl;
     }
     stalled = is_stalled(tid, mem_addr);
     return mem[mem_addr];
