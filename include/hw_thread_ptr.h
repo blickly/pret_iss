@@ -116,7 +116,7 @@ public:
      * @param thread_address Hardware thread pointer object.
      */
     inline friend ostream& operator<< (ostream& out, const hw_thread_ptr& thread_address) {
-      out << "hw_thread_ptr: " << thread_address._handle << endl;
+        out << "hw_thread_ptr: " << thread_address._handle << endl;
         return out;
     }
 private:

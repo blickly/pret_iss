@@ -56,40 +56,40 @@ bool l1_scratch::is_stalled(int tid, uint32_t mem_addr) {
  * longer before the memory can be accessed.
  */
 uint32_t l1_scratch::read(int tid, uint32_t mem_addr, bool& stalled) {
-	if (!is_addr_in_spm(mem_addr)) {
-	   // FIXME: Use this error when address not in scrachpad.
-	   //cerr << "Cannot read address not in scratchpad: 0x"
-	   //     << hex << mem_addr << endl;
-	}
+    if (!is_addr_in_spm(mem_addr)) {
+        // FIXME: Use this error when address not in scrachpad.
+        //cerr << "Cannot read address not in scratchpad: 0x"
+        //     << hex << mem_addr << endl;
+    }
     stalled = is_stalled(tid, mem_addr);
     return mem[mem_addr];
 }
 
 
 void l1_scratch::update_addr(uint32_t mem_addr, uint32_t inst) {
-	if (!is_addr_in_spm(mem_addr)) {
-	   cerr << "Cannot update address not in scratchpad: 0x"
-	        << hex << mem_addr << endl;
-	   return;	
-	}
+    if (!is_addr_in_spm(mem_addr)) {
+        cerr << "Cannot update address not in scratchpad: 0x"
+             << hex << mem_addr << endl;
+        return;
+    }
     /* Modify the instruction in the SPM */
     mem.add_address(mem_addr,  inst);
 }
 
 bool l1_scratch::in_spm_range(uint32_t spm_addr) {
     if (spm_addr % 4 == 0 && spm_addr < SCRATCH_SIZE) {
-       return true;
+        return true;
     } else {
-       return false;
+        return false;
     }
 }
 
 void l1_scratch::add_addr(uint32_t mem_addr, uint32_t spm_addr,
                           uint32_t data) {
     if (!in_spm_range(spm_addr)) {
-       cerr << "Error: Request made to invalid scratchpad address 0x" 
-            << hex << spm_addr << endl;
-       return;
+        cerr << "Error: Request made to invalid scratchpad address 0x"
+             << hex << spm_addr << endl;
+        return;
     }
 
     /* The value being overwritten must be removed first. */

@@ -157,7 +157,7 @@ public:
      *  method and a boolean to tell weather the access stalled or not is
      *  returned through the final parameter.
      *  @param tid The thread id ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///number of the requesting thread.
+    ///                      public variables                           ///number of the requesting thread.
      *  @param addr The 32-bit address to be accessed.
      *  @param stalled An output parameter that tells if this access stalled.
      *  @return The actual 32-bits of instruction that were (or would be) read.
@@ -181,7 +181,7 @@ public:
     /** Port to connect to blocking DMA unit.
      */
     sc_port<dma_if> blocking_dma;
-    
+
 protected:
     virtual void _setup(cycle_counter* cyc);
     l1_scratch** _inst_scratchpad;

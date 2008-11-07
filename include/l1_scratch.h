@@ -41,9 +41,9 @@
 /// l1_scratch
 /**
  * The l1_scratch class provides a representation of a small on-chip
- * scratchpad memory. It adhears to the interface specified by 
+ * scratchpad memory. It adhears to the interface specified by
  * mem_location, but it provides additional methods for managing data in
- * terms of its address on the scratchpad.   
+ * terms of its address on the scratchpad.
  * The size of the scratchpad is taken from SCRATCH_SIZE in defines.h and
  * is strictly enforced.
  * For the purposes of simulation, the scratchpad allows reads addressed
@@ -76,11 +76,11 @@ public:
      *  @return False, since the scratchpad is never stalled.
      */
     virtual bool is_stalled(int tid, uint32_t mem_addr);
-    
+
     /** Read a given (main-memory) address from the scratchpad, if available.
      * Note that in order to conform to the mem_location interface, the
      * address parameter corresponds to the global address of the data
-     * (that in the main memory) rather than the address within the 
+     * (that in the main memory) rather than the address within the
      * scratchpad. An error is output when that address is not
      * in the scratchpad.
      *  @param tid The thread id of the requesting thread (ignored)
@@ -100,13 +100,13 @@ public:
      *  @param data The data being written to the scratchpad.
      */
     void add_addr(uint32_t mem_addr, uint32_t spm_addr, uint32_t data);
-    
+
     /** Check if a given global address is contained on the scratchpad.
      *  @param mem_addr The global address to check for.
      *  @return True if the address is in the scratchpad. False, otherwise.
      */
     bool is_addr_in_spm(uint32_t mem_addr);
-    
+
     /** Update the data in the scratchpad at a particular global address.
      * If the global address is not aleady in the scratchpad, this will
      * give an error.
@@ -131,9 +131,9 @@ protected:
 ///////////////////////////////////////////////////////////////////////
 ///                     protected variables                         ///
     /** Map of scratchpad addresses to main memory adresses.
-     * mem_location already contains a memory unit for the l1_scratch. 
+     * mem_location already contains a memory unit for the l1_scratch.
      * This contains the physical address of main memory and the
-     * data associated with it. We also need a list that identifies 
+     * data associated with it. We also need a list that identifies
      * which SPM addresses correspond to which main memory addresses.
      * This is that list.
      */

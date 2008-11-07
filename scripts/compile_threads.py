@@ -64,17 +64,6 @@ def compile_prom(thread_num, options, prog_addr, delete_exe=True):
    generate_srec_dump(exe_file, srec_file, dump_file)
    if delete_exe: 
       os.unlink(exe_file)
-
-def compile_c_file(thread_num, options, outfile, delete_exe=True):
-   c_file = 'thread%d.c' % thread_num
-   exe_file = outfile + '.exe'
-   srec_file = outfile + '.srec'
-   dump_file = outfile + '.dump'
-   options = options + ' -g -O0 -lm -msoft-float '
-   gcc(c_file, exe_file, options)
-   generate_srec_dump(exe_file, srec_file, dump_file)
-   if delete_exe: 
-      os.unlink(exe_file)
       
 def make_c_file(thread_num, options):
    os.putenv('CFLAGS', options)

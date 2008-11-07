@@ -56,7 +56,7 @@
  * @Pt.AcceptedRating
  */
 class execute : public module_base {
- public:
+public:
     // Constructor
     execute(const sc_module_name& name);
 

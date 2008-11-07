@@ -53,7 +53,7 @@ void decode::behavior() {
 
     in_thread->inst.decode();
 
-   
+
 
 #ifdef _NO_SYSTEMC_
     out_thread = in_thread;
@@ -61,7 +61,7 @@ void decode::behavior() {
 #else
     out.write(in_thread);
 #endif /* _NO_SYSTEMC_ */
-    
+
 
 }
 

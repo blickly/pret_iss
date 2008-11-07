@@ -290,8 +290,8 @@ unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
             (((hardware_thread->inst.op1_val >> 31) && (hardware_thread->inst.op2_val >> 31))
              || (!(hardware_thread->inst.alu_result >> 31) && (hardware_thread->inst.op1_val >> 31 || hardware_thread->inst.op2_val >> 31)))) ||
             (hardware_thread->inst.aluop == ALU_SUB && ((!(hardware_thread->inst.op1_val >> 31) && !(~(hardware_thread->inst.op2_val) >> 31))
-                                           || ((!(hardware_thread->inst.op1_val >> 31) || !(~(hardware_thread->inst.op2_val) >> 31)) &&
-                                               (hardware_thread->inst.alu_result >> 31)))))
+                    || ((!(hardware_thread->inst.op1_val >> 31) || !(~(hardware_thread->inst.op2_val) >> 31)) &&
+                        (hardware_thread->inst.alu_result >> 31)))))
         icc |= 0x1;
 
     //FIXME: Need to add carry

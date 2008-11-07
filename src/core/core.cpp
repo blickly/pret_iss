@@ -94,7 +94,7 @@ core::core(const string& ftxt) {
     srec_parser* _srec_parser = new srec_parser();
     //_srec_parser->set_memory_controller(_memory_controller);
     _srec_parser->set_memory_unit(_memory_controller->get_main_mem_loc(0x3FFFFFFF).mem);
-    
+
     static_bound_parser* _static_bound_parser = new static_bound_parser();
     _static_bound_parser->set_memory_controller(_memory_controller);
 
