@@ -12,7 +12,7 @@ int main (void)
 {
   printf("Start of program\n");
   int mem_addr = 0x400011b0;
-  DMAMV(mem_addr, mem_addr+10);
+  DMAMV(mem_addr, mem_addr - 0x40000000);
   //STCMEM(mem_addr);
   //STCSPM(mem_addr+10);
   //  CPTRANS();
