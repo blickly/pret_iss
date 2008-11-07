@@ -54,7 +54,6 @@ void static_bound_parser::load_spm(unsigned int tid, const string& spm) {
     l1_scratch* current_scratchpad = &_mem_cont->get_spm_mem_loc(tid);
     memory_unit* main_memory = &_mem_cont->get_main_mem_loc(0x3FFFFFFF).mem;
 
-    //cout << "HDP: DSPM - " << dspm << endl;
     if (file_spm.is_open()) {
         uint32_t min = 0;
         uint32_t max = 0;

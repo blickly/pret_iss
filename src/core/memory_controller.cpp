@@ -140,7 +140,7 @@ void memory_controller::write_data(int tid, uint32_t addr, uint32_t data, bool& 
     if (!in_spm) {
         get_main_mem_loc(addr).write(tid, addr, data, stalled);
     } else {
-        get_spm_mem_loc(addr).write(tid, addr, data, stalled);
+      get_spm_mem_loc(tid).write(tid, addr, data, stalled);
     }
     if (stalled) {
         return;

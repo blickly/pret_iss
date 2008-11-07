@@ -18,7 +18,7 @@ $(DUMP): $(EXE)
 $(EXE): $(C_FILES:.c=.o) 
 	# This is more lightweight by not linking in any libraries
 #	$(LD) $(LDFLAGS) $(LIBDIR) $(LIBS) $^ -o $@ 
-	# This is a normal configuration that supports libraries
+#	 This is a normal configuration that supports libraries
 	$(CC) $(CCFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
 
 .c.o:

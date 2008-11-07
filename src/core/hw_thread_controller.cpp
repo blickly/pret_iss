@@ -141,7 +141,6 @@ void hw_thread_controller::parse_srec_files(srec_parser& parser,
         string file_ispm = dir + "/thread" + ss.str() + ".ispm";
         string file_dspm = dir + "/thread" + ss.str() + ".dspm";
 
-
         //  cout << "Loading file in SPM map: " << file_ispm << endl;
         //uint32_t starting_addr = parser.parse(i, file_srec.c_str(), file_ispm.c_str());
         uint32_t starting_addr = parser.parse(file_srec.c_str());
