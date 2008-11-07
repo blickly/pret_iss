@@ -12,5 +12,5 @@ int main()
   /* Exit critical section */
   }
 
-  return 0;
+  WAIT_FOR_END_SIMULATION;
 }

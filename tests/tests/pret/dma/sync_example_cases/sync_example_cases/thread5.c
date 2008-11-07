@@ -1,1 +1,2 @@
-int main() { return 0; }
+#include "deadline.h"
+int main() { WAIT_FOR_END_SIMULATION; }

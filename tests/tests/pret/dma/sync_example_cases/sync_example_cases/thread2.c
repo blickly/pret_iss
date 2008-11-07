@@ -15,5 +15,4 @@ int main()
   WRITE('\n');
 
   END_SIMULATION;
-  return 0;
 }

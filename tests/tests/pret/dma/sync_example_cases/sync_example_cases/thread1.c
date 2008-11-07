@@ -19,5 +19,5 @@ int main()
   for (i = 0; i< 10; i++ )
     printf("%d ", arr[i]);
 */
-  return 0;
+  WAIT_FOR_END_SIMULATION;
 }

@@ -213,7 +213,10 @@
  asm volatile(".word 0xD1602" hexstr);
 
 #define END_SIMULATION \
-  asm(".word 0x22222222");
+  asm(".word 0x22222222"); return 0
+
+#define WAIT_FOR_END_SIMULATION \
+  for(;;); return 0
 
 #define WRITE(c)                              \
  (*((volatile int*)0x80000100) = (c))
