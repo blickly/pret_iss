@@ -16,10 +16,8 @@ $(DUMP): $(EXE)
 	sparc-elf-objdump -D $< > $@
 
 $(EXE): $(C_FILES:.c=.o) 
-	# This is more lightweight by not linking in any libraries
-	#	$(LD) $(LDFLAGS) $^ -o $@ -e main
-	# This is a normal configuration that supports libraries
-	$(CC) $(CCFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
+	# This is a lightweight linking that does not include any libraries
+	$(LD) $(LDFLAGS) $^ -o $@ -e main
 
 .c.o:
 	$(CC) $(CCFLAGS) $(INCDIR) -c $<
