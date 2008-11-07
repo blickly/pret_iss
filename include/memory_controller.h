@@ -121,16 +121,6 @@ public:
      */
     virtual mem_location& get_main_mem_loc(uint32_t addr);
 
-    /** Write the given data to the file on our simulation platform.
-     *  @param data Word of data to write.
-     */
-    void out_file(uint32_t data);
-
-    /** Write the given data to standard output on our simulation platform.
-     *  @param data Word of data to write.
-     */
-    void out_uart(uint32_t data);
-
     /** Register a group of scratchpads to be used by the memory controller.
      *  @param spm[] An array of pointers to the scratchpads to use.
      */
@@ -189,6 +179,5 @@ protected:
     mem_location* _mem_mapped_io;
     pdma* _pdma_unit;
 
-    ofstream _fd;
 };
 #endif

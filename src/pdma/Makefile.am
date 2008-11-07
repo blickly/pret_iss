@@ -34,7 +34,7 @@ libpretpdma_a_SOURCES=./pdma.cpp ../core/l1_scratch.cpp ../core/memory_controlle
 
 #AM_CXXFLAGS=$(AM_CXXFLAGS)
 
-libpretpdma_a_LIBADD=../core/special_reg.o ../core/fetch.o ../core/module_base.o ../core/register_file.o ../core/decode.o ../core/memory_unit.o ../core/mem.o ../core/hw_thread_controller.o ../core/except.o ../core/execute.o ../core/hw_thread_ptr.o ../core/hw_thread.o ../core/instruction.o ../core/regacc.o ../core/cycle_counter.o ../core/core.o  ../core/srec_parser.o ../core/pret_clock.o ../core/dma.o ../core/static_bound_parser.o
+libpretpdma_a_LIBADD=../core/special_reg.o ../core/fetch.o ../core/module_base.o ../core/register_file.o ../core/decode.o ../core/memory_unit.o ../core/mem.o ../core/hw_thread_controller.o ../core/except.o ../core/execute.o ../core/hw_thread_ptr.o ../core/hw_thread.o ../core/instruction.o ../core/regacc.o ../core/cycle_counter.o ../core/core.o  ../core/srec_parser.o ../core/pret_clock.o ../core/dma.o ../core/static_bound_parser.o ../core/mem_mapped_io.o
 
 INCLUDES =-I@top_srcdir@/include -DUSE_PDMA
 

@@ -36,7 +36,7 @@ else
   AM_CXXFLAGS=
 endif
 
-libpretcore_a_SOURCES=./dma.cpp ./special_reg.cpp ./fetch.cpp ./module_base.cpp ./register_file.cpp ./decode.cpp ./memory_unit.cpp ./mem.cpp ./hw_thread_controller.cpp ./except.cpp ./wheeled_mem.cpp ./l1_scratch.cpp ./execute.cpp ./memory_controller.cpp ./hw_thread_ptr.cpp ./hw_thread.cpp ./srec_parser.cpp ./instruction.cpp ./regacc.cpp ./cycle_counter.cpp ./core.cpp ./pret_clock.cpp ./static_bound_parser.cpp
+libpretcore_a_SOURCES=./dma.cpp ./special_reg.cpp ./fetch.cpp ./module_base.cpp ./register_file.cpp ./decode.cpp ./memory_unit.cpp ./mem.cpp ./hw_thread_controller.cpp ./except.cpp ./wheeled_mem.cpp ./l1_scratch.cpp ./mem_mapped_io.cpp ./execute.cpp ./memory_controller.cpp ./hw_thread_ptr.cpp ./hw_thread.cpp ./srec_parser.cpp ./instruction.cpp ./regacc.cpp ./cycle_counter.cpp ./core.cpp ./pret_clock.cpp ./static_bound_parser.cpp 
 
 INCLUDES =-I@top_srcdir@/include
 

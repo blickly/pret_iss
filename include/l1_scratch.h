@@ -41,7 +41,7 @@
 /// l1_scratch
 /**
  * The l1_scratch class provides a representation of a small on-chip
- * scratchpad memory. It adhears to the interface specified by
+ * scratchpad memory. It adhers to the interface specified by
  * mem_location, but it provides additional methods for managing data in
  * terms of its address on the scratchpad.
  * The size of the scratchpad is taken from SCRATCH_SIZE in defines.h and

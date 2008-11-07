@@ -32,6 +32,7 @@
 #include <assert.h>
 
 #include "l1_scratch.h"
+#include "mem_mapped_io.h"
 #include "memory_controller.h"
 #include "wheeled_mem.h"
 #include "dma.h"
@@ -41,7 +42,6 @@ memory_controller::memory_controller(const sc_module_name& nm, cycle_counter* cy
 }
 
 memory_controller::~memory_controller() {
-    _fd.close();
 
     delete[] _inst_scratchpad;
     delete _main_mem;
@@ -76,24 +76,6 @@ l1_scratch& memory_controller::get_spm_mem_loc(int tid) {
     return *_inst_scratchpad[tid];
 }
 
-void memory_controller::out_file(uint32_t data) {
-    /// Address map to an output file the address 0x80000600 which we
-    /// use as VIDEO out
-    if (_fd.is_open()) {
-        //_fd << (char) data;
-        _fd << data << endl;
-    } else {
-        cerr << "ERR: out_file(...), output file is not open" << endl;
-    }
-}
-
-void memory_controller::out_uart(uint32_t data) {
-    char out_char = (char) data;
-    if (out_char == '\r') {
-        return; // This prevents printing out ^M on newlines.
-    }
-    cout << (char)(data);
-}
 
 void memory_controller::register_inst_spm(l1_scratch* spm[]) {
     for (unsigned int i = 0; i < NUM_THREADS; i++) {
@@ -123,7 +105,7 @@ uint32_t memory_controller::read_data(int tid, uint32_t addr, bool& stalled) {
 void memory_controller::_setup(cycle_counter* cyc) {
     _inst_scratchpad = new l1_scratch*[NUM_THREADS];
     _main_mem = new wheeled_mem(MEM_DELAY - 1, PDMA_DELAY, cyc);
-    _mem_mapped_io = new l1_scratch();
+    _mem_mapped_io = new mem_mapped_io();
 
 #ifdef USE_PDMA
     _pdma_unit = new pdma("pdma unit",
@@ -131,7 +113,6 @@ void memory_controller::_setup(cycle_counter* cyc) {
                           _inst_scratchpad);
 #endif /* USE_PDMA */
 
-    _fd.open("out_fd.dmp", ios::out);
 }
 
 void memory_controller::write_data(int tid, uint32_t addr, uint32_t data, bool& stalled) {
@@ -145,19 +126,4 @@ void memory_controller::write_data(int tid, uint32_t addr, uint32_t data, bool& 
     if (stalled) {
         return;
     }
-#ifdef DBG_UART
-    /// Address map to the UART which is mapped at address 0x80000100
-    /// for its data.
-    if (addr == 0x80000100) {
-        /// The write is happening to the APBUART, so print it out
-        out_uart(data);
-    }
-#endif
-#ifdef DBG_FOUT
-    /// Address map to an output file the address 0x80000600 which we
-    /// use as VIDEO out
-    if (addr == 0x80000600) {
-        out_file(data);
-    }
-#endif
 }
