@@ -80,7 +80,7 @@ void mem_mapped_io::out_file(uint32_t data) {
     }
     /// Address map to an output file the address 0x80000600 which we
     /// use as VIDEO out
-    _fd << data << endl;
+    _fd << (char) data << flush;
 }
 
 void mem_mapped_io::out_uart(uint32_t data) {
