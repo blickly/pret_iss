@@ -37,11 +37,6 @@ bool mem_mapped_io::is_stalled(int tid, uint32_t addr) {
 }
 
 uint32_t mem_mapped_io::read(int tid, uint32_t addr, bool& stalled) {
-    //if (!is_addr_in_spm(addr)) {
-        // FIXME: Use this error when address not in scrachpad.
-        //cerr << "Cannot read address not in scratchpad: 0x"
-        //     << hex << addr << endl;
-    //}
     stalled = is_stalled(tid, addr);
     return mem[addr];
 }
