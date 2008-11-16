@@ -4,7 +4,6 @@
 
 int main()
 {
-  int i;
   int *iptr=NULL;
   
   iptr= (int*)malloc(sizeof(int));
