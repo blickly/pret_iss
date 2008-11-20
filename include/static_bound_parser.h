@@ -63,6 +63,7 @@ public:
     void load_inst_spm(unsigned int tid, const string& ispm);
 private:
     memory_controller* _mem_cont;
+    uint32_t spm_addr;
 
 };
 #endif

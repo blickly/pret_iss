@@ -35,6 +35,7 @@
 
 void static_bound_parser::set_memory_controller(memory_controller* memc) {
     _mem_cont = memc;
+    spm_addr = 0;
 }
 
 static_bound_parser::static_bound_parser(): _mem_cont(NULL) {
@@ -65,7 +66,6 @@ void static_bound_parser::load_spm(unsigned int tid, const string& spm) {
             istringstream ss(line);
             ss >> hex >> min >> max;
             if (line.size() > 0) {
-                uint32_t spm_addr = 0;
                 for (uint32_t addr = min; addr < max + 4; addr += 4) {
                     uint32_t data = (*main_memory)[addr];
                     current_scratchpad->add_addr(addr, spm_addr, data);
