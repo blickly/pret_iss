@@ -34,18 +34,18 @@
 #include "hw_thread.h"
 
 unsigned int hw_thread::get_id() {
-    return id;
+    return _id;
 }
 
-hw_thread::hw_thread(): id(MAX_THREAD) {
+hw_thread::hw_thread(): _id(MAX_THREAD) {
     _enabled = false;
 }
 
-hw_thread::hw_thread(const hw_thread & hwth) {
-    this->operator=(hwth);
+hw_thread::hw_thread(const hw_thread& hardware_thread) {
+    this->operator=(hardware_thread);
 }
 
-hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : id(in_id) {
+hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
     PC = pc;
     cnt_cycles = 0;
     cnt_instr = 0;
@@ -58,27 +58,27 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : id(in_id) {
 }
 
 
-void hw_thread::operator=(const hw_thread & hwth) {
-    id = hwth.id;
-    inst = hwth.inst;
-    cnt_cycles = hwth.cnt_cycles;
-    cnt_instr = hwth.cnt_instr;
-    PC = hwth.PC;
-    _enabled = hwth._enabled;
-    spec_regs = hwth.spec_regs;
-    regs = hwth.regs;
-    branch_slot = hwth.branch_slot;
-    db_word = hwth.db_word;
-    _deadline_stalled = hwth._deadline_stalled;
-    _memory_stalled = hwth._memory_stalled;
-    _fetch_stalled = hwth._fetch_stalled;
+void hw_thread::operator=(const hw_thread& hardware_thread) {
+    _id = hardware_thread._id;
+    inst = hardware_thread.inst;
+    cnt_cycles = hardware_thread.cnt_cycles;
+    cnt_instr = hardware_thread.cnt_instr;
+    PC = hardware_thread.PC;
+    _enabled = hardware_thread._enabled;
+    spec_regs = hardware_thread.spec_regs;
+    regs = hardware_thread.regs;
+    branch_slot = hardware_thread.branch_slot;
+    db_word = hardware_thread.db_word;
+    _deadline_stalled = hardware_thread._deadline_stalled;
+    _memory_stalled = hardware_thread._memory_stalled;
+    _fetch_stalled = hardware_thread._fetch_stalled;
 
 }
 
-bool hw_thread::operator==(const hw_thread & hwth) {
+bool hw_thread::operator==(const hw_thread& hardware_thread) {
     /// cnt_instr and cnt_cycles are not behaviors of a thread so no need to compare them.
-    return (id == hwth.id) && (inst == hwth.inst) && (PC == hwth.PC) && (_enabled == hwth._enabled) && (spec_regs == hwth.spec_regs) &&
-           (branch_slot == hwth.branch_slot) && (regs == hwth.regs) && (_deadline_stalled == hwth._deadline_stalled) && (_memory_stalled == hwth._memory_stalled) && (_fetch_stalled == hwth._fetch_stalled);
+    return (_id == hardware_thread._id) && (inst == hardware_thread.inst) && (PC == hardware_thread.PC) && (_enabled == hardware_thread._enabled) && (spec_regs == hardware_thread.spec_regs) &&
+           (branch_slot == hardware_thread.branch_slot) && (regs == hardware_thread.regs) && (_deadline_stalled == hardware_thread._deadline_stalled) && (_memory_stalled == hardware_thread._memory_stalled) && (_fetch_stalled == hardware_thread._fetch_stalled);
 
 }
 
@@ -102,7 +102,7 @@ void hw_thread::reset_register_window() {
 }
 
 void hw_thread::set_id(unsigned int in_id) {
-    id = in_id;
+    _id = in_id;
 }
 
 void hw_thread::set_enabled(bool enable) {

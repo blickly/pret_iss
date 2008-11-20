@@ -69,9 +69,9 @@ public:
 
   /** Copy constructor.
    *
-   *  @param hwth Copy from this hardware thread.
+   *  @param hardware_thread Copy from this hardware thread.
    */
-    hw_thread(const hw_thread& hwth);
+    hw_thread(const hw_thread& hardware_thread);
 
 public:
   /** Returns the thread id.
@@ -107,25 +107,25 @@ public:
   
   /** Overloaded assignment operator.
    *
-   * @param hwth Thread object to assign.
+   * @param hardware_thread Thread object to assign.
    */
-  void operator=(const hw_thread& hwth);
+  void operator=(const hw_thread& hardware_thread);
   
   /** Overloaded equal comparison operator.
    *
-   * @param hwth Thread object to compare with.
+   * @param hardware_thread Thread object to compare with.
    * @return Boolean if equal.
    */
-    bool operator==(const hw_thread& hwth);
+    bool operator==(const hw_thread& hardware_thread);
 
   /** Overloaded output (<<) operator.
    *
    * @param out Output stream.
-   * @param hwth Thread object to output.
+   * @param hardware_thread Thread object to output.
    * @return Output stream.
    */
-    inline friend ostream& operator<<(ostream& out, hw_thread const& hwth) {
-        out << "+ hw_thread id: " << hwth.id << ' ' << hwth.inst;
+    inline friend ostream& operator<<(ostream& out, const hw_thread& hardware_thread) {
+      out << "+ hw_thread id: " << hardware_thread._id << ' ' << hardware_thread.inst;
         return out; 
     }
 
@@ -141,10 +141,10 @@ public:
   /** Dump traces to file when using SystemC. Currently this is empty.
    *
    * @param tf Output trace file.
-   * @param hwth Thread object to dump to trace file.
+   * @param hardware_thread Thread object to dump to trace file.
    * @param str Associate string with object.
    */
-    inline friend void sc_trace(sc_trace_file* tf, const hw_thread& hwth, const string& str) {
+    inline friend void sc_trace(sc_trace_file* tf, const hw_thread& hardware_thread, const string& str) {
         // Do nothing
     }
 #endif /* _NO_SYSTEMC_ */
@@ -187,7 +187,7 @@ public:
     // Data members
     unsigned int cnt_cycles;
     unsigned int cnt_instr;
-    unsigned int id;
+
     instruction inst;
     uint32_t PC;
     uint32_t branch_slot;
@@ -200,6 +200,7 @@ private:
     bool _deadline_stalled; // If the thread is currently in a state of replay.
     bool _memory_stalled;
     bool _fetch_stalled;
+  unsigned int _id;
 };
 
 #endif /* _HW_THREAD_H_ */

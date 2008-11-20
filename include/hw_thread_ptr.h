@@ -34,7 +34,7 @@
 #include "no_systemc.h"
 #else
 #include <systemc.h>
-#endif
+#endif /* _NO_SYSTEMC_ */
 
 #include "hw_thread.h"
 
@@ -120,6 +120,8 @@ public:
         return out;
     }
 private:
+///////////////////////////////////////////////////////////////////////
+///                      private variables                          ///
     hw_thread* _handle;
 };
-#endif
+#endif /* _HW_THREAD_PTR_H_ */

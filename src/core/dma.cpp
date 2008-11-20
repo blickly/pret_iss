@@ -76,7 +76,7 @@ bool dma::is_transfer_complete(const int& thread_id) {
 }
 
 void dma::make_transfer(const hw_thread_ptr& thread_address) {
-    _transfer_complete[thread_address->id] = BUSY;
+  _transfer_complete[thread_address->get_id()] = BUSY;
 }
 
 void dma::register_memory_wheel(const wheeled_mem& wheel) {

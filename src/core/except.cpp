@@ -381,13 +381,13 @@ void except::write_special_regs(const hw_thread_ptr& ht) {
             // To a memory source address.
             if (ht->inst.rd == 0) {
                 //                cout << "except:: memory source, tid: " << ht->id << ", value: " << hex << ht->inst.alu_result << endl;
-                coproc_dma->set_mem_source(ht->id, ht->inst.alu_result);
+	      coproc_dma->set_mem_source(ht->get_id(), ht->inst.alu_result);
             }
 
             // To a spm target address. Start the transfer.
             if (ht->inst.rd == 1) {
                 //                cout << "except:: SPM target, tid: " << ht->id << ", value: " << hex << ht->inst.alu_result << endl;
-                coproc_dma->set_spm_target(ht->id, ht->inst.alu_result);
+	      coproc_dma->set_spm_target(ht->get_id(), ht->inst.alu_result);
                 coproc_dma->make_transfer(ht);
             }
             break;
