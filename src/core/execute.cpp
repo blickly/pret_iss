@@ -42,36 +42,37 @@ execute::execute(const sc_module_name& name): module_base(name) {
 }
 
 #ifdef _NO_SYSTEMC_
-void execute::behavior(const hw_thread_ptr& in_thread, hw_thread_ptr& out_thread) {
+void execute::behavior(const hw_thread_ptr& hardware_thread, hw_thread_ptr& out_thread) {
 #else
 void execute::behavior() {
-    hw_thread_ptr in_thread = in.read();
+    hw_thread_ptr hardware_thread = in.read();
 #endif
 
-    if (in_thread.is_null() || !in_thread->enabled || in_thread->fetch_stalled) {
+    if (hardware_thread.is_null() || !hardware_thread->is_enabled()
+	|| hardware_thread->is_fetch_stalled()) {
 #ifdef _NO_SYSTEMC_
-        out_thread = in_thread;
+        out_thread = hardware_thread;
 #else
-        out.write(in_thread);
+        out.write(hardware_thread);
 #endif
         return;
     }
 
-    perform_alu_operations(in_thread);
+    perform_alu_operations(hardware_thread);
 
 #ifdef DBG_PIPE
     cout << "*execute*" << " (" << sc_time_stamp() << ") ";
-    cout << "hw_thread's id: " << in_thread->get_id() << ", pc: 0x" << hex << in_thread.get_handle()->PC << hex <<  ", " << in_thread->inst;
+    cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex << hardware_thread.get_handle()->PC << hex <<  ", " << hardware_thread->inst;
     cout << "\t+ " << hex << "alu_result: "
-         << dec << in_thread->inst.alu_result << ", aluwreg: " << in_thread->inst.wreg << ", wicc: "
-         << in_thread->inst.wicc << ", local icc = "  << (int)in_thread->inst.icc << endl;
+         << dec << hardware_thread->inst.alu_result << ", aluwreg: " << hardware_thread->inst.wreg << ", wicc: "
+         << hardware_thread->inst.wicc << ", local icc = "  << (int)hardware_thread->inst.icc << endl;
 
 #endif
 
 #ifdef _NO_SYSTEMC_
-    out_thread = in_thread;
+    out_thread = hardware_thread;
 #else
-    out.write(in_thread);
+    out.write(hardware_thread);
 #endif
 }
 
@@ -369,5 +370,6 @@ unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
 }
 
 bool execute::_is_not_valid_hwthread(const hw_thread_ptr& hardware_thread) {
-    return (hardware_thread.is_null() || !hardware_thread->enabled || hardware_thread->fetch_stalled);
+  return (hardware_thread.is_null() || !hardware_thread->is_enabled()
+	  || hardware_thread->is_fetch_stalled());
 }

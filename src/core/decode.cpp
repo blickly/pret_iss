@@ -66,7 +66,8 @@ void decode::behavior() {
 }
 
 bool decode::_is_not_valid_hwthread(const hw_thread_ptr& hardware_thread) {
-    return (hardware_thread.is_null() || !hardware_thread->enabled || hardware_thread->fetch_stalled);
+  return (hardware_thread.is_null() || !hardware_thread->is_enabled()
+	  || hardware_thread->is_fetch_stalled());
 }
 
 void decode::_dbg_pipeline(hw_thread_ptr& hardware_thread) {

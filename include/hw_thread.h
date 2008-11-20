@@ -24,47 +24,164 @@
   PT_COPYRIGHT_VERSION_2
   COPYRIGHTENDKEY
 
-  $Id$
-
 */
 
 #ifndef _HW_THREAD_H_
 #define _HW_THREAD_H_
 
+#ifdef _NO_SYSTEMC_
+#include "no_systemc.h"
+#else
+#include <systemc.h>
+#endif /* _NO_SYSTEMC_ */
+
+#include <stdint.h>
 
 #include "defines.h"
 #include "instruction.h"
 #include "memory_controller.h"
 #include "register_file.h"
 #include "special_reg.h"
-#include <stdint.h>
+///////////////////////////////////////////////////////////////////////
+/// hw_thread
+/**
+ * The state of a thread is captured in this structure. 
+ *
+ * @author  Hiren Patel
+ * @version $Id$
+ * @Pt.ProposedRating red hiren
+ * @Pt.AcceptedRating
+ */
 
-struct hw_thread {
+class hw_thread {
+public:
 
-    unsigned int get_id();
+  /** Construct an empty hardware thread.
+   */
     hw_thread();
-    hw_thread(const hw_thread & hwth);
+
+  /** Overloaded constructor.
+   *
+   * @param in_id Thread id.
+   * @param pc Starting program counter.
+   */
     hw_thread(unsigned int in_id, uint32_t pc);
 
-    bool operator==(const hw_thread & hwth);
-    void operator=(const hw_thread & hwth);
-    inline friend ostream & operator << (ostream & out, hw_thread const & hwth) {
-        //    out << "---------------------------- hw_thread ------------------------------------------" << endl;
+  /** Copy constructor.
+   *
+   *  @param hwth Copy from this hardware thread.
+   */
+    hw_thread(const hw_thread& hwth);
+
+public:
+  /** Returns the thread id.
+   *
+   * @return Thread id.
+   */
+      unsigned int get_id();
+  
+  /** Returns true if stall is caused by a deadline instruction.
+   *
+   * @return True if deadline caused the stall, else false.
+   */
+  bool is_deadline_stalled() const;
+  
+  /** Return if the thread is enabled.
+   *
+   * @return True if thread is enabled for processing, else false.
+   */
+  bool is_enabled() const;
+
+  /** Returns true if stall is caused by an instruction fetch to the memory.
+   *
+   * @return True if fetch caused the stall, else false.
+   */
+  bool is_fetch_stalled() const;
+
+  /** Returns true if stall is caused by a data access to memory.
+   *
+   * @return True if memory stage caused the stall, else false.
+   */
+  bool is_memory_stalled() const;
+
+  
+  /** Overloaded assignment operator.
+   *
+   * @param hwth Thread object to assign.
+   */
+  void operator=(const hw_thread& hwth);
+  
+  /** Overloaded equal comparison operator.
+   *
+   * @param hwth Thread object to compare with.
+   * @return Boolean if equal.
+   */
+    bool operator==(const hw_thread& hwth);
+
+  /** Overloaded output (<<) operator.
+   *
+   * @param out Output stream.
+   * @param hwth Thread object to output.
+   * @return Output stream.
+   */
+    inline friend ostream& operator<<(ostream& out, hw_thread const& hwth) {
         out << "+ hw_thread id: " << hwth.id << ' ' << hwth.inst;
-        //  out << "------------------------------------- ------------------------------------------" << endl;
-        return out;
+        return out; 
     }
 
-    // Print out registers in current register window.
+  /** Print out registers in current register window.
+   */
     void regdump();
-    // Register Access functions
+
+  /** Reset the register windows.
+   */
     void reset_register_window();
+  
 #ifndef  _NO_SYSTEMC_
-    inline friend void sc_trace(sc_trace_file *tf, const hw_thread & hwth, const string & str) {
+  /** Dump traces to file when using SystemC. Currently this is empty.
+   *
+   * @param tf Output trace file.
+   * @param hwth Thread object to dump to trace file.
+   * @param str Associate string with object.
+   */
+    inline friend void sc_trace(sc_trace_file* tf, const hw_thread& hwth, const string& str) {
         // Do nothing
     }
 #endif /* _NO_SYSTEMC_ */
+
+
+
+  /** Set the enabled state of the thread.
+   *
+   * @param enable True if thread is going to be enabled, else false.
+   */
+  void set_enabled(bool enable);
+
+  /** Set the state if stall is caused by instruction fetch from memory.
+   *
+   * @param stall True if stalled, else false.
+   */
+  void set_fetch_stalled(bool stall);
+
+    /** Set the thread id.
+   *
+   * @param in_id New thread identifier.
+   */
     void set_id(unsigned int in_id);
+
+  
+  /** Set the state if stall is caused by a deadline instruction.
+   *
+   * @param stall True if stalled, else false.
+   */
+
+  void set_deadline_stalled(bool stall);
+
+  /** Set the state if stall is caused by a data memory access.
+   *
+   * @param stall True if stalled, else false.
+   */
+  void set_memory_stalled(bool stall);
 
 
     // Data members
@@ -76,11 +193,13 @@ struct hw_thread {
     uint32_t branch_slot;
     register_file regs;
     special_reg spec_regs;
-    bool enabled;
+
     bool db_word;
-    bool dead_stalled; // If the thread is currently in a state of replay.
-    bool mem_stalled;
-    bool fetch_stalled;
+private:
+    bool _enabled;
+    bool _deadline_stalled; // If the thread is currently in a state of replay.
+    bool _memory_stalled;
+    bool _fetch_stalled;
 };
 
 #endif /* _HW_THREAD_H_ */

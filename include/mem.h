@@ -109,6 +109,14 @@ private:
      *  and <i>DBG_MEM</i> flags are enabled during compilation.
      *  @param ht Hardware thread.
      */
-    void _dbg_pipeline(const hw_thread_ptr& ht);
+    void _dbg_pipeline(const hw_thread_ptr& hardware_thread);
+
+
+    /** Check whether the current thread in a stage can processed or not.
+     *  @param hardware_thread The hardware thread.
+     */
+    bool _is_not_valid_hwthread(const hw_thread_ptr& hardware_thread);
+
+  
 };
 #endif /* _MEM_H_ */

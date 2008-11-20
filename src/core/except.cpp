@@ -115,7 +115,7 @@ void except::behavior() {
 
     /* If fetch stage is stalled then just increment the cycle count
     and return. */
-    if (ht->fetch_stalled) {
+    if (ht->is_fetch_stalled()) {
         return;
     }
 
@@ -160,7 +160,7 @@ bool except::dead_stalled(const hw_thread_ptr& ht) {
      //IF DEADLINE IS NOT REACHED, NULL MEANS DON'T COMMIT
      //ANYTHING, SO WE CAN JUST RETURN FROM THIS STAGE
      ****************************************************************/
-    if (ht->dead_stalled) {
+  if (ht->is_deadline_stalled()) {
 #ifdef DBG_REG
         //   ht->spec_regs.dump();
         ht->spec_regs.dump_deadline_timers();
@@ -213,17 +213,17 @@ except::except(const sc_module_name & str): module_base(str) {
 bool except::fetch_stalled(const hw_thread_ptr& ht) {
     /* A stall from the fetch stage causes the exception stage to skip out
      just after the deadline registers are updated */
-    return (ht->fetch_stalled);
+  return (ht->is_fetch_stalled());
 };
 
 bool except::_is_not_valid_hwthread(const hw_thread_ptr& ht) {
-    return (ht.is_null() || !ht->enabled);
+  return (ht.is_null() || !ht->is_enabled());
 }
 
 bool except::mem_stalled(const hw_thread_ptr& ht) {
     /* A stall from the memory causes the exception stage to skip out
      just after the deadline registers are updated */
-    return (ht->mem_stalled);
+  return (ht->is_memory_stalled());
 };
 
 void except::set_dword_state(const hw_thread_ptr& ht) {

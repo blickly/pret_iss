@@ -45,7 +45,7 @@ hw_thread_controller::hw_thread_controller(const sc_module_name& str)  {
     unsigned int i;
     for (i = 0; i < NUM_THREADS; i++) {
         hw_thread * h = new hw_thread(i, 0x40000000);
-        h->enabled = true;
+        h->set_enabled(true);
         //h->instruction_mem(this->instruction_mem);
         hw_thread_ptr * hp = new hw_thread_ptr(h);
 #ifdef DBG_THREAD_CONT

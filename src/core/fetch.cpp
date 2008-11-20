@@ -56,8 +56,10 @@ void fetch::behavior() {
     }
 
     //    cout << hex << ht->PC << "\t" << ht->PC << endl;
+    bool fetch_stall = false;
     uint32_t instruction_bits =
-        instruction_memory->read_inst(input_thread->id, input_thread->PC, input_thread->fetch_stalled);
+        instruction_memory->read_inst(input_thread->id, input_thread->PC, fetch_stall);
+    input_thread->set_fetch_stalled(fetch_stall);
     input_thread->inst.set_inst(instruction_bits);
 
     //    cout << "fetch:: stalled: " << input_thread->fetch_stalled << endl;
@@ -78,7 +80,8 @@ void fetch::behavior() {
     /* If we had a previously dead_stalled set, then we will reset it in
        the register access stage when we identify what particular
        register it is that we are considered with. */
-    input_thread->dead_stalled = false;
+    input_thread->set_deadline_stalled(false);
+    
 #ifdef _NO_SYSTEMC_
     output_thread = input_thread;
 #else
@@ -95,10 +98,11 @@ void fetch::_debug_pipeline(const hw_thread_ptr& hardware_thread) {
 #endif /* _NO_SYSTEMC */
     cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex
          << hardware_thread->PC << hex <<  ", " << hardware_thread->inst
-         << ", stalled: " << hardware_thread->fetch_stalled << endl;
+         << ", stalled: " << hardware_thread->is_fetch_stalled() << endl;
 #endif /* DBG_PIPE */
 }
 
 bool fetch::_is_not_valid_hardware_thread(const hw_thread_ptr& hardware_thread) {
-    return (hardware_thread.is_null() || !hardware_thread->enabled || hardware_thread->mem_stalled);
+  return (hardware_thread.is_null() || !hardware_thread->is_enabled()
+	  || hardware_thread->is_memory_stalled());
 }

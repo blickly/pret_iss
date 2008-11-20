@@ -88,7 +88,8 @@ void regacc::behavior() {
 }
 
 bool regacc::_is_not_valid_hardware_thread(const hw_thread_ptr& hardware_thread) {
-    return (hardware_thread.is_null() || !hardware_thread->enabled || hardware_thread->fetch_stalled);
+  return (hardware_thread.is_null() || !hardware_thread->is_enabled()
+	  || hardware_thread->is_fetch_stalled());
 }
 
 void regacc::_debug_print(const hw_thread_ptr& hardware_thread) {
@@ -102,7 +103,7 @@ void regacc::_debug_print(const hw_thread_ptr& hardware_thread) {
 }
 
 void regacc::_double_word_instruction(const hw_thread_ptr& hardware_thread) {
-    if ((hardware_thread->db_word) && (!hardware_thread->dead_stalled)) {
+  if ((hardware_thread->db_word) && (!hardware_thread->is_deadline_stalled())) {
         hardware_thread->inst.rd += 1;
         // Increment rs1 by 4
         hardware_thread->inst.op1_val =  hardware_thread->regs.get_reg(hardware_thread->inst.rs1, hardware_thread->spec_regs.curr_wp) + 4;
@@ -134,12 +135,12 @@ void regacc::_destination_phaselockloop_deadlines(const hw_thread_ptr& hardware_
        If something is in the mailbox then we will stall no matter what.
     */
     if (hardware_thread->spec_regs.pll_load[hardware_thread->inst.rd-8] != 0) {
-        hardware_thread->dead_stalled = true;
+      hardware_thread->set_deadline_stalled(true);
     }
     //IF WE HAVEN'T LOADED ANYTHING, AND MAILBOX IS CLEAR, WE LOAD IN MAILBOX
     //AND STALL UNTIL MAILBOX IS CLEARED
     else if (hardware_thread->spec_regs.pll_load[hardware_thread->inst.rd - 8] == 0 && !hardware_thread->spec_regs.pll_loaded) {
-        hardware_thread->dead_stalled = true;
+      hardware_thread->set_deadline_stalled(true);
         hardware_thread->inst.wsreg = true;
         hardware_thread->spec_regs.pll_loaded = true;
     }
@@ -158,7 +159,7 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
     if (hardware_thread->spec_regs.dt[hardware_thread->inst.rd] <= 0) {
         hardware_thread->inst.wsreg = true;
     } else {
-        hardware_thread->dead_stalled = true;
+      hardware_thread->set_deadline_stalled(true);
     }
     /*  If a deadline is being missed then print ouf a warning
      *  saying that the deadlines are being missed.

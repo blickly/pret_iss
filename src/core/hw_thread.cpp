@@ -38,7 +38,7 @@ unsigned int hw_thread::get_id() {
 }
 
 hw_thread::hw_thread(): id(MAX_THREAD) {
-    enabled = false;
+    _enabled = false;
 }
 
 hw_thread::hw_thread(const hw_thread & hwth) {
@@ -50,11 +50,11 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : id(in_id) {
     cnt_cycles = 0;
     cnt_instr = 0;
     branch_slot = 0;
-    enabled = false;
     db_word = false;
-    dead_stalled = false;
-    mem_stalled = false;
-    fetch_stalled = false;
+    _enabled = false;
+    _deadline_stalled = false;
+    _memory_stalled = false;
+    _fetch_stalled = false;
 }
 
 
@@ -64,21 +64,21 @@ void hw_thread::operator=(const hw_thread & hwth) {
     cnt_cycles = hwth.cnt_cycles;
     cnt_instr = hwth.cnt_instr;
     PC = hwth.PC;
-    enabled = hwth.enabled;
+    _enabled = hwth._enabled;
     spec_regs = hwth.spec_regs;
     regs = hwth.regs;
     branch_slot = hwth.branch_slot;
     db_word = hwth.db_word;
-    dead_stalled = hwth.dead_stalled;
-    mem_stalled = hwth.mem_stalled;
-    fetch_stalled = hwth.fetch_stalled;
+    _deadline_stalled = hwth._deadline_stalled;
+    _memory_stalled = hwth._memory_stalled;
+    _fetch_stalled = hwth._fetch_stalled;
 
 }
 
 bool hw_thread::operator==(const hw_thread & hwth) {
     /// cnt_instr and cnt_cycles are not behaviors of a thread so no need to compare them.
-    return (id == hwth.id) && (inst == hwth.inst) && (PC == hwth.PC) && (enabled == hwth.enabled) && (spec_regs == hwth.spec_regs) &&
-           (branch_slot == hwth.branch_slot) && (regs == hwth.regs) && (dead_stalled == hwth.dead_stalled) && (mem_stalled == hwth.mem_stalled) && (fetch_stalled == hwth.fetch_stalled);
+    return (id == hwth.id) && (inst == hwth.inst) && (PC == hwth.PC) && (_enabled == hwth._enabled) && (spec_regs == hwth.spec_regs) &&
+           (branch_slot == hwth.branch_slot) && (regs == hwth.regs) && (_deadline_stalled == hwth._deadline_stalled) && (_memory_stalled == hwth._memory_stalled) && (_fetch_stalled == hwth._fetch_stalled);
 
 }
 
@@ -104,3 +104,37 @@ void hw_thread::reset_register_window() {
 void hw_thread::set_id(unsigned int in_id) {
     id = in_id;
 }
+
+void hw_thread::set_enabled(bool enable) {
+  _enabled = enable;
+}
+
+void hw_thread::set_fetch_stalled(bool stall) {
+  _fetch_stalled = stall;
+}
+
+void hw_thread::set_deadline_stalled(bool stall) {
+  _deadline_stalled = stall;
+}
+
+void hw_thread::set_memory_stalled(bool stall) {
+  _memory_stalled = stall;
+}
+
+bool hw_thread::is_deadline_stalled() const {
+  return _deadline_stalled;
+}
+
+bool hw_thread::is_enabled() const {
+  return _enabled;
+}
+
+
+bool hw_thread::is_fetch_stalled() const {
+  return _fetch_stalled;
+}
+
+bool hw_thread::is_memory_stalled() const {
+  return _memory_stalled;
+}
+
