@@ -88,6 +88,12 @@ public:
    */
   uint32_t get_pc() const;
 
+    /** Return the delayed branch address.
+   *
+   * @return Delayed branch address.
+   */
+  uint32_t get_delayed_branch_address() const;
+
       /** Returns true if stall is caused by a double word instruction.
      *
      * @return True if double word instruction caused the stall, else false.
@@ -164,7 +170,29 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 
-    /** Set the enabled state of the thread.
+
+
+    /** Set the state if stall is caused by a double word instruction.
+     *
+     * @param stall True if stalled, else false.
+     */
+
+    void set_db_word_stalled(bool stall);
+
+    /** Set the state if stall is caused by a deadline instruction.
+     *
+     * @param stall True if stalled, else false.
+     */
+
+    void set_deadline_stalled(bool stall);
+
+     /** Set the delayed branch address.
+     *
+     * @param address Address for delayed branch.
+     */
+    void set_delayed_branch_address(uint32_t address);
+
+      /** Set the enabled state of the thread.
      *
      * @param enable True if thread is going to be enabled, else false.
      */
@@ -182,21 +210,6 @@ public:
     */
     void set_id(unsigned int in_id);
   
-    /** Set the state if stall is caused by a double word instruction.
-     *
-     * @param stall True if stalled, else false.
-     */
-
-    void set_db_word_stalled(bool stall);
-
-
-    /** Set the state if stall is caused by a deadline instruction.
-     *
-     * @param stall True if stalled, else false.
-     */
-
-    void set_deadline_stalled(bool stall);
-
     /** Set the state if stall is caused by a data memory access.
      *
      * @param stall True if stalled, else false.
@@ -213,25 +226,25 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///                      public  variables                          ///
 
-    unsigned int cnt_cycles;
-    unsigned int cnt_instr;
-    instruction inst;
+  unsigned int cnt_cycles; // Count the number of cycles this thread executes. 
+  unsigned int cnt_instr; // Count the number of instructions this thread executes.
+  instruction inst; // Instruction data structure.
 
-    uint32_t branch_slot;
-    register_file regs;
-    special_reg spec_regs;
+  register_file regs; // Registers. 
+  special_reg spec_regs; // Special registers with timers. 
 
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
 private:
-  bool _enabled; // If the thread is enabled.
-  bool _db_word_stalled;   // Current instruction being executed is a double word.
+  bool _enabled;          // If the thread is enabled.
+  uint32_t _branch_slot;  // Delay branch  address.
+  bool _db_word_stalled;  // Current instruction being executed is a double word.
   bool _deadline_stalled; // If the thread is currently in a state of replay.
-  bool _memory_stalled; // If the memory stage causes a stall. 
-  bool _fetch_stalled; // If the fetch stage causes a stall. 
-  unsigned int _id; // Thread identifier.
-  uint32_t _pc; // Thread's current program counter.
+  bool _memory_stalled;   // If the memory stage causes a stall. 
+  bool _fetch_stalled;    // If the fetch stage causes a stall. 
+  unsigned int _id;       // Thread identifier.
+  uint32_t _pc;           // Thread's current program counter.
 
 };
 

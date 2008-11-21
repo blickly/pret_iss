@@ -180,7 +180,7 @@ void except::debug(const hw_thread_ptr& ht) {
 #ifdef DBG_PIPE
     cout << "*eXcept*" << "  (" << sc_time_stamp() << ") ";
     cout << "hw_thread's id: " << ht->get_id() << ", pc: 0x" << hex << ht._handle->PC << ", " << hex << ht->inst;
-    cout << "\t+ pc: " << hex << ht->PC << " branch: " << ht->branch_slot << " icc: " << hex << (uint32_t)(ht->spec_regs.icc) << dec << endl;
+    cout << "\t+ pc: " << hex << ht->PC << " branch: " << ht->get_delayed_branch_address() << " icc: " << hex << (uint32_t)(ht->spec_regs.icc) << dec << endl;
 #endif
 
 #ifdef DBG_INST_TRACE
@@ -249,15 +249,15 @@ void except::inc_pc(const hw_thread_ptr& ht) {
     // We must execute the delayed instruction stored in the branch
     // slot. If there is none in the branch_slot then we can simply
     // forward the PC.
-    if (ht->branch_slot) {
+    if (ht->get_delayed_branch_address()) {
         // If there is double instruction in the delay slot then we need to make
         // sure to not set the PC to the branch slot instruction until we have
         // finished processing the delay slot instruction.
 
         // Make sure the instruction's db_word is not set.
         if (!ht->inst.db_word) {
-	  ht->set_pc(ht->branch_slot);
-            ht->branch_slot = 0;
+	  ht->set_pc(ht->get_delayed_branch_address());
+	  ht->set_delayed_branch_address(0);
         }
     } else {
       ht->set_pc(ht->get_pc() + 4);
@@ -266,7 +266,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
     if (branch_check(ht)) {
         //    if (branch_check(ht->inst, ht->spec_regs.icc)) {
         if (!(ht->inst.branch && ht->inst.annul && ht->inst.cond == BRCH_BA)) {
-	  ht->branch_slot = ht->get_pc() + addr_calc(ht) - 4;
+	  ht->set_delayed_branch_address(ht->get_pc() + addr_calc(ht) - 4);
         } else {
 	  ht->set_pc(ht->get_pc() + addr_calc(ht) - 4);
         }
@@ -274,7 +274,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 #ifdef DBG_PIPE
         cout << "\t+ inst.pc = " << ht->inst.pc << endl;
 #endif
-        ht->branch_slot = ht->inst.alu_result;
+        ht->set_delayed_branch_address(ht->inst.alu_result);
     }  else
         if (ht->inst.branch && ht->inst.annul) {
 	  ht->set_pc(ht->get_pc() + 4);
@@ -286,7 +286,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 
 
 #ifdef DBG_PIPE
-    cout << "\t+ next PC: " << hex << ht->PC << ", branch slot: " << ht->branch_slot << dec << endl;
+    cout << "\t+ next PC: " << hex << ht->PC << ", branch slot: " << ht->get_delayed_branch_address() << dec << endl;
 
 
     //   cout << "Increment PC @ time " << sc_time_stamp() << ", old pc: "

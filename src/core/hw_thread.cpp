@@ -41,6 +41,10 @@ uint32_t hw_thread::get_pc() const {
     return _pc;
 }
 
+uint32_t hw_thread::get_delayed_branch_address() const {
+  return _branch_slot;
+}
+
 hw_thread::hw_thread(): _id(MAX_THREAD) {
     _enabled = false;
 }
@@ -53,7 +57,7 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
     _pc = pc;
     cnt_cycles = 0;
     cnt_instr = 0;
-    branch_slot = 0;
+    _branch_slot = 0;
     _db_word_stalled = false;
     _enabled = false;
     _deadline_stalled = false;
@@ -90,7 +94,7 @@ void hw_thread::operator=(const hw_thread & hardware_thread) {
     _enabled = hardware_thread._enabled;
     spec_regs = hardware_thread.spec_regs;
     regs = hardware_thread.regs;
-    branch_slot = hardware_thread.branch_slot;
+    _branch_slot = hardware_thread._branch_slot;
     _db_word_stalled = hardware_thread._db_word_stalled;
     _deadline_stalled = hardware_thread._deadline_stalled;
     _memory_stalled = hardware_thread._memory_stalled;
@@ -106,7 +110,7 @@ bool hw_thread::operator==(const hw_thread& hardware_thread) {
       && (_pc == hardware_thread._pc)
       && (_enabled == hardware_thread._enabled)
       && (spec_regs == hardware_thread.spec_regs)
-      &&  (branch_slot == hardware_thread.branch_slot)
+      &&  (_branch_slot == hardware_thread._branch_slot)
       && (regs == hardware_thread.regs)
       && (_deadline_stalled == hardware_thread._deadline_stalled)
       && (_memory_stalled == hardware_thread._memory_stalled)
@@ -119,13 +123,13 @@ void hw_thread::regdump() {
     regs.regdump(spec_regs.curr_wp);
     cout << hex << setfill('0') << "pc : " << setw(8) << _pc << "    ";
 
-    // This is assuming that if the branch_slot is 0 then basically npc
+    // This is assuming that if the _branch_slot is 0 then basically npc
     // = pc +4 but if it is set then that is the next instruction we are
     // going to execute.
-    if (branch_slot == 0)
+    if (_branch_slot == 0)
         cout << "npc: " <<  hex << setfill('0') <<  setw(8) << _pc + 4 << endl;
     else
-        cout << "npc: " <<  hex << setfill('0') <<  setw(8) << branch_slot << endl;
+        cout << "npc: " <<  hex << setfill('0') <<  setw(8) << _branch_slot << endl;
 
     spec_regs.dump();
 }
@@ -138,20 +142,24 @@ void hw_thread::set_id(unsigned int in_id) {
     _id = in_id;
 }
 
-void hw_thread::set_enabled(bool enable) {
-    _enabled = enable;
-}
-
-void hw_thread::set_fetch_stalled(bool stall) {
-    _fetch_stalled = stall;
-}
-
 void hw_thread::set_db_word_stalled(bool stall) {
     _db_word_stalled = stall;
 }
 
 void hw_thread::set_deadline_stalled(bool stall) {
     _deadline_stalled = stall;
+}
+
+void hw_thread::set_delayed_branch_address(uint32_t address) {
+  _branch_slot = address;
+}
+
+void hw_thread::set_enabled(bool enable) {
+    _enabled = enable;
+}
+
+void hw_thread::set_fetch_stalled(bool stall) {
+    _fetch_stalled = stall;
 }
 
 void hw_thread::set_memory_stalled(bool stall) {
