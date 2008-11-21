@@ -30,11 +30,9 @@
 
 #ifndef _SPECIAL_REG_H_
 #define _SPECIAL_REG_H_
-
-
+#include <stdint.h>
 #include "instruction.h"
 #include "defines.h"
-#include <stdint.h>
 
 enum DT_STATUS {
     UNSET,
@@ -42,22 +40,25 @@ enum DT_STATUS {
     MISSED
 };
 
-struct special_reg {
-
+class special_reg {
+public:
     special_reg();
     special_reg(const special_reg& sr);
-    bool operator==(const special_reg& sr);
     void operator=(const special_reg& sr);
+  bool operator==(const special_reg& sr);
+
 
     uint32_t get_carry_bit();
-    void set_psr(uint32_t psr);
-    uint32_t get_psr();
-    void dump_deadline_timers();
+  uint32_t get_psr();
+  
     void dump();
+  void dump_deadline_timers();
+  
     void decrement_deadline_timers();
-    bool missed_deadline(uint32_t& dt_reg);
     void decrement_pll_timers();
-
+  bool missed_deadline(uint32_t& dt_reg);
+    void set_psr(uint32_t psr);
+  
     // Data members
     unsigned char imp_ver;
     WindowPointer curr_wp;  // Thread's current window pointer
@@ -82,6 +83,5 @@ struct special_reg {
     uint32_t pll_load[NUM_PLL_TIMERS];
     bool pll_loaded;
     DT_STATUS dt_status[NUM_DEADLINE_TIMERS];
-
 };
-#endif
+#endif /* _SPECIAL_REG_H_ */
