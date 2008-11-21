@@ -256,19 +256,19 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 
         // Make sure the instruction's db_word is not set.
         if (!ht->inst.db_word) {
-            ht->PC = ht->branch_slot;
+	  ht->set_pc(ht->branch_slot);
             ht->branch_slot = 0;
         }
     } else {
-        ht->PC += 4;
+      ht->set_pc(ht->get_pc() + 4);
     }
 
     if (branch_check(ht)) {
         //    if (branch_check(ht->inst, ht->spec_regs.icc)) {
         if (!(ht->inst.branch && ht->inst.annul && ht->inst.cond == BRCH_BA)) {
-            ht ->branch_slot = ht->PC + addr_calc(ht) - 4;
+	  ht->branch_slot = ht->get_pc() + addr_calc(ht) - 4;
         } else {
-            ht ->PC = ht->PC + addr_calc(ht) - 4;
+	  ht->set_pc(ht->get_pc() + addr_calc(ht) - 4);
         }
     } else if (ht->inst.jump) {
 #ifdef DBG_PIPE
@@ -277,11 +277,11 @@ void except::inc_pc(const hw_thread_ptr& ht) {
         ht->branch_slot = ht->inst.alu_result;
     }  else
         if (ht->inst.branch && ht->inst.annul) {
-            ht->PC += 4;
+	  ht->set_pc(ht->get_pc() + 4);
         }
 
     if (ht->inst.jump || ht->inst.call) {
-        ht->inst.alu_result = ht->PC - 4;
+      ht->inst.alu_result = ht->get_pc() - 4;
     }
 
 

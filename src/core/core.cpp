@@ -217,7 +217,7 @@ uint32_t core::get_memory_data(uint32_t addr) const {
 }
 
 uint32_t core::get_pc(int thread_id) const {
-    return _thread_controller->get_thread(thread_id)->get_handle()->PC;
+  return _thread_controller->get_thread(thread_id)->get_handle()->get_pc();
 }
 
 long int core::get_period() const {
@@ -251,7 +251,7 @@ bool core::is_memory_stalled(int thread_id) const {
 
 void core::print_memory() {
     cout << "Data Memory contents for thread " << _thread_controller->get_thread(0)->get_handle()->get_id()
-         << "(PC = " << hex <<  _thread_controller->get_thread(0)->get_handle()->PC << ")" << endl;
+         << "(PC = " << hex <<  _thread_controller->get_thread(0)->get_handle()->get_pc() << ")" << endl;
     // FIX: The dump because it's one big memory now and it needs to
     // spit out only from the address that is data.
     _memory_controller->dump();

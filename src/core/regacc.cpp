@@ -95,7 +95,7 @@ bool regacc::_is_not_valid_hardware_thread(const hw_thread_ptr& hardware_thread)
 void regacc::_debug_print(const hw_thread_ptr& hardware_thread) {
 #ifdef DBG_PIPE
     cout << "*regacc*" << "  (" << sc_time_stamp() << ") ";
-    cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex << hardware_thread._handle->PC << hex <<  ", " << hardware_thread->inst ;
+    cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex << hardware_thread._handle->get_pc() << hex <<  ", " << hardware_thread->inst ;
     cout   << "\t+ "  << "op1_val: "  << dec << hardware_thread->inst.op1_val
            << ", op2_val: "  << hardware_thread->inst.op2_val
            << ", wp: " << hardware_thread->spec_regs.curr_wp << endl;
@@ -190,6 +190,6 @@ void regacc::_warn_missing_deadlines(const hw_thread_ptr& hardware_thread) {
     bool missed_deadline = hardware_thread->spec_regs.missed_deadline(dead_timer);
     if (missed_deadline) {
         cout << "Warning: Missed deadline in thread " << hardware_thread->get_id() << ", dt reg: "
-             << dead_timer << ", pc: "  << hex << hardware_thread->PC << endl;
+             << dead_timer << ", pc: "  << hex << hardware_thread->get_pc() << endl;
     }
 }

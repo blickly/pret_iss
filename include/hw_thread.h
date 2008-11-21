@@ -73,6 +73,8 @@ public:
      */
     hw_thread(const hw_thread& hardware_thread);
 
+///////////////////////////////////////////////////////////////////////
+///                      public methods                             ///
 public:
     /** Returns the thread id.
      *
@@ -80,6 +82,12 @@ public:
      */
     unsigned int get_id();
 
+  /** Return the current thread program counter.
+   *
+   * @return Thread's program counter.
+   */
+  uint32_t get_pc() const;
+  
     /** Returns true if stall is caused by a deadline instruction.
      *
      * @return True if deadline caused the stall, else false.
@@ -150,7 +158,6 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 
-
     /** Set the enabled state of the thread.
      *
      * @param enable True if thread is going to be enabled, else false.
@@ -183,24 +190,34 @@ public:
      */
     void set_memory_stalled(bool stall);
 
+  /** Set the thread's program counter.
+   *
+   * @param pc New pc of thread.
+   */
+  void set_pc(uint32_t pc);
 
-    // Data members
+
+///////////////////////////////////////////////////////////////////////
+///                      public  variables                          ///
+
     unsigned int cnt_cycles;
     unsigned int cnt_instr;
-
     instruction inst;
-    uint32_t PC;
+
     uint32_t branch_slot;
     register_file regs;
     special_reg spec_regs;
+    bool db_word;  
 
-    bool db_word;
+///////////////////////////////////////////////////////////////////////
+///                      private variables                          ///
 private:
     bool _enabled;
     bool _deadline_stalled; // If the thread is currently in a state of replay.
     bool _memory_stalled;
     bool _fetch_stalled;
     unsigned int _id;
+  uint32_t _pc;
 };
 
 #endif /* _HW_THREAD_H_ */

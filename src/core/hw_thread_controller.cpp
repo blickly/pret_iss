@@ -150,7 +150,7 @@ void hw_thread_controller::parse_srec_files(srec_parser& parser,
 #ifdef DBG_THREAD_CONT
         cout << "Starting PC for thread " << i << " is " << hex << starting_addr << endl;;
 #endif /* DBG_THREAD_CONT */
-        _pool[i]->get_handle()->PC = starting_addr;
+        _pool[i]->get_handle()->set_pc(starting_addr);
     }
     /*Feature: Pass in file to load SREC files
       for (unsigned int i = 0; i < pool.size(); i++) {

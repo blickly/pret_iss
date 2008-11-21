@@ -37,6 +37,10 @@ unsigned int hw_thread::get_id() {
     return _id;
 }
 
+uint32_t hw_thread::get_pc() const {
+    return _pc;
+}
+
 hw_thread::hw_thread(): _id(MAX_THREAD) {
     _enabled = false;
 }
@@ -46,7 +50,7 @@ hw_thread::hw_thread(const hw_thread& hardware_thread) {
 }
 
 hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
-    PC = pc;
+    _pc = pc;
     cnt_cycles = 0;
     cnt_instr = 0;
     branch_slot = 0;
@@ -57,13 +61,28 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
     _fetch_stalled = false;
 }
 
+bool hw_thread::is_deadline_stalled() const {
+    return _deadline_stalled;
+}
 
+bool hw_thread::is_enabled() const {
+    return _enabled;
+}
+
+
+bool hw_thread::is_fetch_stalled() const {
+    return _fetch_stalled;
+}
+
+bool hw_thread::is_memory_stalled() const {
+    return _memory_stalled;
+}
 void hw_thread::operator=(const hw_thread & hardware_thread) {
     _id = hardware_thread._id;
     inst = hardware_thread.inst;
     cnt_cycles = hardware_thread.cnt_cycles;
     cnt_instr = hardware_thread.cnt_instr;
-    PC = hardware_thread.PC;
+    _pc = hardware_thread._pc;
     _enabled = hardware_thread._enabled;
     spec_regs = hardware_thread.spec_regs;
     regs = hardware_thread.regs;
@@ -77,20 +96,30 @@ void hw_thread::operator=(const hw_thread & hardware_thread) {
 
 bool hw_thread::operator==(const hw_thread& hardware_thread) {
     /// cnt_instr and cnt_cycles are not behaviors of a thread so no need to compare them.
-    return (_id == hardware_thread._id) && (inst == hardware_thread.inst) && (PC == hardware_thread.PC) && (_enabled == hardware_thread._enabled) && (spec_regs == hardware_thread.spec_regs) &&
-           (branch_slot == hardware_thread.branch_slot) && (regs == hardware_thread.regs) && (_deadline_stalled == hardware_thread._deadline_stalled) && (_memory_stalled == hardware_thread._memory_stalled) && (_fetch_stalled == hardware_thread._fetch_stalled);
+  return (
+      (_id == hardware_thread._id)
+      && (inst == hardware_thread.inst)
+      && (_pc == hardware_thread._pc)
+      && (_enabled == hardware_thread._enabled)
+      && (spec_regs == hardware_thread.spec_regs)
+      &&  (branch_slot == hardware_thread.branch_slot)
+      && (regs == hardware_thread.regs)
+      && (_deadline_stalled == hardware_thread._deadline_stalled)
+      && (_memory_stalled == hardware_thread._memory_stalled)
+      && (_fetch_stalled == hardware_thread._fetch_stalled)
+      );
 
 }
 
 void hw_thread::regdump() {
     regs.regdump(spec_regs.curr_wp);
-    cout << hex << setfill('0') << "pc : " << setw(8) << PC << "    ";
+    cout << hex << setfill('0') << "pc : " << setw(8) << _pc << "    ";
 
     // This is assuming that if the branch_slot is 0 then basically npc
     // = pc +4 but if it is set then that is the next instruction we are
     // going to execute.
     if (branch_slot == 0)
-        cout << "npc: " <<  hex << setfill('0') <<  setw(8) << PC + 4 << endl;
+        cout << "npc: " <<  hex << setfill('0') <<  setw(8) << _pc + 4 << endl;
     else
         cout << "npc: " <<  hex << setfill('0') <<  setw(8) << branch_slot << endl;
 
@@ -121,20 +150,7 @@ void hw_thread::set_memory_stalled(bool stall) {
     _memory_stalled = stall;
 }
 
-bool hw_thread::is_deadline_stalled() const {
-    return _deadline_stalled;
-}
-
-bool hw_thread::is_enabled() const {
-    return _enabled;
-}
-
-
-bool hw_thread::is_fetch_stalled() const {
-    return _fetch_stalled;
-}
-
-bool hw_thread::is_memory_stalled() const {
-    return _memory_stalled;
+void hw_thread::set_pc(uint32_t pc) {
+  _pc = pc;
 }
 
