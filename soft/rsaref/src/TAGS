@@ -1,0 +1,347 @@
+
+rdemo/dhdemo.c,686
+static int SILENT_PROMPT 32,1159
+static unsigned char PRIME1[34,1190
+static unsigned char GENERATOR1[42,1624
+static R_DH_PARAMS PARAMS1 51,2063
+R_DH_PARAMS PARAMS2;54,2156
+int PARAMS2_READY 55,2177
+int main 57,2201
+static int SetOptions 118,3483
+static void InitRandomStruct 150,4116
+static void DoSetupAgreement 170,4574
+static void DoComputeAgreedKey 219,5936
+static void DoGenerateParams 271,7569
+static void WriteParams2 310,8571
+static void WriteBigInteger 346,9463
+static int GetParams 372,10070
+static int ReadBlock 415,11057
+static int WriteBlock 463,12305
+static void PrintMessage 505,13191
+static void PrintError 517,13438
+static void GetCommand 571,14855
+
+rdemo/rdemo.c,1205
+static int SILENT_PROMPT 42,1705
+static R_RSA_PUBLIC_KEY PUBLIC_KEY1 44,1736
+static R_RSA_PRIVATE_KEY PRIVATE_KEY1 70,3390
+static R_RSA_PUBLIC_KEY PUBLIC_KEY2 137,7889
+static R_RSA_PRIVATE_KEY PRIVATE_KEY2 163,9543
+R_RSA_PUBLIC_KEY PUBLIC_KEY3;230,14042
+R_RSA_PRIVATE_KEY PRIVATE_KEY3;231,14072
+int KEYPAIR3_READY 232,14104
+int main 234,14129
+static int SetOptions 308,15645
+static void InitRandomStruct 340,16279
+static void DoSignFile 360,16737
+static void DoVerifyFile 408,17857
+static void DoSealFile 459,19039
+static void DoOpenFile 525,20796
+static void DoGenerateKeys 589,22487
+static void WriteKeypair3 618,23147
+static void WriteBigInteger 681,25171
+static int GetPublicKey 707,25766
+static int GetPrivateKey 750,26739
+static int GetDigestAlgorithm 793,27716
+static int GetEncryptionAlgorithm 824,28384
+static int ReadInit 866,29300
+static int ReadUpdate 891,29888
+static void ReadFinal 916,30379
+static int ReadBlock 927,30691
+static int WriteInit 961,31583
+static int WriteUpdate 990,32191
+static void WriteFinal 1008,32507
+static int WriteBlock 1019,32776
+static void PrintMessage 1044,33207
+static void PrintError 1056,33454
+static void GetCommand 1098,34455
+
+source/des.h,129
+#define _DES_H_ 5,55
+} DES_CBC_CTX;DES_CBC_CTX16,448
+} DESX_CBC_CTX;DESX_CBC_CTX25,955
+} DES3_CBC_CTX;DES3_CBC_CTX32,1305
+
+source/desc.c,804
+static UINT2 BYTE_BIT[9,182
+static UINT4 BIG_BYTE[13,255
+static unsigned char PC1[22,549
+static unsigned char TOTAL_ROTATIONS[29,833
+static unsigned char PC2[33,942
+static UINT4 SP1[40,1178
+static UINT4 SP2[59,2070
+static UINT4 SP3[78,2962
+static UINT4 SP4[97,3854
+static UINT4 SP5[116,4746
+static UINT4 SP6[135,5638
+static UINT4 SP7[154,6530
+static UINT4 SP8[173,7422
+void DES_CBCInit 200,8688
+int DES_CBCUpdate 227,9560
+void DES_CBCRestart 278,10906
+void DESX_CBCInit 289,11234
+int DESX_CBCUpdate 318,12157
+void DESX_CBCRestart 373,13823
+void DES3_CBCInit(383,14076
+int DES3_CBCUpdate 408,14941
+void DES3_CBCRestart 461,16381
+static void Pack 469,16559
+static void Unpack 483,16928
+static void DESKey 497,17425
+static void CookKey 545,18491
+static void DESFunction 572,19181
+
+source/digit.c,52
+void NN_DigitMult 17,312
+void NN_DigitDiv 48,1043
+
+source/digit.h,0
+
+source/global.h,334
+#define _GLOBAL_H_ 8,180
+#define PROTOTYPES 16,448
+typedef unsigned char *POINTER;POINTER20,522
+typedef unsigned short int UINT2;UINT223,591
+typedef unsigned long int UINT4;UINT426,663
+#define NULL_PTR 29,714
+#define UNUSED_ARG(UNUSED_ARG33,771
+#define PROTO_LIST(PROTO_LIST41,1003
+#define PROTO_LIST(PROTO_LIST43,1039
+
+source/md2.h,51
+#define _MD2_H_ 23,787
+} MD2_CTX;MD2_CTX34,1147
+
+source/md2c.c,249
+static unsigned char PI_SUBST[33,1206
+static unsigned char *PADDING[54,2454
+void MD2Init 80,3524
+void MD2Update 93,3939
+void MD2Final 130,5012
+static void MD2Transform 156,5719
+static void MD2_memcpy 196,6648
+static void MD2_memset 209,6887
+
+source/md5.h,52
+#define _MD5_H_ 27,1119
+} MD5_CTX;MD5_CTX38,1427
+
+source/md5c.c,823
+#define S11 31,1216
+#define S12 32,1230
+#define S13 33,1245
+#define S14 34,1260
+#define S21 35,1275
+#define S22 36,1289
+#define S23 37,1303
+#define S24 38,1318
+#define S31 39,1333
+#define S32 40,1347
+#define S33 41,1362
+#define S34 42,1377
+#define S41 43,1392
+#define S42 44,1406
+#define S43 45,1421
+#define S44 46,1436
+static unsigned char PADDING[56,1812
+#define F(F64,2099
+#define G(G65,2147
+#define H(H66,2195
+#define I(I67,2232
+#define ROTATE_LEFT(ROTATE_LEFT71,2315
+#define FF(FF76,2510
+#define GG(GG81,2657
+#define HH(HH86,2804
+#define II(II91,2951
+void MD5Init 99,3174
+void MD5Update 116,3651
+void MD5Final 158,4867
+static void MD5Transform 187,5664
+static void Encode 280,9487
+static void Decode 298,9982
+static void MD5_memcpy 312,10343
+static void MD5_memset 325,10582
+
+source/nn.c,645
+void NN_Decode 27,768
+void NN_Encode 54,1372
+void NN_Assign 77,1778
+void NN_AssignZero 91,1964
+void NN_Assign2Exp 106,2186
+NN_DIGIT NN_Add 122,2489
+NN_DIGIT NN_Sub 148,2916
+void NN_Mult 175,3420
+NN_DIGIT NN_LShift 202,4046
+NN_DIGIT NN_RShift 230,4537
+void NN_Div 260,5085
+void NN_Mod 317,6515
+void NN_ModMult 335,6918
+void NN_ModExp 354,7352
+void NN_ModInv 407,8736
+void NN_Gcd 460,10168
+int NN_Cmp 488,10773
+int NN_Zero 508,11052
+unsigned int NN_Bits 525,11294
+unsigned int NN_Digits 539,11576
+static NN_DIGIT NN_AddDigitMult 556,11854
+static NN_DIGIT NN_SubDigitMult 585,12391
+static unsigned int NN_DigitBits 612,12932
+
+source/nn.h,587
+typedef UINT4 NN_DIGIT;NN_DIGIT10,180
+typedef UINT2 NN_HALF_DIGIT;NN_HALF_DIGIT11,204
+#define NN_DIGIT_BITS 22,620
+#define NN_HALF_DIGIT_BITS 23,645
+#define NN_DIGIT_LEN 25,706
+#define MAX_NN_DIGITS 27,778
+#define MAX_NN_DIGIT 30,887
+#define MAX_NN_HALF_DIGIT 31,919
+#define LOW_HALF(LOW_HALF35,968
+#define HIGH_HALF(HIGH_HALF36,1014
+#define TO_HIGH_HALF(TO_HIGH_HALF37,1085
+#define DIGIT_MSB(DIGIT_MSB38,1149
+#define DIGIT_2MSB(DIGIT_2MSB39,1219
+#define NN_ASSIGN_DIGIT(NN_ASSIGN_DIGIT112,4430
+#define NN_EQUAL(NN_EQUAL113,4507
+#define NN_EVEN(NN_EVEN114,4564
+
+source/prime.c,199
+static unsigned int SMALL_PRIMES[14,262
+#define SMALL_PRIME_COUNT 15,316
+int GeneratePrime 30,812
+static int ProbablePrime 79,2043
+static int SmallFactor 91,2313
+static int FermatTest 126,3015
+
+source/prime.h,0
+
+source/r_dh.c,96
+int R_GenerateDHParams 16,313
+int R_SetupDHAgreement69,2214
+int R_ComputeDHAgreedKey112,3705
+
+source/r_encode.c,351
+#define ENCODING(ENCODING32,1268
+#define ENCODING_PAD 37,1498
+#define IS_ENCODING(IS_ENCODING39,1525
+#define DECODING(DECODING47,1749
+int R_EncodePEMBlock 62,2365
+int R_DecodePEMBlock 85,3109
+static void EncodeQuantum 113,3952
+static int DecodeQuantum 140,4612
+static void EncodeLastQuantum 175,5448
+static int DecodeLastQuantum 213,6441
+
+source/r_enhanc.c,1118
+static unsigned char DIGEST_INFO_A[17,383
+#define DIGEST_INFO_A_LEN 21,508
+static unsigned char DIGEST_INFO_B[23,558
+#define DIGEST_INFO_B_LEN 24,625
+#define DIGEST_INFO_LEN 26,675
+static unsigned char *PADDING[28,749
+#define MAX_ENCRYPTED_KEY_LEN 37,1134
+int R_DigestInit 53,1814
+int R_DigestUpdate 75,2291
+int R_DigestFinal 87,2760
+int R_SignInit 101,3224
+int R_SignUpdate 108,3497
+int R_SignFinal 116,3857
+int R_VerifyInit 154,5084
+int R_VerifyUpdate 161,5359
+int R_VerifyFinal 169,5721
+int R_SealInit223,7461
+int R_SealUpdate 279,9340
+int R_SealFinal 330,10838
+int R_OpenInit355,11566
+int R_OpenUpdate 409,13131
+int R_OpenFinal 462,14756
+int R_SignPEMBlock 513,16058
+int R_SignBlock545,17376
+int R_VerifyPEMSignature 573,18384
+int R_VerifyBlockSignature 611,19931
+int R_SealPEMBlock 639,20955
+int R_OpenPEMBlock698,23372
+int R_DigestBlock 774,26163
+static void R_EncodeDigestInfo 801,27127
+static void EncryptPEMUpdateFinal823,27920
+static int DecryptPEMUpdateFinal 862,29374
+static int CipherInit 916,31034
+static void CipherUpdate 942,31856
+static void CipherRestart 956,32502
+
+source/r_keygen.c,98
+int R_GeneratePEMKeys 21,530
+static int RSAFilter 139,4902
+static int RelativelyPrime 163,5470
+
+source/r_random.c,182
+#define RANDOM_BYTES_NEEDED 13,246
+int R_RandomInit 15,279
+int R_RandomUpdate 25,576
+int R_GetRandomBytesNeeded 59,1472
+int R_GenerateBytes 68,1751
+void R_RandomFinal 107,2843
+
+source/r_random.h,0
+
+source/r_stdlib.c,65
+void R_memset 12,249
+void R_memcpy 21,570
+int R_memcmp 30,891
+
+source/rsa.c,195
+int RSAPublicEncrypt23,578
+int RSAPublicDecrypt 70,1994
+int RSAPrivateEncrypt 121,3447
+int RSAPrivateDecrypt 160,4636
+static int RSAPublicBlock 215,6172
+static int RSAPrivateBlock 255,7561
+
+source/rsa.h,0
+
+source/rsaref.h,1671
+#define _RSAREF_H_ 9,202
+#define DA_MD2 21,350
+#define DA_MD5 22,367
+#define EA_DES_CBC 26,465
+#define EA_DES_EDE2_CBC 27,486
+#define EA_DES_EDE3_CBC 28,512
+#define EA_DESX_CBC 29,538
+#define MIN_RSA_MODULUS_BITS 33,585
+#define MAX_RSA_MODULUS_BITS 34,618
+#define MAX_RSA_MODULUS_LEN 35,652
+#define MAX_RSA_PRIME_BITS 36,713
+#define MAX_RSA_PRIME_LEN 37,773
+#define ENCODED_CONTENT_LEN(ENCODED_CONTENT_LEN42,953
+#define ENCRYPTED_CONTENT_LEN(ENCRYPTED_CONTENT_LEN43,1002
+#define DECODED_CONTENT_LEN(DECODED_CONTENT_LEN44,1067
+#define DECRYPTED_CONTENT_LEN(DECRYPTED_CONTENT_LEN45,1116
+#define MAX_SIGNATURE_LEN 50,1284
+#define MAX_PEM_SIGNATURE_LEN 51,1330
+#define MAX_ENCRYPTED_KEY_LEN 52,1400
+#define MAX_PEM_ENCRYPTED_KEY_LEN 53,1450
+#define MAX_PEM_ENCRYPTED_SIGNATURE_LEN 54,1528
+#define MAX_DIGEST_LEN 56,1614
+#define DH_PRIME_LEN(DH_PRIME_LEN60,1693
+#define RE_CONTENT_ENCODING 64,1760
+#define RE_DATA 65,1795
+#define RE_DIGEST_ALGORITHM 66,1818
+#define RE_ENCODING 67,1853
+#define RE_KEY 68,1880
+#define RE_KEY_ENCODING 69,1902
+#define RE_LEN 70,1933
+#define RE_MODULUS_LEN 71,1955
+#define RE_NEED_RANDOM 72,1985
+#define RE_PRIVATE_KEY 73,2015
+#define RE_PUBLIC_KEY 74,2045
+#define RE_SIGNATURE 75,2074
+#define RE_SIGNATURE_ENCODING 76,2102
+#define RE_ENCRYPTION_ALGORITHM 77,2139
+} R_RANDOM_STRUCT;R_RANDOM_STRUCT86,2336
+} R_RSA_PUBLIC_KEY;R_RSA_PUBLIC_KEY94,2645
+} R_RSA_PRIVATE_KEY;R_RSA_PRIVATE_KEY104,3236
+} R_RSA_PROTO_KEY;R_RSA_PROTO_KEY111,3459
+} R_DH_PARAMS;R_DH_PARAMS120,3846
+} R_DIGEST_CTX;R_DIGEST_CTX128,3959
+} R_SIGNATURE_CTX;R_SIGNATURE_CTX132,4023
+} R_ENVELOPE_CTX;R_ENVELOPE_CTX144,4239

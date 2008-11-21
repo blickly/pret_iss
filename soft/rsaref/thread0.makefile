@@ -1,5 +1,14 @@
 # This is a makefile for UNIX
 
+#THis part is for the thread makefile
+THREAD_NUM=0
+INCDIR= 
+LIBDIR= 
+LIBS= -lm
+CFLAGS = -O3
+
+#C_FILES=thread$(THREAD_NUM).c
+
 #Comment out next line if you want to build for local machine
 BUILDTOOL_PREFIX=sparc-elf-
 
@@ -28,13 +37,13 @@ CFLAGS = $(INCL) -O -c -DPROTOTYPES=1
 MFLAGS = -I. -I$(RSAREFDIR)
 
 # The location of the common source directory.
-RSAREFDIR = ../source/
+RSAREFDIR = src/source/
 RSAREFLIB = rsaref.a
 
 # The location of the demo source directory.
-RDEMODIR = ../rdemo/
+RDEMODIR = src/rdemo/
 
-all : rdemo dhdemo
+all : rdemo dhdemo thread$(THREAD_NUM)
 
 clean : 
 	rm -rf *.o rdemo dhdemo *.a *~
@@ -57,4 +66,12 @@ rdemo.$(O) : $(RDEMODIR)rdemo.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
 dhdemo.$(O) : $(RDEMODIR)dhdemo.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
 	$(CC) $(CFLAGS) $(RDEMODIR)dhdemo.c
 
+
+thread$(THREAD_NUM) : rdemo
+	cp rdemo bare_thread$(THREAD_NUM).exe
+	$(BUILDTOOL_PREFIX)objcopy -O srec bare_thread$(THREAD_NUM).exe bare_thread$(THREAD_NUM).srec
+	$(BUILDTOOL_PREFIX)objdump -D bare_thread$(THREAD_NUM).exe > bare_thread$(THREAD_NUM).dump
+
+
 include $(RSAREFDIR)targets.mak
+
