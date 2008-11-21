@@ -35,7 +35,7 @@
 #include "assert.h"
 
 #define ROUND_UP(x,y) ( (((x) + (y) - 1) / (y)) * (y) )
-#ifndef USE_PDMA
+#ifndef USE_burst
 #define MAX_WORDS 1
 #else
 #define MAX_WORDS 4
@@ -63,7 +63,7 @@ wheeled_mem::wheeled_mem(int l_d, int t_d, cycle_counter* cyc, int mem_win)
  * Create a new wheeled memory with the given delays.
  *
  * Since this constructor does not specify a memory window size,
- * the minimal size that can accomodate the longest PDMA access is assumed.
+ * the minimal size that can accomodate the longest burst access is assumed.
  */
 wheeled_mem::wheeled_mem(int l_d, int t_d, cycle_counter* cyc)
         : lat_d(l_d),
@@ -79,8 +79,8 @@ bool wheeled_mem::is_stalled(int tid, uint32_t addr) {
     return is_stalled_helper(GLOBAL, tid, addr, 1);
 }
 
-bool wheeled_mem::is_stalled_pdma(int tid, uint32_t addr, int num_words) {
-    return is_stalled_helper(PDMA, tid, addr, num_words);
+bool wheeled_mem::is_stalled_burst(int tid, uint32_t addr, int num_words) {
+    return is_stalled_helper(burst, tid, addr, num_words);
 }
 
 bool wheeled_mem::is_stalled_helper(AccessorType acc, int tid, uint32_t addr, int num_words) {
@@ -123,8 +123,8 @@ uint32_t wheeled_mem::read(int tid, uint32_t addr, bool& stalled) {
     return mem[addr];
 }
 
-vector<uint32_t> wheeled_mem::read_pdma(int tid, uint32_t start_addr, bool& stalled, int num_words) {
-    stalled = is_stalled_pdma(tid, start_addr, num_words);
+vector<uint32_t> wheeled_mem::read_burst(int tid, uint32_t start_addr, bool& stalled, int num_words) {
+    stalled = is_stalled_burst(tid, start_addr, num_words);
     return get_data_stream(start_addr, num_words);
 }
 
@@ -137,13 +137,13 @@ vector<uint32_t> wheeled_mem::get_data_stream(uint32_t start_addr, int num_words
     return data_stream;
 }
 
-int wheeled_mem::pdma_words_returned(int tid, int num_words) {
+int wheeled_mem::burst_words_returned(int tid, int num_words) {
     // If we aren't accessing, we know zero bytes have been transferred
     if (tid != current_thread() || !accessing) {
         assert(remaining_cycles == 0);
         return 0;
     } else {
-        int counted_cycles = get_delay(PDMA, num_words) - remaining_cycles;
+        int counted_cycles = get_delay(burst, num_words) - remaining_cycles;
         if (counted_cycles < lat_d) {
             return 0;
         } else {

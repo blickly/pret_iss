@@ -47,9 +47,6 @@ memory_controller::~memory_controller() {
     delete _main_mem;
     delete _mem_mapped_io;
 
-#ifdef USE_PDMA
-    delete _pdma_unit;
-#endif /* USE_PDMA */
 }
 
 void memory_controller::behavior() {
@@ -106,12 +103,6 @@ void memory_controller::_setup(cycle_counter* cyc) {
     _inst_scratchpad = new l1_scratch*[NUM_THREADS];
     _main_mem = new wheeled_mem(MEM_DELAY - 1, PDMA_DELAY, cyc);
     _mem_mapped_io = new mem_mapped_io();
-
-#ifdef USE_PDMA
-    _pdma_unit = new pdma("pdma unit",
-                          dynamic_cast<wheeled_mem*>(_main_mem),
-                          _inst_scratchpad);
-#endif /* USE_PDMA */
 
 }
 

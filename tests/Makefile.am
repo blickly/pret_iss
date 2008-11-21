@@ -68,9 +68,6 @@ quick_tests: regression.h verify.pl
 	${PRET_ISS}/tests/scripts/verify.pl -T -v ${SCTESTS} pret/sys/cnt pret/sys/bubsort pret/sys/expint pret/sys/float_addi pret/sys/smile pret/sys/binsearch pret/sys/compress pret/sys/crc pret/sys/insertsort pret/sys/edn pret/sys/printf pret/sys/janne  pret/sys/fac pret/sys/ludcmp pret/sys/ndes pret/sys/fibcall pret/sys/fft pret/sys/qurt pret/sys/float_mult pret/sys/statemate pret/sys/synchronization pret/dma
 
 
-pdma_tests:
-	${PRET_ISS}/tests/scripts/verify-pdma.pl -T -v pret/pdma 
-
 clean:
 	-$(RM) exports.sh scripts/verify.pl 
 

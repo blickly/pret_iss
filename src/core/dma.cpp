@@ -45,7 +45,7 @@ void dma::behavior() {
         if (_transfer_complete[thread_id] == BUSY) {
             bool dma_fetch_stalled = false;
             // Receive 4 words at a time.
-            _received_data[thread_id] = _mem_wheel->read_pdma(thread_id, _mem_source_reg[thread_id], dma_fetch_stalled, 4);
+            _received_data[thread_id] = _mem_wheel->read_burst(thread_id, _mem_source_reg[thread_id], dma_fetch_stalled, 4);
             if (!dma_fetch_stalled) {
                 // Move data into SPM.
                 for (unsigned int num_data = 0; num_data < _received_data[thread_id].size(); num_data++) {

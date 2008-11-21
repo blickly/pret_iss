@@ -45,8 +45,8 @@ using namespace std;
 #include "defines.h"
 #include "srec_parser.h"
 #include "mem_location.h"
+#include "l1_scratch.h"
 #include "cycle_counter.h"
-#include "pdma.h"
 
 /** Forward declaration for blocking DMA interface. */
 class dma_if;
@@ -177,7 +177,6 @@ protected:
     l1_scratch** _inst_scratchpad;
     mem_location* _main_mem;
     mem_location* _mem_mapped_io;
-    pdma* _pdma_unit;
 
 };
 #endif

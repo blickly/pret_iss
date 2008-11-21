@@ -351,7 +351,6 @@ then
 AC_OUTPUT([Makefile
 	   src/Makefile
 	   src/core/Makefile
-	   src/pdma/Makefile
 	   src/debugger/Makefile
 	   scripts/Makefile 
 	   tests/Makefile ])

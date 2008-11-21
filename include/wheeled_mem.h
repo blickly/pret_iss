@@ -34,28 +34,27 @@
 #include "memory_unit.h"
 #include "cycle_counter.h"
 #include "mem_location.h"
-#include "pdma_if.h"
 #include <vector>
 #include <stdint.h>
 
-class wheeled_mem : public mem_location, public pdma_if {
+class wheeled_mem : public mem_location {
 public:
-    enum AccessorType { PDMA, GLOBAL, DMA };
+    enum AccessorType { burst, GLOBAL, DMA };
     wheeled_mem(int latency_delay, int throughput_delay, cycle_counter* cyc);
     wheeled_mem(int l_d, int t_d, cycle_counter* cyc, int mem_win);
     virtual ~wheeled_mem();
     virtual bool is_stalled(int tid, uint32_t addr);
     virtual uint32_t read(int tid, uint32_t addr, bool& stalled);
 
-    virtual vector<uint32_t> read_pdma(int tid,
+    virtual vector<uint32_t> read_burst(int tid,
                                        uint32_t addr,
                                        bool& stalled,
                                        int num_words);
-    virtual int pdma_words_returned(int tid, int num_words);
+    virtual int burst_words_returned(int tid, int num_words);
     virtual void behavior();
 
 protected:
-    bool is_stalled_pdma(int tid, uint32_t addr, int num_words);
+    bool is_stalled_burst(int tid, uint32_t addr, int num_words);
     bool is_stalled_helper(AccessorType acc, int tid, uint32_t addr, int num_words);
     int current_thread();
     vector<uint32_t> get_data_stream(uint32_t start_addr, int num_words);

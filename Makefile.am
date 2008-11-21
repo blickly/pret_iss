@@ -37,9 +37,6 @@ regression: tests/Makefile
 quick_tests: tests/Makefile
 	make -f tests/Makefile quick_tests 
 
-pdma_tests: tests/Makefile
-	make -f tests/Makefile pdma_tests 
-
 ship_examples:
 	-mkdir examples/
 # Copy Basic

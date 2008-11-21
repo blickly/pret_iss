@@ -30,9 +30,8 @@
 #
 ###################################################################
 
-bin_PROGRAMS=pret pretpdma
+bin_PROGRAMS=pret 
 pret_SOURCES=main.cpp
-pretpdma_SOURCES=main.cpp
 
 
 
@@ -48,10 +47,9 @@ else
   AM_CXXFLAGS=
 endif
 
-SUBDIRS=core pdma $(COND_DBG)
+SUBDIRS=core $(COND_DBG)
 
 
 LDADD=./core/libpretcore.a
-pretpdma_LDADD=./pdma/libpretpdma.a
 
 INCLUDES =-I@top_srcdir@/include
