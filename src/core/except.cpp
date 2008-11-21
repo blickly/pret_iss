@@ -140,7 +140,7 @@ void except::behavior() {
         return;
     }
 
-    if (!ht->db_word) {
+    if (!ht->is_db_word_stalled()) {
         /* Increment the PC based */
         inc_pc(ht);
     }
@@ -230,10 +230,10 @@ void except::set_dword_state(const hw_thread_ptr& ht) {
 
     // HDP: If the instruction is a double anything we need to redo the
     // instruction except we need to increment the destination address.
-    if ((ht->inst.db_word) && (!ht->db_word)) {
+  if ((ht->inst.db_word) && (!ht->is_db_word_stalled())) {
         // The PC is no longer incremented if a db_word is recognized.
         // Set the thread's double word flag to true.
-        ht->db_word = true;
+      ht->set_db_word_stalled(true);
         //    cout << "DOUBLE WORD: " << " rs1: " << ht->inst.rs1 << endl;
     }
 

@@ -54,11 +54,15 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
     cnt_cycles = 0;
     cnt_instr = 0;
     branch_slot = 0;
-    db_word = false;
+    _db_word_stalled = false;
     _enabled = false;
     _deadline_stalled = false;
     _memory_stalled = false;
     _fetch_stalled = false;
+}
+
+bool hw_thread::is_db_word_stalled() const {
+    return _db_word_stalled;
 }
 
 bool hw_thread::is_deadline_stalled() const {
@@ -87,7 +91,7 @@ void hw_thread::operator=(const hw_thread & hardware_thread) {
     spec_regs = hardware_thread.spec_regs;
     regs = hardware_thread.regs;
     branch_slot = hardware_thread.branch_slot;
-    db_word = hardware_thread.db_word;
+    _db_word_stalled = hardware_thread._db_word_stalled;
     _deadline_stalled = hardware_thread._deadline_stalled;
     _memory_stalled = hardware_thread._memory_stalled;
     _fetch_stalled = hardware_thread._fetch_stalled;
@@ -140,6 +144,10 @@ void hw_thread::set_enabled(bool enable) {
 
 void hw_thread::set_fetch_stalled(bool stall) {
     _fetch_stalled = stall;
+}
+
+void hw_thread::set_db_word_stalled(bool stall) {
+    _db_word_stalled = stall;
 }
 
 void hw_thread::set_deadline_stalled(bool stall) {

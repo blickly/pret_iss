@@ -87,7 +87,13 @@ public:
    * @return Thread's program counter.
    */
   uint32_t get_pc() const;
-  
+
+      /** Returns true if stall is caused by a double word instruction.
+     *
+     * @return True if double word instruction caused the stall, else false.
+     */
+    bool is_db_word_stalled() const;
+
     /** Returns true if stall is caused by a deadline instruction.
      *
      * @return True if deadline caused the stall, else false.
@@ -175,6 +181,13 @@ public:
     * @param in_id New thread identifier.
     */
     void set_id(unsigned int in_id);
+  
+    /** Set the state if stall is caused by a double word instruction.
+     *
+     * @param stall True if stalled, else false.
+     */
+
+    void set_db_word_stalled(bool stall);
 
 
     /** Set the state if stall is caused by a deadline instruction.
@@ -207,17 +220,19 @@ public:
     uint32_t branch_slot;
     register_file regs;
     special_reg spec_regs;
-    bool db_word;  
+
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
 private:
-    bool _enabled;
-    bool _deadline_stalled; // If the thread is currently in a state of replay.
-    bool _memory_stalled;
-    bool _fetch_stalled;
-    unsigned int _id;
-  uint32_t _pc;
+  bool _enabled; // If the thread is enabled.
+  bool _db_word_stalled;   // Current instruction being executed is a double word.
+  bool _deadline_stalled; // If the thread is currently in a state of replay.
+  bool _memory_stalled; // If the memory stage causes a stall. 
+  bool _fetch_stalled; // If the fetch stage causes a stall. 
+  unsigned int _id; // Thread identifier.
+  uint32_t _pc; // Thread's current program counter.
+
 };
 
 #endif /* _HW_THREAD_H_ */
