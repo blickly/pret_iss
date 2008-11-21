@@ -66,6 +66,7 @@ class hw_thread_controller : public sc_module {
 public:
     /** Construct a hardware thread controller object with a unique name
         identified by <i>str</i>.
+     *
      * @param str Unique identifier for the hardware thread controller.
      */
     hw_thread_controller(const sc_module_name& str);
@@ -73,6 +74,7 @@ public:
     /** Destroy the dynamically created thread objects.
      */
     ~hw_thread_controller();
+
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///
 public:
@@ -91,22 +93,26 @@ public:
      *  order.
      *  This is only used when <i>_NO_SYSTEMC_</i> flag is set
      *  during compilation.
+     *
      *  @param out The hardware thread sent to the
      *  fetch stage.
      */
     void behavior(hw_thread_ptr& out);
 #endif /* _NO_SYSTEMC_ */
+
     /** Returns a pointer to the thread with the <i>id</i>. This is
-     *  mainly used in the main() function to display internals of the
-     *  threads such as the instruction and cycle counts. It is purely
-     *  for debugging use.
-     *  @param id Thread identifier.
-     @  @return Pointer to the thread with the id.
-     */
+       *  mainly used in the main() function to display internals of the
+       *  threads such as the instruction and cycle counts. It is purely
+       *  for debugging use.
+       *
+       *  @param id Thread identifier.
+       *  @return Pointer to the thread with the id.
+       */
     hw_thread_ptr* get_thread(unsigned int id) const;
 
     /** Parse the SREC files specified by <i>_txt_str</i> and load it
      * into the respective scratchpad memory units.
+     *
      * @param srec_parser SREC parser that is associated with each memory unit.
      * @param bound_parser Parser for reading in static bound data.
      */
@@ -118,6 +124,7 @@ public:
 
     /** Sets the name of a file with a location of where the SREC files
       are stored.
+      *
       * @param str The name of the file with the location of SREC files.
       */
     void set_txtname(const string& str);

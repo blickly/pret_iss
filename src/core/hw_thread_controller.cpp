@@ -28,28 +28,31 @@
   $Id$
 */
 
-#include "hw_thread_controller.h"
 #include <sstream>
 #include <stdlib.h>
+#include "hw_thread_controller.h"
 
 #define MAX(x,y) (((x)>(y))?(x):(y))
 
 hw_thread_controller::hw_thread_controller() {
 }
 
-hw_thread_controller::hw_thread_controller(const sc_module_name& str)  {
+hw_thread_controller::hw_thread_controller(const sc_module_name& name)  {
     _txt_str = "none";
+
 #ifdef DBG_THREAD_CONT
     cout << "-------------------- hw_thread_controller ------------------------- " << endl;
 #endif /* DBG_THREAD_CONT */
+
     unsigned int i;
     for (i = 0; i < NUM_THREADS; i++) {
-        hw_thread * h = new hw_thread(i, 0x40000000);
-        h->set_enabled(true);
-        //h->instruction_mem(this->instruction_mem);
-        hw_thread_ptr * hp = new hw_thread_ptr(h);
+        hw_thread* hardware_thread = new hw_thread(i, 0x40000000);
+        hardware_thread->set_enabled(true);
+        hw_thread_ptr* hp = new hw_thread_ptr(hardware_thread);
+
 #ifdef DBG_THREAD_CONT
-        cout << "Thread creation - ID: " << hp->get_handle()->id << ", pointer = " << hp->get_handle() << endl;
+        cout << "Thread creation - ID: " << hp->get_handle()->get_id()
+             << ", pointer = " << hp->get_handle() << endl;
 #endif /* DBG_THREAD_CONT */
         _pool[i] = hp;
     }
@@ -79,9 +82,9 @@ void hw_thread_controller::behavior() {
 #ifdef DBG_THREAD_CONT
     cout << name() << " (" << sc_time_stamp() << ") " << endl;
 #endif /* DBG_THREAD_CONT */
-    //  cout << "hardware thread_controller behavior: " << sc_time_stamp() << endl;
-    //if (pool.size() > 0) {
+
     hw_thread_ptr * hp = _pool[_tcount++ % MAX(NUM_THREADS,6)];
+
 #ifdef _NO_SYSTEMC_
     out = *hp;
 #else
@@ -107,11 +110,10 @@ void hw_thread_controller::parse_srec_files(srec_parser& parser,
     /* Check if the _txt_str is a directory or a file */
     bool is_dir = true;
     string dir;
-
     ifstream txt;
     ifstream ftxt;
-
     string test_dir = _txt_str + "/thread0.srec";
+
     txt.open(test_dir.c_str());
     if (!txt.is_open()) {
         is_dir = false;
@@ -125,6 +127,7 @@ void hw_thread_controller::parse_srec_files(srec_parser& parser,
     } else
         if (!is_dir && !ftxt.is_open()) {
             cout << "Error: File or directory not found, " << _txt_str << endl;
+
 #ifdef _NO_SYSTEMC_
             exit(1);
 #else
@@ -140,30 +143,20 @@ void hw_thread_controller::parse_srec_files(srec_parser& parser,
         file_srec = file_srec + "/thread" + ss.str() + ".srec";
         string file_ispm = dir + "/thread" + ss.str() + ".ispm";
         string file_dspm = dir + "/thread" + ss.str() + ".dspm";
-
-        //  cout << "Loading file in SPM map: " << file_ispm << endl;
-        //uint32_t starting_addr = parser.parse(i, file_srec.c_str(), file_ispm.c_str());
         uint32_t starting_addr = parser.parse(file_srec.c_str());
         bound_parser.load_inst_spm(i, file_ispm);
         bound_parser.load_data_spm(i, file_dspm);
-        //parser.load_data_spm(i, file_dspm);
+
 #ifdef DBG_THREAD_CONT
         cout << "Starting PC for thread " << i << " is " << hex << starting_addr << endl;;
 #endif /* DBG_THREAD_CONT */
+
         _pool[i]->get_handle()->set_pc(starting_addr);
     }
-    /*Feature: Pass in file to load SREC files
-      for (unsigned int i = 0; i < pool.size(); i++) {
-      char srec_file_name[50];
-      sprintf(srec_file_name, "soft/thread%d.srec", i);
-      uint32_t starting_addr = parser.parse(i, srec_file_name);
-      pool[i].handle->PC = starting_addr;
-      }
-    */
 }
 
 void hw_thread_controller::pll_behavior() {
-    //decrement all counters by 1
+    /* Decrement all counters by 1.*/
     for (unsigned int i = 0; i < NUM_THREADS; i++) {
         _pool[i]->get_handle()->spec_regs.decrement_pll_timers();
     }
