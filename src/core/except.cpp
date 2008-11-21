@@ -230,10 +230,10 @@ void except::set_dword_state(const hw_thread_ptr& ht) {
 
     // HDP: If the instruction is a double anything we need to redo the
     // instruction except we need to increment the destination address.
-  if ((ht->inst.db_word) && (!ht->is_db_word_stalled())) {
+    if ((ht->inst.db_word) && (!ht->is_db_word_stalled())) {
         // The PC is no longer incremented if a db_word is recognized.
         // Set the thread's double word flag to true.
-      ht->set_db_word_stalled(true);
+        ht->set_db_word_stalled(true);
         //    cout << "DOUBLE WORD: " << " rs1: " << ht->inst.rs1 << endl;
     }
 
@@ -256,19 +256,19 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 
         // Make sure the instruction's db_word is not set.
         if (!ht->inst.db_word) {
-	  ht->set_pc(ht->get_delayed_branch_address());
-	  ht->set_delayed_branch_address(0);
+            ht->set_pc(ht->get_delayed_branch_address());
+            ht->set_delayed_branch_address(0);
         }
     } else {
-      ht->set_pc(ht->get_pc() + 4);
+        ht->set_pc(ht->get_pc() + 4);
     }
 
     if (branch_check(ht)) {
         //    if (branch_check(ht->inst, ht->spec_regs.icc)) {
         if (!(ht->inst.branch && ht->inst.annul && ht->inst.cond == BRCH_BA)) {
-	  ht->set_delayed_branch_address(ht->get_pc() + addr_calc(ht) - 4);
+            ht->set_delayed_branch_address(ht->get_pc() + addr_calc(ht) - 4);
         } else {
-	  ht->set_pc(ht->get_pc() + addr_calc(ht) - 4);
+            ht->set_pc(ht->get_pc() + addr_calc(ht) - 4);
         }
     } else if (ht->inst.jump) {
 #ifdef DBG_PIPE
@@ -277,11 +277,11 @@ void except::inc_pc(const hw_thread_ptr& ht) {
         ht->set_delayed_branch_address(ht->inst.alu_result);
     }  else
         if (ht->inst.branch && ht->inst.annul) {
-	  ht->set_pc(ht->get_pc() + 4);
+            ht->set_pc(ht->get_pc() + 4);
         }
 
     if (ht->inst.jump || ht->inst.call) {
-      ht->inst.alu_result = ht->get_pc() - 4;
+        ht->inst.alu_result = ht->get_pc() - 4;
     }
 
 

@@ -217,7 +217,7 @@ uint32_t core::get_memory_data(uint32_t addr) const {
 }
 
 uint32_t core::get_pc(int thread_id) const {
-  return _thread_controller->get_thread(thread_id)->get_handle()->get_pc();
+    return _thread_controller->get_thread(thread_id)->get_handle()->get_pc();
 }
 
 long int core::get_period() const {

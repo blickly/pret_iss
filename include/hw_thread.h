@@ -82,22 +82,22 @@ public:
      */
     unsigned int get_id();
 
-  /** Return the current thread program counter.
-   *
-   * @return Thread's program counter.
-   */
-  uint32_t get_pc() const;
+    /** Return the current thread program counter.
+     *
+     * @return Thread's program counter.
+     */
+    uint32_t get_pc() const;
 
     /** Return the delayed branch address.
-   *
-   * @return Delayed branch address.
-   */
-  uint32_t get_delayed_branch_address() const;
+    *
+    * @return Delayed branch address.
+    */
+    uint32_t get_delayed_branch_address() const;
 
-      /** Returns true if stall is caused by a double word instruction.
-     *
-     * @return True if double word instruction caused the stall, else false.
-     */
+    /** Returns true if stall is caused by a double word instruction.
+    *
+    * @return True if double word instruction caused the stall, else false.
+    */
     bool is_db_word_stalled() const;
 
     /** Returns true if stall is caused by a deadline instruction.
@@ -186,16 +186,16 @@ public:
 
     void set_deadline_stalled(bool stall);
 
-     /** Set the delayed branch address.
-     *
-     * @param address Address for delayed branch.
-     */
+    /** Set the delayed branch address.
+    *
+    * @param address Address for delayed branch.
+    */
     void set_delayed_branch_address(uint32_t address);
 
-      /** Set the enabled state of the thread.
-     *
-     * @param enable True if thread is going to be enabled, else false.
-     */
+    /** Set the enabled state of the thread.
+    *
+    * @param enable True if thread is going to be enabled, else false.
+    */
     void set_enabled(bool enable);
 
     /** Set the state if stall is caused by instruction fetch from memory.
@@ -209,42 +209,41 @@ public:
     * @param in_id New thread identifier.
     */
     void set_id(unsigned int in_id);
-  
+
     /** Set the state if stall is caused by a data memory access.
      *
      * @param stall True if stalled, else false.
      */
     void set_memory_stalled(bool stall);
 
-  /** Set the thread's program counter.
-   *
-   * @param pc New pc of thread.
-   */
-  void set_pc(uint32_t pc);
+    /** Set the thread's program counter.
+     *
+     * @param pc New pc of thread.
+     */
+    void set_pc(uint32_t pc);
 
 
 ///////////////////////////////////////////////////////////////////////
 ///                      public  variables                          ///
 
-  unsigned int cnt_cycles; // Count the number of cycles this thread executes. 
-  unsigned int cnt_instr; // Count the number of instructions this thread executes.
-  instruction inst; // Instruction data structure.
-
-  register_file regs; // Registers. 
-  special_reg spec_regs; // Special registers with timers. 
+    unsigned int cnt_cycles; // Count the number of cycles this thread executes.
+    unsigned int cnt_instr; // Count the number of instructions this thread executes.
+    instruction inst; // Instruction data structure.
+    register_file regs; // Registers.
+    special_reg spec_regs; // Special registers with timers.
 
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
 private:
-  bool _enabled;          // If the thread is enabled.
-  uint32_t _branch_slot;  // Delay branch  address.
-  bool _db_word_stalled;  // Current instruction being executed is a double word.
-  bool _deadline_stalled; // If the thread is currently in a state of replay.
-  bool _memory_stalled;   // If the memory stage causes a stall. 
-  bool _fetch_stalled;    // If the fetch stage causes a stall. 
-  unsigned int _id;       // Thread identifier.
-  uint32_t _pc;           // Thread's current program counter.
+    bool _enabled;          // If the thread is enabled.
+    uint32_t _branch_slot;  // Delay branch  address.
+    bool _db_word_stalled;  // Current instruction being executed is a double word.
+    bool _deadline_stalled; // If the thread is currently in a state of replay.
+    bool _memory_stalled;   // If the memory stage causes a stall.
+    bool _fetch_stalled;    // If the fetch stage causes a stall.
+    unsigned int _id;       // Thread identifier.
+    uint32_t _pc;           // Thread's current program counter.
 
 };
 

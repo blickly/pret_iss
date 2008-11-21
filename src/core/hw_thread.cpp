@@ -42,7 +42,7 @@ uint32_t hw_thread::get_pc() const {
 }
 
 uint32_t hw_thread::get_delayed_branch_address() const {
-  return _branch_slot;
+    return _branch_slot;
 }
 
 hw_thread::hw_thread(): _id(MAX_THREAD) {
@@ -104,18 +104,18 @@ void hw_thread::operator=(const hw_thread & hardware_thread) {
 
 bool hw_thread::operator==(const hw_thread& hardware_thread) {
     /// cnt_instr and cnt_cycles are not behaviors of a thread so no need to compare them.
-  return (
-      (_id == hardware_thread._id)
-      && (inst == hardware_thread.inst)
-      && (_pc == hardware_thread._pc)
-      && (_enabled == hardware_thread._enabled)
-      && (spec_regs == hardware_thread.spec_regs)
-      &&  (_branch_slot == hardware_thread._branch_slot)
-      && (regs == hardware_thread.regs)
-      && (_deadline_stalled == hardware_thread._deadline_stalled)
-      && (_memory_stalled == hardware_thread._memory_stalled)
-      && (_fetch_stalled == hardware_thread._fetch_stalled)
-      );
+    return (
+               (_id == hardware_thread._id)
+               && (inst == hardware_thread.inst)
+               && (_pc == hardware_thread._pc)
+               && (_enabled == hardware_thread._enabled)
+               && (spec_regs == hardware_thread.spec_regs)
+               && (_branch_slot == hardware_thread._branch_slot)
+               && (regs == hardware_thread.regs)
+               && (_deadline_stalled == hardware_thread._deadline_stalled)
+               && (_memory_stalled == hardware_thread._memory_stalled)
+               && (_fetch_stalled == hardware_thread._fetch_stalled)
+           );
 
 }
 
@@ -151,7 +151,7 @@ void hw_thread::set_deadline_stalled(bool stall) {
 }
 
 void hw_thread::set_delayed_branch_address(uint32_t address) {
-  _branch_slot = address;
+    _branch_slot = address;
 }
 
 void hw_thread::set_enabled(bool enable) {
@@ -167,6 +167,6 @@ void hw_thread::set_memory_stalled(bool stall) {
 }
 
 void hw_thread::set_pc(uint32_t pc) {
-  _pc = pc;
+    _pc = pc;
 }
 

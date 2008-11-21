@@ -58,7 +58,7 @@ void fetch::behavior() {
     //    cout << hex << ht->PC << "\t" << ht->PC << endl;
     bool fetch_stall = false;
     uint32_t instruction_bits =
-      instruction_memory->read_inst(input_thread->get_id(), input_thread->get_pc(), fetch_stall);
+        instruction_memory->read_inst(input_thread->get_id(), input_thread->get_pc(), fetch_stall);
     input_thread->set_fetch_stalled(fetch_stall);
     input_thread->inst.set_inst(instruction_bits);
 
