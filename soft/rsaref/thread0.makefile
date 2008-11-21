@@ -43,16 +43,13 @@ RSAREFLIB = rsaref.a
 # The location of the demo source directory.
 RDEMODIR = src/rdemo/
 
-all : rdemo dhdemo thread$(THREAD_NUM)
+all : thread$(THREAD_NUM)
 
 clean : 
-	rm -rf *.o rdemo dhdemo *.a *~
+	rm -rf *.o *.a *~
 
-rdemo : rdemo.$(O) $(RSAREFLIB)
-	$(CC) -o $@ rdemo.$(O) $(RSAREFLIB)
-
-dhdemo : dhdemo.$(O) $(RSAREFLIB)
-	$(CC) -o $@ dhdemo.$(O) $(RSAREFLIB)
+encrypt : encrypt.$(O) $(RSAREFLIB)
+	$(CC) -o $@ encrypt.$(O) $(RSAREFLIB)
 
 $(RSAREFLIB) : desc.$(O) digit.$(O) md2c.$(O) md5c.$(O) nn.$(O) prime.$(O)\
   rsa.$(O) r_encode.$(O) r_dh.$(O) r_enhanc.$(O) r_keygen.$(O) r_random.$(O)\
@@ -60,15 +57,11 @@ $(RSAREFLIB) : desc.$(O) digit.$(O) md2c.$(O) md5c.$(O) nn.$(O) prime.$(O)\
 	$(LIB) r $@ $?
 	$(RANLIB) $@
 
-rdemo.$(O) : $(RDEMODIR)rdemo.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
-	$(CC) $(CFLAGS) $(RDEMODIR)rdemo.c
+encrypt.$(O) : $(RDEMODIR)encrypt.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
+	$(CC) $(CFLAGS) $(RDEMODIR)encrypt.c
 
-dhdemo.$(O) : $(RDEMODIR)dhdemo.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
-	$(CC) $(CFLAGS) $(RDEMODIR)dhdemo.c
-
-
-thread$(THREAD_NUM) : rdemo
-	cp rdemo bare_thread$(THREAD_NUM).exe
+thread$(THREAD_NUM) : encrypt
+	mv encrypt bare_thread$(THREAD_NUM).exe
 	$(BUILDTOOL_PREFIX)objcopy -O srec bare_thread$(THREAD_NUM).exe bare_thread$(THREAD_NUM).srec
 	$(BUILDTOOL_PREFIX)objdump -D bare_thread$(THREAD_NUM).exe > bare_thread$(THREAD_NUM).dump
 

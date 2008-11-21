@@ -34,16 +34,19 @@ RSAREFLIB = rsaref.a
 # The location of the demo source directory.
 RDEMODIR = ../rdemo/
 
-all : rdemo dhdemo
+all : rdemo dhdemo encrypt
 
 clean : 
-	rm -rf *.o rdemo dhdemo *.a *~
+	rm -rf *.o rdemo dhdemo encrypt *.a *~
 
 rdemo : rdemo.$(O) $(RSAREFLIB)
 	$(CC) -o $@ rdemo.$(O) $(RSAREFLIB)
 
 dhdemo : dhdemo.$(O) $(RSAREFLIB)
 	$(CC) -o $@ dhdemo.$(O) $(RSAREFLIB)
+
+encrypt : encrypt.$(O) $(RSAREFLIB)
+	$(CC) -o $@ encrypt.$(O) $(RSAREFLIB)
 
 $(RSAREFLIB) : desc.$(O) digit.$(O) md2c.$(O) md5c.$(O) nn.$(O) prime.$(O)\
   rsa.$(O) r_encode.$(O) r_dh.$(O) r_enhanc.$(O) r_keygen.$(O) r_random.$(O)\
@@ -56,5 +59,8 @@ rdemo.$(O) : $(RDEMODIR)rdemo.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
 
 dhdemo.$(O) : $(RDEMODIR)dhdemo.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
 	$(CC) $(CFLAGS) $(RDEMODIR)dhdemo.c
+
+encrypt.$(O) : $(RDEMODIR)encrypt.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
+	$(CC) $(CFLAGS) $(RDEMODIR)encrypt.c
 
 include $(RSAREFDIR)targets.mak
