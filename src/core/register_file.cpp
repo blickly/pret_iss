@@ -59,7 +59,7 @@ bool register_file::operator==(const register_file& rf) {
     return true;
 }
 
-int register_file::get_reg(RegNum rs, WindowPointer wp) {
+int register_file::get_reg(register_number rs, window_pointer wp) {
     if (rs < 8) {
         return gReg[rs];
     } else {
@@ -70,7 +70,7 @@ int register_file::get_reg(RegNum rs, WindowPointer wp) {
     }
 }
 
-void register_file::set_reg(RegNum rs, uint32_t value, WindowPointer wp) {
+void register_file::set_reg(register_number rs, uint32_t value, window_pointer wp) {
     if (rs < 8) {
         gReg[rs] = value;
     } else {
@@ -82,7 +82,7 @@ void register_file::set_reg(RegNum rs, uint32_t value, WindowPointer wp) {
 }
 
 
-void register_file::regdump(WindowPointer wp) {
+void register_file::regdump(window_pointer wp) {
     cout << "-----------------------------------------------------" << endl;
 #ifndef _NO_SYSTEMC_
     cout << "                     RegDump: " << sc_time_stamp() << endl;
@@ -117,7 +117,7 @@ void register_file::regdump(WindowPointer wp) {
     cout << endl;
 }
 
-// void register_file::regdump(WindowPointer wp){
+// void register_file::regdump(window_pointer wp){
 //   cout << "-----------------------------------------------------" << endl;
 //   cout << "                     RegDump: " << sc_time_stamp() << endl;
 //   cout << "-----------------------------------------------------" << endl;

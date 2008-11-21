@@ -48,9 +48,9 @@ struct register_file {
     register_file();
     register_file(const register_file& rf);
 
-    int get_reg(RegNum rs, WindowPointer wp);
-    void set_reg(RegNum rs, uint32_t value, WindowPointer wp);
-    void regdump(WindowPointer wp);
+    int get_reg(register_number rs, window_pointer wp);
+    void set_reg(register_number rs, uint32_t value, window_pointer wp);
+    void regdump(window_pointer wp);
     void reset_register_window();
 
     bool operator==(const register_file& rf);

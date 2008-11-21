@@ -28,15 +28,14 @@
 
 */
 
-#ifndef _DEFINITIONS_H_
-#define _DEFINITIONS_H_
+#ifndef _INSTRUCTION_DEFS_H_
+#define _INSTRUCTION_DEFS_H_
 
 #include <iostream>
-
 using namespace std;
 
-typedef short unsigned int RegNum;
-typedef short unsigned int WindowPointer;
+typedef short unsigned int register_number;
+typedef short unsigned int window_pointer;
 
 enum SrcMux {
     SRCMUX_RA,
@@ -178,11 +177,11 @@ enum SREG_MUX_Type {
 };
 
 struct SpecialRegisters {
-    WindowPointer wp;
+    window_pointer wp;
 
     void reset() {
         wp = 0;
     }
 };
 
-#endif
+#endif /* _INSTRUCTION_DEFS_H_ */

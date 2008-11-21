@@ -53,9 +53,9 @@ struct instruction {
 
     short op, op2, op3;
 
-    RegNum rs1;
-    RegNum rs2;
-    RegNum rd;
+    register_number rs1;
+    register_number rs2;
+    register_number rd;
     ALUType aluop;
     bool wreg;
     bool wicc;
