@@ -58,7 +58,7 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
 }
 
 
-void hw_thread::operator=(const hw_thread& hardware_thread) {
+void hw_thread::operator=(const hw_thread & hardware_thread) {
     _id = hardware_thread._id;
     inst = hardware_thread.inst;
     cnt_cycles = hardware_thread.cnt_cycles;
@@ -106,35 +106,35 @@ void hw_thread::set_id(unsigned int in_id) {
 }
 
 void hw_thread::set_enabled(bool enable) {
-  _enabled = enable;
+    _enabled = enable;
 }
 
 void hw_thread::set_fetch_stalled(bool stall) {
-  _fetch_stalled = stall;
+    _fetch_stalled = stall;
 }
 
 void hw_thread::set_deadline_stalled(bool stall) {
-  _deadline_stalled = stall;
+    _deadline_stalled = stall;
 }
 
 void hw_thread::set_memory_stalled(bool stall) {
-  _memory_stalled = stall;
+    _memory_stalled = stall;
 }
 
 bool hw_thread::is_deadline_stalled() const {
-  return _deadline_stalled;
+    return _deadline_stalled;
 }
 
 bool hw_thread::is_enabled() const {
-  return _enabled;
+    return _enabled;
 }
 
 
 bool hw_thread::is_fetch_stalled() const {
-  return _fetch_stalled;
+    return _fetch_stalled;
 }
 
 bool hw_thread::is_memory_stalled() const {
-  return _memory_stalled;
+    return _memory_stalled;
 }
 

@@ -58,7 +58,7 @@ void fetch::behavior() {
     //    cout << hex << ht->PC << "\t" << ht->PC << endl;
     bool fetch_stall = false;
     uint32_t instruction_bits =
-      instruction_memory->read_inst(input_thread->get_id(), input_thread->PC, fetch_stall);
+        instruction_memory->read_inst(input_thread->get_id(), input_thread->PC, fetch_stall);
     input_thread->set_fetch_stalled(fetch_stall);
     input_thread->inst.set_inst(instruction_bits);
 
@@ -81,7 +81,7 @@ void fetch::behavior() {
        the register access stage when we identify what particular
        register it is that we are considered with. */
     input_thread->set_deadline_stalled(false);
-    
+
 #ifdef _NO_SYSTEMC_
     output_thread = input_thread;
 #else
@@ -103,6 +103,6 @@ void fetch::_debug_pipeline(const hw_thread_ptr& hardware_thread) {
 }
 
 bool fetch::_is_not_valid_hardware_thread(const hw_thread_ptr& hardware_thread) {
-  return (hardware_thread.is_null() || !hardware_thread->is_enabled()
-	  || hardware_thread->is_memory_stalled());
+    return (hardware_thread.is_null() || !hardware_thread->is_enabled()
+            || hardware_thread->is_memory_stalled());
 }

@@ -117,6 +117,6 @@ private:
      */
     bool _is_not_valid_hwthread(const hw_thread_ptr& hardware_thread);
 
-  
+
 };
 #endif /* _MEM_H_ */

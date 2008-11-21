@@ -45,7 +45,7 @@
 ///////////////////////////////////////////////////////////////////////
 /// hw_thread
 /**
- * The state of a thread is captured in this structure. 
+ * The state of a thread is captured in this structure.
  *
  * @author  Hiren Patel
  * @version $Id$
@@ -56,94 +56,94 @@
 class hw_thread {
 public:
 
-  /** Construct an empty hardware thread.
-   */
+    /** Construct an empty hardware thread.
+     */
     hw_thread();
 
-  /** Overloaded constructor.
-   *
-   * @param in_id Thread id.
-   * @param pc Starting program counter.
-   */
+    /** Overloaded constructor.
+     *
+     * @param in_id Thread id.
+     * @param pc Starting program counter.
+     */
     hw_thread(unsigned int in_id, uint32_t pc);
 
-  /** Copy constructor.
-   *
-   *  @param hardware_thread Copy from this hardware thread.
-   */
+    /** Copy constructor.
+     *
+     *  @param hardware_thread Copy from this hardware thread.
+     */
     hw_thread(const hw_thread& hardware_thread);
 
 public:
-  /** Returns the thread id.
-   *
-   * @return Thread id.
-   */
-      unsigned int get_id();
-  
-  /** Returns true if stall is caused by a deadline instruction.
-   *
-   * @return True if deadline caused the stall, else false.
-   */
-  bool is_deadline_stalled() const;
-  
-  /** Return if the thread is enabled.
-   *
-   * @return True if thread is enabled for processing, else false.
-   */
-  bool is_enabled() const;
+    /** Returns the thread id.
+     *
+     * @return Thread id.
+     */
+    unsigned int get_id();
 
-  /** Returns true if stall is caused by an instruction fetch to the memory.
-   *
-   * @return True if fetch caused the stall, else false.
-   */
-  bool is_fetch_stalled() const;
+    /** Returns true if stall is caused by a deadline instruction.
+     *
+     * @return True if deadline caused the stall, else false.
+     */
+    bool is_deadline_stalled() const;
 
-  /** Returns true if stall is caused by a data access to memory.
-   *
-   * @return True if memory stage caused the stall, else false.
-   */
-  bool is_memory_stalled() const;
+    /** Return if the thread is enabled.
+     *
+     * @return True if thread is enabled for processing, else false.
+     */
+    bool is_enabled() const;
 
-  
-  /** Overloaded assignment operator.
-   *
-   * @param hardware_thread Thread object to assign.
-   */
-  void operator=(const hw_thread& hardware_thread);
-  
-  /** Overloaded equal comparison operator.
-   *
-   * @param hardware_thread Thread object to compare with.
-   * @return Boolean if equal.
-   */
+    /** Returns true if stall is caused by an instruction fetch to the memory.
+     *
+     * @return True if fetch caused the stall, else false.
+     */
+    bool is_fetch_stalled() const;
+
+    /** Returns true if stall is caused by a data access to memory.
+     *
+     * @return True if memory stage caused the stall, else false.
+     */
+    bool is_memory_stalled() const;
+
+
+    /** Overloaded assignment operator.
+     *
+     * @param hardware_thread Thread object to assign.
+     */
+    void operator=(const hw_thread& hardware_thread);
+
+    /** Overloaded equal comparison operator.
+     *
+     * @param hardware_thread Thread object to compare with.
+     * @return Boolean if equal.
+     */
     bool operator==(const hw_thread& hardware_thread);
 
-  /** Overloaded output (<<) operator.
-   *
-   * @param out Output stream.
-   * @param hardware_thread Thread object to output.
-   * @return Output stream.
-   */
+    /** Overloaded output (<<) operator.
+     *
+     * @param out Output stream.
+     * @param hardware_thread Thread object to output.
+     * @return Output stream.
+     */
     inline friend ostream& operator<<(ostream& out, const hw_thread& hardware_thread) {
-      out << "+ hw_thread id: " << hardware_thread._id << ' ' << hardware_thread.inst;
-        return out; 
+        out << "+ hw_thread id: " << hardware_thread._id << ' ' << hardware_thread.inst;
+        return out;
     }
 
-  /** Print out registers in current register window.
-   */
+    /** Print out registers in current register window.
+     */
     void regdump();
 
-  /** Reset the register windows.
-   */
+    /** Reset the register windows.
+     */
     void reset_register_window();
-  
+
 #ifndef  _NO_SYSTEMC_
-  /** Dump traces to file when using SystemC. Currently this is empty.
-   *
-   * @param tf Output trace file.
-   * @param hardware_thread Thread object to dump to trace file.
-   * @param str Associate string with object.
-   */
+    /** Dump traces to file when using SystemC. Currently this is empty.
+     *
+     * @param tf Output trace file.
+     * @param hardware_thread Thread object to dump to trace file.
+     * @param str Associate string with object.
+     */
     inline friend void sc_trace(sc_trace_file* tf, const hw_thread& hardware_thread, const string& str) {
         // Do nothing
     }
@@ -151,37 +151,37 @@ public:
 
 
 
-  /** Set the enabled state of the thread.
-   *
-   * @param enable True if thread is going to be enabled, else false.
-   */
-  void set_enabled(bool enable);
+    /** Set the enabled state of the thread.
+     *
+     * @param enable True if thread is going to be enabled, else false.
+     */
+    void set_enabled(bool enable);
 
-  /** Set the state if stall is caused by instruction fetch from memory.
-   *
-   * @param stall True if stalled, else false.
-   */
-  void set_fetch_stalled(bool stall);
+    /** Set the state if stall is caused by instruction fetch from memory.
+     *
+     * @param stall True if stalled, else false.
+     */
+    void set_fetch_stalled(bool stall);
 
     /** Set the thread id.
-   *
-   * @param in_id New thread identifier.
-   */
+    *
+    * @param in_id New thread identifier.
+    */
     void set_id(unsigned int in_id);
 
-  
-  /** Set the state if stall is caused by a deadline instruction.
-   *
-   * @param stall True if stalled, else false.
-   */
 
-  void set_deadline_stalled(bool stall);
+    /** Set the state if stall is caused by a deadline instruction.
+     *
+     * @param stall True if stalled, else false.
+     */
 
-  /** Set the state if stall is caused by a data memory access.
-   *
-   * @param stall True if stalled, else false.
-   */
-  void set_memory_stalled(bool stall);
+    void set_deadline_stalled(bool stall);
+
+    /** Set the state if stall is caused by a data memory access.
+     *
+     * @param stall True if stalled, else false.
+     */
+    void set_memory_stalled(bool stall);
 
 
     // Data members
@@ -200,7 +200,7 @@ private:
     bool _deadline_stalled; // If the thread is currently in a state of replay.
     bool _memory_stalled;
     bool _fetch_stalled;
-  unsigned int _id;
+    unsigned int _id;
 };
 
 #endif /* _HW_THREAD_H_ */

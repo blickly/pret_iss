@@ -64,7 +64,7 @@ void mem::behavior() {
     bool memory_stall = false;
     if (ht->inst.read_mem) {
         uint32_t raw_data = data_mem->read_data(ht->get_id(), aligned_addr, memory_stall);
-	ht->set_memory_stalled(memory_stall);
+        ht->set_memory_stalled(memory_stall);
         if (!ht->is_memory_stalled()) {
             ht->inst.read_data(raw_data, addr_offset);
         }
@@ -77,7 +77,7 @@ void mem::behavior() {
         }
         data_to_write = ht->inst.get_write_data(old_data, addr_offset);
         data_mem->write_data(ht->get_id(), aligned_addr, data_to_write, memory_stall);
-	ht->set_memory_stalled(memory_stall);
+        ht->set_memory_stalled(memory_stall);
     }
 
 //     if (ht->get_id() == 0) {
@@ -137,7 +137,7 @@ void mem::_dbg_pipeline(const hw_thread_ptr& ht) {
 #endif /* DBG_PIPE || DBG_MEM */
 }
 
- bool mem::_is_not_valid_hwthread(const hw_thread_ptr& hardware_thread) {
-  return ( hardware_thread.is_null() || !hardware_thread->is_enabled()
-	   || hardware_thread->is_fetch_stalled());
- }
+bool mem::_is_not_valid_hwthread(const hw_thread_ptr& hardware_thread) {
+    return (hardware_thread.is_null() || !hardware_thread->is_enabled()
+            || hardware_thread->is_fetch_stalled());
+}

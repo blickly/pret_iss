@@ -47,9 +47,9 @@ public:
     virtual uint32_t read(int tid, uint32_t addr, bool& stalled);
 
     virtual vector<uint32_t> read_burst(int tid,
-                                       uint32_t addr,
-                                       bool& stalled,
-                                       int num_words);
+                                        uint32_t addr,
+                                        bool& stalled,
+                                        int num_words);
     virtual int burst_words_returned(int tid, int num_words);
     virtual void behavior();
 

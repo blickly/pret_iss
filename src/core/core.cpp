@@ -242,11 +242,11 @@ hw_thread_ptr * core::get_thread(int thread_id) const {
 }
 
 bool core::is_fetch_stalled(int thread_id) const {
-  return _thread_controller->get_thread(thread_id)->get_handle()->is_fetch_stalled();
+    return _thread_controller->get_thread(thread_id)->get_handle()->is_fetch_stalled();
 }
 
 bool core::is_memory_stalled(int thread_id) const {
-  return _thread_controller->get_thread(thread_id)->get_handle()->is_memory_stalled();
+    return _thread_controller->get_thread(thread_id)->get_handle()->is_memory_stalled();
 }
 
 void core::print_memory() {

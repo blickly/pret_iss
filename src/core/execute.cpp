@@ -49,7 +49,7 @@ void execute::behavior() {
 #endif
 
     if (hardware_thread.is_null() || !hardware_thread->is_enabled()
-	|| hardware_thread->is_fetch_stalled()) {
+            || hardware_thread->is_fetch_stalled()) {
 #ifdef _NO_SYSTEMC_
         out_thread = hardware_thread;
 #else
@@ -370,6 +370,6 @@ unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
 }
 
 bool execute::_is_not_valid_hwthread(const hw_thread_ptr& hardware_thread) {
-  return (hardware_thread.is_null() || !hardware_thread->is_enabled()
-	  || hardware_thread->is_fetch_stalled());
+    return (hardware_thread.is_null() || !hardware_thread->is_enabled()
+            || hardware_thread->is_fetch_stalled());
 }

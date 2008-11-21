@@ -42,7 +42,7 @@
 /**
  * The mem_mapped_io class provides a representation of the memory-mapped
  * I/O of the chip. Currently, this only includes interfaces for writing
- * to memory-mapped output addresses of 
+ * to memory-mapped output addresses of
  *
  * @author  Ben Lickly
  * @version $Id:$
