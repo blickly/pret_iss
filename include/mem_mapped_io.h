@@ -53,6 +53,12 @@ class mem_mapped_io : public mem_location {
 public:
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///
+    /** Construct and initialize a memory-mapped
+     * This method is responsible for initializing any memory-mapped 
+     * addresses that must be set before program execution.
+     */
+    mem_mapped_io();
+
     /** Update any state that must be updated every cycle.
      * Does nothing in mem_mapped_io.
      */

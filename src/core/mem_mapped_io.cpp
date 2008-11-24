@@ -30,6 +30,10 @@
 
 #include "mem_mapped_io.h"
 
+mem_mapped_io::mem_mapped_io() {
+    mem.add_address(0x80000104,  6);
+}
+
 void mem_mapped_io::behavior() {}
 
 bool mem_mapped_io::is_stalled(int tid, uint32_t addr) {
@@ -37,6 +41,12 @@ bool mem_mapped_io::is_stalled(int tid, uint32_t addr) {
 }
 
 uint32_t mem_mapped_io::read(int tid, uint32_t addr, bool& stalled) {
+    /// Address map to the UART which is mapped at address 0x80000100
+    /// for its data.
+#ifdef DBG_MEM_MAP_READ
+    cout << "Read of address: " << hex << addr 
+         << " (data) " << mem[addr] << endl;
+#endif
     stalled = is_stalled(tid, addr);
     return mem[addr];
 }
@@ -62,6 +72,11 @@ void mem_mapped_io::write(int tid, uint32_t addr, uint32_t data, bool& stalled) 
     }
 #endif
     mem.add_address(addr, data);
+#ifdef DBG_MEM_MAP_WRITE
+    cout << "Write to address: " << hex << addr 
+         << " of data: " << data << endl;
+#endif
+
 }
 
 void mem_mapped_io::out_file(uint32_t data) {
