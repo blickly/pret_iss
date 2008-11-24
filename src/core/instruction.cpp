@@ -537,7 +537,7 @@ void instruction::initialize() {
     icc = 0x0;
     disp22 = 0;
 
-    sp_reg.wp = 0;
+    sp_reg.set_window_pointer(0);
     wp_increment = 0;
 
     rs1sel = SRCMUX_RA;

@@ -34,10 +34,10 @@
 #include <iostream>
 using namespace std;
 
-typedef short unsigned int register_number;
-typedef short unsigned int window_pointer;
+typedef short unsigned int REGISTER_NUMBER;
+typedef short unsigned int WINDOW_POINTER;
 
-enum SrcMux {
+enum SRCMUX {
     SRCMUX_RA,
     SRCMUX_EX,
     SRCMUX_ME,
@@ -46,7 +46,7 @@ enum SrcMux {
     SRCMUX_XC
 };
 
-enum ALUType {
+enum ALU {
     ALU_NOP,
     ALU_ADD,
     ALU_SUB,
@@ -63,7 +63,7 @@ enum ALUType {
     ALU_MUL
 };
 
-enum MemorySize {
+enum MEMORY_SIZE {
     MEM_SIGNED_BYTE,
     MEM_UNSIGNED_BYTE,
     MEM_SIGNED_HALFWORD,
@@ -72,21 +72,21 @@ enum MemorySize {
     MEM_DOUBLEWORD
 };
 
-enum OpType {
+enum OP {
     OP_SETHI_BRANCHES = 0,
     OP_CALL = 1,
     OP_ARITHMETIC_ETC = 2,
     OP_MEMORY = 3
 };
 
-enum Op2Type {
+enum OP2 {
     OP2_BICC = 2,
     OP2_SETHI = 4,
     OP2_FBFCC = 6,
     OP2_CBCCC = 7
 };
 
-enum BranchConditions {
+enum BRANCH_CONDITIONS {
     BRCH_BA = 8,
     BRCH_BN = 0,
     BRCH_BNE = 9,
@@ -105,7 +105,7 @@ enum BranchConditions {
     BRCH_BVS = 7
 };
 
-enum Op3ArithType {
+enum OP3_ARITHMETIC {
     OP3_ADD = 0x0,
     OP3_AND = 0x1,
     OP3_OR = 0x2,
@@ -147,7 +147,7 @@ enum Op3ArithType {
 
 };
 
-enum Op3MemType {
+enum OP3_MEMORY {
     OP3_LD = 0x0,
     OP3_ST = 0x4,
     OP3_STB = 0x5,
@@ -176,12 +176,5 @@ enum SREG_MUX_Type {
     SREG_CP = 7
 };
 
-struct SpecialRegisters {
-    window_pointer wp;
-
-    void reset() {
-        wp = 0;
-    }
-};
 
 #endif /* _INSTRUCTION_DEFS_H_ */

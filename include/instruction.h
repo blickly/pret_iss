@@ -38,12 +38,13 @@
 
 #include <iostream>
 #include <iomanip>
-#include "instruction_defs.h"
-
 using namespace std;
 
-struct instruction {
+#include "instruction_defs.h"
+#include "special_registers.h"
 
+class instruction {
+public:
     // Flag to see if instruction is a double word instruction
     bool db_word;
 
@@ -51,17 +52,19 @@ struct instruction {
     int pc;
     bool halt;
 
-    short op, op2, op3;
+  short op;
+  short op2;
+  short op3;
 
-    register_number rs1;
-    register_number rs2;
-    register_number rd;
-    ALUType aluop;
+    REGISTER_NUMBER rs1;
+    REGISTER_NUMBER rs2;
+    REGISTER_NUMBER rd;
+    ALU aluop;
     bool wreg;
     bool wicc;
     bool write_mem;
     bool read_mem;
-    MemorySize mem_size;
+    MEMORY_SIZE mem_size;
     bool branch;
     bool jump;
     bool call;
@@ -70,12 +73,12 @@ struct instruction {
     int disp30;
     int disp22;
 
-    SpecialRegisters sp_reg;
+    special_registers sp_reg;
     short wp_increment;
 
-    SrcMux rs1sel;
-    SrcMux rs2sel;
-    SrcMux rdsel;
+    SRCMUX rs1sel;
+    SRCMUX rs2sel;
+    SRCMUX rdsel;
 
     int op1_val;
     int op2_val;

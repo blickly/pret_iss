@@ -61,7 +61,7 @@ public:
   
     // Data members
     unsigned char imp_ver;
-    window_pointer curr_wp;  // Thread's current window pointer
+    WINDOW_POINTER curr_wp;  // Thread's current window pointer
     unsigned char icc;
     bool s;
     bool ps;
