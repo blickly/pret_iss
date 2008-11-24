@@ -32,8 +32,7 @@
 """Multiple thread/multiple program compiler
 
 Compiles c files (named thread1.c, thread2.c, ...) and aligns the resulting
-srec files (and executables) to be packed together in memory space with 
-minimal overlap.
+srec files (and executables) to specified boundaries.
 
 """
 import os
@@ -48,23 +47,6 @@ thread_spacing = '0x00100000'
 
 quiet = True
          
-def compile_prom(thread_num, options, prog_addr, delete_exe=True):
-   h_file    = 'prom.h'
-   asm_file  = 'prom.S'
-   o_file    = 'prom%d.o' % thread_num
-   exe_file  = 'prom%d.exe' % thread_num
-   srec_file = 'prom%d.srec' % thread_num
-   dump_file = 'prom%d.dump' % thread_num
-   compile_options = ' -c -I. '
-   link_options = ' -nostdlib -Tlinkprom -N -L./ %s -nostartfiles ' % options
-   augment_h_file(h_file, prog_addr)
-   gcc(asm_file, o_file, compile_options)
-   gcc(o_file, exe_file, link_options)
-   os.unlink(o_file)
-   generate_srec_dump(exe_file, srec_file, dump_file)
-   if delete_exe: 
-      os.unlink(exe_file)
-      
 def make_c_file(thread_num, options):
    os.putenv('CFLAGS', options)
    if quiet:
@@ -81,12 +63,6 @@ def system(command, abort_on_fail=True):
       print "ERROR running '%s'" % command
       if abort_on_fail:
          sys.exit(1)
-
-def gcc(in_file, out_file, options):
-   """Compile an input file into an output file using the given options"""
-   assert os.path.exists(in_file), "Cannot find " + in_file
-   system('sparc-elf-gcc -o %s %s %s ' % (out_file, in_file, options))
-   assert os.path.exists(out_file), "Could not create: " + out_file
 
 def generate_srec_dump(exe_file, srec_file, dump_file):
    """Generate the srec and dump files from a given source file"""
@@ -108,17 +84,6 @@ def augment_h_file(h_file, prog_addr):
    write_file.close()
    assert os.path.exists(h_file), "Could not create " + h_file
      
-def merge_srec_files(boot_srec, prog_srec, new_srec):
-   """Merge two srec files into one.  
-   The starting address is taken from the first srec file"""
-   write_file = open(new_srec, "w")
-   for line in open(boot_srec, "rb"):
-      write_file.write(line)
-   for line in open(prog_srec, "rb"):
-      if '1' <= line[1] <= '3':
-         write_file.write(line)
-   write_file.close()
-
 def get_max_address(srec_file):
    """Find the address one past the end of the given SREC file"""
    max_addr = 0
@@ -140,19 +105,7 @@ def align(addr):
    """Align address to next possible 32-bit aligned address"""
    return ((addr + 31)/32) * 32
 
-def compile_proms(num_threads, delete_exes=True):
-   """Compile the prom SREC files for each thread"""
-   boot_addr = 0
-   prog_addr = int(thread_start, 16)
-   for thread in range(num_threads):
-      boot_ops = start_at(boot_addr)
-      if not quiet:
-         print "PROM %d alignments are: %s" % (thread, boot_ops)
-      compile_prom(thread, boot_ops, prog_addr, delete_exes)
-      boot_addr = align(get_max_address('prom%d.srec' % thread))
-      prog_addr = align(prog_addr + int(thread_spacing, 16))
-
-def compile_threads(num_threads, delete_exes=True):
+def compile_threads(num_threads):
    """Compile the final simluation-loadable SREC files for each thread"""
    prog_addr = int(thread_start, 16)
    for thread in range(num_threads):
@@ -163,29 +116,13 @@ def compile_threads(num_threads, delete_exes=True):
       prog_addr = align(prog_addr + int(thread_spacing, 16))
       assert get_max_address('bare_thread%d.srec' % thread) < prog_addr, \
              "Thread %d is too large to fit in ram" % thread
-      merge_srec_files('prom%d.srec' % thread, 
-                       'bare_thread%d.srec' % thread, 
-                       'thread%d.srec' %thread )
+      shutil.copy('bare_thread%d.srec' % thread, 'thread%d.srec' %thread)
 
-def compile_all(working_dir, delete_exes = False):
+def compile_all(working_dir):
    olddir = os.path.abspath(os.curdir)
-   working_dir = os.path.abspath(working_dir)
-   os.chdir(prom_dir())
-   compile_proms(6, delete_exes)
-   for i in range(6):
-      try:
-         shutil.copy("prom%s.srec" % i, working_dir)
-         shutil.copy("prom%s.dump" % i, working_dir)
-      except shutil.Error:
-         pass # If files are the same, do nothing
    os.chdir(working_dir)
-   compile_threads(6, delete_exes)
+   compile_threads(6)
    os.chdir(olddir)
-
-def prom_dir():
-   """Return directory that contains prom source and SREC files"""
-   pdir = os.path.join(os.environ['PRET_ISS'], 'soft')
-   return os.path.abspath(pdir)
 
 if __name__ == "__main__":
    if len(sys.argv) < 2:
