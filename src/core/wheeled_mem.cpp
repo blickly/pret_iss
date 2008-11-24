@@ -117,9 +117,6 @@ bool wheeled_mem::is_stalled_helper(AccessorType acc, int tid, uint32_t addr, in
 uint32_t wheeled_mem::read(int tid, uint32_t addr, bool& stalled) {
 
     stalled = is_stalled(tid, addr);
-    //Added so boot code is never stalled
-    if (addr < 0x10000000)
-        stalled = false;
     return mem[addr];
 }
 
