@@ -49,9 +49,10 @@
 #include "l1_scratch.h"
 #include "dma.h"
 #include "memory_controller.h"
+#include "regacc.h"
 #include "srec_parser.h"
 #include "static_bound_parser.h"
-#include "regacc.h"
+
 ///////////////////////////////////////////////////////////////////////
 /// core
 /**

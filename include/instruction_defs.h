@@ -34,18 +34,27 @@
 #include <iostream>
 using namespace std;
 
+///////////////////////////////////////////////////////////////////////
+/// REGISTER_NUMBER
+/**
+ * Representing register windows as short unsigned integers.
+ */
 typedef short unsigned int REGISTER_NUMBER;
+
+///////////////////////////////////////////////////////////////////////
+/// WINDOW_POINTER
+/**
+ * Representing register windows as short unsigned integers.
+ */
 typedef short unsigned int WINDOW_POINTER;
 
-enum SRCMUX {
-    SRCMUX_RA,
-    SRCMUX_EX,
-    SRCMUX_ME,
-    SRCMUX_IMM,
-    SRCMUX_ZERO,
-    SRCMUX_XC
-};
 
+///////////////////////////////////////////////////////////////////////
+/// ALU
+/**
+ * Encoding of the ALU operation.
+ * 
+ */
 enum ALU {
     ALU_NOP,
     ALU_ADD,
@@ -63,29 +72,12 @@ enum ALU {
     ALU_MUL
 };
 
-enum MEMORY_SIZE {
-    MEM_SIGNED_BYTE,
-    MEM_UNSIGNED_BYTE,
-    MEM_SIGNED_HALFWORD,
-    MEM_UNSIGNED_HALFWORD,
-    MEM_WORD,
-    MEM_DOUBLEWORD
-};
-
-enum OP {
-    OP_SETHI_BRANCHES = 0,
-    OP_CALL = 1,
-    OP_ARITHMETIC_ETC = 2,
-    OP_MEMORY = 3
-};
-
-enum OP2 {
-    OP2_BICC = 2,
-    OP2_SETHI = 4,
-    OP2_FBFCC = 6,
-    OP2_CBCCC = 7
-};
-
+///////////////////////////////////////////////////////////////////////
+/// BRANCH_CONDITIONS
+/**
+ * Encoding of supported branching conditions.
+ * 
+ */
 enum BRANCH_CONDITIONS {
     BRCH_BA = 8,
     BRCH_BN = 0,
@@ -105,6 +97,54 @@ enum BRANCH_CONDITIONS {
     BRCH_BVS = 7
 };
 
+///////////////////////////////////////////////////////////////////////
+/// MEMORY_SIZE
+/**
+ * Encoding of supported memory sizes.
+ * 
+ */
+enum MEMORY_SIZE {
+    MEM_SIGNED_BYTE,
+    MEM_UNSIGNED_BYTE,
+    MEM_SIGNED_HALFWORD,
+    MEM_UNSIGNED_HALFWORD,
+    MEM_WORD,
+    MEM_DOUBLEWORD
+};
+
+///////////////////////////////////////////////////////////////////////
+/// OP
+/**
+ * Encoding of opcode of type 1.
+ * 
+ */
+enum OP {
+    OP_SETHI_BRANCHES = 0,
+    OP_CALL = 1,
+    OP_ARITHMETIC_ETC = 2,
+    OP_MEMORY = 3
+};
+
+///////////////////////////////////////////////////////////////////////
+/// OP2
+/**
+ * Encoding of opcode type 2.
+ * 
+ */
+enum OP2 {
+    OP2_BICC = 2,
+    OP2_SETHI = 4,
+    OP2_FBFCC = 6,
+    OP2_CBCCC = 7
+};
+
+
+///////////////////////////////////////////////////////////////////////
+/// OP3_ARITHMETIC
+/**
+ * Encoding of opcode type 3 for arithmetic operations.
+ * 
+ */
 enum OP3_ARITHMETIC {
     OP3_ADD = 0x0,
     OP3_AND = 0x1,
@@ -147,6 +187,24 @@ enum OP3_ARITHMETIC {
 
 };
 
+///////////////////////////////////////////////////////////////////////
+/// OP3_COPROC
+/**
+ * Encoding of opcode type 3 for coprocessor instructions.
+ * 
+ */
+enum OP3_COPROC {
+    // Coprocessor opcodes.
+    OP3_STC = 0x34,
+    OP3_CPOP1 = 0x36
+};
+
+///////////////////////////////////////////////////////////////////////
+/// OP3_MEMORY
+/**
+ * Encoding of opcode type 3 for memory operations.
+ * 
+ */
 enum OP3_MEMORY {
     OP3_LD = 0x0,
     OP3_ST = 0x4,
@@ -160,13 +218,28 @@ enum OP3_MEMORY {
     OP3_LDD = 0x3
 };
 
-enum OP3_COPROC_T {
-    // Coprocessor opcodes.
-    OP3_STC = 0x34,
-    OP3_CPOP1 = 0x36
+///////////////////////////////////////////////////////////////////////
+/// SRCMUX
+/**
+ * Multiplexes the source operand registers for each of the stages.
+ * 
+ */
+enum SRCMUX {
+    SRCMUX_RA,
+    SRCMUX_EX,
+    SRCMUX_ME,
+    SRCMUX_IMM,
+    SRCMUX_ZERO,
+    SRCMUX_XC
 };
 
-enum SREG_MUX_Type {
+///////////////////////////////////////////////////////////////////////
+/// SREG_MUX
+/**
+ * Multiplexes the selection of special registers. 
+ * 
+ */
+enum SREG_MUX {
     SREG_Y = 1,
     SREG_ASR = 2,
     SREG_PSR = 3,
