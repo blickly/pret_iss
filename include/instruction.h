@@ -34,6 +34,8 @@
 
 #ifndef _NO_SYSTEMC_
 #include <systemc.h>
+#else
+#include "no_systemc.h"
 #endif
 
 #include <iostream>
@@ -182,37 +184,48 @@ public:    // Flag to see if instruction is a double word instruction
     int disp22;
 
     special_registers sp_reg;
-    short wp_increment;
 
-    SRCMUX rs1sel;
-    SRCMUX rs2sel;
-    SRCMUX rdsel;
 
     int op1_val;
     int op2_val;
     int op3_val; // Value of register rd
     int imm;
-    bool use_imm;
+
     bool use_carry;
 
-    int alu_result;
+
     unsigned char icc;
     bool trap;
     unsigned char traptype;
     bool unimp;
     unsigned char mux_specreg;
     bool wsreg;
-
+    short wp_increment;  
     /// Whether it is a signed multiple or not
     bool mul_signed;
 
+  int get_alu_result() const;
+  void set_alu_result(const int& result);
+  
+  void set_immediate(const bool& immediate);
+  bool is_immediate() const;
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+///                      private methods                          ///
 private:
     /** Initialize the data elements to be reasonable default values.
      * By default, an instruction does performs a null operation.
      */
     void initialize();
+  
+///////////////////////////////////////////////////////////////////////
+///                      private variables                          ///
+private:
+      int alu_result;
+    SRCMUX rs1sel;
+    SRCMUX rs2sel;
+    SRCMUX rdsel;
+
+    bool use_imm;
 };
 
 #endif /* _INSTRUCTION_H_ */

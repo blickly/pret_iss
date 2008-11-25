@@ -54,7 +54,7 @@ void mem::behavior() {
         return;
     }
 
-    uint32_t addr = ht->inst.alu_result;
+    uint32_t addr = ht->inst.get_alu_result();
     uint32_t data_to_write = 0;
     // Add the write_data for storing halfwords : ht->inst.op3_val;
 

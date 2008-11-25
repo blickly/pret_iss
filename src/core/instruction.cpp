@@ -582,3 +582,19 @@ bool instruction::check_end_sim() {
 // #endif
 //   }
 }
+
+void instruction::set_alu_result(const int& result) {
+  alu_result = result;
+}
+
+int instruction::get_alu_result() const {
+  return alu_result;
+}
+
+void instruction::set_immediate(const bool& immediate) {
+  use_imm = immediate;
+}
+
+bool instruction::is_immediate() const {
+  return use_imm;
+}

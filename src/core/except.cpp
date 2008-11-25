@@ -169,7 +169,7 @@ bool except::dead_stalled(const hw_thread_ptr& ht) {
         //HACK!!! NEED TO CHANGE!!
         //STALLED BUT WANT TO UPDATE MAILBOX
         if (ht->spec_regs.pll_loaded && ht->inst.wsreg) {
-            ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.alu_result;
+	  ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.get_alu_result();
         }
         return true;
     }
@@ -274,14 +274,14 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 #ifdef DBG_PIPE
         cout << "\t+ inst.pc = " << ht->inst.pc << endl;
 #endif
-        ht->set_delayed_branch_address(ht->inst.alu_result);
+        ht->set_delayed_branch_address(ht->inst.get_alu_result());
     }  else
         if (ht->inst.branch && ht->inst.annul) {
             ht->set_pc(ht->get_pc() + 4);
         }
 
     if (ht->inst.jump || ht->inst.call) {
-        ht->inst.alu_result = ht->get_pc() - 4;
+      ht->inst.set_alu_result(ht->get_pc() - 4);
     }
 
 
@@ -293,7 +293,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
     //        << ht->PC - 4 << ", new pc: " << ht->PC << endl;
     // FIXME: Add case to deal with thread stalls from memory accesses.
 
-    cout << "\t+ ALU Result in exception stage: " << ht->inst.alu_result << endl;
+    cout << "\t+ ALU Result in exception stage: " << ht->inst.get_alu_result() << endl;
 #endif
 
 };
@@ -322,7 +322,7 @@ void except::write_regs(const hw_thread_ptr& ht) {
             ht->regs.set_reg(ht->inst.rd, ht->spec_regs.tbr , ht->spec_regs.curr_wp);
             break;
         default:
-            ht->regs.set_reg(ht->inst.rd, ht->inst.alu_result, ht->spec_regs.curr_wp);
+	  ht->regs.set_reg(ht->inst.rd, ht->inst.get_alu_result(), ht->spec_regs.curr_wp);
             break;
         }
 
@@ -345,49 +345,49 @@ void except::write_special_regs(const hw_thread_ptr& ht) {
     if (ht->inst.wsreg) {
         switch (ht->inst.mux_specreg) {
         case SREG_Y:
-            ht->spec_regs.y = ht->inst.alu_result;
+	  ht->spec_regs.y = ht->inst.get_alu_result();
             break;
         case SREG_ASR:
-            ht->spec_regs.asr[ht->inst.rd] = ht->inst.alu_result;
+	  ht->spec_regs.asr[ht->inst.rd] = ht->inst.get_alu_result();
             break;
         case SREG_PSR:
-            ht->spec_regs.set_psr(ht->inst.alu_result);
+	  ht->spec_regs.set_psr(ht->inst.get_alu_result());
             break;
         case SREG_WIM:
-            ht->spec_regs.wim = ht->inst.alu_result;
+	  ht->spec_regs.wim = ht->inst.get_alu_result();
             break;
         case SREG_TBR:
-            ht->spec_regs.tbr = ht-> inst.alu_result;
+	  ht->spec_regs.tbr = ht-> inst.get_alu_result();
             break;
         case SREG_DT:
             if (ht->inst.rd < NUM_DEADLINE_TIMERS) {
-                ht->spec_regs.dt[ht->inst.rd] = ht->inst.alu_result;
+	      ht->spec_regs.dt[ht->inst.rd] = ht->inst.get_alu_result();
 
                 /* If the value being set is 0, then it should not cause a warning. */
-                if (ht->inst.alu_result != 0) {
-                    //                    cout << "dt value: " << hex << ht->inst.alu_result << endl;
+	      if (ht->inst.get_alu_result() != 0) {
+                    //                    cout << "dt value: " << hex << ht->inst.get_alu_result() << endl;
                     ht->spec_regs.dt_status[ht->inst.rd] = SET;
                 }
 
             } else {
-                ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.alu_result;
+	      ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.get_alu_result();
             }
 
-            // printf("Should have written %d  to timer %d\n", ht->inst.alu_result, ht->inst.rd);
+            // printf("Should have written %d  to timer %d\n", ht->inst.get_alu_result(), ht->inst.rd);
             break;
         case SREG_CP:
             //            cout << "except:: SREG_CP write special registers" << endl;
             /*FIXME: Hiren More DMA to its own arch.version */
             // To a memory source address.
             if (ht->inst.rd == 0) {
-                //                cout << "except:: memory source, tid: " << ht->id << ", value: " << hex << ht->inst.alu_result << endl;
-                coproc_dma->set_mem_source(ht->get_id(), ht->inst.alu_result);
+                //                cout << "except:: memory source, tid: " << ht->id << ", value: " << hex << ht->inst.get_alu_result() << endl;
+	      coproc_dma->set_mem_source(ht->get_id(), ht->inst.get_alu_result());
             }
 
             // To a spm target address. Start the transfer.
             if (ht->inst.rd == 1) {
-                //                cout << "except:: SPM target, tid: " << ht->id << ", value: " << hex << ht->inst.alu_result << endl;
-                coproc_dma->set_spm_target(ht->get_id(), ht->inst.alu_result);
+                //                cout << "except:: SPM target, tid: " << ht->id << ", value: " << hex << ht->inst.get_alu_result() << endl;
+	      coproc_dma->set_spm_target(ht->get_id(), ht->inst.get_alu_result());
                 coproc_dma->make_transfer(ht);
             }
             break;

@@ -171,7 +171,7 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
 
 void regacc::_immediate_instruction(const hw_thread_ptr& hardware_thread) {
 
-    if (hardware_thread->inst.use_imm) {
+  if (hardware_thread->inst.is_immediate()) {
         hardware_thread->inst.op2_val = hardware_thread->inst.imm;
     } else {
         hardware_thread->inst.op2_val = hardware_thread->regs.get_reg(hardware_thread->inst.rs2, hardware_thread->spec_regs.curr_wp);
