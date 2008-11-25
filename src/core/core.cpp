@@ -185,12 +185,12 @@ void core::behavior() {
 }
 
 bool core::is_memory_read(int thread_id) const {
-    return _thread_controller->get_thread(thread_id)->get_handle()->inst.read_mem;
+  return _thread_controller->get_thread(thread_id)->get_handle()->inst.is_read_memory();
 }
 
 
 bool core::is_memory_write(int thread_id) const {
-    return _thread_controller->get_thread(thread_id)->get_handle()->inst.write_mem;
+  return _thread_controller->get_thread(thread_id)->get_handle()->inst.is_write_memory();
 }
 
 int core::get_aligned_memory_address(int thread_id) const {

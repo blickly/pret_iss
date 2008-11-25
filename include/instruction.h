@@ -170,13 +170,9 @@ public:    // Flag to see if instruction is a double word instruction
     REGISTER_NUMBER rs2;
     REGISTER_NUMBER rd;
     ALU aluop;
-    bool wreg;
+
     bool wicc;
-    bool write_mem;
-    bool read_mem;
     MEMORY_SIZE mem_size;
-
-
 
     int disp30;
     int disp22;
@@ -198,8 +194,12 @@ public:    // Flag to see if instruction is a double word instruction
   bool is_call() const;
   bool is_immediate() const;
   bool is_jump() const;
+  bool is_read_memory() const;
   bool is_unimplemented() const;  
-  
+  bool is_write_registers() const;
+  bool is_write_memory() const;
+
+
   int get_alu_result() const;
   short get_conditional_branch() const;
   int get_immediate_value() const;
@@ -213,7 +213,10 @@ public:    // Flag to see if instruction is a double word instruction
   void set_immediate(const bool& immediate);
   void set_immediate_value(const int& immediate_value);
   void set_jump(const bool& jump);
+  void set_read_memory(const bool& read);
   void set_unimplemented(const bool& unimplemented);
+  void set_write_registers(const bool& write);
+  void set_write_memory(const bool& write_memory);
 ///////////////////////////////////////////////////////////////////////
 ///                      private methods                          ///
 private:
@@ -230,8 +233,11 @@ private:
       bool _branch;
       short _conditional_branch;
     bool _jump;
-
+    bool _write_registers;
   bool _call;
+      bool _write_memory;
+    bool _read_memory;
+
     SRCMUX rs1sel;
     SRCMUX rs2sel;
     SRCMUX rdsel;

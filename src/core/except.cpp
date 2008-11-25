@@ -301,7 +301,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 
 void except::write_regs(const hw_thread_ptr& ht) {
 
-    if (ht->inst.wreg) {
+  if (ht->inst.is_write_registers()) {
         //    if ( ht->inst.is_call() || ht->inst.is_jump() )
 
         switch (ht->inst.mux_specreg) {

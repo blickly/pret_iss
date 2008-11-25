@@ -62,13 +62,13 @@ void mem::behavior() {
     int aligned_addr = 4 * (addr / 4);
     int addr_offset  = addr % 4;
     bool memory_stall = false;
-    if (ht->inst.read_mem) {
+    if (ht->inst.is_read_memory()) {
         uint32_t raw_data = data_mem->read_data(ht->get_id(), aligned_addr, memory_stall);
         ht->set_memory_stalled(memory_stall);
         if (!ht->is_memory_stalled()) {
             ht->inst.read_data(raw_data, addr_offset);
         }
-    } else if (ht->inst.write_mem) {
+    } else if (ht->inst.is_write_memory()) {
         uint32_t old_data = 0xdeadbeef;
         if (ht->inst.mem_size != MEM_WORD) {
             bool nul;  // FIXME: Implement store byte and store halfword correctly so that
@@ -88,14 +88,14 @@ void mem::behavior() {
 //     cout << "*mem*" << "     (" << sc_time_stamp() << ") " << ", mem stalled: " << ht->is_memory_stalled() << endl;
 // #endif /* _NO_SYSTEMC_ */
 //     cout << "hw_thread's id: " << ht->get_id() << ", pc: 0x" << hex << ht.handle->PC << hex <<  ", " << ht->inst << endl;
-//     cout << "\t+ "  << "load: " << ht->inst.read_mem  << ", store: " << ht->inst.write_mem << endl;
+//     cout << "\t+ "  << "load: " << ht->inst.is_read_memory()  << ", store: " << ht->inst.is_write_memory() << endl;
 
-//     if (ht->inst.read_mem) {
+//     if (ht->inst.is_read_memory()) {
 //         cout << "\t+ " << "to be read from: " << hex << addr << endl;
 //         cout << "\t+ " << "read:            " << hex << data_mem->read_data(ht->get_id(), aligned_addr, null) << endl;
 //     }
 
-//     if (ht->inst.write_mem) {
+//     if (ht->inst.is_write_memory()) {
 //         cout << "\t+ " << "addr  written: " << hex << addr << endl;
 //         cout << "\t+ " << "to be written: " << hex << data_to_write << endl;
 //         cout << "\t+ " << "written:       " << hex << data_mem->read_data(ht->get_id(), aligned_addr, null) << endl;
@@ -122,14 +122,14 @@ void mem::_dbg_pipeline(const hw_thread_ptr& ht) {
     cout << "*mem*" << "     (" << sc_time_stamp() << ") " << ", mem stalled: " << ht->is_memory_stalled() << endl;
 #endif /* _NO_SYSTEMC_ */
     cout << "hw_thread's id: " << ht->get_id() << ", pc: 0x" << hex << ht._handle->PC << hex <<  ", " << ht->inst << endl;
-    cout << "\t+ "  << "load: " << ht->inst.read_mem  << ", store: " << ht->inst.write_mem << endl;
+    cout << "\t+ "  << "load: " << ht->inst.is_read_memory()  << ", store: " << ht->inst.is_write_memory() << endl;
 
-    if (ht->inst.read_mem) {
+    if (ht->inst.is_read_memory()) {
         cout << "\t+ " << "to be read from: " << hex << addr << endl;
         cout << "\t+ " << "read:            " << hex << data_mem->read_data(ht->get_id(), aligned_addr, null) << endl;
     }
 
-    if (ht->inst.write_mem) {
+    if (ht->inst.is_write_memory()) {
         cout << "\t+ " << "addr  written: " << hex << addr << endl;
         cout << "\t+ " << "to be written: " << hex << data_to_write << endl;
         cout << "\t+ " << "written:       " << hex << data_mem->read_data(ht->get_id(), aligned_addr, null) << endl;

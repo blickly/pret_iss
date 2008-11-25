@@ -64,7 +64,7 @@ void instruction::decode() {
     case OP_CALL:
         _call = 1;
         aluop = ALU_ADD;
-        wreg = true;
+        _write_registers = true;
         rd = 15;
         break;
     case OP_SETHI_BRANCHES:
@@ -81,7 +81,7 @@ void instruction::decode() {
         break;
     };
     if (rd == 0) {
-        wreg = false;
+        _write_registers = false;
     }
 }
 
@@ -89,146 +89,146 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     switch (op3) {
     case OP3_MULSCC:
         aluop = ALU_MUL;
-        wreg = true;
+        _write_registers = true;
         mul_signed = true;
         wicc = true;
         break;
     case OP3_ADD:
         aluop = ALU_ADD;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_ADDX:
         aluop = ALU_ADD;
-        wreg = true;
+        _write_registers = true;
         _carry = true;
         break;
     case OP3_ADDXCC:
         aluop = ALU_ADD;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         _carry = true;
         break;
     case OP3_AND:
         aluop = ALU_AND;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_OR:
         aluop = ALU_OR;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_XOR:
         aluop = ALU_XOR;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_SUB:
         aluop = ALU_SUB;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_SUBX:
         aluop = ALU_SUB;
-        wreg = true;
+        _write_registers = true;
         _carry = true;
         break;
     case OP3_SUBXCC:
         aluop = ALU_SUB;
-        wreg = true;
+        _write_registers = true;
         _carry = true;
         wicc = true;
         break;
     case OP3_ANDN:
         aluop = ALU_ANDN;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_ORN:
         aluop = ALU_ORN;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_XNOR:
         aluop = ALU_XNOR;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_ADDCC:
         aluop = ALU_ADD;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         break;
     case OP3_ANDCC:
         aluop = ALU_AND;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         break;
     case OP3_ORCC:
         aluop = ALU_OR;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         break;
     case OP3_XORCC:
         aluop = ALU_XOR;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         break;
     case OP3_SUBCC:
         aluop = ALU_SUB;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         break;
     case OP3_ANDNCC:
         aluop = ALU_ANDN;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         break;
     case OP3_ORNCC:
         aluop = ALU_ORN;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         break;
     case OP3_XNORCC:
         aluop = ALU_XNOR;
-        wreg = true;
+        _write_registers = true;
         wicc = true;
         break;
     case OP3_JMPL:
         _jump = 1;
-        wreg = true;
+        _write_registers = true;
         aluop = ALU_ADD;
         break;
     case OP3_SAVE:
         wp_increment = -1;
         aluop = ALU_ADD;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_RESTORE:
         wp_increment = 1;
         aluop = ALU_ADD;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_SLL:
         aluop = ALU_SLL;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_SRL:
         aluop = ALU_SRL;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_SRA:
         aluop = ALU_SRA;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_RDPSR:
         mux_specreg = SREG_PSR;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_RDASR:
         mux_specreg = (rs1 ? SREG_ASR : SREG_Y);
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_RDWIM:
         mux_specreg = SREG_WIM;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_RDTBR:
         mux_specreg = SREG_TBR;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP3_DEAD:
         cerr << "DETECTED DEADLINE INSTRUCTION IN WRONG PLACE\n" ;
@@ -272,56 +272,56 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
     switch (op3) {
     case OP3_ST:
         aluop = ALU_ADD;
-        write_mem = true;
+        _write_memory = true;
         break;
     case OP3_STB:
         aluop = ALU_ADD;
-        write_mem = true;
+        _write_memory = true;
         mem_size = MEM_UNSIGNED_BYTE;
         break;
     case OP3_STD:
         aluop = ALU_ADD;
-        write_mem = true;
+        _write_memory = true;
         db_word = true;
         break;
     case OP3_STH:
         aluop = ALU_ADD;
-        write_mem = true;
+        _write_memory = true;
         mem_size = MEM_UNSIGNED_HALFWORD;
         break;
     case OP3_LD:
         aluop = ALU_ADD;
-        wreg = true;
-        read_mem = true;
+        _write_registers = true;
+        _read_memory = true;
         break;
     case OP3_LDUB:
         aluop = ALU_ADD;
-        wreg = true;
-        read_mem = true;
+        _write_registers = true;
+        _read_memory = true;
         mem_size = MEM_UNSIGNED_BYTE;
         break;
     case OP3_LDUH:
         aluop = ALU_ADD;
-        wreg = true;
-        read_mem = true;
+        _write_registers = true;
+        _read_memory = true;
         mem_size = MEM_UNSIGNED_HALFWORD;
         break;
     case OP3_LDSB:
         aluop = ALU_ADD;
-        wreg = true;
-        read_mem = true;
+        _write_registers = true;
+        _read_memory = true;
         mem_size = MEM_SIGNED_BYTE;
         break;
     case OP3_LDSH:
         aluop = ALU_ADD;
-        wreg = true;
-        read_mem = true;
+        _write_registers = true;
+        _read_memory = true;
         mem_size = MEM_SIGNED_HALFWORD;
         break;
     case OP3_LDD:
         aluop = ALU_ADD;
-        wreg = true;
-        read_mem = true;
+        _write_registers = true;
+        _read_memory = true;
         mem_size = MEM_DOUBLEWORD;
         db_word = true;
         break;
@@ -348,7 +348,7 @@ void instruction::decode_sethi_branches(const OP2& op2) {
     switch (op2) {
     case OP2_SETHI: //NOP
         aluop = ALU_SETHI;
-        wreg = true;
+        _write_registers = true;
         break;
     case OP2_BICC:
         _branch = 1;
@@ -435,9 +435,9 @@ void instruction::operator=(const instruction & mem) {
     rs2 = mem.rs2;
     rd = mem.rd;
     aluop = mem.aluop;
-    wreg = mem.wreg;
-    write_mem = mem.write_mem;
-    read_mem = mem.read_mem;
+    _write_registers = mem._write_registers;
+    _write_memory = mem._write_memory;
+    _read_memory = mem._read_memory;
     mem_size = mem.mem_size;
     rs1sel = mem.rs1sel;
     rs2sel = mem.rs2sel;
@@ -485,9 +485,9 @@ bool instruction::operator==(const instruction & mem) const {
            rs2 == mem.rs2 &&
            rd == mem.rd &&
            aluop == mem.aluop &&
-           wreg == mem.wreg &&
-           write_mem == mem.write_mem &&
-           read_mem == mem.read_mem &&
+           _write_registers == mem._write_registers &&
+           _write_memory == mem._write_memory &&
+           _read_memory == mem._read_memory &&
            mem_size == mem.mem_size &&
            rs1sel == mem.rs1sel &&
            rs2sel == mem.rs2sel &&
@@ -545,10 +545,10 @@ void instruction::initialize() {
     rdsel = SRCMUX_RA;
 
     aluop = ALU_NOP;
-    wreg = false;
+    _write_registers = false;
     use_imm = false;
-    write_mem = false;
-    read_mem = false;
+    _write_memory = false;
+    _read_memory = false;
     mem_size = MEM_WORD;
 
     op1_val = 0;
@@ -607,8 +607,20 @@ bool instruction::is_jump() const {
   return _jump;
 }
 
+bool instruction::is_read_memory() const {
+  return _read_memory;
+}
+
 bool instruction::is_unimplemented() const {
   return _unimplemented;
+}
+
+bool instruction::is_write_registers() const {
+  return _write_registers;
+}
+
+bool instruction::is_write_memory() const {
+  return _write_memory;
 }
 
 int instruction::get_alu_result() const {
@@ -661,6 +673,18 @@ void instruction::set_jump(const bool& jump) {
   _jump = jump;
 }
 
+void instruction::set_read_memory(const bool& read_memory) {
+  _read_memory = read_memory;
+}
+
 void instruction::set_unimplemented(const bool& unimplemented) {
   _unimplemented = unimplemented;
+}
+
+void instruction::set_write_registers(const bool& write) {
+  _write_registers = write;
+}
+
+void instruction::set_write_memory(const bool& write_memory) {
+  _write_memory = write_memory;
 }
