@@ -43,18 +43,14 @@ import os;
 class DumpReader:
 
   def __init__(self):
-    self.prom   = []
     self.thread = []
     self.labels = []
 
   def parse_dumps(self, dump_dir):
-    prom_list = [os.path.join(dump_dir, "prom%d.dump" % i) for i in range(6)]
     thread_list = [os.path.join(dump_dir, "bare_thread%d.dump" % i) 
                                                           for i in range(6)]
-    for pfile, tfile in zip(prom_list, thread_list):
-       (plines, plabels) = self.parse_dump(pfile)
+    for tfile in thread_list:
        (tlines, tlabels) = self.parse_dump(tfile)
-       self.prom.append(plines)
        self.thread.append(tlines)
        self.labels.append(tlabels)
        
@@ -84,11 +80,7 @@ class DumpReader:
     return (lines, labels)
 
   def get_line(self, addr):
-    #if addr < 40000000:
-    #   dicts = self.prom
-    #else:
-    #   dicts = self.thread
-    for dict in self.thread + self.prom:
+    for dict in self.thread:
        try:
           return dict[addr]
        except:
