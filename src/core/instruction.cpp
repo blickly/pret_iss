@@ -52,8 +52,8 @@ void instruction::decode() {
 
 
     rs2 = (inst & 0X0000001F);
-    cond = (inst & 0X1E000000) >> 25;
-    annul = (inst & 0X20000000) >> 29;
+    _conditional_branch = (inst & 0X1E000000) >> 25;
+    _annul = (inst & 0X20000000) >> 29;
 
     disp30 = (inst & 0X3FFFFFFF) << 2;
     disp30 = disp30 >> 2;
@@ -62,7 +62,7 @@ void instruction::decode() {
 
     switch (op) {
     case OP_CALL:
-        call = 1;
+        _call = 1;
         aluop = ALU_ADD;
         wreg = true;
         rd = 15;
@@ -77,7 +77,7 @@ void instruction::decode() {
       decode_arithmetic(static_cast<OP3_ARITHMETIC>(op3));
         break;
     default:
-        unimp = true;
+        _unimplemented = true;
         break;
     };
     if (rd == 0) {
@@ -100,13 +100,13 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     case OP3_ADDX:
         aluop = ALU_ADD;
         wreg = true;
-        use_carry = true;
+        _carry = true;
         break;
     case OP3_ADDXCC:
         aluop = ALU_ADD;
         wreg = true;
         wicc = true;
-        use_carry = true;
+        _carry = true;
         break;
     case OP3_AND:
         aluop = ALU_AND;
@@ -127,12 +127,12 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     case OP3_SUBX:
         aluop = ALU_SUB;
         wreg = true;
-        use_carry = true;
+        _carry = true;
         break;
     case OP3_SUBXCC:
         aluop = ALU_SUB;
         wreg = true;
-        use_carry = true;
+        _carry = true;
         wicc = true;
         break;
     case OP3_ANDN:
@@ -188,7 +188,7 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         wicc = true;
         break;
     case OP3_JMPL:
-        jump = 1;
+        _jump = 1;
         wreg = true;
         aluop = ALU_ADD;
         break;
@@ -262,7 +262,7 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
 
 
     default:
-        unimp = true;
+        _unimplemented = true;
         break;
     };
 
@@ -338,7 +338,7 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
         wsreg = true;
         break;
     default:
-        unimp = true;
+        _unimplemented = true;
         break;
     };
 
@@ -351,10 +351,10 @@ void instruction::decode_sethi_branches(const OP2& op2) {
         wreg = true;
         break;
     case OP2_BICC:
-        branch = 1;
+        _branch = 1;
         break;
     default:
-        unimp = true;
+        _unimplemented = true;
         break;
     }
 }
@@ -363,20 +363,20 @@ void instruction::read_data(uint32_t data_in, int offset) {
     int shamt = offset * 8;
     switch (mem_size) {
     case MEM_SIGNED_BYTE:
-        alu_result = ((signed int) data_in << shamt) >> 24;
+        _alu_result = ((signed int) data_in << shamt) >> 24;
         break;
     case MEM_UNSIGNED_BYTE:
-        alu_result = (data_in << shamt) >> 24;
+        _alu_result = (data_in << shamt) >> 24;
         break;
     case MEM_SIGNED_HALFWORD:
-        alu_result = ((signed int) data_in << shamt) >> 16;
+        _alu_result = ((signed int) data_in << shamt) >> 16;
         break;
     case MEM_UNSIGNED_HALFWORD:
-        alu_result = (data_in << shamt) >> 16;
+        _alu_result = (data_in << shamt) >> 16;
         break;
         //  case MEM_WORD:
     default:
-        alu_result = data_in;
+        _alu_result = data_in;
         break;
     }
 }
@@ -422,7 +422,7 @@ instruction::instruction(const instruction& mem) {
 }
 
 void instruction::operator=(const instruction & mem) {
-    unimp = mem.unimp;
+    _unimplemented = mem._unimplemented;
     halt = mem.halt;
     pc = mem.pc;
     inst = mem.inst;
@@ -451,16 +451,16 @@ void instruction::operator=(const instruction & mem) {
     op3_val = mem.op3_val;
     imm = mem.imm;
     use_imm = mem.use_imm;
-    use_carry = mem.use_carry;
+    _carry = mem._carry;
 
-    alu_result = mem.alu_result;
+    _alu_result = mem._alu_result;
 
 
-    branch = mem.branch;
-    jump = mem.jump;
-    cond = mem.cond;
-    annul = mem.annul;
-    call = mem.call;
+    _branch = mem._branch;
+    _jump = mem._jump;
+    _conditional_branch = mem._conditional_branch;
+    _annul = mem._annul;
+    _call = mem._call;
     disp30 = mem.disp30;
     wicc = mem.wicc;
     icc = mem.icc;
@@ -475,7 +475,7 @@ void instruction::operator=(const instruction & mem) {
 }
 bool instruction::operator==(const instruction & mem) const {
     return halt == mem.halt &&
-           unimp == mem.unimp &&
+           _unimplemented == mem._unimplemented &&
            pc == mem.pc &&
            inst == mem.inst &&
            op == mem.op &&
@@ -496,12 +496,12 @@ bool instruction::operator==(const instruction & mem) const {
            op3_val == mem.op3_val &&
            imm == mem.imm &&
            use_imm == mem.use_imm &&
-           alu_result == mem.alu_result &&
-           branch == mem.branch &&
-           jump == mem.jump &&
-           cond == mem.cond &&
-           annul == mem.annul &&
-           call == mem.call &&
+           _alu_result == mem._alu_result &&
+           _branch == mem._branch &&
+           _jump == mem._jump &&
+           _conditional_branch == mem._conditional_branch &&
+           _annul == mem._annul &&
+           _call == mem._call &&
            disp30 == mem.disp30 &&
            wicc == mem.wicc &&
            icc == mem.icc &&
@@ -511,7 +511,7 @@ bool instruction::operator==(const instruction & mem) const {
            mux_specreg == mem.mux_specreg &&
            wsreg == mem.wsreg &&
            db_word == mem.db_word &&
-           use_carry == mem.use_carry &&
+           _carry == mem._carry &&
            mul_signed == mem.mul_signed;
 }
 
@@ -527,11 +527,11 @@ void instruction::initialize() {
     rs2 = 0;
     imm = 0;
     rd = 0;
-    branch = 0;
-    jump = 0;
-    cond = 0;
-    annul = 0;
-    call = 0;
+    _branch = 0;
+    _jump = 0;
+    _conditional_branch = 0;
+    _annul = 0;
+    _call = 0;
     disp30 = 0;
     wicc = 0;
     icc = 0x0;
@@ -554,11 +554,11 @@ void instruction::initialize() {
     op1_val = 0;
     op2_val = 0;
     op3_val = 0;
-    use_carry = false;
+    _carry = false;
 
-    alu_result = 0;
+    _alu_result = 0;
     trap = false;
-    unimp = false;
+    _unimplemented = false;
     traptype = 0;
 
     pc = 0;
@@ -583,18 +583,84 @@ bool instruction::check_end_sim() {
 //   }
 }
 
-void instruction::set_alu_result(const int& result) {
-  alu_result = result;
+bool instruction::is_annul() const {
+  return _annul;
+}
+
+bool instruction::is_carry() const {
+  return _carry;
+}
+
+bool instruction::is_branch() const {
+  return _branch;
+}
+
+bool instruction::is_call() const {
+  return _call;
+}
+
+bool instruction::is_immediate() const {
+  return use_imm;
+}
+
+bool instruction::is_jump() const {
+  return _jump;
+}
+
+bool instruction::is_unimplemented() const {
+  return _unimplemented;
 }
 
 int instruction::get_alu_result() const {
-  return alu_result;
+  return _alu_result;
+}
+
+short instruction::get_conditional_branch() const {
+  return _conditional_branch;
+}
+
+int instruction::get_immediate_value() const {
+  return imm;
+}
+
+
+void instruction::set_alu_result(const int& result) {
+  _alu_result = result;
+}
+
+void instruction::set_annul(const bool& annul) {
+  _annul = annul;
+}
+
+void instruction::set_branch(const bool& branch) {
+  _branch = branch;
+}
+
+void instruction::set_carry(const bool& carry) {
+  _carry = carry;
+}
+
+void instruction::set_call(const bool& call) {
+  _call = call;
+}
+
+void instruction::set_conditional_branch(const short& conditional) {
+  _conditional_branch = conditional;
 }
 
 void instruction::set_immediate(const bool& immediate) {
   use_imm = immediate;
 }
 
-bool instruction::is_immediate() const {
-  return use_imm;
+
+void instruction::set_immediate_value(const int& immediate_value) {
+  imm = immediate_value;
+}
+
+void instruction::set_jump(const bool& jump) {
+  _jump = jump;
+}
+
+void instruction::set_unimplemented(const bool& unimplemented) {
+  _unimplemented = unimplemented;
 }

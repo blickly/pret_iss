@@ -175,40 +175,45 @@ public:    // Flag to see if instruction is a double word instruction
     bool write_mem;
     bool read_mem;
     MEMORY_SIZE mem_size;
-    bool branch;
-    bool jump;
-    bool call;
-    short cond;
-    bool annul;
+
+
+
     int disp30;
     int disp22;
 
     special_registers sp_reg;
-
-
     int op1_val;
     int op2_val;
     int op3_val; // Value of register rd
-    int imm;
-
-    bool use_carry;
-
-
     unsigned char icc;
-    bool trap;
-    unsigned char traptype;
-    bool unimp;
+
     unsigned char mux_specreg;
     bool wsreg;
     short wp_increment;  
     /// Whether it is a signed multiple or not
     bool mul_signed;
-
-  int get_alu_result() const;
-  void set_alu_result(const int& result);
-  
-  void set_immediate(const bool& immediate);
+  bool is_annul() const;
+  bool is_branch() const;
+  bool is_carry() const;
+  bool is_call() const;
   bool is_immediate() const;
+  bool is_jump() const;
+  bool is_unimplemented() const;  
+  
+  int get_alu_result() const;
+  short get_conditional_branch() const;
+  int get_immediate_value() const;
+  
+  void set_alu_result(const int& result);
+  void set_annul(const bool& annul);
+  void set_branch(const bool& branch);
+  void set_call(const bool& call);
+  void set_carry(const bool& carry);
+  void set_conditional_branch(const short& conditional);
+  void set_immediate(const bool& immediate);
+  void set_immediate_value(const int& immediate_value);
+  void set_jump(const bool& jump);
+  void set_unimplemented(const bool& unimplemented);
 ///////////////////////////////////////////////////////////////////////
 ///                      private methods                          ///
 private:
@@ -220,12 +225,26 @@ private:
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
 private:
-      int alu_result;
+      int _alu_result;
+      bool _annul;
+      bool _branch;
+      short _conditional_branch;
+    bool _jump;
+
+  bool _call;
     SRCMUX rs1sel;
     SRCMUX rs2sel;
     SRCMUX rdsel;
-
+    bool _carry;
     bool use_imm;
+      int imm;
+      bool _unimplemented;
+  
+  /* FIXME: These are probably unimplemented.
+   */
+      bool trap;
+      unsigned char traptype;
+
 };
 
 #endif /* _INSTRUCTION_H_ */

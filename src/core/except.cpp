@@ -37,9 +37,9 @@
 
 uint32_t except::addr_calc(const hw_thread_ptr& ht) {
     //instruction const& inst) {
-    if (ht->inst.branch) {
+    if (ht->inst.is_branch()) {
         return ht->inst.pc + (ht->inst.disp22*4);
-    } else if (ht->inst.call) {
+    } else if (ht->inst.is_call()) {
         return ht->inst.pc + (ht->inst.disp30*4);
     } else {
         assert(false);
@@ -54,16 +54,16 @@ bool except::branch_check(const hw_thread_ptr& ht) {
     bool ovfl = ht->spec_regs.icc & 0x02;
     bool carry = ht->spec_regs.icc & 0x01;
 
-    if (!ht->inst.branch && ! ht->inst.call) {
+    if (!ht->inst.is_branch() && ! ht->inst.is_call()) {
         return false;
-    } else if (ht->inst.call) {
+    } else if (ht->inst.is_call()) {
         return true;
-    } else if (ht->inst.cond == BRCH_BA) {
+    } else if (ht->inst.get_conditional_branch() == BRCH_BA) {
         return true;
-    } else if (ht->inst.cond == BRCH_BN) {
+    } else if (ht->inst.get_conditional_branch() == BRCH_BN) {
         return false;
     } else {
-        switch (ht->inst.cond) {
+        switch (ht->inst.get_conditional_branch()) {
         case BRCH_BNE:
             return !zero;
         case  BRCH_BE:
@@ -265,22 +265,22 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 
     if (branch_check(ht)) {
         //    if (branch_check(ht->inst, ht->spec_regs.icc)) {
-        if (!(ht->inst.branch && ht->inst.annul && ht->inst.cond == BRCH_BA)) {
+        if (!(ht->inst.is_branch() && ht->inst.is_annul() && ht->inst.get_conditional_branch() == BRCH_BA)) {
             ht->set_delayed_branch_address(ht->get_pc() + addr_calc(ht) - 4);
         } else {
             ht->set_pc(ht->get_pc() + addr_calc(ht) - 4);
         }
-    } else if (ht->inst.jump) {
+    } else if (ht->inst.is_jump()) {
 #ifdef DBG_PIPE
         cout << "\t+ inst.pc = " << ht->inst.pc << endl;
 #endif
         ht->set_delayed_branch_address(ht->inst.get_alu_result());
     }  else
-        if (ht->inst.branch && ht->inst.annul) {
+        if (ht->inst.is_branch() && ht->inst.is_annul()) {
             ht->set_pc(ht->get_pc() + 4);
         }
 
-    if (ht->inst.jump || ht->inst.call) {
+    if (ht->inst.is_jump() || ht->inst.is_call()) {
       ht->inst.set_alu_result(ht->get_pc() - 4);
     }
 
@@ -302,7 +302,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 void except::write_regs(const hw_thread_ptr& ht) {
 
     if (ht->inst.wreg) {
-        //    if ( ht->inst.call || ht->inst.jump )
+        //    if ( ht->inst.is_call() || ht->inst.is_jump() )
 
         switch (ht->inst.mux_specreg) {
         case SREG_Y:

@@ -87,7 +87,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
     case ALU_ADD:
       hardware_thread->inst.set_alu_result(hardware_thread->inst.op1_val + hardware_thread->inst.op2_val);
         // If the carry has to be used
-        if (hardware_thread->inst.use_carry) {
+      if (hardware_thread->inst.is_carry()) {
 	  hardware_thread->inst.set_alu_result( hardware_thread->inst.get_alu_result() + hardware_thread->spec_regs.get_carry_bit());
         }
 
@@ -97,7 +97,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
         break;
     case ALU_SUB:
       hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val - hardware_thread->inst.op2_val);
-        if (hardware_thread->inst.use_carry)
+      if (hardware_thread->inst.is_carry())
 	  hardware_thread->inst.set_alu_result( hardware_thread->inst.get_alu_result() - hardware_thread->spec_regs.get_carry_bit());
         break;
     case ALU_AND:
