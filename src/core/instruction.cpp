@@ -68,13 +68,13 @@ void instruction::decode() {
         rd = 15;
         break;
     case OP_SETHI_BRANCHES:
-        decode_sethi_branches(op2);
+      decode_sethi_branches(static_cast<OP2>(op2));
         break;
     case OP_MEMORY:
-        decode_memory(op3);
+      decode_memory(static_cast<OP3_MEMORY>(op3));
         break;
     case OP_ARITHMETIC_ETC:
-        decode_arithmetic(op3);
+      decode_arithmetic(static_cast<OP3_ARITHMETIC>(op3));
         break;
     default:
         unimp = true;
@@ -85,7 +85,7 @@ void instruction::decode() {
     }
 }
 
-void instruction::decode_arithmetic(const int& op3) {
+void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     switch (op3) {
     case OP3_MULSCC:
         aluop = ALU_MUL;
@@ -268,7 +268,7 @@ void instruction::decode_arithmetic(const int& op3) {
 
 }
 
-void instruction::decode_memory(const int& op3) {
+void instruction::decode_memory(const OP3_MEMORY& op3) {
     switch (op3) {
     case OP3_ST:
         aluop = ALU_ADD;
@@ -344,7 +344,7 @@ void instruction::decode_memory(const int& op3) {
 
 }
 
-void instruction::decode_sethi_branches(const int& op2) {
+void instruction::decode_sethi_branches(const OP2& op2) {
     switch (op2) {
     case OP2_SETHI: //NOP
         aluop = ALU_SETHI;
@@ -386,7 +386,7 @@ void instruction::set_inst(uint32_t inbits) {
     inst = inbits;
 }
 
-uint32_t instruction::get_write_data(uint32_t old_data, int offset) {
+uint32_t instruction::get_write_data(uint32_t old_data, int offset) const {
 
     int shamt = 0;
     int mask = 0xFFFFFFFF;

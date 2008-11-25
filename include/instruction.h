@@ -43,9 +43,117 @@ using namespace std;
 #include "instruction_defs.h"
 #include "special_registers.h"
 
+///////////////////////////////////////////////////////////////////////
+/// instruction
+/**
+ * This class contains the data members used in decoding an
+ * instruction.
+ *
+ * @author  Isaac Liu
+ * @version $Id$
+ * @Pt.ProposedRating red hiren
+ * @Pt.AcceptedRating
+ */
 class instruction {
+
+///////////////////////////////////////////////////////////////////////
+///                      public methods                             ///
 public:
-    // Flag to see if instruction is a double word instruction
+  /** Create a NOP instruction.
+   */
+    instruction();
+
+    /** Create an instruction from a binary representation
+     * of the machine code.
+     *
+     * @param binary_representation This instruction's binary representation
+     */
+    instruction(uint32_t binary_representation);
+
+
+  /** Copy constructor.
+   *
+   * @param from_instruction Instruction to copy from.
+   */
+  instruction(const instruction& from_instruction);
+
+  /** Terminate simulation if this returns true.
+   *
+   */
+    bool check_end_sim();
+
+    /** Decode the binary representation into meaningful values in all
+     * the other fields of the instruction object.
+     */
+    void decode();
+
+  /** Decode the binary representation for arithmetic instruction of
+   * type opcode 3.
+   *
+   * @param op3 The opcode to be decoded.
+   */
+    void decode_arithmetic(const OP3_ARITHMETIC& op3);
+
+  /** Decode the binary representation memory instructions of type
+   * opcode 3.
+   *
+   * @param op3 The opcode to be decoded.
+   */
+  void decode_memory(const OP3_MEMORY& op3);
+
+  /** Decode the binary representation for sethi instructions of type
+   * opcode 2.
+   *
+   * @param op2 The opcode to be decoded.
+   */
+  void decode_sethi_branches(const OP2& op2);
+
+  /** Return the data to be written by performing the appropriate byte
+   *  alignment shifts.
+   *
+   * @param old_data This is the old data.
+   * @param offset The offset at which to place the data.
+   */
+      uint32_t get_write_data(uint32_t old_data, int offset) const;
+
+  /** Overloaded assignment operator.
+   *
+   * @param from_instruction Instruction assigned from.
+   */
+    void operator=(const instruction& from_instruction);
+  
+  /** Overloaded equality operator.
+   *
+   * @is_instruction Instruction to check if equal.
+   */
+    bool operator==(const instruction& is_instruction) const;
+
+  /** Print out the contents of the instruction.
+   *
+   * @param out Output stream.
+   * @param output_instruction Instruction to output.
+   */
+    inline friend ostream& operator<<(ostream& out, const instruction& output_instruction) {
+        out << setw(8) << setfill('0') << hex << output_instruction.inst;
+        return out;
+    }
+
+    /* Stores data read from memory into the correct format in keeping
+     * with the type of load that this instruction implements.
+     *
+     * @param data_in The data read from memory.
+     */
+    void read_data(uint32_t data_in, int offset);
+  
+  /** Sets the bits of the current instruction.
+   *
+   * @param bits Instruction bits for current instruction.
+   */
+    void set_inst(uint32_t bits);
+
+///////////////////////////////////////////////////////////////////////
+///                      public variables                           ///
+public:    // Flag to see if instruction is a double word instruction
     bool db_word;
 
     uint32_t inst;
@@ -98,52 +206,13 @@ public:
     /// Whether it is a signed multiple or not
     bool mul_signed;
 
-    /**
-     * Create a NOP instruction.
-     */
-    instruction();
-
-    /**
-     * Create an instruction from a binary representation
-     * of the machine code.
-     *
-     * @param binary_representation This instruction's binary representation
-     */
-    instruction(uint32_t binary_representation);
-    bool check_end_sim();
-
-    /**
-     * Decode the binary representation into meaningful values in all the
-     * other fields of the instruction object.
-     */
-    void decode();
-    void decode_arithmetic(const int& op3);
-    void decode_memory(const int& op3);
-    void decode_sethi_branches(const int& op2);
-    uint32_t get_write_data(uint32_t old_data, int offset);
-    instruction(const instruction& mem);
-    void operator=(const instruction& mem);
-    bool operator == (const instruction& mem) const;
-    inline friend ostream& operator<< (ostream& out, const instruction& inst) {
-        out << setw(8) << setfill('0') << hex << inst.inst;
-        return out;
-    }
-
-    /**
-     * Stores data read from memory into the correct format in keeping
-     * with the type of load that this instruction implements.
-     *
-     * @param data_in The data read from memory
-     */
-    void read_data(uint32_t data_in, int offset);
-    void set_inst(uint32_t inbits);
-
+///////////////////////////////////////////////////////////////////////
+///                      private variables                          ///
 private:
-    /**
-     * Initialize the data elements to be reasonable default values.
+    /** Initialize the data elements to be reasonable default values.
      * By default, an instruction does performs a null operation.
      */
     void initialize();
 };
 
-#endif
+#endif /* _INSTRUCTION_H_ */
