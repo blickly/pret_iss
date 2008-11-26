@@ -68,13 +68,13 @@ void instruction::decode() {
         rd = 15;
         break;
     case OP_SETHI_BRANCHES:
-      decode_sethi_branches(static_cast<OP2>(op2));
+        decode_sethi_branches(static_cast<OP2>(op2));
         break;
     case OP_MEMORY:
-      decode_memory(static_cast<OP3_MEMORY>(op3));
+        decode_memory(static_cast<OP3_MEMORY>(op3));
         break;
     case OP_ARITHMETIC_ETC:
-      decode_arithmetic(static_cast<OP3_ARITHMETIC>(op3));
+        decode_arithmetic(static_cast<OP3_ARITHMETIC>(op3));
         break;
     default:
         _unimplemented = true;
@@ -584,170 +584,170 @@ bool instruction::check_end_sim() {
 }
 
 bool instruction::is_annul() const {
-  return _annul;
+    return _annul;
 }
 
 bool instruction::is_carry() const {
-  return _carry;
+    return _carry;
 }
 
 bool instruction::is_branch() const {
-  return _branch;
+    return _branch;
 }
 
 bool instruction::is_call() const {
-  return _call;
+    return _call;
 }
 
 bool instruction::is_db_word() const {
-  return _db_word_instruction;
+    return _db_word_instruction;
 }
 
 bool instruction::is_immediate() const {
-  return use_imm;
+    return use_imm;
 }
 
 bool instruction::is_jump() const {
-  return _jump;
+    return _jump;
 }
 
 bool instruction::is_read_memory() const {
-  return _read_memory;
+    return _read_memory;
 }
 
 bool instruction::is_signed_multiply() const {
-  return _signed_multiply;
+    return _signed_multiply;
 }
 
 bool instruction::is_unimplemented() const {
-  return _unimplemented;
+    return _unimplemented;
 }
 
 bool instruction::is_write_icc() const {
-  return _write_icc;
+    return _write_icc;
 }
 
 bool instruction::is_write_registers() const {
-  return _write_registers;
+    return _write_registers;
 }
 
 bool instruction::is_write_special_registers() const {
-  return _write_special_registers;
+    return _write_special_registers;
 }
 
 bool instruction::is_write_memory() const {
-  return _write_memory;
+    return _write_memory;
 }
 
 int instruction::get_alu_result() const {
-  return _alu_result;
+    return _alu_result;
 }
 
 short instruction::get_conditional_branch() const {
-  return _conditional_branch;
+    return _conditional_branch;
 }
 
 unsigned char instruction::get_icc() const {
-  return _icc;
+    return _icc;
 }
 
 int instruction::get_immediate_value() const {
-  return imm;
+    return imm;
 }
 
 int instruction::get_op1_value() const {
-  return _op1_value;
+    return _op1_value;
 }
 
 int instruction::get_op2_value() const {
-  return _op2_value;
+    return _op2_value;
 }
 
 int instruction::get_op3_value() const {
-  return _op3_value;
+    return _op3_value;
 }
 
 void instruction::set_alu_result(const int& result) {
-  _alu_result = result;
+    _alu_result = result;
 }
 
 void instruction::set_annul(const bool& annul) {
-  _annul = annul;
+    _annul = annul;
 }
 
 void instruction::set_branch(const bool& branch) {
-  _branch = branch;
+    _branch = branch;
 }
 
 void instruction::set_carry(const bool& carry) {
-  _carry = carry;
+    _carry = carry;
 }
 
 void instruction::set_call(const bool& call) {
-  _call = call;
+    _call = call;
 }
 
 void instruction::set_db_word(const bool& db_word) {
-  _db_word_instruction = db_word;
+    _db_word_instruction = db_word;
 }
 
 void instruction::set_conditional_branch(const short& conditional) {
-  _conditional_branch = conditional;
+    _conditional_branch = conditional;
 }
 
 void instruction::set_icc(const unsigned char& icc) {
-  _icc = icc;
+    _icc = icc;
 }
 
 void instruction::set_immediate(const bool& immediate) {
-  use_imm = immediate;
+    use_imm = immediate;
 }
 
 
 void instruction::set_immediate_value(const int& immediate_value) {
-  imm = immediate_value;
+    imm = immediate_value;
 }
 
 void instruction::set_jump(const bool& jump) {
-  _jump = jump;
+    _jump = jump;
 }
 
 void instruction::set_op1_value(const int& value) {
-  _op1_value = value;
+    _op1_value = value;
 }
 
 void instruction::set_op2_value(const int& value) {
-  _op2_value = value;
+    _op2_value = value;
 }
 
 void instruction::set_op3_value(const int& value) {
-  _op3_value = value;
+    _op3_value = value;
 }
 
 void instruction::set_read_memory(const bool& read_memory) {
-  _read_memory = read_memory;
+    _read_memory = read_memory;
 }
 
 void instruction::set_unimplemented(const bool& unimplemented) {
-  _unimplemented = unimplemented;
+    _unimplemented = unimplemented;
 }
 
 void instruction::set_write_icc(const bool& write_icc) {
-  _write_icc = write_icc;
+    _write_icc = write_icc;
 }
 
 void instruction::set_write_registers(const bool& write) {
-  _write_registers = write;
+    _write_registers = write;
 }
 
 void instruction::set_write_special_registers(const bool& write_special) {
-  _write_special_registers = write_special;
+    _write_special_registers = write_special;
 }
 
 void instruction::set_write_memory(const bool& write_memory) {
-  _write_memory = write_memory;
+    _write_memory = write_memory;
 }
 
 void instruction::set_signed_multiply(const bool& signed_multiply) {
-  _signed_multiply = signed_multiply;
+    _signed_multiply = signed_multiply;
 }

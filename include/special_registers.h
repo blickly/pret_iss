@@ -42,17 +42,17 @@
 
 class special_registers {
 public:
-  WINDOW_POINTER get_window_pointer() const {
-    return wp;
-  }
-  
-  void set_window_pointer(const WINDOW_POINTER& wp_val) {
-    wp = wp_val;
-  }
+    WINDOW_POINTER get_window_pointer() const {
+        return wp;
+    }
+
+    void set_window_pointer(const WINDOW_POINTER& wp_val) {
+        wp = wp_val;
+    }
     void reset_window_pointer() {
         wp = 0;
     }
 private:
-  WINDOW_POINTER wp;
+    WINDOW_POINTER wp;
 };
 #endif /* _SPECIAL_REGISTERS_H_ */

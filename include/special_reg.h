@@ -45,20 +45,20 @@ public:
     special_reg();
     special_reg(const special_reg& sr);
     void operator=(const special_reg& sr);
-  bool operator==(const special_reg& sr);
+    bool operator==(const special_reg& sr);
 
 
     uint32_t get_carry_bit();
-  uint32_t get_psr();
-  
+    uint32_t get_psr();
+
     void dump();
-  void dump_deadline_timers();
-  
+    void dump_deadline_timers();
+
     void decrement_deadline_timers();
     void decrement_pll_timers();
-  bool missed_deadline(uint32_t& dt_reg);
+    bool missed_deadline(uint32_t& dt_reg);
     void set_psr(uint32_t psr);
-  
+
     // Data members
     unsigned char imp_ver;
     WINDOW_POINTER curr_wp;  // Thread's current window pointer

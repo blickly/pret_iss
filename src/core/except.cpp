@@ -169,7 +169,7 @@ bool except::dead_stalled(const hw_thread_ptr& ht) {
         //HACK!!! NEED TO CHANGE!!
         //STALLED BUT WANT TO UPDATE MAILBOX
         if (ht->spec_regs.pll_loaded && ht->inst.is_write_special_registers()) {
-	  ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.get_alu_result();
+            ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.get_alu_result();
         }
         return true;
     }
@@ -230,7 +230,7 @@ void except::set_dword_state(const hw_thread_ptr& ht) {
 
     // HDP: If the instruction is a double anything we need to redo the
     // instruction except we need to increment the destination address.
-  if ((ht->inst.is_db_word()) && (!ht->is_db_word_stalled())) {
+    if ((ht->inst.is_db_word()) && (!ht->is_db_word_stalled())) {
         // The PC is no longer incremented if a db_word is recognized.
         // Set the thread's double word flag to true.
         ht->set_db_word_stalled(true);
@@ -242,8 +242,8 @@ void except::set_dword_state(const hw_thread_ptr& ht) {
 void except::inc_pc(const hw_thread_ptr& ht) {
 
     //If no exception
-  if (ht->inst.is_write_icc()) {
-    ht->spec_regs.icc = ht->inst.get_icc();
+    if (ht->inst.is_write_icc()) {
+        ht->spec_regs.icc = ht->inst.get_icc();
     }
 
     // We must execute the delayed instruction stored in the branch
@@ -255,7 +255,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
         // finished processing the delay slot instruction.
 
         // Make sure the instruction's db_word is not set.
-      if (!ht->inst.is_db_word()) {
+        if (!ht->inst.is_db_word()) {
             ht->set_pc(ht->get_delayed_branch_address());
             ht->set_delayed_branch_address(0);
         }
@@ -281,7 +281,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
         }
 
     if (ht->inst.is_jump() || ht->inst.is_call()) {
-      ht->inst.set_alu_result(ht->get_pc() - 4);
+        ht->inst.set_alu_result(ht->get_pc() - 4);
     }
 
 
@@ -301,7 +301,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
 
 void except::write_regs(const hw_thread_ptr& ht) {
 
-  if (ht->inst.is_write_registers()) {
+    if (ht->inst.is_write_registers()) {
         //    if ( ht->inst.is_call() || ht->inst.is_jump() )
 
         switch (ht->inst.mux_specreg) {
@@ -322,7 +322,7 @@ void except::write_regs(const hw_thread_ptr& ht) {
             ht->regs.set_reg(ht->inst.rd, ht->spec_regs.tbr , ht->spec_regs.curr_wp);
             break;
         default:
-	  ht->regs.set_reg(ht->inst.rd, ht->inst.get_alu_result(), ht->spec_regs.curr_wp);
+            ht->regs.set_reg(ht->inst.rd, ht->inst.get_alu_result(), ht->spec_regs.curr_wp);
             break;
         }
 
@@ -345,32 +345,32 @@ void except::write_special_regs(const hw_thread_ptr& ht) {
     if (ht->inst.is_write_special_registers()) {
         switch (ht->inst.mux_specreg) {
         case SREG_Y:
-	  ht->spec_regs.y = ht->inst.get_alu_result();
+            ht->spec_regs.y = ht->inst.get_alu_result();
             break;
         case SREG_ASR:
-	  ht->spec_regs.asr[ht->inst.rd] = ht->inst.get_alu_result();
+            ht->spec_regs.asr[ht->inst.rd] = ht->inst.get_alu_result();
             break;
         case SREG_PSR:
-	  ht->spec_regs.set_psr(ht->inst.get_alu_result());
+            ht->spec_regs.set_psr(ht->inst.get_alu_result());
             break;
         case SREG_WIM:
-	  ht->spec_regs.wim = ht->inst.get_alu_result();
+            ht->spec_regs.wim = ht->inst.get_alu_result();
             break;
         case SREG_TBR:
-	  ht->spec_regs.tbr = ht-> inst.get_alu_result();
+            ht->spec_regs.tbr = ht-> inst.get_alu_result();
             break;
         case SREG_DT:
             if (ht->inst.rd < NUM_DEADLINE_TIMERS) {
-	      ht->spec_regs.dt[ht->inst.rd] = ht->inst.get_alu_result();
+                ht->spec_regs.dt[ht->inst.rd] = ht->inst.get_alu_result();
 
                 /* If the value being set is 0, then it should not cause a warning. */
-	      if (ht->inst.get_alu_result() != 0) {
+                if (ht->inst.get_alu_result() != 0) {
                     //                    cout << "dt value: " << hex << ht->inst.get_alu_result() << endl;
                     ht->spec_regs.dt_status[ht->inst.rd] = SET;
                 }
 
             } else {
-	      ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.get_alu_result();
+                ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.get_alu_result();
             }
 
             // printf("Should have written %d  to timer %d\n", ht->inst.get_alu_result(), ht->inst.rd);
@@ -381,13 +381,13 @@ void except::write_special_regs(const hw_thread_ptr& ht) {
             // To a memory source address.
             if (ht->inst.rd == 0) {
                 //                cout << "except:: memory source, tid: " << ht->id << ", value: " << hex << ht->inst.get_alu_result() << endl;
-	      coproc_dma->set_mem_source(ht->get_id(), ht->inst.get_alu_result());
+                coproc_dma->set_mem_source(ht->get_id(), ht->inst.get_alu_result());
             }
 
             // To a spm target address. Start the transfer.
             if (ht->inst.rd == 1) {
                 //                cout << "except:: SPM target, tid: " << ht->id << ", value: " << hex << ht->inst.get_alu_result() << endl;
-	      coproc_dma->set_spm_target(ht->get_id(), ht->inst.get_alu_result());
+                coproc_dma->set_spm_target(ht->get_id(), ht->inst.get_alu_result());
                 coproc_dma->make_transfer(ht);
             }
             break;

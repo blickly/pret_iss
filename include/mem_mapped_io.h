@@ -54,7 +54,7 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///
     /** Construct and initialize a memory-mapped
-     * This method is responsible for initializing any memory-mapped 
+     * This method is responsible for initializing any memory-mapped
      * addresses that must be set before program execution.
      */
     mem_mapped_io();

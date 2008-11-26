@@ -53,7 +53,7 @@ typedef short unsigned int WINDOW_POINTER;
 /// ALU
 /**
  * Encoding of the ALU operation.
- * 
+ *
  */
 enum ALU {
     ALU_NOP,
@@ -76,7 +76,7 @@ enum ALU {
 /// BRANCH_CONDITIONS
 /**
  * Encoding of supported branching conditions.
- * 
+ *
  */
 enum BRANCH_CONDITIONS {
     BRCH_BA = 8,
@@ -101,7 +101,7 @@ enum BRANCH_CONDITIONS {
 /// MEMORY_SIZE
 /**
  * Encoding of supported memory sizes.
- * 
+ *
  */
 enum MEMORY_SIZE {
     MEM_SIGNED_BYTE,
@@ -116,7 +116,7 @@ enum MEMORY_SIZE {
 /// OP
 /**
  * Encoding of opcode of type 1.
- * 
+ *
  */
 enum OP {
     OP_SETHI_BRANCHES = 0,
@@ -129,7 +129,7 @@ enum OP {
 /// OP2
 /**
  * Encoding of opcode type 2.
- * 
+ *
  */
 enum OP2 {
     OP2_BICC = 2,
@@ -143,7 +143,7 @@ enum OP2 {
 /// OP3_ARITHMETIC
 /**
  * Encoding of opcode type 3 for arithmetic operations.
- * 
+ *
  */
 enum OP3_ARITHMETIC {
     OP3_ADD = 0x0,
@@ -191,7 +191,7 @@ enum OP3_ARITHMETIC {
 /// OP3_COPROC
 /**
  * Encoding of opcode type 3 for coprocessor instructions.
- * 
+ *
  */
 enum OP3_COPROC {
     // Coprocessor opcodes.
@@ -203,7 +203,7 @@ enum OP3_COPROC {
 /// OP3_MEMORY
 /**
  * Encoding of opcode type 3 for memory operations.
- * 
+ *
  */
 enum OP3_MEMORY {
     OP3_LD = 0x0,
@@ -222,7 +222,7 @@ enum OP3_MEMORY {
 /// SRCMUX
 /**
  * Multiplexes the source operand registers for each of the stages.
- * 
+ *
  */
 enum SRCMUX {
     SRCMUX_RA,
@@ -236,8 +236,8 @@ enum SRCMUX {
 ///////////////////////////////////////////////////////////////////////
 /// SREG_MUX
 /**
- * Multiplexes the selection of special registers. 
- * 
+ * Multiplexes the selection of special registers.
+ *
  */
 enum SREG_MUX {
     SREG_Y = 1,

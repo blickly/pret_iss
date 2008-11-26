@@ -85,56 +85,56 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
     //ALU Operations
     switch (hardware_thread->inst.aluop) {
     case ALU_ADD:
-      hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() + hardware_thread->inst.get_op2_value());
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() + hardware_thread->inst.get_op2_value());
         // If the carry has to be used
-      if (hardware_thread->inst.is_carry()) {
-	  hardware_thread->inst.set_alu_result( hardware_thread->inst.get_alu_result() + hardware_thread->spec_regs.get_carry_bit());
+        if (hardware_thread->inst.is_carry()) {
+            hardware_thread->inst.set_alu_result(hardware_thread->inst.get_alu_result() + hardware_thread->spec_regs.get_carry_bit());
         }
 
         break;
     case ALU_NOP:
-      hardware_thread->inst.set_alu_result(0);
+        hardware_thread->inst.set_alu_result(0);
         break;
     case ALU_SUB:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() - hardware_thread->inst.get_op2_value());
-      if (hardware_thread->inst.is_carry())
-	  hardware_thread->inst.set_alu_result( hardware_thread->inst.get_alu_result() - hardware_thread->spec_regs.get_carry_bit());
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() - hardware_thread->inst.get_op2_value());
+        if (hardware_thread->inst.is_carry())
+            hardware_thread->inst.set_alu_result(hardware_thread->inst.get_alu_result() - hardware_thread->spec_regs.get_carry_bit());
         break;
     case ALU_AND:
-      hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() & hardware_thread->inst.get_op2_value());
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() & hardware_thread->inst.get_op2_value());
         break;
     case ALU_OR:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() | hardware_thread->inst.get_op2_value());
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() | hardware_thread->inst.get_op2_value());
         break;
     case ALU_XOR:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() ^ hardware_thread->inst.get_op2_value());
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() ^ hardware_thread->inst.get_op2_value());
         break;
     case ALU_ANDN:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() & ~(hardware_thread->inst.get_op2_value()));
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() & ~(hardware_thread->inst.get_op2_value()));
         break;
     case ALU_XNOR:
-      hardware_thread->inst.set_alu_result( ~(hardware_thread->inst.get_op1_value() ^ hardware_thread->inst.get_op2_value()));
+        hardware_thread->inst.set_alu_result(~(hardware_thread->inst.get_op1_value() ^ hardware_thread->inst.get_op2_value()));
         break;
     case ALU_ORN:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() | ~(hardware_thread->inst.get_op2_value()));
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() | ~(hardware_thread->inst.get_op2_value()));
         break;
     case ALU_SLL:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() << (hardware_thread->inst.get_op2_value() & 0x1F));
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() << (hardware_thread->inst.get_op2_value() & 0x1F));
         break;
     case ALU_SRL:
         // In a logical shift righardware_thread, the sign bit shifted is always 0
         signbit = hardware_thread->inst.get_op1_value() & 0x80000000;
         shift_amount = hardware_thread->inst.get_op2_value() & 0x1F;
-        hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value());
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value());
 
         if (signbit) {
             while (shift_amount--) {
                 temporary_alu = 0;
                 temporary_alu = (hardware_thread->inst.get_alu_result() >> 1) & 0x7FFFFFFF;
-                hardware_thread->inst.set_alu_result( temporary_alu);
+                hardware_thread->inst.set_alu_result(temporary_alu);
             }
         } else {
-	  hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() >> shift_amount);
+            hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() >> shift_amount);
         }
 
         /* FIXME: HDP, I don't know why this shift is working like this */
@@ -153,17 +153,17 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
         */
         break;
     case ALU_SRA:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() >> (hardware_thread->inst.get_op2_value() & 0x1F));
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() >> (hardware_thread->inst.get_op2_value() & 0x1F));
         break;
     case ALU_SETHI:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.disp22 << 10);
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.disp22 << 10);
         break;
     case ALU_MUL:
         /// Hiren: Going to use SystemC data types for easier
         /// maniuplation of 64 bits.
 #ifndef _NO_SYSTEMC_
         /// If signed multiplication
-      if (hardware_thread->inst.is_signed_multiply()) {
+        if (hardware_thread->inst.is_signed_multiply()) {
             sc_uint<32> rs1(hardware_thread->inst.get_op1_value());
             sc_uint<32> rs2(hardware_thread->inst.get_op2_value());
             sc_uint<32> y(hardware_thread->spec_regs.y);
@@ -200,11 +200,11 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
             hardware_thread->spec_regs.y = y.to_uint();
             hardware_thread->inst.set_op1_value(rs1.to_uint());
             hardware_thread->inst.set_op2_value(rs2.to_uint());
-            hardware_thread->inst.set_alu_result( rsd.to_uint());
+            hardware_thread->inst.set_alu_result(rsd.to_uint());
         }
 #else
         /// If signed multiplication
-      if (hardware_thread->inst.is_signed_multiply()) {
+        if (hardware_thread->inst.is_signed_multiply()) {
             uint32_t  rs1 = (hardware_thread->inst.get_op1_value());
             uint32_t rs2 = (hardware_thread->inst.get_op2_value());
             uint32_t y = (hardware_thread->spec_regs.y);
@@ -241,7 +241,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
             hardware_thread->spec_regs.y = y;
             hardware_thread->inst.set_op1_value(rs1);
             hardware_thread->inst.set_op2_value(rs2);
-            hardware_thread->inst.set_alu_result( rsd);
+            hardware_thread->inst.set_alu_result(rsd);
         }
 
 #endif
@@ -252,7 +252,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 
     //write to the icc
     if (hardware_thread->inst.is_write_icc()) {
-      hardware_thread->inst.set_icc(geticc(hardware_thread));
+        hardware_thread->inst.set_icc(geticc(hardware_thread));
     }
 
 #ifdef DBG_PIPE
@@ -271,7 +271,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 
 
 unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
-  unsigned char icc = hardware_thread->inst.get_icc();
+    unsigned char icc = hardware_thread->inst.get_icc();
 
     //zero
     if (hardware_thread->inst.get_alu_result() == 0)
@@ -282,7 +282,7 @@ unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
     //overflow
     if ((((hardware_thread->inst.aluop == ALU_ADD) || (hardware_thread->inst.aluop == ALU_MUL)) &&
             (hardware_thread->inst.get_op1_value() >> 31) == (hardware_thread->inst.get_op2_value() >> 31) &&
-	 (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_alu_result() >> 31)) ||
+            (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_alu_result() >> 31)) ||
             (hardware_thread->inst.aluop == ALU_SUB && (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_op2_value() >> 31)
              && (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_alu_result() >> 31)))
         icc |= 0x2;

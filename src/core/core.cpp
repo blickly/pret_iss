@@ -185,16 +185,16 @@ void core::behavior() {
 }
 
 bool core::is_memory_read(int thread_id) const {
-  return _thread_controller->get_thread(thread_id)->get_handle()->inst.is_read_memory();
+    return _thread_controller->get_thread(thread_id)->get_handle()->inst.is_read_memory();
 }
 
 
 bool core::is_memory_write(int thread_id) const {
-  return _thread_controller->get_thread(thread_id)->get_handle()->inst.is_write_memory();
+    return _thread_controller->get_thread(thread_id)->get_handle()->inst.is_write_memory();
 }
 
 int core::get_aligned_memory_address(int thread_id) const {
-  return 4*(_thread_controller->get_thread(thread_id)->get_handle()->inst.get_alu_result() / 4);
+    return 4*(_thread_controller->get_thread(thread_id)->get_handle()->inst.get_alu_result() / 4);
 }
 
 unsigned int core::get_instruction_count(int thread_id) const {
