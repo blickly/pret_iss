@@ -168,7 +168,7 @@ bool except::dead_stalled(const hw_thread_ptr& ht) {
 #endif
         //HACK!!! NEED TO CHANGE!!
         //STALLED BUT WANT TO UPDATE MAILBOX
-        if (ht->spec_regs.pll_loaded && ht->inst.wsreg) {
+        if (ht->spec_regs.pll_loaded && ht->inst.is_write_special_registers()) {
 	  ht->spec_regs.pll_load[ht->inst.rd-8] = ht->inst.get_alu_result();
         }
         return true;
@@ -230,7 +230,7 @@ void except::set_dword_state(const hw_thread_ptr& ht) {
 
     // HDP: If the instruction is a double anything we need to redo the
     // instruction except we need to increment the destination address.
-    if ((ht->inst.db_word) && (!ht->is_db_word_stalled())) {
+  if ((ht->inst.is_db_word()) && (!ht->is_db_word_stalled())) {
         // The PC is no longer incremented if a db_word is recognized.
         // Set the thread's double word flag to true.
         ht->set_db_word_stalled(true);
@@ -242,8 +242,8 @@ void except::set_dword_state(const hw_thread_ptr& ht) {
 void except::inc_pc(const hw_thread_ptr& ht) {
 
     //If no exception
-    if (ht->inst.wicc) {
-        ht->spec_regs.icc = ht->inst.icc;
+  if (ht->inst.is_write_icc()) {
+    ht->spec_regs.icc = ht->inst.get_icc();
     }
 
     // We must execute the delayed instruction stored in the branch
@@ -255,7 +255,7 @@ void except::inc_pc(const hw_thread_ptr& ht) {
         // finished processing the delay slot instruction.
 
         // Make sure the instruction's db_word is not set.
-        if (!ht->inst.db_word) {
+      if (!ht->inst.is_db_word()) {
             ht->set_pc(ht->get_delayed_branch_address());
             ht->set_delayed_branch_address(0);
         }
@@ -342,7 +342,7 @@ void except::write_regs(const hw_thread_ptr& ht) {
 
 void except::write_special_regs(const hw_thread_ptr& ht) {
 
-    if (ht->inst.wsreg) {
+    if (ht->inst.is_write_special_registers()) {
         switch (ht->inst.mux_specreg) {
         case SREG_Y:
 	  ht->spec_regs.y = ht->inst.get_alu_result();

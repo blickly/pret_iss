@@ -156,47 +156,42 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///                      public variables                           ///
 public:    // Flag to see if instruction is a double word instruction
-    bool db_word;
+
 
     uint32_t inst;
     int pc;
-
-
   short op;
   short op2;
   short op3;
-
     REGISTER_NUMBER rs1;
     REGISTER_NUMBER rs2;
     REGISTER_NUMBER rd;
     ALU aluop;
-
-    bool wicc;
     MEMORY_SIZE mem_size;
-
     int disp30;
     int disp22;
-
     special_registers sp_reg;
-    unsigned char icc;
-
     unsigned char mux_specreg;
-    bool wsreg;
-    short wp_increment;  
+    short wp_increment;
+  
   bool is_annul() const;
   bool is_branch() const;
   bool is_carry() const;
   bool is_call() const;
+  bool is_db_word() const;
   bool is_immediate() const;
   bool is_jump() const;
   bool is_read_memory() const;
   bool is_signed_multiply() const;
-  bool is_unimplemented() const;  
+  bool is_unimplemented() const;
+  bool is_write_icc() const;
   bool is_write_registers() const;
+  bool is_write_special_registers() const;
   bool is_write_memory() const;
 
   int get_alu_result() const;
   short get_conditional_branch() const;
+  unsigned char get_icc() const;
   int get_immediate_value() const;
   int get_op1_value() const;
   int get_op2_value() const;
@@ -208,6 +203,8 @@ public:    // Flag to see if instruction is a double word instruction
   void set_call(const bool& call);
   void set_carry(const bool& carry);
   void set_conditional_branch(const short& conditional);
+  void set_db_word(const bool& db_word);
+  void set_icc(const unsigned char& icc);
   void set_immediate(const bool& immediate);
   void set_immediate_value(const int& immediate_value);
   void set_jump(const bool& jump);
@@ -217,7 +214,9 @@ public:    // Flag to see if instruction is a double word instruction
   void set_read_memory(const bool& read);
   void set_signed_multiply(const bool& signed_multiply);
   void set_unimplemented(const bool& unimplemented);
+  void set_write_icc(const bool& write_icc);
   void set_write_registers(const bool& write);
+    void set_write_special_registers(const bool& write_special);
   void set_write_memory(const bool& write_memory);
 ///////////////////////////////////////////////////////////////////////
 ///                      private methods                          ///
@@ -234,8 +233,13 @@ private:
       bool _annul;
       bool _branch;
       short _conditional_branch;
-    bool _jump;
-    bool _write_registers;
+    bool _db_word_instruction;
+  unsigned char _icc;
+  bool _jump;
+      bool _write_icc;
+  bool _write_registers;
+  bool _write_special_registers;
+
   bool _call;
       bool _write_memory;
     bool _read_memory;
@@ -258,6 +262,7 @@ private:
       bool trap;
       unsigned char traptype;
     bool halt;
+
 };
 
 #endif /* _INSTRUCTION_H_ */

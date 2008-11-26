@@ -65,7 +65,7 @@ void execute::behavior() {
     cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex << hardware_thread.get_handle()->PC << hex <<  ", " << hardware_thread->inst;
     cout << "\t+ " << hex << "alu_result: "
          << dec << hardware_thread->inst.get_alu_result() << ", aluwreg: " << hardware_thread->inst.wreg << ", wicc: "
-         << hardware_thread->inst.wicc << ", local icc = "  << (int)hardware_thread->inst.icc << endl;
+         << hardware_thread->inst.is_write_icc() << ", local icc = "  << (int)hardware_thread->inst.get_icc() << endl;
 
 #endif
 
@@ -251,8 +251,8 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
     }
 
     //write to the icc
-    if (hardware_thread->inst.wicc) {
-        hardware_thread->inst.icc = geticc(hardware_thread);
+    if (hardware_thread->inst.is_write_icc()) {
+      hardware_thread->inst.set_icc(geticc(hardware_thread));
     }
 
 #ifdef DBG_PIPE
@@ -271,7 +271,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 
 
 unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
-    unsigned char icc = hardware_thread->inst.icc;
+  unsigned char icc = hardware_thread->inst.get_icc();
 
     //zero
     if (hardware_thread->inst.get_alu_result() == 0)

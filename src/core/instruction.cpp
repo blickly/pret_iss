@@ -91,7 +91,7 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         aluop = ALU_MUL;
         _write_registers = true;
         _signed_multiply = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_ADD:
         aluop = ALU_ADD;
@@ -105,7 +105,7 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     case OP3_ADDXCC:
         aluop = ALU_ADD;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         _carry = true;
         break;
     case OP3_AND:
@@ -133,7 +133,7 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         aluop = ALU_SUB;
         _write_registers = true;
         _carry = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_ANDN:
         aluop = ALU_ANDN;
@@ -150,42 +150,42 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     case OP3_ADDCC:
         aluop = ALU_ADD;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_ANDCC:
         aluop = ALU_AND;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_ORCC:
         aluop = ALU_OR;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_XORCC:
         aluop = ALU_XOR;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_SUBCC:
         aluop = ALU_SUB;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_ANDNCC:
         aluop = ALU_ANDN;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_ORNCC:
         aluop = ALU_ORN;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_XNORCC:
         aluop = ALU_XNOR;
         _write_registers = true;
-        wicc = true;
+        _write_icc = true;
         break;
     case OP3_JMPL:
         _jump = 1;
@@ -236,28 +236,28 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     case OP3_WRY:
 
         mux_specreg = ((rd != 0) ? SREG_ASR : SREG_Y);
-        wsreg = true;
+        _write_special_registers = true;
         aluop = ALU_XOR;
         break;
     case OP3_WRPSR:
         mux_specreg = SREG_PSR;
         aluop = ALU_XOR;
-        wsreg = true;
+        _write_special_registers = true;
         break;
     case OP3_WRWIM:
         mux_specreg = SREG_WIM;
         aluop = ALU_XOR;
-        wsreg = true;
+        _write_special_registers = true;
         break;
     case OP3_WRTBR:
         mux_specreg = SREG_TBR;
         aluop = ALU_XOR;
-        wsreg = true;
+        _write_special_registers = true;
         break;
         // Perform the DMA transfer
 //  case OP3_CPOP1:
 //    cout << "COPROC: CPOP1" << endl;
-//    wsreg = true;
+//    _write_special_registers = true;
 //    break;
 
 
@@ -282,7 +282,7 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
     case OP3_STD:
         aluop = ALU_ADD;
         _write_memory = true;
-        db_word = true;
+        _db_word_instruction = true;
         break;
     case OP3_STH:
         aluop = ALU_ADD;
@@ -323,7 +323,7 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
         _write_registers = true;
         _read_memory = true;
         mem_size = MEM_DOUBLEWORD;
-        db_word = true;
+        _db_word_instruction = true;
         break;
     case OP3_DEAD:
         //cout << "DETECTED DEADLINE INSTRUCTION IN WRONG PLACE\n" ;
@@ -335,7 +335,7 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
         //        cout << "COPROC: STC" << endl;
         aluop = ALU_ADD;
         mux_specreg = SREG_CP;
-        wsreg = true;
+        _write_special_registers = true;
         break;
     default:
         _unimplemented = true;
@@ -462,14 +462,14 @@ void instruction::operator=(const instruction & mem) {
     _annul = mem._annul;
     _call = mem._call;
     disp30 = mem.disp30;
-    wicc = mem.wicc;
-    icc = mem.icc;
+    _write_icc = mem._write_icc;
+    _icc = mem._icc;
     disp22 = mem.disp22;
     trap = mem.trap;
     traptype = mem.traptype;
     mux_specreg = mem.mux_specreg;
-    wsreg = mem.wsreg;
-    db_word = mem.db_word;
+    _write_special_registers = mem._write_special_registers;
+    _db_word_instruction = mem._db_word_instruction;
     _signed_multiply = mem._signed_multiply;
 
 }
@@ -503,14 +503,14 @@ bool instruction::operator==(const instruction & mem) const {
            _annul == mem._annul &&
            _call == mem._call &&
            disp30 == mem.disp30 &&
-           wicc == mem.wicc &&
-           icc == mem.icc &&
+           _write_icc == mem._write_icc &&
+           _icc == mem._icc &&
            disp22 == mem.disp22 &&
            trap == mem.trap &&
            traptype == mem.traptype &&
            mux_specreg == mem.mux_specreg &&
-           wsreg == mem.wsreg &&
-           db_word == mem.db_word &&
+           _write_special_registers == mem._write_special_registers &&
+           _db_word_instruction == mem._db_word_instruction &&
            _carry == mem._carry &&
            _signed_multiply == mem._signed_multiply;
 }
@@ -521,7 +521,7 @@ void instruction::initialize() {
     op2 = OP2_SETHI;
     op3 = OP3_ADD;
 
-    db_word = false;
+    _db_word_instruction = false;
     halt = false;
     rs1 = 0;
     rs2 = 0;
@@ -533,8 +533,8 @@ void instruction::initialize() {
     _annul = 0;
     _call = 0;
     disp30 = 0;
-    wicc = 0;
-    icc = 0x0;
+    _write_icc = 0;
+    _icc = 0x0;
     disp22 = 0;
 
     sp_reg.set_window_pointer(0);
@@ -563,7 +563,7 @@ void instruction::initialize() {
 
     pc = 0;
     mux_specreg = 0;
-    wsreg = false;
+    _write_special_registers = false;
     _signed_multiply = false;
 }
 
@@ -599,6 +599,10 @@ bool instruction::is_call() const {
   return _call;
 }
 
+bool instruction::is_db_word() const {
+  return _db_word_instruction;
+}
+
 bool instruction::is_immediate() const {
   return use_imm;
 }
@@ -619,8 +623,16 @@ bool instruction::is_unimplemented() const {
   return _unimplemented;
 }
 
+bool instruction::is_write_icc() const {
+  return _write_icc;
+}
+
 bool instruction::is_write_registers() const {
   return _write_registers;
+}
+
+bool instruction::is_write_special_registers() const {
+  return _write_special_registers;
 }
 
 bool instruction::is_write_memory() const {
@@ -633,6 +645,10 @@ int instruction::get_alu_result() const {
 
 short instruction::get_conditional_branch() const {
   return _conditional_branch;
+}
+
+unsigned char instruction::get_icc() const {
+  return _icc;
 }
 
 int instruction::get_immediate_value() const {
@@ -671,8 +687,16 @@ void instruction::set_call(const bool& call) {
   _call = call;
 }
 
+void instruction::set_db_word(const bool& db_word) {
+  _db_word_instruction = db_word;
+}
+
 void instruction::set_conditional_branch(const short& conditional) {
   _conditional_branch = conditional;
+}
+
+void instruction::set_icc(const unsigned char& icc) {
+  _icc = icc;
 }
 
 void instruction::set_immediate(const bool& immediate) {
@@ -708,8 +732,16 @@ void instruction::set_unimplemented(const bool& unimplemented) {
   _unimplemented = unimplemented;
 }
 
+void instruction::set_write_icc(const bool& write_icc) {
+  _write_icc = write_icc;
+}
+
 void instruction::set_write_registers(const bool& write) {
   _write_registers = write;
+}
+
+void instruction::set_write_special_registers(const bool& write_special) {
+  _write_special_registers = write_special;
 }
 
 void instruction::set_write_memory(const bool& write_memory) {

@@ -112,7 +112,7 @@ void regacc::_double_word_instruction(const hw_thread_ptr& hardware_thread) {
         // Reset the flag indicating the double word was handled.
         hardware_thread->set_db_word_stalled(false);
         // Reset the instruction's double word flag off since it's handled.
-        hardware_thread->inst.db_word = false;
+        hardware_thread->inst.set_db_word(false);
     } else {
       hardware_thread->inst.set_op1_value( hardware_thread->regs.get_reg(hardware_thread->inst.rs1, hardware_thread->spec_regs.curr_wp));
     }
@@ -141,7 +141,7 @@ void regacc::_destination_phaselockloop_deadlines(const hw_thread_ptr& hardware_
     //AND STALL UNTIL MAILBOX IS CLEARED
     else if (hardware_thread->spec_regs.pll_load[hardware_thread->inst.rd - 8] == 0 && !hardware_thread->spec_regs.pll_loaded) {
         hardware_thread->set_deadline_stalled(true);
-        hardware_thread->inst.wsreg = true;
+        hardware_thread->inst.set_write_special_registers(true);
         hardware_thread->spec_regs.pll_loaded = true;
     }
     //IF WE LOADED SOMETHING ALREADY, AND MAILBOX IS CLEARED, WE ARE GOOD TO GO
@@ -157,7 +157,7 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
     *  should reset it if there is a new one availabile.
     */
     if (hardware_thread->spec_regs.dt[hardware_thread->inst.rd] <= 0) {
-        hardware_thread->inst.wsreg = true;
+      hardware_thread->inst.set_write_special_registers(true);
     } else {
         hardware_thread->set_deadline_stalled(true);
     }
