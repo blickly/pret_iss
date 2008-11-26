@@ -21,6 +21,41 @@ static void PrintMessage 505,13191
 static void PrintError 517,13438
 static void GetCommand 571,14855
 
+rdemo/encrypt.c,1205
+static int SILENT_PROMPT 42,1705
+static R_RSA_PUBLIC_KEY PUBLIC_KEY1 44,1736
+static R_RSA_PRIVATE_KEY PRIVATE_KEY1 70,3390
+static R_RSA_PUBLIC_KEY PUBLIC_KEY2 137,7889
+static R_RSA_PRIVATE_KEY PRIVATE_KEY2 163,9543
+R_RSA_PUBLIC_KEY PUBLIC_KEY3;230,14042
+R_RSA_PRIVATE_KEY PRIVATE_KEY3;231,14072
+int KEYPAIR3_READY 232,14104
+int main 234,14129
+static int SetOptions 311,15668
+static void InitRandomStruct 343,16302
+static void DoSignFile 363,16760
+static void DoVerifyFile 411,17880
+static void DoSealFile 462,19062
+static void DoOpenFile 528,20819
+static void DoGenerateKeys 592,22510
+static void WriteKeypair3 621,23170
+static void WriteBigInteger 684,25194
+static int GetPublicKey 710,25789
+static int GetPrivateKey 753,26762
+static int GetDigestAlgorithm 796,27739
+static int GetEncryptionAlgorithm 827,28407
+static int ReadInit 869,29323
+static int ReadUpdate 894,29911
+static void ReadFinal 919,30402
+static int ReadBlock 930,30714
+static int WriteInit 964,31606
+static int WriteUpdate 993,32214
+static void WriteFinal 1011,32530
+static int WriteBlock 1022,32799
+static void PrintMessage 1047,33230
+static void PrintError 1059,33477
+static void GetCommand 1101,34478
+
 rdemo/rdemo.c,1205
 static int SILENT_PROMPT 42,1705
 static R_RSA_PUBLIC_KEY PUBLIC_KEY1 44,1736
@@ -31,30 +66,30 @@ R_RSA_PUBLIC_KEY PUBLIC_KEY3;230,14042
 R_RSA_PRIVATE_KEY PRIVATE_KEY3;231,14072
 int KEYPAIR3_READY 232,14104
 int main 234,14129
-static int SetOptions 308,15645
-static void InitRandomStruct 340,16279
-static void DoSignFile 360,16737
-static void DoVerifyFile 408,17857
-static void DoSealFile 459,19039
-static void DoOpenFile 525,20796
-static void DoGenerateKeys 589,22487
-static void WriteKeypair3 618,23147
-static void WriteBigInteger 681,25171
-static int GetPublicKey 707,25766
-static int GetPrivateKey 750,26739
-static int GetDigestAlgorithm 793,27716
-static int GetEncryptionAlgorithm 824,28384
-static int ReadInit 866,29300
-static int ReadUpdate 891,29888
-static void ReadFinal 916,30379
-static int ReadBlock 927,30691
-static int WriteInit 961,31583
-static int WriteUpdate 990,32191
-static void WriteFinal 1008,32507
-static int WriteBlock 1019,32776
-static void PrintMessage 1044,33207
-static void PrintError 1056,33454
-static void GetCommand 1098,34455
+static int SetOptions 309,15644
+static void InitRandomStruct 341,16278
+static void DoSignFile 361,16736
+static void DoVerifyFile 409,17856
+static void DoSealFile 460,19038
+static void DoOpenFile 526,20795
+static void DoGenerateKeys 590,22486
+static void WriteKeypair3 619,23146
+static void WriteBigInteger 682,25170
+static int GetPublicKey 708,25765
+static int GetPrivateKey 751,26738
+static int GetDigestAlgorithm 794,27715
+static int GetEncryptionAlgorithm 825,28383
+static int ReadInit 867,29299
+static int ReadUpdate 892,29887
+static void ReadFinal 917,30378
+static int ReadBlock 928,30690
+static int WriteInit 962,31582
+static int WriteUpdate 991,32190
+static void WriteFinal 1009,32506
+static int WriteBlock 1020,32775
+static void PrintMessage 1045,33206
+static void PrintError 1057,33453
+static void GetCommand 1099,34454
 
 source/des.h,129
 #define _DES_H_ 5,55

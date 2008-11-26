@@ -23,7 +23,7 @@ static void WriteBigInteger PROTO_LIST
   ((FILE *, unsigned char *, unsigned int));
 static int ReadInit PROTO_LIST ((FILE **, char *));
 static int ReadUpdate PROTO_LIST
-  ((FILE *, unsigned char *, unsigned int *, unsigned int));
+  ((char *, unsigned char *, unsigned int *, unsigned int));
 static void ReadFinal PROTO_LIST ((FILE *));
 static int ReadBlock PROTO_LIST
   ((unsigned char *, unsigned int *, unsigned int, char *));
@@ -40,6 +40,10 @@ static void PrintError PROTO_LIST ((char *, int));
 static void GetCommand PROTO_LIST ((char *, unsigned int, char *));
 
 static int SILENT_PROMPT = 0;
+
+
+static char* file1 = "This is the contents of the first file to be encrypted, which is just a test file to see if we can directly read from a char string instead of a real file, since in our simulator there is no operating system, so we would have to use this.";
+
 
 static R_RSA_PUBLIC_KEY PUBLIC_KEY1 = {
   512,
@@ -243,7 +247,7 @@ char *argv[];
     return (0);
   
   InitRandomStruct (&randomStruct);
-
+  /*
   PrintMessage
     ("NOTE: When saving to a file, a filename of \"-\" will output to the screen.");
 
@@ -259,7 +263,7 @@ char *argv[];
     
     switch (*command) {
     case '#':
-      /* Entered a comment */
+      // Entered a comment //
       break;
       
     case 's':
@@ -297,7 +301,10 @@ char *argv[];
       PrintError ("ERROR: Unrecognized command.  Try again.", 0);
       break;
     }
-  }
+  }*/
+
+  //DoSignFile ();
+  DoSealFile (&randomStruct);
 
   R_RandomFinal (&randomStruct);
   R_memset ((POINTER)&PRIVATE_KEY3, 0, sizeof (PRIVATE_KEY3));
@@ -366,25 +373,33 @@ static void DoSignFile ()
   int digestAlgorithm, status;
   unsigned char partIn[24], signature[MAX_SIGNATURE_LEN];
   unsigned int partInLen, signatureLen;
+  unsigned int curLoc = 0, rtn = 0; 
 
   status = 0;
 
-  if (ReadInit (&file, "  Enter filename of content to sign"))
-    return;
+  //if (ReadInit (&file, "  Enter filename of content to sign"))
+  //  return;
 
   do {
-    if (GetPrivateKey (&privateKey))
-      break;
+    //    if (GetPrivateKey (&privateKey))
+    //break;
 
-    if (GetDigestAlgorithm (&digestAlgorithm))
-      break;
+    privateKey = &PRIVATE_KEY1;
+
+/*     if (GetDigestAlgorithm (&digestAlgorithm)) */
+/*       break; */
+    digestAlgorithm = DA_MD5;
 
     if ((status = R_SignInit (&context, digestAlgorithm)) != 0)
       break;
 
-    while (!ReadUpdate (file, partIn, &partInLen, sizeof (partIn)))
+    printf("Strlen of file: %d\n", strlen(file1));
+    while (!(rtn = ReadUpdate (&file1[curLoc], partIn, &partInLen, sizeof (partIn)))) {
+      printf ("curLoc: %d\n", curLoc);
+      curLoc += partInLen;
       if ((status = R_SignUpdate (&context, partIn, partInLen)) != 0)
         break;
+    }
     if (status)
       break;
 
@@ -435,7 +450,7 @@ static void DoVerifyFile ()
     if ((status = R_VerifyInit (&context, digestAlgorithm)) != 0)
       break;
 
-    while (!ReadUpdate (file, partIn, &partInLen, sizeof (partIn)))
+    while (!ReadUpdate (file1, partIn, &partInLen, sizeof (partIn)))
       if ((status = R_VerifyUpdate (&context, partIn, partInLen)) != 0)
         break;
     if (status)
@@ -460,62 +475,80 @@ static void DoVerifyFile ()
 static void DoSealFile (randomStruct)
 R_RANDOM_STRUCT *randomStruct;
 {
-  FILE *inFile, *outFile;
+  //FILE *inFile, *outFile;
+  char *inFile, *outFile;
   R_ENVELOPE_CTX context;
   R_RSA_PUBLIC_KEY *publicKey;
   int encryptionAlgorithm, status;
   unsigned char encryptedKey[MAX_ENCRYPTED_KEY_LEN], *encryptedKeys[1],
     iv[8], partIn[24], partOut[31];
   unsigned int encryptedKeyLen, partInLen, partOutLen;
-
+  unsigned int curLoc = 0, rtn;
+  unsigned int i;
+  unsigned char printString[1024];
+  
   status = 0;
 
-  if (ReadInit (&inFile, "  Enter filename of content to seal"))
-    return;
-  if (WriteInit (&outFile, "  Enter filename to save the encrypted content")) {
-    ReadFinal (inFile);
-    return;
-  }
+  for ( i = 0; i < 31; i++ )
+    partOut[i] = 0;
 
   do {
-    if (GetPublicKey (&publicKey))
-      break;
+    
+    // ------------------
+    // Choose public key:
+    // ------------------
+    publicKey = &PUBLIC_KEY1;
+    //    publicKey = &PUBLIC_KEY2;
 
-    if (GetEncryptionAlgorithm (&encryptionAlgorithm))
-      break;
+    // -----------------------------
+    // Choose encryptions algorithm:
+    // -----------------------------
+    //    encryptionAlgorithm = EA_DES_CBC;
+    encryptionAlgorithm = EA_DESX_CBC;
+    //    encryptionAlgorithm = EA_DES_EDE2_CBC;
+    //    encryptionAlgorithm = EA_DES_EDE3_CBC;
 
     encryptedKeys[0] = encryptedKey;
+
+    printf("Encrypted data:\n");
 
     if ((status = R_SealInit
          (&context, encryptedKeys, &encryptedKeyLen, iv, 1, &publicKey,
           encryptionAlgorithm, randomStruct)) != 0)
       break;
 
-    while (!ReadUpdate (inFile, partIn, &partInLen, sizeof (partIn))) {
+    while (!(rtn = ReadUpdate (&file1[curLoc], partIn, &partInLen, sizeof (partIn)))) {
+      curLoc += partInLen;
+
       if ((status = R_SealUpdate
            (&context, partOut, &partOutLen, partIn, partInLen)) != 0)
         break;
-      WriteUpdate (outFile, partOut, partOutLen);
+      if ( partOutLen )
+	printf("%s", partOut);
+
     }
     if (status)
       break;
 
     if ((status = R_SealFinal (&context, partOut, &partOutLen)))
       break;
-    WriteUpdate (outFile, partOut, partOutLen);
+    if ( partOutLen )
+      printf("%s", partOut);
+
+    printf("\n");
   
-    if (WriteBlock
-        (encryptedKey, encryptedKeyLen,
-         "  Enter filename to save the encrypted key"))
-      break;
-    if (WriteBlock
-        (iv, 8, "  Enter filename to save the initializing vector"))
-      break;
+    printf("Key (%d):\n", encryptedKeyLen);
+    R_memset ((POINTER)&printString, 0, sizeof (printString));
+    R_memcpy (printString, encryptedKey, encryptedKeyLen);
+    printf("%s\n", printString);
+
+    printf("Initializing vector (8): \n");
+    R_memset ((POINTER)&printString, 0, sizeof (printString));
+    R_memcpy (printString, iv, 8);
+    printf("%s\n", printString);
+
   } while (0);
   
-  ReadFinal (inFile);
-  WriteFinal (outFile);
-
   if (status)
     PrintError ("sealing file", status);
 
@@ -525,7 +558,7 @@ R_RANDOM_STRUCT *randomStruct;
 
 static void DoOpenFile ()
 {
-  FILE *inFile, *outFile;
+  char *inFile, *outFile;
   R_ENVELOPE_CTX context;
   R_RSA_PRIVATE_KEY *privateKey;
   int encryptionAlgorithm, status;
@@ -535,13 +568,13 @@ static void DoOpenFile ()
 
   status = 0;
 
-  if (ReadInit (&inFile, "  Enter filename of encrypted content to open"))
-    return;
+  /* if (ReadInit (&inFile, "  Enter filename of encrypted content to open")) */
+/*     return; */
 
-  if (WriteInit (&outFile, "  Enter filename to save the recovered content")) {
-    ReadFinal (inFile);
-    return;
-  }
+/*   if (WriteInit (&outFile, "  Enter filename to save the recovered content")) { */
+/*     ReadFinal (inFile); */
+/*     return; */
+/*   } */
 
   do {
     if (GetPrivateKey (&privateKey))
@@ -890,24 +923,25 @@ char *prompt;
    Return 0 on success or 1 if error or end of file.
  */
 static int ReadUpdate (file, partOut, partOutLen, maxPartOutLen)
-FILE *file;
+char *file;
 unsigned char *partOut;
 unsigned int *partOutLen;
 unsigned int maxPartOutLen;
 {
-  int status;
+  int status = 0;
+  int fileLen = strlen(file);
   
-  /* fread () returns the number of items read in.
-   */
-  *partOutLen = fread (partOut, 1, maxPartOutLen, file);
-
-  status = 0;
-  if (ferror (file)) {
-    PrintError ("ERROR: Cannot read file.", 0);
+  if (maxPartOutLen > fileLen ){
+    *partOutLen = fileLen;
     status = 1;
   }
-  if (*partOutLen == 0 && feof (file))
-    status = 1;
+  else
+    *partOutLen = maxPartOutLen;
+
+  if ( *partOutLen ) {
+    strncpy ( partOut, file, *partOutLen );
+    //    printf("%s | length: %d\n", partOut, *partOutLen);
+  }
 
   return (status);
 }
@@ -1041,6 +1075,7 @@ char *prompt;
 
   return (status);
 }
+
 
 static void PrintMessage (message)
 char *message;
