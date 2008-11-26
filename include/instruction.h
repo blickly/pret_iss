@@ -155,8 +155,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////
 ///                      public variables                           ///
-public:    // Flag to see if instruction is a double word instruction
-
+public:    
 
     uint32_t inst;
     int pc;
