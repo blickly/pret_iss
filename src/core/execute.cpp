@@ -85,7 +85,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
     //ALU Operations
     switch (hardware_thread->inst.aluop) {
     case ALU_ADD:
-      hardware_thread->inst.set_alu_result(hardware_thread->inst.op1_val + hardware_thread->inst.op2_val);
+      hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() + hardware_thread->inst.get_op2_value());
         // If the carry has to be used
       if (hardware_thread->inst.is_carry()) {
 	  hardware_thread->inst.set_alu_result( hardware_thread->inst.get_alu_result() + hardware_thread->spec_regs.get_carry_bit());
@@ -96,36 +96,36 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
       hardware_thread->inst.set_alu_result(0);
         break;
     case ALU_SUB:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val - hardware_thread->inst.op2_val);
+      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() - hardware_thread->inst.get_op2_value());
       if (hardware_thread->inst.is_carry())
 	  hardware_thread->inst.set_alu_result( hardware_thread->inst.get_alu_result() - hardware_thread->spec_regs.get_carry_bit());
         break;
     case ALU_AND:
-      hardware_thread->inst.set_alu_result(hardware_thread->inst.op1_val & hardware_thread->inst.op2_val);
+      hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() & hardware_thread->inst.get_op2_value());
         break;
     case ALU_OR:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val | hardware_thread->inst.op2_val);
+      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() | hardware_thread->inst.get_op2_value());
         break;
     case ALU_XOR:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val ^ hardware_thread->inst.op2_val);
+      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() ^ hardware_thread->inst.get_op2_value());
         break;
     case ALU_ANDN:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val & ~(hardware_thread->inst.op2_val));
+      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() & ~(hardware_thread->inst.get_op2_value()));
         break;
     case ALU_XNOR:
-      hardware_thread->inst.set_alu_result( ~(hardware_thread->inst.op1_val ^ hardware_thread->inst.op2_val));
+      hardware_thread->inst.set_alu_result( ~(hardware_thread->inst.get_op1_value() ^ hardware_thread->inst.get_op2_value()));
         break;
     case ALU_ORN:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val | ~(hardware_thread->inst.op2_val));
+      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() | ~(hardware_thread->inst.get_op2_value()));
         break;
     case ALU_SLL:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val << (hardware_thread->inst.op2_val & 0x1F));
+      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() << (hardware_thread->inst.get_op2_value() & 0x1F));
         break;
     case ALU_SRL:
         // In a logical shift righardware_thread, the sign bit shifted is always 0
-        signbit = hardware_thread->inst.op1_val & 0x80000000;
-        shift_amount = hardware_thread->inst.op2_val & 0x1F;
-        hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val);
+        signbit = hardware_thread->inst.get_op1_value() & 0x80000000;
+        shift_amount = hardware_thread->inst.get_op2_value() & 0x1F;
+        hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value());
 
         if (signbit) {
             while (shift_amount--) {
@@ -134,26 +134,26 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
                 hardware_thread->inst.set_alu_result( temporary_alu);
             }
         } else {
-	  hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val >> shift_amount);
+	  hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() >> shift_amount);
         }
 
         /* FIXME: HDP, I don't know why this shift is working like this */
         /*
-          signbit = hardware_thread->inst.op1_val & 0x80000000;
-          shift_amount = hardware_thread->inst.op2_val & 0x1F;
-          hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val);
+          signbit = hardware_thread->inst.get_op1_value() & 0x80000000;
+          shift_amount = hardware_thread->inst.get_op2_value() & 0x1F;
+          hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value());
           if ( signbit )
           while (shift_amount--) {
           temp = 0;
           hardware_thread->inst.set_alu_result( (hardware_thread->inst.alu_result >> 1) & 0x7FFFFFFF);
           }
           else
-          hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val >> shift_amount);
+          hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() >> shift_amount);
 
         */
         break;
     case ALU_SRA:
-      hardware_thread->inst.set_alu_result( hardware_thread->inst.op1_val >> (hardware_thread->inst.op2_val & 0x1F));
+      hardware_thread->inst.set_alu_result( hardware_thread->inst.get_op1_value() >> (hardware_thread->inst.get_op2_value() & 0x1F));
         break;
     case ALU_SETHI:
       hardware_thread->inst.set_alu_result( hardware_thread->inst.disp22 << 10);
@@ -163,9 +163,9 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
         /// maniuplation of 64 bits.
 #ifndef _NO_SYSTEMC_
         /// If signed multiplication
-        if (hardware_thread->inst.mul_signed == true) {
-            sc_uint<32> rs1(hardware_thread->inst.op1_val);
-            sc_uint<32> rs2(hardware_thread->inst.op2_val);
+      if (hardware_thread->inst.is_signed_multiply()) {
+            sc_uint<32> rs1(hardware_thread->inst.get_op1_value());
+            sc_uint<32> rs2(hardware_thread->inst.get_op2_value());
             sc_uint<32> y(hardware_thread->spec_regs.y);
             sc_uint<32> rsd;
             sc_uint<32> temp_rsd;
@@ -198,15 +198,15 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 
             /// Restore updated register values
             hardware_thread->spec_regs.y = y.to_uint();
-            hardware_thread->inst.op1_val = rs1.to_uint();
-            hardware_thread->inst.op2_val = rs2.to_uint();
+            hardware_thread->inst.set_op1_value(rs1.to_uint());
+            hardware_thread->inst.set_op2_value(rs2.to_uint());
             hardware_thread->inst.set_alu_result( rsd.to_uint());
         }
 #else
         /// If signed multiplication
-        if (hardware_thread->inst.mul_signed == true) {
-            uint32_t  rs1 = (hardware_thread->inst.op1_val);
-            uint32_t rs2 = (hardware_thread->inst.op2_val);
+      if (hardware_thread->inst.is_signed_multiply()) {
+            uint32_t  rs1 = (hardware_thread->inst.get_op1_value());
+            uint32_t rs2 = (hardware_thread->inst.get_op2_value());
             uint32_t y = (hardware_thread->spec_regs.y);
             uint32_t rsd;
             uint32_t  temp_rsd;
@@ -239,8 +239,8 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 
             /// Restore updated register values
             hardware_thread->spec_regs.y = y;
-            hardware_thread->inst.op1_val = rs1;
-            hardware_thread->inst.op2_val = rs2;
+            hardware_thread->inst.set_op1_value(rs1);
+            hardware_thread->inst.set_op2_value(rs2);
             hardware_thread->inst.set_alu_result( rsd);
         }
 
@@ -257,8 +257,8 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 
 #ifdef DBG_PIPE
     if (hardware_thread->inst.jump) {
-        cout << "ALU Result in execute stage: " << hardware_thread->inst.op1_val
-             << "+" << hardware_thread->inst.op2_val << "=" << hardware_thread->inst.get_alu_result() << endl;
+        cout << "ALU Result in execute stage: " << hardware_thread->inst.get_op1_value()
+             << "+" << hardware_thread->inst.get_op2_value() << "=" << hardware_thread->inst.get_alu_result() << endl;
     }
 #endif
 
@@ -281,25 +281,25 @@ unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
         icc |= 0x08;
     //overflow
     if ((((hardware_thread->inst.aluop == ALU_ADD) || (hardware_thread->inst.aluop == ALU_MUL)) &&
-            (hardware_thread->inst.op1_val >> 31) == (hardware_thread->inst.op2_val >> 31) &&
-	 (hardware_thread->inst.op1_val >> 31) != (hardware_thread->inst.get_alu_result() >> 31)) ||
-            (hardware_thread->inst.aluop == ALU_SUB && (hardware_thread->inst.op1_val >> 31) != (hardware_thread->inst.op2_val >> 31)
-             && (hardware_thread->inst.op1_val >> 31) != (hardware_thread->inst.get_alu_result() >> 31)))
+            (hardware_thread->inst.get_op1_value() >> 31) == (hardware_thread->inst.get_op2_value() >> 31) &&
+	 (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_alu_result() >> 31)) ||
+            (hardware_thread->inst.aluop == ALU_SUB && (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_op2_value() >> 31)
+             && (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_alu_result() >> 31)))
         icc |= 0x2;
 
     //carry
     if ((((hardware_thread->inst.aluop == ALU_ADD) || (hardware_thread->inst.aluop == ALU_MUL)) &&
-            (((hardware_thread->inst.op1_val >> 31) && (hardware_thread->inst.op2_val >> 31))
-             || (!(hardware_thread->inst.get_alu_result() >> 31) && (hardware_thread->inst.op1_val >> 31 || hardware_thread->inst.op2_val >> 31)))) ||
-            (hardware_thread->inst.aluop == ALU_SUB && ((!(hardware_thread->inst.op1_val >> 31) && !(~(hardware_thread->inst.op2_val) >> 31))
-                    || ((!(hardware_thread->inst.op1_val >> 31) || !(~(hardware_thread->inst.op2_val) >> 31)) &&
+            (((hardware_thread->inst.get_op1_value() >> 31) && (hardware_thread->inst.get_op2_value() >> 31))
+             || (!(hardware_thread->inst.get_alu_result() >> 31) && (hardware_thread->inst.get_op1_value() >> 31 || hardware_thread->inst.get_op2_value() >> 31)))) ||
+            (hardware_thread->inst.aluop == ALU_SUB && ((!(hardware_thread->inst.get_op1_value() >> 31) && !(~(hardware_thread->inst.get_op2_value()) >> 31))
+                    || ((!(hardware_thread->inst.get_op1_value() >> 31) || !(~(hardware_thread->inst.get_op2_value()) >> 31)) &&
                         (hardware_thread->inst.get_alu_result() >> 31)))))
         icc |= 0x1;
 
     //FIXME: Need to add carry
 
-    //  sc_uint<32> o1(hardware_thread->inst.op1_val);
-    //   sc_uint<32> o2(hardware_thread->inst.op2_val);
+    //  sc_uint<32> o1(hardware_thread->inst.get_op1_value());
+    //   sc_uint<32> o2(hardware_thread->inst.get_op2_value());
     //   sc_uint<33> res_tmp = o1 - o2;
     //   sc_uint<32> ticc(icc);
 
@@ -328,15 +328,15 @@ unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
     // see if it works better that way.
 
     /*
-      long long int res_tmp = hardware_thread->inst.op1_val - hardware_thread->inst.op2_val;
+      long long int res_tmp = hardware_thread->inst.get_op1_value() - hardware_thread->inst.get_op2_value();
       long long int mask = 0x100000000LL;
       cout << "before -> icc: " << (uint32_t)(icc) << endl;
 
       if ((hardware_thread->inst.aluop == ALU_ADD) || (hardware_thread->inst.aluop == ALU_ADDX)) {
-      // Both 31st bit of op1_val and op2_val are 1s then carry is set
-      if (((0x80000000 & hardware_thread->inst.op1_val ) && (0x80000000 & hardware_thread->inst.op2_val))
+      // Both 31st bit of op1_val and get_op2_value() are 1s then carry is set
+      if (((0x80000000 & hardware_thread->inst.get_op1_value() ) && (0x80000000 & hardware_thread->inst.get_op2_value()))
       || ( (! (mask & res_tmp)) &&
-      ((0x80000000 & hardware_thread->inst.op1_val) || (0x80000000 & hardware_thread->inst.op2_val)))   {
+      ((0x80000000 & hardware_thread->inst.get_op1_value()) || (0x80000000 & hardware_thread->inst.get_op2_value())))   {
 
       icc |= 0x01;
       }
@@ -349,12 +349,12 @@ unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
       }
       // Add for subtract.
       if ((hardware_thread->inst.aluop == ALU_SUB)) {
-      cout << "+HDP: ALU_SUB, op1: " << hardware_thread->inst.op1_val << ", op2: " << hardware_thread->inst.op2_val
+      cout << "+HDP: ALU_SUB, op1: " << hardware_thread->inst.get_op1_value() << ", op2: " << hardware_thread->inst.get_op2_value()
       << ", mask: " << mask << ", res_tmp: " << res_tmp << endl;
-      cout << " first part: " << ((! (0x80000000 & hardware_thread->inst.op1_val)) && (! (0x80000000 & hardware_thread->inst.op2_val))) << endl;
-      if (((! (0x80000000 & hardware_thread->inst.op1_val)) && (! (0x80000000 & hardware_thread->inst.op2_val)))
+      cout << " first part: " << ((! (0x80000000 & hardware_thread->inst.get_op1_value())) && (! (0x80000000 & hardware_thread->inst.get_op2_value()))) << endl;
+      if (((! (0x80000000 & hardware_thread->inst.get_op1_value())) && (! (0x80000000 & hardware_thread->inst.get_op2_value())))
       || ((mask && res_tmp) &&
-      ((! (0x80000000 & hardware_thread->inst.op1_val)) || (! (0x80000000 & hardware_thread->inst.op2_val)))))      {
+      ((! (0x80000000 & hardware_thread->inst.get_op1_value())) || (! (0x80000000 & hardware_thread->inst.get_op2_value())))))      {
       icc |= 0x01;
       cout << " SET CARRY " << endl;
       }

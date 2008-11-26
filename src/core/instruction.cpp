@@ -90,7 +90,7 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     case OP3_MULSCC:
         aluop = ALU_MUL;
         _write_registers = true;
-        mul_signed = true;
+        _signed_multiply = true;
         wicc = true;
         break;
     case OP3_ADD:
@@ -414,7 +414,7 @@ uint32_t instruction::get_write_data(uint32_t old_data, int offset) const {
         mask = 0xFFFFFFFF;
         break;
     }
-    return ((op3_val << shamt) & mask) | (old_data & ~mask);
+    return ((_op3_value << shamt) & mask) | (old_data & ~mask);
 }
 
 instruction::instruction(const instruction& mem) {
@@ -446,9 +446,9 @@ void instruction::operator=(const instruction & mem) {
     wp_increment = mem.wp_increment;
     sp_reg = mem.sp_reg;
 
-    op1_val = mem.op1_val;
-    op2_val = mem.op2_val;
-    op3_val = mem.op3_val;
+    _op1_value = mem._op1_value;
+    _op2_value = mem._op2_value;
+    _op3_value = mem._op3_value;
     imm = mem.imm;
     use_imm = mem.use_imm;
     _carry = mem._carry;
@@ -470,7 +470,7 @@ void instruction::operator=(const instruction & mem) {
     mux_specreg = mem.mux_specreg;
     wsreg = mem.wsreg;
     db_word = mem.db_word;
-    mul_signed = mem.mul_signed;
+    _signed_multiply = mem._signed_multiply;
 
 }
 bool instruction::operator==(const instruction & mem) const {
@@ -491,9 +491,9 @@ bool instruction::operator==(const instruction & mem) const {
            mem_size == mem.mem_size &&
            rs1sel == mem.rs1sel &&
            rs2sel == mem.rs2sel &&
-           op1_val == mem.op1_val &&
-           op2_val == mem.op2_val &&
-           op3_val == mem.op3_val &&
+           _op1_value == mem._op1_value &&
+           _op2_value == mem._op2_value &&
+           _op3_value == mem._op3_value &&
            imm == mem.imm &&
            use_imm == mem.use_imm &&
            _alu_result == mem._alu_result &&
@@ -512,7 +512,7 @@ bool instruction::operator==(const instruction & mem) const {
            wsreg == mem.wsreg &&
            db_word == mem.db_word &&
            _carry == mem._carry &&
-           mul_signed == mem.mul_signed;
+           _signed_multiply == mem._signed_multiply;
 }
 
 
@@ -551,9 +551,9 @@ void instruction::initialize() {
     _read_memory = false;
     mem_size = MEM_WORD;
 
-    op1_val = 0;
-    op2_val = 0;
-    op3_val = 0;
+    _op1_value = 0;
+    _op2_value = 0;
+    _op3_value = 0;
     _carry = false;
 
     _alu_result = 0;
@@ -564,7 +564,7 @@ void instruction::initialize() {
     pc = 0;
     mux_specreg = 0;
     wsreg = false;
-    mul_signed = false;
+    _signed_multiply = false;
 }
 
 bool instruction::check_end_sim() {
@@ -611,6 +611,10 @@ bool instruction::is_read_memory() const {
   return _read_memory;
 }
 
+bool instruction::is_signed_multiply() const {
+  return _signed_multiply;
+}
+
 bool instruction::is_unimplemented() const {
   return _unimplemented;
 }
@@ -635,6 +639,17 @@ int instruction::get_immediate_value() const {
   return imm;
 }
 
+int instruction::get_op1_value() const {
+  return _op1_value;
+}
+
+int instruction::get_op2_value() const {
+  return _op2_value;
+}
+
+int instruction::get_op3_value() const {
+  return _op3_value;
+}
 
 void instruction::set_alu_result(const int& result) {
   _alu_result = result;
@@ -673,6 +688,18 @@ void instruction::set_jump(const bool& jump) {
   _jump = jump;
 }
 
+void instruction::set_op1_value(const int& value) {
+  _op1_value = value;
+}
+
+void instruction::set_op2_value(const int& value) {
+  _op2_value = value;
+}
+
+void instruction::set_op3_value(const int& value) {
+  _op3_value = value;
+}
+
 void instruction::set_read_memory(const bool& read_memory) {
   _read_memory = read_memory;
 }
@@ -687,4 +714,8 @@ void instruction::set_write_registers(const bool& write) {
 
 void instruction::set_write_memory(const bool& write_memory) {
   _write_memory = write_memory;
+}
+
+void instruction::set_signed_multiply(const bool& signed_multiply) {
+  _signed_multiply = signed_multiply;
 }

@@ -73,7 +73,7 @@ void regacc::behavior() {
      */
     _immediate_instruction(input_thread);
 
-    input_thread->inst.op3_val = input_thread->regs.get_reg(input_thread->inst.rd, input_thread->spec_regs.curr_wp);
+    input_thread->inst.set_op3_value(input_thread->regs.get_reg(input_thread->inst.rd, input_thread->spec_regs.curr_wp));
     input_thread->spec_regs.curr_wp += input_thread->inst.wp_increment;
     input_thread->spec_regs.curr_wp %= REGISTER_WINDOWS;
     // FIXME: delete sp_reg.wp in instruction class
@@ -96,8 +96,8 @@ void regacc::_debug_print(const hw_thread_ptr& hardware_thread) {
 #ifdef DBG_PIPE
     cout << "*regacc*" << "  (" << sc_time_stamp() << ") ";
     cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex << hardware_thread._handle->get_pc() << hex <<  ", " << hardware_thread->inst ;
-    cout   << "\t+ "  << "op1_val: "  << dec << hardware_thread->inst.op1_val
-           << ", op2_val: "  << hardware_thread->inst.op2_val
+    cout   << "\t+ "  << "op1_val: "  << dec << hardware_thread->inst.get_op1_value()
+           << ", op2_val: "  << hardware_thread->inst.get_op2_value()
            << ", wp: " << hardware_thread->spec_regs.curr_wp << endl;
 #endif /* DBG_PIPE */
 }
@@ -106,7 +106,7 @@ void regacc::_double_word_instruction(const hw_thread_ptr& hardware_thread) {
     if ((hardware_thread->is_db_word_stalled()) && (!hardware_thread->is_deadline_stalled())) {
         hardware_thread->inst.rd += 1;
         // Increment rs1 by 4
-        hardware_thread->inst.op1_val =  hardware_thread->regs.get_reg(hardware_thread->inst.rs1, hardware_thread->spec_regs.curr_wp) + 4;
+        hardware_thread->inst.set_op1_value(hardware_thread->regs.get_reg(hardware_thread->inst.rs1, hardware_thread->spec_regs.curr_wp) + 4);
         /* If the instruction is a double LD, then we have to increment
            the destination register as well */
         // Reset the flag indicating the double word was handled.
@@ -114,7 +114,7 @@ void regacc::_double_word_instruction(const hw_thread_ptr& hardware_thread) {
         // Reset the instruction's double word flag off since it's handled.
         hardware_thread->inst.db_word = false;
     } else {
-        hardware_thread->inst.op1_val = hardware_thread->regs.get_reg(hardware_thread->inst.rs1, hardware_thread->spec_regs.curr_wp);
+      hardware_thread->inst.set_op1_value( hardware_thread->regs.get_reg(hardware_thread->inst.rs1, hardware_thread->spec_regs.curr_wp));
     }
 
 }
@@ -172,9 +172,9 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
 void regacc::_immediate_instruction(const hw_thread_ptr& hardware_thread) {
 
   if (hardware_thread->inst.is_immediate()) {
-    hardware_thread->inst.op2_val = hardware_thread->inst.get_immediate_value();
+    hardware_thread->inst.set_op2_value(hardware_thread->inst.get_immediate_value());
     } else {
-        hardware_thread->inst.op2_val = hardware_thread->regs.get_reg(hardware_thread->inst.rs2, hardware_thread->spec_regs.curr_wp);
+    hardware_thread->inst.set_op2_value( hardware_thread->regs.get_reg(hardware_thread->inst.rs2, hardware_thread->spec_regs.curr_wp));
     }
 
 }

@@ -160,7 +160,7 @@ public:    // Flag to see if instruction is a double word instruction
 
     uint32_t inst;
     int pc;
-    bool halt;
+
 
   short op;
   short op2;
@@ -178,16 +178,11 @@ public:    // Flag to see if instruction is a double word instruction
     int disp22;
 
     special_registers sp_reg;
-    int op1_val;
-    int op2_val;
-    int op3_val; // Value of register rd
     unsigned char icc;
 
     unsigned char mux_specreg;
     bool wsreg;
     short wp_increment;  
-    /// Whether it is a signed multiple or not
-    bool mul_signed;
   bool is_annul() const;
   bool is_branch() const;
   bool is_carry() const;
@@ -195,14 +190,17 @@ public:    // Flag to see if instruction is a double word instruction
   bool is_immediate() const;
   bool is_jump() const;
   bool is_read_memory() const;
+  bool is_signed_multiply() const;
   bool is_unimplemented() const;  
   bool is_write_registers() const;
   bool is_write_memory() const;
 
-
   int get_alu_result() const;
   short get_conditional_branch() const;
   int get_immediate_value() const;
+  int get_op1_value() const;
+  int get_op2_value() const;
+  int get_op3_value() const;
   
   void set_alu_result(const int& result);
   void set_annul(const bool& annul);
@@ -213,7 +211,11 @@ public:    // Flag to see if instruction is a double word instruction
   void set_immediate(const bool& immediate);
   void set_immediate_value(const int& immediate_value);
   void set_jump(const bool& jump);
+  void set_op1_value(const int& value);
+  void set_op2_value(const int& value);
+  void set_op3_value(const int& value);
   void set_read_memory(const bool& read);
+  void set_signed_multiply(const bool& signed_multiply);
   void set_unimplemented(const bool& unimplemented);
   void set_write_registers(const bool& write);
   void set_write_memory(const bool& write_memory);
@@ -237,6 +239,11 @@ private:
   bool _call;
       bool _write_memory;
     bool _read_memory;
+    /// Whether it is a signed multiple or not
+    bool _signed_multiply;
+    int _op1_value;
+    int _op2_value;
+    int _op3_value; // Value of register rd
 
     SRCMUX rs1sel;
     SRCMUX rs2sel;
@@ -250,7 +257,7 @@ private:
    */
       bool trap;
       unsigned char traptype;
-
+    bool halt;
 };
 
 #endif /* _INSTRUCTION_H_ */
