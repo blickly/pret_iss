@@ -27,6 +27,6 @@
 
 
 export SYSTEMC_HOME=$SYSTEMC
-export CXXFLAGS="$CXXFLAGS ADDFLAGS -I./include"
+export CXXFLAGS="ADDFLAGS -I./include"
 #export PRET_ISS=$HOME/workspace/pret_iss
 export RT_ADD_LDLIBS="$PRET_ISS/src/core/libpretcore.a"
