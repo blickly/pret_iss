@@ -74,7 +74,7 @@ void regacc::behavior() {
     _immediate_instruction(input_thread);
 
     input_thread->inst.set_op3_value(input_thread->regs.get_reg(input_thread->inst.rd, input_thread->spec_regs.curr_wp));
-    input_thread->spec_regs.curr_wp += input_thread->inst.wp_increment;
+    input_thread->spec_regs.curr_wp += input_thread->inst.get_increment_window_pointer();
     input_thread->spec_regs.curr_wp %= REGISTER_WINDOWS;
     // FIXME: delete sp_reg.wp in instruction class
     input_thread->inst.sp_reg.set_window_pointer(input_thread->spec_regs.curr_wp);
