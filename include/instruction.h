@@ -157,9 +157,7 @@ public:
 ///                      public variables                           ///
 public:    
 
-    ALU aluop;
-    MEMORY_SIZE mem_size;
-    special_registers sp_reg;
+
 
     bool is_annul() const;
     bool is_branch() const;
@@ -176,6 +174,7 @@ public:
     bool is_write_special_registers() const;
     bool is_write_memory() const;
 
+  ALU get_aluop() const;
     int get_alu_result() const;
     short get_conditional_branch() const;
   int get_disp22() const;
@@ -183,6 +182,7 @@ public:
     unsigned char get_icc() const;
     int get_immediate_value() const;
     short get_increment_window_pointer() const;
+  MEMORY_SIZE get_memory_size() const;
     int get_op1_value() const;
     int get_op2_value() const;
     int get_op3_value() const;
@@ -191,6 +191,8 @@ public:
   REGISTER_NUMBER get_rs2() const;
   REGISTER_NUMBER get_rd() const;
   unsigned char get_select_special_register() const ;
+  special_registers get_special_registers() const;
+  WINDOW_POINTER get_window_pointer() const;
   
     void set_alu_result(const int& result);
     void set_annul(const bool& annul);
@@ -215,6 +217,8 @@ public:
     void set_signed_multiply(const bool& signed_multiply);
   void set_select_special_register(const unsigned char& select_special);
     void set_unimplemented(const bool& unimplemented);
+  void set_window_pointer(const WINDOW_POINTER& window_pointer);
+
     void set_write_icc(const bool& write_icc);
     void set_write_registers(const bool& write);
     void set_write_special_registers(const bool& write_special);
@@ -230,7 +234,8 @@ private:
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
 private:
-    int _alu_result;
+    ALU _aluop;
+  int _alu_result;
     bool _annul;
     bool _branch;
     bool _call;
@@ -243,6 +248,7 @@ private:
   short _increment_window_pointer;
     uint32_t _inst;
   bool _jump;
+  MEMORY_SIZE _memory_size;
   short _op1;
     int _op1_value;
   short _op2;
@@ -257,7 +263,7 @@ private:
 
   unsigned char _select_special_register;  
       bool _signed_multiply;
-  
+    special_registers _special_registers;  
   bool _write_icc;
     bool _write_registers;
     bool _write_special_registers;

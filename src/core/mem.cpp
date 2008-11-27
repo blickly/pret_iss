@@ -70,7 +70,7 @@ void mem::behavior() {
         }
     } else if (ht->inst.is_write_memory()) {
         uint32_t old_data = 0xdeadbeef;
-        if (ht->inst.mem_size != MEM_WORD) {
+        if (ht->inst.get_memory_size() != MEM_WORD) {
             bool nul;  // FIXME: Implement store byte and store halfword correctly so that
             // they stall the pipeline for longer than normal stores.
             old_data = data_mem->read_data(ht->get_id(), aligned_addr, nul);

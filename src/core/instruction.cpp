@@ -61,7 +61,7 @@ void instruction::decode() {
     switch (_op1) {
     case OP_CALL:
         _call = 1;
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _rd = 15;
         break;
@@ -86,130 +86,130 @@ void instruction::decode() {
 void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
     switch (op3) {
     case OP3_MULSCC:
-        aluop = ALU_MUL;
+        _aluop = ALU_MUL;
         _write_registers = true;
         _signed_multiply = true;
         _write_icc = true;
         break;
     case OP3_ADD:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         break;
     case OP3_ADDX:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _carry = true;
         break;
     case OP3_ADDXCC:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _write_icc = true;
         _carry = true;
         break;
     case OP3_AND:
-        aluop = ALU_AND;
+        _aluop = ALU_AND;
         _write_registers = true;
         break;
     case OP3_OR:
-        aluop = ALU_OR;
+        _aluop = ALU_OR;
         _write_registers = true;
         break;
     case OP3_XOR:
-        aluop = ALU_XOR;
+        _aluop = ALU_XOR;
         _write_registers = true;
         break;
     case OP3_SUB:
-        aluop = ALU_SUB;
+        _aluop = ALU_SUB;
         _write_registers = true;
         break;
     case OP3_SUBX:
-        aluop = ALU_SUB;
+        _aluop = ALU_SUB;
         _write_registers = true;
         _carry = true;
         break;
     case OP3_SUBXCC:
-        aluop = ALU_SUB;
+        _aluop = ALU_SUB;
         _write_registers = true;
         _carry = true;
         _write_icc = true;
         break;
     case OP3_ANDN:
-        aluop = ALU_ANDN;
+        _aluop = ALU_ANDN;
         _write_registers = true;
         break;
     case OP3_ORN:
-        aluop = ALU_ORN;
+        _aluop = ALU_ORN;
         _write_registers = true;
         break;
     case OP3_XNOR:
-        aluop = ALU_XNOR;
+        _aluop = ALU_XNOR;
         _write_registers = true;
         break;
     case OP3_ADDCC:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _write_icc = true;
         break;
     case OP3_ANDCC:
-        aluop = ALU_AND;
+        _aluop = ALU_AND;
         _write_registers = true;
         _write_icc = true;
         break;
     case OP3_ORCC:
-        aluop = ALU_OR;
+        _aluop = ALU_OR;
         _write_registers = true;
         _write_icc = true;
         break;
     case OP3_XORCC:
-        aluop = ALU_XOR;
+        _aluop = ALU_XOR;
         _write_registers = true;
         _write_icc = true;
         break;
     case OP3_SUBCC:
-        aluop = ALU_SUB;
+        _aluop = ALU_SUB;
         _write_registers = true;
         _write_icc = true;
         break;
     case OP3_ANDNCC:
-        aluop = ALU_ANDN;
+        _aluop = ALU_ANDN;
         _write_registers = true;
         _write_icc = true;
         break;
     case OP3_ORNCC:
-        aluop = ALU_ORN;
+        _aluop = ALU_ORN;
         _write_registers = true;
         _write_icc = true;
         break;
     case OP3_XNORCC:
-        aluop = ALU_XNOR;
+        _aluop = ALU_XNOR;
         _write_registers = true;
         _write_icc = true;
         break;
     case OP3_JMPL:
         _jump = 1;
         _write_registers = true;
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         break;
     case OP3_SAVE:
         _increment_window_pointer = -1;
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         break;
     case OP3_RESTORE:
         _increment_window_pointer = 1;
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         break;
     case OP3_SLL:
-        aluop = ALU_SLL;
+        _aluop = ALU_SLL;
         _write_registers = true;
         break;
     case OP3_SRL:
-        aluop = ALU_SRL;
+        _aluop = ALU_SRL;
         _write_registers = true;
         break;
     case OP3_SRA:
-        aluop = ALU_SRA;
+        _aluop = ALU_SRA;
         _write_registers = true;
         break;
     case OP3_RDPSR:
@@ -235,21 +235,21 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
 
         _select_special_register = ((_rd != 0) ? SREG_ASR : SREG_Y);
         _write_special_registers = true;
-        aluop = ALU_XOR;
+        _aluop = ALU_XOR;
         break;
     case OP3_WRPSR:
         _select_special_register = SREG_PSR;
-        aluop = ALU_XOR;
+        _aluop = ALU_XOR;
         _write_special_registers = true;
         break;
     case OP3_WRWIM:
         _select_special_register = SREG_WIM;
-        aluop = ALU_XOR;
+        _aluop = ALU_XOR;
         _write_special_registers = true;
         break;
     case OP3_WRTBR:
         _select_special_register = SREG_TBR;
-        aluop = ALU_XOR;
+        _aluop = ALU_XOR;
         _write_special_registers = true;
         break;
         // Perform the DMA transfer
@@ -269,69 +269,69 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
 void instruction::decode_memory(const OP3_MEMORY& op3) {
     switch (op3) {
     case OP3_ST:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_memory = true;
         break;
     case OP3_STB:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_memory = true;
-        mem_size = MEM_UNSIGNED_BYTE;
+        _memory_size = MEM_UNSIGNED_BYTE;
         break;
     case OP3_STD:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_memory = true;
         _db_word_instruction = true;
         break;
     case OP3_STH:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_memory = true;
-        mem_size = MEM_UNSIGNED_HALFWORD;
+        _memory_size = MEM_UNSIGNED_HALFWORD;
         break;
     case OP3_LD:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _read_memory = true;
         break;
     case OP3_LDUB:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _read_memory = true;
-        mem_size = MEM_UNSIGNED_BYTE;
+        _memory_size = MEM_UNSIGNED_BYTE;
         break;
     case OP3_LDUH:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _read_memory = true;
-        mem_size = MEM_UNSIGNED_HALFWORD;
+        _memory_size = MEM_UNSIGNED_HALFWORD;
         break;
     case OP3_LDSB:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _read_memory = true;
-        mem_size = MEM_SIGNED_BYTE;
+        _memory_size = MEM_SIGNED_BYTE;
         break;
     case OP3_LDSH:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _read_memory = true;
-        mem_size = MEM_SIGNED_HALFWORD;
+        _memory_size = MEM_SIGNED_HALFWORD;
         break;
     case OP3_LDD:
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _write_registers = true;
         _read_memory = true;
-        mem_size = MEM_DOUBLEWORD;
+        _memory_size = MEM_DOUBLEWORD;
         _db_word_instruction = true;
         break;
     case OP3_DEAD:
         //cout << "DETECTED DEADLINE INSTRUCTION IN WRONG PLACE\n" ;
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _select_special_register = SREG_DT;
         break;
         // These are opcodes added for DMA coprocessor instructions.
     case OP3_STC:
         //        cout << "COPROC: STC" << endl;
-        aluop = ALU_ADD;
+        _aluop = ALU_ADD;
         _select_special_register = SREG_CP;
         _write_special_registers = true;
         break;
@@ -345,7 +345,7 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
 void instruction::decode_sethi_branches(const OP2& op2) {
     switch (op2) {
     case OP2_SETHI: //NOP
-        aluop = ALU_SETHI;
+        _aluop = ALU_SETHI;
         _write_registers = true;
         break;
     case OP2_BICC:
@@ -359,7 +359,7 @@ void instruction::decode_sethi_branches(const OP2& op2) {
 
 void instruction::read_data(uint32_t data_in, int offset) {
     int shamt = offset * 8;
-    switch (mem_size) {
+    switch (_memory_size) {
     case MEM_SIGNED_BYTE:
         _alu_result = ((signed int) data_in << shamt) >> 24;
         break;
@@ -389,7 +389,7 @@ uint32_t instruction::get_write_data(uint32_t old_data, int offset) const {
     int shamt = 0;
     int mask = 0xFFFFFFFF;
 
-    switch (mem_size) {
+    switch (_memory_size) {
     case MEM_SIGNED_BYTE:
         shamt = (3 - offset) * 8;
         mask = 0xFF << shamt;
@@ -432,17 +432,17 @@ void instruction::operator=(const instruction& from_instruction) {
     _rs1 = from_instruction._rs1;
     _rs2 = from_instruction._rs2;
     _rd = from_instruction._rd;
-    aluop = from_instruction.aluop;
+    _aluop = from_instruction._aluop;
     _write_registers = from_instruction._write_registers;
     _write_memory = from_instruction._write_memory;
     _read_memory = from_instruction._read_memory;
-    mem_size = from_instruction.mem_size;
+    _memory_size = from_instruction._memory_size;
     _rs1sel = from_instruction._rs1sel;
     _rs2sel = from_instruction._rs2sel;
     _rdsel = from_instruction._rdsel;
 
     _increment_window_pointer = from_instruction._increment_window_pointer;
-    sp_reg = from_instruction.sp_reg;
+    _special_registers = from_instruction._special_registers;
 
     _op1_value = from_instruction._op1_value;
     _op2_value = from_instruction._op2_value;
@@ -483,11 +483,11 @@ bool instruction::operator==(const instruction& compare_instruction) const {
            _rs1 == compare_instruction._rs1 &&
            _rs2 == compare_instruction._rs2 &&
            _rd == compare_instruction._rd &&
-           aluop == compare_instruction.aluop &&
+           _aluop == compare_instruction._aluop &&
            _write_registers == compare_instruction._write_registers &&
            _write_memory == compare_instruction._write_memory &&
            _read_memory == compare_instruction._read_memory &&
-           mem_size == compare_instruction.mem_size &&
+           _memory_size == compare_instruction._memory_size &&
            _rs1sel == compare_instruction._rs1sel &&
            _rs2sel == compare_instruction._rs2sel &&
            _rdsel == compare_instruction._rdsel &&
@@ -537,19 +537,19 @@ void instruction::initialize() {
     _icc = 0x0;
     _disp22 = 0;
 
-    sp_reg.set_window_pointer(0);
+    _special_registers.set_window_pointer(0);
     _increment_window_pointer = 0;
 
     _rs1sel = SRCMUX_RA;
     _rs2sel = SRCMUX_RA;
     _rdsel = SRCMUX_RA;
 
-    aluop = ALU_NOP;
+    _aluop = ALU_NOP;
     _write_registers = false;
     use_imm = false;
     _write_memory = false;
     _read_memory = false;
-    mem_size = MEM_WORD;
+    _memory_size = MEM_WORD;
 
     _op1_value = 0;
     _op2_value = 0;
@@ -632,6 +632,10 @@ bool instruction::is_write_memory() const {
     return _write_memory;
 }
 
+ALU instruction::get_aluop() const {
+  return _aluop;
+}
+
 int instruction::get_alu_result() const {
     return _alu_result;
 }
@@ -660,6 +664,9 @@ short instruction::get_increment_window_pointer() const {
   return _increment_window_pointer;
 }
 
+MEMORY_SIZE instruction::get_memory_size() const {
+  return _memory_size;
+}
 
 int instruction::get_op1_value() const {
     return _op1_value;
@@ -691,6 +698,14 @@ REGISTER_NUMBER instruction::get_rd() const {
 
 unsigned char instruction::get_select_special_register() const {
   return _select_special_register;
+}
+
+special_registers instruction::get_special_registers() const {
+  return _special_registers;
+}
+
+WINDOW_POINTER instruction::get_window_pointer() const {
+  return _special_registers.get_window_pointer();
 }
 
 void instruction::set_alu_result(const int& result) {
@@ -779,6 +794,10 @@ void instruction::set_select_special_register(const unsigned char& special_regis
 
 void instruction::set_unimplemented(const bool& unimplemented) {
     _unimplemented = unimplemented;
+}
+
+void instruction::set_window_pointer(const WINDOW_POINTER& window_pointer) {
+  _special_registers.set_window_pointer(window_pointer);
 }
 
 void instruction::set_write_icc(const bool& write_icc) {

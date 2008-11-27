@@ -83,7 +83,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
     int temporary_alu = 0;
 
     //ALU Operations
-    switch (hardware_thread->inst.aluop) {
+    switch (hardware_thread->inst.get_aluop()) {
     case ALU_ADD:
         hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() + hardware_thread->inst.get_op2_value());
         // If the carry has to be used
@@ -280,92 +280,21 @@ unsigned char execute::geticc(const hw_thread_ptr& hardware_thread) {
     if (hardware_thread->inst.get_alu_result() < 0)
         icc |= 0x08;
     //overflow
-    if ((((hardware_thread->inst.aluop == ALU_ADD) || (hardware_thread->inst.aluop == ALU_MUL)) &&
+    if ((((hardware_thread->inst.get_aluop() == ALU_ADD) || (hardware_thread->inst.get_aluop() == ALU_MUL)) &&
             (hardware_thread->inst.get_op1_value() >> 31) == (hardware_thread->inst.get_op2_value() >> 31) &&
             (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_alu_result() >> 31)) ||
-            (hardware_thread->inst.aluop == ALU_SUB && (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_op2_value() >> 31)
+            (hardware_thread->inst.get_aluop() == ALU_SUB && (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_op2_value() >> 31)
              && (hardware_thread->inst.get_op1_value() >> 31) != (hardware_thread->inst.get_alu_result() >> 31)))
         icc |= 0x2;
 
     //carry
-    if ((((hardware_thread->inst.aluop == ALU_ADD) || (hardware_thread->inst.aluop == ALU_MUL)) &&
+    if ((((hardware_thread->inst.get_aluop() == ALU_ADD) || (hardware_thread->inst.get_aluop() == ALU_MUL)) &&
             (((hardware_thread->inst.get_op1_value() >> 31) && (hardware_thread->inst.get_op2_value() >> 31))
              || (!(hardware_thread->inst.get_alu_result() >> 31) && (hardware_thread->inst.get_op1_value() >> 31 || hardware_thread->inst.get_op2_value() >> 31)))) ||
-            (hardware_thread->inst.aluop == ALU_SUB && ((!(hardware_thread->inst.get_op1_value() >> 31) && !(~(hardware_thread->inst.get_op2_value()) >> 31))
+            (hardware_thread->inst.get_aluop() == ALU_SUB && ((!(hardware_thread->inst.get_op1_value() >> 31) && !(~(hardware_thread->inst.get_op2_value()) >> 31))
                     || ((!(hardware_thread->inst.get_op1_value() >> 31) || !(~(hardware_thread->inst.get_op2_value()) >> 31)) &&
                         (hardware_thread->inst.get_alu_result() >> 31)))))
         icc |= 0x1;
-
-    //FIXME: Need to add carry
-
-    //  sc_uint<32> o1(hardware_thread->inst.get_op1_value());
-    //   sc_uint<32> o2(hardware_thread->inst.get_op2_value());
-    //   sc_uint<33> res_tmp = o1 - o2;
-    //   sc_uint<32> ticc(icc);
-
-    //   cout << "before: ticc: " << ticc.to_string() << ", icc: " << (uint32_t) icc << ", res_tmp: "<< res_tmp.to_string() << endl;
-
-    //   if ((hardware_thread->inst.aluop == ALU_ADD) || (hardware_thread->inst.aluop == ALU_ADDX)) {
-    //      ticc[0] = (o1[31] & o2[31]) |
-    //        (!(res_tmp[32]) & (o1[31] | o2[31]));
-
-    //     }
-
-    //   if ((hardware_thread->inst.aluop == ALU_SUB)) {
-    //      ticc[0] = ((! o1[31]) & !o2[31]) |
-    //        (res_tmp[32] & ((! o1[31]) | !o2[31]));
-
-
-    //   }
-
-    //   icc = 0x0000000f & ticc.to_uint();
-    //   cout << "after: ticc: " << ticc.to_string() << ", icc: " << hex << (uint32_t)icc << ", res_tmp: "<< res_tmp.to_string() << endl;
-
-    // Took this from the LEON. Only thing is that they use a result
-    // which is 32 bits. This is definitely going to be a problem for
-    // us since we need to do the computation with an extra bit, but
-    // we can't. So we need to temporarily do it with long longs and
-    // see if it works better that way.
-
-    /*
-      long long int res_tmp = hardware_thread->inst.get_op1_value() - hardware_thread->inst.get_op2_value();
-      long long int mask = 0x100000000LL;
-      cout << "before -> icc: " << (uint32_t)(icc) << endl;
-
-      if ((hardware_thread->inst.aluop == ALU_ADD) || (hardware_thread->inst.aluop == ALU_ADDX)) {
-      // Both 31st bit of op1_val and get_op2_value() are 1s then carry is set
-      if (((0x80000000 & hardware_thread->inst.get_op1_value() ) && (0x80000000 & hardware_thread->inst.get_op2_value()))
-      || ( (! (mask & res_tmp)) &&
-      ((0x80000000 & hardware_thread->inst.get_op1_value()) || (0x80000000 & hardware_thread->inst.get_op2_value())))   {
-
-      icc |= 0x01;
-      }
-      else {
-      unsigned char ticc = 0;
-      ticc = ticc | icc;
-      icc = ticc;
-      }
-
-      }
-      // Add for subtract.
-      if ((hardware_thread->inst.aluop == ALU_SUB)) {
-      cout << "+HDP: ALU_SUB, op1: " << hardware_thread->inst.get_op1_value() << ", op2: " << hardware_thread->inst.get_op2_value()
-      << ", mask: " << mask << ", res_tmp: " << res_tmp << endl;
-      cout << " first part: " << ((! (0x80000000 & hardware_thread->inst.get_op1_value())) && (! (0x80000000 & hardware_thread->inst.get_op2_value()))) << endl;
-      if (((! (0x80000000 & hardware_thread->inst.get_op1_value())) && (! (0x80000000 & hardware_thread->inst.get_op2_value())))
-      || ((mask && res_tmp) &&
-      ((! (0x80000000 & hardware_thread->inst.get_op1_value())) || (! (0x80000000 & hardware_thread->inst.get_op2_value())))))      {
-      icc |= 0x01;
-      cout << " SET CARRY " << endl;
-      }
-      else {
-      unsigned char ticc = 0;
-      ticc = ticc | icc;
-      icc = ticc;
-      }
-      }
-      cout << "after -> icc: " << (uint32_t)(icc) << endl;
-    */
 
     return icc;
 }
