@@ -171,7 +171,7 @@ public:
     int disp22;
     special_registers sp_reg;
     unsigned char mux_specreg;
-    short wp_increment;
+
 
     bool is_annul() const;
     bool is_branch() const;
@@ -261,7 +261,7 @@ private:
     bool trap;
     unsigned char traptype;
     bool halt;
-
+    short wp_increment;
 };
 
 #endif /* _INSTRUCTION_H_ */

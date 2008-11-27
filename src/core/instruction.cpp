@@ -193,12 +193,12 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         aluop = ALU_ADD;
         break;
     case OP3_SAVE:
-        wp_increment = -1;
+        _increment_window_pointer = -1;
         aluop = ALU_ADD;
         _write_registers = true;
         break;
     case OP3_RESTORE:
-        wp_increment = 1;
+        _increment_window_pointer = 1;
         aluop = ALU_ADD;
         _write_registers = true;
         break;
@@ -443,7 +443,7 @@ void instruction::operator=(const instruction & mem) {
     rs2sel = mem.rs2sel;
     rdsel = mem.rdsel;
 
-    wp_increment = mem.wp_increment;
+    _increment_window_pointer = mem._increment_window_pointer;
     sp_reg = mem.sp_reg;
 
     _op1_value = mem._op1_value;
@@ -538,7 +538,7 @@ void instruction::initialize() {
     disp22 = 0;
 
     sp_reg.set_window_pointer(0);
-    wp_increment = 0;
+    _increment_window_pointer = 0;
 
     rs1sel = SRCMUX_RA;
     rs2sel = SRCMUX_RA;
@@ -655,6 +655,10 @@ int instruction::get_immediate_value() const {
     return imm;
 }
 
+short instruction::get_increment_window_pointer() const {
+  return _increment_window_pointer;
+}
+
 int instruction::get_op1_value() const {
     return _op1_value;
 }
@@ -703,6 +707,9 @@ void instruction::set_immediate(const bool& immediate) {
     use_imm = immediate;
 }
 
+void instruction::set_increment_window_pointer(const short& window_pointer) {
+  _increment_window_pointer = window_pointer;
+}
 
 void instruction::set_immediate_value(const int& immediate_value) {
     imm = immediate_value;
