@@ -136,7 +136,7 @@ public:
      * @param output_instruction Instruction to output.
      */
     inline friend ostream& operator<<(ostream& out, const instruction& output_instruction) {
-        out << setw(8) << setfill('0') << hex << output_instruction.inst;
+        out << setw(8) << setfill('0') << hex << output_instruction._inst;
         return out;
     }
 
@@ -157,21 +157,9 @@ public:
 ///                      public variables                           ///
 public:    
 
-    uint32_t inst;
-    int pc;
-    short op;
-    short op2;
-    short op3;
-    REGISTER_NUMBER rs1;
-    REGISTER_NUMBER rs2;
-    REGISTER_NUMBER rd;
     ALU aluop;
     MEMORY_SIZE mem_size;
-    int disp30;
-    int disp22;
     special_registers sp_reg;
-    unsigned char mux_specreg;
-
 
     bool is_annul() const;
     bool is_branch() const;
@@ -190,13 +178,20 @@ public:
 
     int get_alu_result() const;
     short get_conditional_branch() const;
+  int get_disp22() const;
+  int get_disp30() const;
     unsigned char get_icc() const;
     int get_immediate_value() const;
     short get_increment_window_pointer() const;
     int get_op1_value() const;
     int get_op2_value() const;
     int get_op3_value() const;
-
+  int get_pc() const;
+  REGISTER_NUMBER get_rs1() const;
+  REGISTER_NUMBER get_rs2() const;
+  REGISTER_NUMBER get_rd() const;
+  unsigned char get_select_special_register() const ;
+  
     void set_alu_result(const int& result);
     void set_annul(const bool& annul);
     void set_branch(const bool& branch);
@@ -204,6 +199,8 @@ public:
     void set_carry(const bool& carry);
     void set_conditional_branch(const short& conditional);
     void set_db_word(const bool& db_word);
+  void set_disp22(const int& disp22);
+  void set_disp30(const int& disp30);
     void set_icc(const unsigned char& icc);
     void set_immediate(const bool& immediate);
     void set_immediate_value(const int& immediate_value);
@@ -212,8 +209,11 @@ public:
     void set_op1_value(const int& value);
     void set_op2_value(const int& value);
     void set_op3_value(const int& value);
+  void set_pc(const int& pc);
+  void set_rd(const REGISTER_NUMBER& rd);
     void set_read_memory(const bool& read);
     void set_signed_multiply(const bool& signed_multiply);
+  void set_select_special_register(const unsigned char& select_special);
     void set_unimplemented(const bool& unimplemented);
     void set_write_icc(const bool& write_icc);
     void set_write_registers(const bool& write);
@@ -233,30 +233,43 @@ private:
     int _alu_result;
     bool _annul;
     bool _branch;
-    short _conditional_branch;
+    bool _call;
+  short _conditional_branch;
     bool _db_word_instruction;
+      int _disp30;
+    int _disp22;
+
     unsigned char _icc;
   short _increment_window_pointer;
+    uint32_t _inst;
   bool _jump;
-    bool _write_icc;
+  short _op1;
+    int _op1_value;
+  short _op2;
+    int _op2_value;
+  short _op3;
+      int _op3_value; // Value of register rd
+    int _pc;
+    bool _read_memory;
+      REGISTER_NUMBER _rs1;
+    REGISTER_NUMBER _rs2;
+    REGISTER_NUMBER _rd;
+
+  unsigned char _select_special_register;  
+      bool _signed_multiply;
+  
+  bool _write_icc;
     bool _write_registers;
     bool _write_special_registers;
-
-    bool _call;
     bool _write_memory;
-    bool _read_memory;
-    /// Whether it is a signed multiple or not
-    bool _signed_multiply;
-    int _op1_value;
-    int _op2_value;
-    int _op3_value; // Value of register rd
 
-    SRCMUX rs1sel;
-    SRCMUX rs2sel;
-    SRCMUX rdsel;
+  
+    SRCMUX _rs1sel;
+    SRCMUX _rs2sel;
+    SRCMUX _rdsel;
     bool _carry;
     bool use_imm;
-    int imm;
+    int _imm;
     bool _unimplemented;
 
     /* FIXME: These are probably unimplemented.

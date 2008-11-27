@@ -156,7 +156,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
         hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op1_value() >> (hardware_thread->inst.get_op2_value() & 0x1F));
         break;
     case ALU_SETHI:
-        hardware_thread->inst.set_alu_result(hardware_thread->inst.disp22 << 10);
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_disp22() << 10);
         break;
     case ALU_MUL:
         /// Hiren: Going to use SystemC data types for easier

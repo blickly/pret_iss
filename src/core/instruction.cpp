@@ -32,55 +32,53 @@
 
 instruction::instruction() {
     initialize();
-    inst = 0x01000000; //NOP
+    _inst = 0x01000000; //NOP
 }
 
 instruction::instruction(uint32_t binary_representation) {
     initialize();
-    inst = binary_representation;
+    _inst = binary_representation;
 }
 
 void instruction::decode() {
-    op = inst >> 30;
-    op2 = (inst & 0x01C00000) >> 22;
-    op3 = (inst & 0X01F80000) >> 19;
-    rd = (inst & 0x3E000000) >> 25;//0011 1110 0000
-    rs1 = (inst & 0X0007C000) >> 14;// 0000 0000 0000 0111 1100
-    use_imm = (inst & 0X00002000) >> 12; //0000 0000 0000 0000 0010
-    imm = (inst & 0X00001FFF) << 19;
-    imm = imm >> 19;
+    _op1 = _inst >> 30;
+    _op2 = (_inst & 0x01C00000) >> 22;
+    _op3 = (_inst & 0X01F80000) >> 19;
+    _rd = (_inst & 0x3E000000) >> 25;//0011 1110 0000
+    _rs1 = (_inst & 0X0007C000) >> 14;// 0000 0000 0000 0111 1100
+    use_imm = (_inst & 0X00002000) >> 12; //0000 0000 0000 0000 0010
+    _imm = (_inst & 0X00001FFF) << 19;
+    _imm = _imm >> 19;
+    _rs2 = (_inst & 0X0000001F);
+    _conditional_branch = (_inst & 0X1E000000) >> 25;
+    _annul = (_inst & 0X20000000) >> 29;
 
+    _disp30 = (_inst & 0X3FFFFFFF) << 2;
+    _disp30 = _disp30 >> 2;
+    _disp22 = (_inst & 0X003FFFFF) << 10;
+    _disp22 = _disp22 >> 10;
 
-    rs2 = (inst & 0X0000001F);
-    _conditional_branch = (inst & 0X1E000000) >> 25;
-    _annul = (inst & 0X20000000) >> 29;
-
-    disp30 = (inst & 0X3FFFFFFF) << 2;
-    disp30 = disp30 >> 2;
-    disp22 = (inst & 0X003FFFFF) << 10;
-    disp22 = disp22 >> 10;
-
-    switch (op) {
+    switch (_op1) {
     case OP_CALL:
         _call = 1;
         aluop = ALU_ADD;
         _write_registers = true;
-        rd = 15;
+        _rd = 15;
         break;
     case OP_SETHI_BRANCHES:
-        decode_sethi_branches(static_cast<OP2>(op2));
+        decode_sethi_branches(static_cast<OP2>(_op2));
         break;
     case OP_MEMORY:
-        decode_memory(static_cast<OP3_MEMORY>(op3));
+        decode_memory(static_cast<OP3_MEMORY>(_op3));
         break;
     case OP_ARITHMETIC_ETC:
-        decode_arithmetic(static_cast<OP3_ARITHMETIC>(op3));
+        decode_arithmetic(static_cast<OP3_ARITHMETIC>(_op3));
         break;
     default:
         _unimplemented = true;
         break;
     };
-    if (rd == 0) {
+    if (_rd == 0) {
         _write_registers = false;
     }
 }
@@ -215,19 +213,19 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         _write_registers = true;
         break;
     case OP3_RDPSR:
-        mux_specreg = SREG_PSR;
+        _select_special_register = SREG_PSR;
         _write_registers = true;
         break;
     case OP3_RDASR:
-        mux_specreg = (rs1 ? SREG_ASR : SREG_Y);
+        _select_special_register = (_rs1 ? SREG_ASR : SREG_Y);
         _write_registers = true;
         break;
     case OP3_RDWIM:
-        mux_specreg = SREG_WIM;
+        _select_special_register = SREG_WIM;
         _write_registers = true;
         break;
     case OP3_RDTBR:
-        mux_specreg = SREG_TBR;
+        _select_special_register = SREG_TBR;
         _write_registers = true;
         break;
     case OP3_DEAD:
@@ -235,22 +233,22 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         break;
     case OP3_WRY:
 
-        mux_specreg = ((rd != 0) ? SREG_ASR : SREG_Y);
+        _select_special_register = ((_rd != 0) ? SREG_ASR : SREG_Y);
         _write_special_registers = true;
         aluop = ALU_XOR;
         break;
     case OP3_WRPSR:
-        mux_specreg = SREG_PSR;
+        _select_special_register = SREG_PSR;
         aluop = ALU_XOR;
         _write_special_registers = true;
         break;
     case OP3_WRWIM:
-        mux_specreg = SREG_WIM;
+        _select_special_register = SREG_WIM;
         aluop = ALU_XOR;
         _write_special_registers = true;
         break;
     case OP3_WRTBR:
-        mux_specreg = SREG_TBR;
+        _select_special_register = SREG_TBR;
         aluop = ALU_XOR;
         _write_special_registers = true;
         break;
@@ -328,13 +326,13 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
     case OP3_DEAD:
         //cout << "DETECTED DEADLINE INSTRUCTION IN WRONG PLACE\n" ;
         aluop = ALU_ADD;
-        mux_specreg = SREG_DT;
+        _select_special_register = SREG_DT;
         break;
         // These are opcodes added for DMA coprocessor instructions.
     case OP3_STC:
         //        cout << "COPROC: STC" << endl;
         aluop = ALU_ADD;
-        mux_specreg = SREG_CP;
+        _select_special_register = SREG_CP;
         _write_special_registers = true;
         break;
     default:
@@ -383,7 +381,7 @@ void instruction::read_data(uint32_t data_in, int offset) {
 
 void instruction::set_inst(uint32_t inbits) {
     initialize();
-    inst = inbits;
+    _inst = inbits;
 }
 
 uint32_t instruction::get_write_data(uint32_t old_data, int offset) const {
@@ -421,128 +419,130 @@ instruction::instruction(const instruction& mem) {
     this->operator=(mem); //*this = mem;
 }
 
-void instruction::operator=(const instruction & mem) {
-    _unimplemented = mem._unimplemented;
-    halt = mem.halt;
-    pc = mem.pc;
-    inst = mem.inst;
+void instruction::operator=(const instruction& from_instruction) {
+    _unimplemented = from_instruction._unimplemented;
+    halt = from_instruction.halt;
+    _pc = from_instruction._pc;
+    _inst = from_instruction._inst;
 
-    op = mem.op;
-    op2 = mem.op2;
-    op3 = mem.op3;
+    _op1 = from_instruction._op1;
+    _op2 = from_instruction._op2;
+    _op3 = from_instruction._op3;
 
-    rs1 = mem.rs1;
-    rs2 = mem.rs2;
-    rd = mem.rd;
-    aluop = mem.aluop;
-    _write_registers = mem._write_registers;
-    _write_memory = mem._write_memory;
-    _read_memory = mem._read_memory;
-    mem_size = mem.mem_size;
-    rs1sel = mem.rs1sel;
-    rs2sel = mem.rs2sel;
-    rdsel = mem.rdsel;
+    _rs1 = from_instruction._rs1;
+    _rs2 = from_instruction._rs2;
+    _rd = from_instruction._rd;
+    aluop = from_instruction.aluop;
+    _write_registers = from_instruction._write_registers;
+    _write_memory = from_instruction._write_memory;
+    _read_memory = from_instruction._read_memory;
+    mem_size = from_instruction.mem_size;
+    _rs1sel = from_instruction._rs1sel;
+    _rs2sel = from_instruction._rs2sel;
+    _rdsel = from_instruction._rdsel;
 
-    _increment_window_pointer = mem._increment_window_pointer;
-    sp_reg = mem.sp_reg;
+    _increment_window_pointer = from_instruction._increment_window_pointer;
+    sp_reg = from_instruction.sp_reg;
 
-    _op1_value = mem._op1_value;
-    _op2_value = mem._op2_value;
-    _op3_value = mem._op3_value;
-    imm = mem.imm;
-    use_imm = mem.use_imm;
-    _carry = mem._carry;
+    _op1_value = from_instruction._op1_value;
+    _op2_value = from_instruction._op2_value;
+    _op3_value = from_instruction._op3_value;
+    _imm = from_instruction._imm;
+    use_imm = from_instruction.use_imm;
+    _carry = from_instruction._carry;
 
-    _alu_result = mem._alu_result;
+    _alu_result = from_instruction._alu_result;
 
 
-    _branch = mem._branch;
-    _jump = mem._jump;
-    _conditional_branch = mem._conditional_branch;
-    _annul = mem._annul;
-    _call = mem._call;
-    disp30 = mem.disp30;
-    _write_icc = mem._write_icc;
-    _icc = mem._icc;
-    disp22 = mem.disp22;
-    trap = mem.trap;
-    traptype = mem.traptype;
-    mux_specreg = mem.mux_specreg;
-    _write_special_registers = mem._write_special_registers;
-    _db_word_instruction = mem._db_word_instruction;
-    _signed_multiply = mem._signed_multiply;
+    _branch = from_instruction._branch;
+    _jump = from_instruction._jump;
+    _conditional_branch = from_instruction._conditional_branch;
+    _annul = from_instruction._annul;
+    _call = from_instruction._call;
+    _disp30 = from_instruction._disp30;
+    _write_icc = from_instruction._write_icc;
+    _icc = from_instruction._icc;
+    _disp22 = from_instruction._disp22;
+    trap = from_instruction.trap;
+    traptype = from_instruction.traptype;
+    _select_special_register = from_instruction._select_special_register;
+    _write_special_registers = from_instruction._write_special_registers;
+    _db_word_instruction = from_instruction._db_word_instruction;
+    _signed_multiply = from_instruction._signed_multiply;
 
 }
-bool instruction::operator==(const instruction & mem) const {
-    return halt == mem.halt &&
-           _unimplemented == mem._unimplemented &&
-           pc == mem.pc &&
-           inst == mem.inst &&
-           op == mem.op &&
-           op2 == mem.op2 &&
-           op3 == mem.op3 &&
-           rs1 == mem.rs1 &&
-           rs2 == mem.rs2 &&
-           rd == mem.rd &&
-           aluop == mem.aluop &&
-           _write_registers == mem._write_registers &&
-           _write_memory == mem._write_memory &&
-           _read_memory == mem._read_memory &&
-           mem_size == mem.mem_size &&
-           rs1sel == mem.rs1sel &&
-           rs2sel == mem.rs2sel &&
-           _op1_value == mem._op1_value &&
-           _op2_value == mem._op2_value &&
-           _op3_value == mem._op3_value &&
-           imm == mem.imm &&
-           use_imm == mem.use_imm &&
-           _alu_result == mem._alu_result &&
-           _branch == mem._branch &&
-           _jump == mem._jump &&
-           _conditional_branch == mem._conditional_branch &&
-           _annul == mem._annul &&
-           _call == mem._call &&
-           disp30 == mem.disp30 &&
-           _write_icc == mem._write_icc &&
-           _icc == mem._icc &&
-           disp22 == mem.disp22 &&
-           trap == mem.trap &&
-           traptype == mem.traptype &&
-           mux_specreg == mem.mux_specreg &&
-           _write_special_registers == mem._write_special_registers &&
-           _db_word_instruction == mem._db_word_instruction &&
-           _carry == mem._carry &&
-           _signed_multiply == mem._signed_multiply;
+
+bool instruction::operator==(const instruction& compare_instruction) const {
+    return halt == compare_instruction.halt &&
+           _unimplemented == compare_instruction._unimplemented &&
+           _pc == compare_instruction._pc &&
+           _inst == compare_instruction._inst &&
+           _op1 == compare_instruction._op1 &&
+           _op2 == compare_instruction._op2 &&
+           _op3 == compare_instruction._op3 &&
+           _rs1 == compare_instruction._rs1 &&
+           _rs2 == compare_instruction._rs2 &&
+           _rd == compare_instruction._rd &&
+           aluop == compare_instruction.aluop &&
+           _write_registers == compare_instruction._write_registers &&
+           _write_memory == compare_instruction._write_memory &&
+           _read_memory == compare_instruction._read_memory &&
+           mem_size == compare_instruction.mem_size &&
+           _rs1sel == compare_instruction._rs1sel &&
+           _rs2sel == compare_instruction._rs2sel &&
+           _rdsel == compare_instruction._rdsel &&
+           _op1_value == compare_instruction._op1_value &&
+           _op2_value == compare_instruction._op2_value &&
+           _op3_value == compare_instruction._op3_value &&
+           _imm == compare_instruction._imm &&
+           use_imm == compare_instruction.use_imm &&
+           _alu_result == compare_instruction._alu_result &&
+           _branch == compare_instruction._branch &&
+           _jump == compare_instruction._jump &&
+           _conditional_branch == compare_instruction._conditional_branch &&
+           _annul == compare_instruction._annul &&
+           _call == compare_instruction._call &&
+           _disp30 == compare_instruction._disp30 &&
+           _write_icc == compare_instruction._write_icc &&
+           _icc == compare_instruction._icc &&
+           _disp22 == compare_instruction._disp22 &&
+           trap == compare_instruction.trap &&
+           traptype == compare_instruction.traptype &&
+           _select_special_register == compare_instruction._select_special_register &&
+           _write_special_registers == compare_instruction._write_special_registers &&
+           _db_word_instruction == compare_instruction._db_word_instruction &&
+           _carry == compare_instruction._carry &&
+           _signed_multiply == compare_instruction._signed_multiply;
 }
 
 
 void instruction::initialize() {
-    op = OP_SETHI_BRANCHES;
-    op2 = OP2_SETHI;
-    op3 = OP3_ADD;
+    _op1 = OP_SETHI_BRANCHES;
+    _op2 = OP2_SETHI;
+    _op3 = OP3_ADD;
 
     _db_word_instruction = false;
     halt = false;
-    rs1 = 0;
-    rs2 = 0;
-    imm = 0;
-    rd = 0;
+    _rs1 = 0;
+    _rs2 = 0;
+    _imm = 0;
+    _rd = 0;
     _branch = 0;
     _jump = 0;
     _conditional_branch = 0;
     _annul = 0;
     _call = 0;
-    disp30 = 0;
+    _disp30 = 0;
     _write_icc = 0;
     _icc = 0x0;
-    disp22 = 0;
+    _disp22 = 0;
 
     sp_reg.set_window_pointer(0);
     _increment_window_pointer = 0;
 
-    rs1sel = SRCMUX_RA;
-    rs2sel = SRCMUX_RA;
-    rdsel = SRCMUX_RA;
+    _rs1sel = SRCMUX_RA;
+    _rs2sel = SRCMUX_RA;
+    _rdsel = SRCMUX_RA;
 
     aluop = ALU_NOP;
     _write_registers = false;
@@ -561,26 +561,19 @@ void instruction::initialize() {
     _unimplemented = false;
     traptype = 0;
 
-    pc = 0;
-    mux_specreg = 0;
+    _pc = 0;
+    _select_special_register = 0;
     _write_special_registers = false;
     _signed_multiply = false;
 }
 
 bool instruction::check_end_sim() {
     /* This is to simply halt the simulation */
-    if (inst == 0x22222222) {
+    if (_inst == 0x22222222) {
         return true;
     } else {
         return false;
     }
-    //    cerr << "instruction:: Received 0x22222222 in program to terminate simulation" << endl;
-// #ifdef _NO_SYSTEMC_
-//     exit(1);
-// #else
-//     sc_stop();
-// #endif
-//   }
 }
 
 bool instruction::is_annul() const {
@@ -647,17 +640,26 @@ short instruction::get_conditional_branch() const {
     return _conditional_branch;
 }
 
+int instruction::get_disp22() const {
+  return _disp22;
+}
+
+int instruction::get_disp30() const {
+  return _disp30;
+}
+
 unsigned char instruction::get_icc() const {
     return _icc;
 }
 
 int instruction::get_immediate_value() const {
-    return imm;
+    return _imm;
 }
 
 short instruction::get_increment_window_pointer() const {
   return _increment_window_pointer;
 }
+
 
 int instruction::get_op1_value() const {
     return _op1_value;
@@ -669,6 +671,26 @@ int instruction::get_op2_value() const {
 
 int instruction::get_op3_value() const {
     return _op3_value;
+}
+
+int instruction::get_pc() const {
+  return _pc;
+}
+
+REGISTER_NUMBER instruction::get_rs1() const {
+  return _rs1;
+}
+
+REGISTER_NUMBER instruction::get_rs2() const {
+  return _rs2;
+}
+
+REGISTER_NUMBER instruction::get_rd() const {
+  return _rd;
+}
+
+unsigned char instruction::get_select_special_register() const {
+  return _select_special_register;
 }
 
 void instruction::set_alu_result(const int& result) {
@@ -699,6 +721,14 @@ void instruction::set_conditional_branch(const short& conditional) {
     _conditional_branch = conditional;
 }
 
+void instruction::set_disp22(const int& disp22) {
+  _disp22 = disp22;
+}
+
+void instruction::set_disp30(const int& disp30) {
+  _disp30 = disp30;
+}
+
 void instruction::set_icc(const unsigned char& icc) {
     _icc = icc;
 }
@@ -712,7 +742,7 @@ void instruction::set_increment_window_pointer(const short& window_pointer) {
 }
 
 void instruction::set_immediate_value(const int& immediate_value) {
-    imm = immediate_value;
+    _imm = immediate_value;
 }
 
 void instruction::set_jump(const bool& jump) {
@@ -731,8 +761,20 @@ void instruction::set_op3_value(const int& value) {
     _op3_value = value;
 }
 
+void instruction::set_pc(const int& pc) {
+  _pc = pc;
+}
+
+void instruction::set_rd(const REGISTER_NUMBER& rd) {
+  _rd = rd;
+}
+
 void instruction::set_read_memory(const bool& read_memory) {
     _read_memory = read_memory;
+}
+
+void instruction::set_select_special_register(const unsigned char& special_register) {
+  _select_special_register = special_register;
 }
 
 void instruction::set_unimplemented(const bool& unimplemented) {
