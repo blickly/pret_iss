@@ -192,6 +192,7 @@ public:
     short get_conditional_branch() const;
     unsigned char get_icc() const;
     int get_immediate_value() const;
+    short get_increment_window_pointer() const;
     int get_op1_value() const;
     int get_op2_value() const;
     int get_op3_value() const;
@@ -206,6 +207,7 @@ public:
     void set_icc(const unsigned char& icc);
     void set_immediate(const bool& immediate);
     void set_immediate_value(const int& immediate_value);
+    void set_increment_window_pointer(const short& window_pointer);
     void set_jump(const bool& jump);
     void set_op1_value(const int& value);
     void set_op2_value(const int& value);
@@ -234,7 +236,8 @@ private:
     short _conditional_branch;
     bool _db_word_instruction;
     unsigned char _icc;
-    bool _jump;
+  short _increment_window_pointer;
+  bool _jump;
     bool _write_icc;
     bool _write_registers;
     bool _write_special_registers;
@@ -261,7 +264,7 @@ private:
     bool trap;
     unsigned char traptype;
     bool halt;
-    short wp_increment;
+
 };
 
 #endif /* _INSTRUCTION_H_ */
