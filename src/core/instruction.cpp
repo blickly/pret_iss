@@ -441,7 +441,6 @@ void instruction::operator=(const instruction & from_instruction) {
     _rdsel = from_instruction._rdsel;
 
     _increment_window_pointer = from_instruction._increment_window_pointer;
-    _special_registers = from_instruction._special_registers;
 
     _op1_value = from_instruction._op1_value;
     _op2_value = from_instruction._op2_value;
@@ -531,7 +530,6 @@ void instruction::initialize() {
     _icc = 0x0;
     _disp22 = 0;
 
-    _special_registers.set_window_pointer(0);
     _increment_window_pointer = 0;
 
     _rs1sel = SRCMUX_RA;
@@ -692,14 +690,6 @@ unsigned char instruction::get_select_special_register() const {
     return _select_special_register;
 }
 
-special_registers instruction::get_special_registers() const {
-    return _special_registers;
-}
-
-WINDOW_POINTER instruction::get_window_pointer() const {
-    return _special_registers.get_window_pointer();
-}
-
 void instruction::set_alu_result(const int& result) {
     _alu_result = result;
 }
@@ -786,10 +776,6 @@ void instruction::set_select_special_register(const unsigned char& special_regis
 
 void instruction::set_unimplemented(const bool& unimplemented) {
     _unimplemented = unimplemented;
-}
-
-void instruction::set_window_pointer(const WINDOW_POINTER& window_pointer) {
-    _special_registers.set_window_pointer(window_pointer);
 }
 
 void instruction::set_write_icc(const bool& write_icc) {

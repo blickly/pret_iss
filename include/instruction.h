@@ -43,7 +43,7 @@
 using namespace std;
 
 #include "instruction_defs.h"
-#include "special_registers.h"
+//#include "special_registers.h"
 
 ///////////////////////////////////////////////////////////////////////
 /// instruction
@@ -158,24 +158,108 @@ public:
 public:
 
 
-
+  /** Returns true if the annul bit is set for the instruction.
+   *
+   * @return True if annul is set, else false.
+   */
     bool is_annul() const;
-    bool is_branch() const;
+
+  /** Returns true if instruction is of branch type.
+   *
+   * @return True if branch instruction, else false.
+   */
+  bool is_branch() const;
+
+  /** Returns true if instruction's carry bit is set.
+   *
+   * @return True if carry bit set, else false.
+   */
     bool is_carry() const;
+
+  /** Returns true if call instruction.
+   *
+   * @return True if call instruction, else false.
+   */
     bool is_call() const;
+
+  /** Returns true if instruction is a double word instruction.
+   *
+   * @return True if double word instruction, else false.
+   */
     bool is_db_word() const;
+
+    /** Returns true if instruction uses immediate field.
+   *
+   * @return True if immediate field is used, else false.
+   */
     bool is_immediate() const;
+
+  /** Returns true if instruction is of jump type.
+   *
+   * @return True if jump instruction, else false.
+   */
     bool is_jump() const;
+
+  /** Returns true if instruction is going to read from memory.
+   *
+   * @return True if memory read instruction, else false.
+   */
     bool is_read_memory() const;
+
+  /** Returns true if instruction performs a signed multiply.
+   *
+   * @return True if signed multiply instruction, else false.
+   */
     bool is_signed_multiply() const;
+
+    /** Returns true if instruction is not implemented.
+   *
+   * @return True if branch instruction, else false.
+   */
     bool is_unimplemented() const;
+
+    /** Returns true if instruction writes to the instruction
+   * condition codes.
+   *
+   * @return True if writing to ICC, else false.
+   */
     bool is_write_icc() const;
+
+  /** Returns true if commit to registers is required.
+   *
+   * @return True if instruction writes to registers, else false.
+   */
     bool is_write_registers() const;
+
+    /** Returns true if instruction writes to special registers such
+   * as deadline timers.
+   *
+   * @return True if commit to special registers, else false.
+   */
     bool is_write_special_registers() const;
+
+  /** Returns true if instruction writes to the memory.
+   *
+   * @return True if write to memory, else false.
+   */
     bool is_write_memory() const;
 
+  /** Get the ALU operation.
+   *
+   * @return ALU operation.
+   */
     ALU get_aluop() const;
+
+  /** Get result from ALU operation.
+   *
+   * @return ALU result.
+   */
     int get_alu_result() const;
+
+  /** Get the conditional branch.
+   *
+   * @return Conditional branch.
+   */
     short get_conditional_branch() const;
     int get_disp22() const;
     int get_disp30() const;
@@ -191,8 +275,8 @@ public:
     REGISTER_NUMBER get_rs2() const;
     REGISTER_NUMBER get_rd() const;
     unsigned char get_select_special_register() const ;
-    special_registers get_special_registers() const;
-    WINDOW_POINTER get_window_pointer() const;
+  //    special_registers get_special_registers() const;
+  //    WINDOW_POINTER get_window_pointer() const;
 
     void set_alu_result(const int& result);
     void set_annul(const bool& annul);
@@ -217,7 +301,7 @@ public:
     void set_signed_multiply(const bool& signed_multiply);
     void set_select_special_register(const unsigned char& select_special);
     void set_unimplemented(const bool& unimplemented);
-    void set_window_pointer(const WINDOW_POINTER& window_pointer);
+  //    void set_window_pointer(const WINDOW_POINTER& window_pointer);
 
     void set_write_icc(const bool& write_icc);
     void set_write_registers(const bool& write);
@@ -267,7 +351,6 @@ private:
     SRCMUX _rdsel;
     unsigned char _select_special_register;
     bool _signed_multiply;
-    special_registers _special_registers;
     bool _unimplemented;
     bool _use_imm;
     bool _write_icc;
