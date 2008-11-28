@@ -104,7 +104,7 @@ void regacc::_debug_print(const hw_thread_ptr& hardware_thread) {
 
 void regacc::_double_word_instruction(const hw_thread_ptr& hardware_thread) {
     if ((hardware_thread->is_db_word_stalled()) && (!hardware_thread->is_deadline_stalled())) {
-        hardware_thread->inst.set_rd( hardware_thread->inst.get_rd() + 1);
+        hardware_thread->inst.set_rd(hardware_thread->inst.get_rd() + 1);
         // Increment rs1 by 4
         hardware_thread->inst.set_op1_value(hardware_thread->regs.get_reg(hardware_thread->inst.get_rs1(), hardware_thread->spec_regs.curr_wp) + 4);
         /* If the instruction is a double LD, then we have to increment

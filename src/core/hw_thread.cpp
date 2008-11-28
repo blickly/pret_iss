@@ -138,35 +138,35 @@ void hw_thread::reset_register_window() {
     regs.reset_register_window();
 }
 
-void hw_thread::set_id(unsigned int in_id) {
+void hw_thread::set_id(const unsigned int& in_id) {
     _id = in_id;
 }
 
-void hw_thread::set_db_word_stalled(bool stall) {
+void hw_thread::set_db_word_stalled(const bool& stall) {
     _db_word_stalled = stall;
 }
 
-void hw_thread::set_deadline_stalled(bool stall) {
+void hw_thread::set_deadline_stalled(const bool& stall) {
     _deadline_stalled = stall;
 }
 
-void hw_thread::set_delayed_branch_address(uint32_t address) {
+void hw_thread::set_delayed_branch_address(const uint32_t& address) {
     _branch_slot = address;
 }
 
-void hw_thread::set_enabled(bool enable) {
+void hw_thread::set_enabled(const bool& enable) {
     _enabled = enable;
 }
 
-void hw_thread::set_fetch_stalled(bool stall) {
+void hw_thread::set_fetch_stalled(const bool& stall) {
     _fetch_stalled = stall;
 }
 
-void hw_thread::set_memory_stalled(bool stall) {
+void hw_thread::set_memory_stalled(const bool& stall) {
     _memory_stalled = stall;
 }
 
-void hw_thread::set_pc(uint32_t pc) {
+void hw_thread::set_pc(const uint32_t& pc) {
     _pc = pc;
 }
 

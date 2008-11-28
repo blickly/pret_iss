@@ -118,7 +118,7 @@ enum MEMORY_SIZE {
  * Encoding of opcode of type 1.
  *
  */
-enum OP {
+enum OP1 {
     OP_SETHI_BRANCHES = 0,
     OP_CALL = 1,
     OP_ARITHMETIC_ETC = 2,

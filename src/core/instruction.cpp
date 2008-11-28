@@ -46,7 +46,7 @@ void instruction::decode() {
     _op3 = (_inst & 0X01F80000) >> 19;
     _rd = (_inst & 0x3E000000) >> 25;//0011 1110 0000
     _rs1 = (_inst & 0X0007C000) >> 14;// 0000 0000 0000 0111 1100
-    use_imm = (_inst & 0X00002000) >> 12; //0000 0000 0000 0000 0010
+    _use_imm = (_inst & 0X00002000) >> 12; //0000 0000 0000 0000 0010
     _imm = (_inst & 0X00001FFF) << 19;
     _imm = _imm >> 19;
     _rs2 = (_inst & 0X0000001F);
@@ -419,9 +419,8 @@ instruction::instruction(const instruction& mem) {
     this->operator=(mem); //*this = mem;
 }
 
-void instruction::operator=(const instruction& from_instruction) {
+void instruction::operator=(const instruction & from_instruction) {
     _unimplemented = from_instruction._unimplemented;
-    halt = from_instruction.halt;
     _pc = from_instruction._pc;
     _inst = from_instruction._inst;
 
@@ -448,7 +447,7 @@ void instruction::operator=(const instruction& from_instruction) {
     _op2_value = from_instruction._op2_value;
     _op3_value = from_instruction._op3_value;
     _imm = from_instruction._imm;
-    use_imm = from_instruction.use_imm;
+    _use_imm = from_instruction._use_imm;
     _carry = from_instruction._carry;
 
     _alu_result = from_instruction._alu_result;
@@ -463,8 +462,6 @@ void instruction::operator=(const instruction& from_instruction) {
     _write_icc = from_instruction._write_icc;
     _icc = from_instruction._icc;
     _disp22 = from_instruction._disp22;
-    trap = from_instruction.trap;
-    traptype = from_instruction.traptype;
     _select_special_register = from_instruction._select_special_register;
     _write_special_registers = from_instruction._write_special_registers;
     _db_word_instruction = from_instruction._db_word_instruction;
@@ -473,8 +470,7 @@ void instruction::operator=(const instruction& from_instruction) {
 }
 
 bool instruction::operator==(const instruction& compare_instruction) const {
-    return halt == compare_instruction.halt &&
-           _unimplemented == compare_instruction._unimplemented &&
+    return _unimplemented == compare_instruction._unimplemented &&
            _pc == compare_instruction._pc &&
            _inst == compare_instruction._inst &&
            _op1 == compare_instruction._op1 &&
@@ -495,7 +491,7 @@ bool instruction::operator==(const instruction& compare_instruction) const {
            _op2_value == compare_instruction._op2_value &&
            _op3_value == compare_instruction._op3_value &&
            _imm == compare_instruction._imm &&
-           use_imm == compare_instruction.use_imm &&
+           _use_imm == compare_instruction._use_imm &&
            _alu_result == compare_instruction._alu_result &&
            _branch == compare_instruction._branch &&
            _jump == compare_instruction._jump &&
@@ -506,8 +502,6 @@ bool instruction::operator==(const instruction& compare_instruction) const {
            _write_icc == compare_instruction._write_icc &&
            _icc == compare_instruction._icc &&
            _disp22 == compare_instruction._disp22 &&
-           trap == compare_instruction.trap &&
-           traptype == compare_instruction.traptype &&
            _select_special_register == compare_instruction._select_special_register &&
            _write_special_registers == compare_instruction._write_special_registers &&
            _db_word_instruction == compare_instruction._db_word_instruction &&
@@ -522,7 +516,7 @@ void instruction::initialize() {
     _op3 = OP3_ADD;
 
     _db_word_instruction = false;
-    halt = false;
+
     _rs1 = 0;
     _rs2 = 0;
     _imm = 0;
@@ -546,7 +540,7 @@ void instruction::initialize() {
 
     _aluop = ALU_NOP;
     _write_registers = false;
-    use_imm = false;
+    _use_imm = false;
     _write_memory = false;
     _read_memory = false;
     _memory_size = MEM_WORD;
@@ -557,9 +551,7 @@ void instruction::initialize() {
     _carry = false;
 
     _alu_result = 0;
-    trap = false;
     _unimplemented = false;
-    traptype = 0;
 
     _pc = 0;
     _select_special_register = 0;
@@ -597,7 +589,7 @@ bool instruction::is_db_word() const {
 }
 
 bool instruction::is_immediate() const {
-    return use_imm;
+    return _use_imm;
 }
 
 bool instruction::is_jump() const {
@@ -633,7 +625,7 @@ bool instruction::is_write_memory() const {
 }
 
 ALU instruction::get_aluop() const {
-  return _aluop;
+    return _aluop;
 }
 
 int instruction::get_alu_result() const {
@@ -645,11 +637,11 @@ short instruction::get_conditional_branch() const {
 }
 
 int instruction::get_disp22() const {
-  return _disp22;
+    return _disp22;
 }
 
 int instruction::get_disp30() const {
-  return _disp30;
+    return _disp30;
 }
 
 unsigned char instruction::get_icc() const {
@@ -661,11 +653,11 @@ int instruction::get_immediate_value() const {
 }
 
 short instruction::get_increment_window_pointer() const {
-  return _increment_window_pointer;
+    return _increment_window_pointer;
 }
 
 MEMORY_SIZE instruction::get_memory_size() const {
-  return _memory_size;
+    return _memory_size;
 }
 
 int instruction::get_op1_value() const {
@@ -681,31 +673,31 @@ int instruction::get_op3_value() const {
 }
 
 int instruction::get_pc() const {
-  return _pc;
+    return _pc;
 }
 
 REGISTER_NUMBER instruction::get_rs1() const {
-  return _rs1;
+    return _rs1;
 }
 
 REGISTER_NUMBER instruction::get_rs2() const {
-  return _rs2;
+    return _rs2;
 }
 
 REGISTER_NUMBER instruction::get_rd() const {
-  return _rd;
+    return _rd;
 }
 
 unsigned char instruction::get_select_special_register() const {
-  return _select_special_register;
+    return _select_special_register;
 }
 
 special_registers instruction::get_special_registers() const {
-  return _special_registers;
+    return _special_registers;
 }
 
 WINDOW_POINTER instruction::get_window_pointer() const {
-  return _special_registers.get_window_pointer();
+    return _special_registers.get_window_pointer();
 }
 
 void instruction::set_alu_result(const int& result) {
@@ -737,11 +729,11 @@ void instruction::set_conditional_branch(const short& conditional) {
 }
 
 void instruction::set_disp22(const int& disp22) {
-  _disp22 = disp22;
+    _disp22 = disp22;
 }
 
 void instruction::set_disp30(const int& disp30) {
-  _disp30 = disp30;
+    _disp30 = disp30;
 }
 
 void instruction::set_icc(const unsigned char& icc) {
@@ -749,11 +741,11 @@ void instruction::set_icc(const unsigned char& icc) {
 }
 
 void instruction::set_immediate(const bool& immediate) {
-    use_imm = immediate;
+    _use_imm = immediate;
 }
 
 void instruction::set_increment_window_pointer(const short& window_pointer) {
-  _increment_window_pointer = window_pointer;
+    _increment_window_pointer = window_pointer;
 }
 
 void instruction::set_immediate_value(const int& immediate_value) {
@@ -777,11 +769,11 @@ void instruction::set_op3_value(const int& value) {
 }
 
 void instruction::set_pc(const int& pc) {
-  _pc = pc;
+    _pc = pc;
 }
 
 void instruction::set_rd(const REGISTER_NUMBER& rd) {
-  _rd = rd;
+    _rd = rd;
 }
 
 void instruction::set_read_memory(const bool& read_memory) {
@@ -789,7 +781,7 @@ void instruction::set_read_memory(const bool& read_memory) {
 }
 
 void instruction::set_select_special_register(const unsigned char& special_register) {
-  _select_special_register = special_register;
+    _select_special_register = special_register;
 }
 
 void instruction::set_unimplemented(const bool& unimplemented) {
@@ -797,7 +789,7 @@ void instruction::set_unimplemented(const bool& unimplemented) {
 }
 
 void instruction::set_window_pointer(const WINDOW_POINTER& window_pointer) {
-  _special_registers.set_window_pointer(window_pointer);
+    _special_registers.set_window_pointer(window_pointer);
 }
 
 void instruction::set_write_icc(const bool& write_icc) {

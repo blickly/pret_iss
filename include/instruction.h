@@ -155,7 +155,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////
 ///                      public variables                           ///
-public:    
+public:
 
 
 
@@ -174,26 +174,26 @@ public:
     bool is_write_special_registers() const;
     bool is_write_memory() const;
 
-  ALU get_aluop() const;
+    ALU get_aluop() const;
     int get_alu_result() const;
     short get_conditional_branch() const;
-  int get_disp22() const;
-  int get_disp30() const;
+    int get_disp22() const;
+    int get_disp30() const;
     unsigned char get_icc() const;
     int get_immediate_value() const;
     short get_increment_window_pointer() const;
-  MEMORY_SIZE get_memory_size() const;
+    MEMORY_SIZE get_memory_size() const;
     int get_op1_value() const;
     int get_op2_value() const;
     int get_op3_value() const;
-  int get_pc() const;
-  REGISTER_NUMBER get_rs1() const;
-  REGISTER_NUMBER get_rs2() const;
-  REGISTER_NUMBER get_rd() const;
-  unsigned char get_select_special_register() const ;
-  special_registers get_special_registers() const;
-  WINDOW_POINTER get_window_pointer() const;
-  
+    int get_pc() const;
+    REGISTER_NUMBER get_rs1() const;
+    REGISTER_NUMBER get_rs2() const;
+    REGISTER_NUMBER get_rd() const;
+    unsigned char get_select_special_register() const ;
+    special_registers get_special_registers() const;
+    WINDOW_POINTER get_window_pointer() const;
+
     void set_alu_result(const int& result);
     void set_annul(const bool& annul);
     void set_branch(const bool& branch);
@@ -201,8 +201,8 @@ public:
     void set_carry(const bool& carry);
     void set_conditional_branch(const short& conditional);
     void set_db_word(const bool& db_word);
-  void set_disp22(const int& disp22);
-  void set_disp30(const int& disp30);
+    void set_disp22(const int& disp22);
+    void set_disp30(const int& disp30);
     void set_icc(const unsigned char& icc);
     void set_immediate(const bool& immediate);
     void set_immediate_value(const int& immediate_value);
@@ -211,13 +211,13 @@ public:
     void set_op1_value(const int& value);
     void set_op2_value(const int& value);
     void set_op3_value(const int& value);
-  void set_pc(const int& pc);
-  void set_rd(const REGISTER_NUMBER& rd);
+    void set_pc(const int& pc);
+    void set_rd(const REGISTER_NUMBER& rd);
     void set_read_memory(const bool& read);
     void set_signed_multiply(const bool& signed_multiply);
-  void set_select_special_register(const unsigned char& select_special);
+    void set_select_special_register(const unsigned char& select_special);
     void set_unimplemented(const bool& unimplemented);
-  void set_window_pointer(const WINDOW_POINTER& window_pointer);
+    void set_window_pointer(const WINDOW_POINTER& window_pointer);
 
     void set_write_icc(const bool& write_icc);
     void set_write_registers(const bool& write);
@@ -235,54 +235,45 @@ private:
 ///                      private variables                          ///
 private:
     ALU _aluop;
-  int _alu_result;
+    int _alu_result;
     bool _annul;
     bool _branch;
     bool _call;
-  short _conditional_branch;
+    bool _carry;
+    short _conditional_branch;
     bool _db_word_instruction;
-      int _disp30;
+    int _disp30;
     int _disp22;
 
     unsigned char _icc;
-  short _increment_window_pointer;
+    short _increment_window_pointer;
+    int _imm;
     uint32_t _inst;
-  bool _jump;
-  MEMORY_SIZE _memory_size;
-  short _op1;
+    bool _jump;
+    MEMORY_SIZE _memory_size;
+    short _op1;
     int _op1_value;
-  short _op2;
+    short _op2;
     int _op2_value;
-  short _op3;
-      int _op3_value; // Value of register rd
+    short _op3;
+    int _op3_value; // Value of register rd
     int _pc;
     bool _read_memory;
-      REGISTER_NUMBER _rs1;
+    REGISTER_NUMBER _rs1;
+    SRCMUX _rs1sel;
     REGISTER_NUMBER _rs2;
+    SRCMUX _rs2sel;
     REGISTER_NUMBER _rd;
-
-  unsigned char _select_special_register;  
-      bool _signed_multiply;
-    special_registers _special_registers;  
-  bool _write_icc;
+    SRCMUX _rdsel;
+    unsigned char _select_special_register;
+    bool _signed_multiply;
+    special_registers _special_registers;
+    bool _unimplemented;
+    bool _use_imm;
+    bool _write_icc;
     bool _write_registers;
     bool _write_special_registers;
     bool _write_memory;
-
-  
-    SRCMUX _rs1sel;
-    SRCMUX _rs2sel;
-    SRCMUX _rdsel;
-    bool _carry;
-    bool use_imm;
-    int _imm;
-    bool _unimplemented;
-
-    /* FIXME: These are probably unimplemented.
-     */
-    bool trap;
-    unsigned char traptype;
-    bool halt;
 
 };
 

@@ -170,57 +170,55 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 
-
-
     /** Set the state if stall is caused by a double word instruction.
      *
      * @param stall True if stalled, else false.
      */
 
-    void set_db_word_stalled(bool stall);
+    void set_db_word_stalled(const bool& stall);
 
     /** Set the state if stall is caused by a deadline instruction.
      *
      * @param stall True if stalled, else false.
      */
 
-    void set_deadline_stalled(bool stall);
+    void set_deadline_stalled(const bool& stall);
 
     /** Set the delayed branch address.
     *
     * @param address Address for delayed branch.
     */
-    void set_delayed_branch_address(uint32_t address);
+    void set_delayed_branch_address(const uint32_t& address);
 
     /** Set the enabled state of the thread.
     *
     * @param enable True if thread is going to be enabled, else false.
     */
-    void set_enabled(bool enable);
+    void set_enabled(const bool& enable);
 
     /** Set the state if stall is caused by instruction fetch from memory.
      *
      * @param stall True if stalled, else false.
      */
-    void set_fetch_stalled(bool stall);
+    void set_fetch_stalled(const bool& stall);
 
     /** Set the thread id.
     *
     * @param in_id New thread identifier.
     */
-    void set_id(unsigned int in_id);
+    void set_id(const unsigned int& in_id);
 
     /** Set the state if stall is caused by a data memory access.
      *
      * @param stall True if stalled, else false.
      */
-    void set_memory_stalled(bool stall);
+    void set_memory_stalled(const bool& stall);
 
     /** Set the thread's program counter.
      *
      * @param pc New pc of thread.
      */
-    void set_pc(uint32_t pc);
+    void set_pc(const uint32_t& pc);
 
 
 ///////////////////////////////////////////////////////////////////////
