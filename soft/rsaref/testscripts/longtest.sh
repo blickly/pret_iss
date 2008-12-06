@@ -17,7 +17,7 @@ do
   cat $KEYDIR/key0512-$i >> $RDEMODIR/encrypt.c 
   cd $PRETDIR
   make
-  ./run.sh pret >> data_$datetime.raw
-  touch progress$i
+  ./run.sh pret >> $CURDIR/data_$datetime.raw
+  touch $CURDIR/progress$i
 done
 
