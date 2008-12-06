@@ -165,6 +165,9 @@ extern "C" {
     int R_SignFinal PROTO_LIST
     ((R_SIGNATURE_CTX *, unsigned char *, unsigned int *, R_RSA_PRIVATE_KEY *));
 
+   int R_SignFinal2 PROTO_LIST
+    ((unsigned char*, unsigned char *, unsigned int *, R_RSA_PRIVATE_KEY *));
+
     int R_VerifyInit PROTO_LIST((R_SIGNATURE_CTX *, int));
     int R_VerifyUpdate PROTO_LIST
     ((R_SIGNATURE_CTX *, unsigned char *, unsigned int));

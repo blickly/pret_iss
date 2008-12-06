@@ -151,6 +151,36 @@ R_RSA_PRIVATE_KEY *privateKey;                  /* signer's RSA private key */
   return (status);
 }
 
+int R_SignFinal2 (context, signature, signatureLen, privateKey)
+unsigned char *context;                                        /* context */
+unsigned char *signature;                                      /* signature */
+unsigned int *signatureLen;                          /* length of signature */
+R_RSA_PRIVATE_KEY *privateKey;                  /* signer's RSA private key */
+{
+  int status;
+  unsigned char digest[MAX_DIGEST_LEN], digestInfo[DIGEST_INFO_LEN];
+  unsigned int digestLen;
+
+  status = 0;
+  do {
+
+    if (RSAPrivateEncrypt
+        (signature, signatureLen, context, DIGEST_INFO_LEN, privateKey)
+        != 0) {
+      status = RE_PRIVATE_KEY;
+      break;
+    }
+    
+  } while (0);
+  
+  /* Zeroize potentially sensitive information.
+   */
+  R_memset ((POINTER)digest, 0, sizeof (digest));
+  R_memset ((POINTER)digestInfo, 0, sizeof (digestInfo));
+
+  return (status);
+}
+
 int R_VerifyInit (context, digestAlgorithm)
 R_SIGNATURE_CTX *context;                                    /* new context */
 int digestAlgorithm;                            /* message-digest algorithm */
