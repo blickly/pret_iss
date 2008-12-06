@@ -109,6 +109,8 @@ int NN_Zero PROTO_LIST((NN_DIGIT *, unsigned int));
 unsigned int NN_Bits PROTO_LIST((NN_DIGIT *, unsigned int));
 unsigned int NN_Digits PROTO_LIST((NN_DIGIT *, unsigned int));
 
+unsigned int NN_ModExpCount PROTO_LIST ((void));
+void NN_ResetCount PROTO_LIST ((void));
 #define NN_ASSIGN_DIGIT(a, b, digits) {NN_AssignZero (a, digits); a[0] = b;}
 #define NN_EQUAL(a, b, digits) (! NN_Cmp (a, b, digits))
 #define NN_EVEN(a, digits) (((digits) == 0) || ! (a[0] & 1))

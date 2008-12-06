@@ -265,6 +265,8 @@ R_RSA_PRIVATE_KEY *privateKey;                           /* RSA private key */
     qInv[MAX_NN_DIGITS], t[MAX_NN_DIGITS];
   unsigned int cDigits, nDigits, pDigits;
   
+  unsigned int DivCount;
+
   NN_Decode (c, MAX_NN_DIGITS, input, inputLen);
   NN_Decode (n, MAX_NN_DIGITS, privateKey->modulus, MAX_RSA_MODULUS_LEN);
   NN_Decode (p, MAX_NN_DIGITS, privateKey->prime[0], MAX_RSA_PRIME_LEN);
@@ -280,16 +282,28 @@ R_RSA_PRIVATE_KEY *privateKey;                           /* RSA private key */
 
   if (NN_Cmp (c, n, nDigits) >= 0)
     return (RE_DATA);
-  
+
   /* Compute mP = cP^dP mod p  and  mQ = cQ^dQ mod q. (Assumes q has
      length at most pDigits, i.e., p > q.)
    */
   NN_Mod (cP, c, cDigits, p, pDigits);
   NN_Mod (cQ, c, cDigits, q, pDigits);
+
+  DivCount = 0;
+  //  printf("Starting ModExp..\n");
   NN_ModExp (mP, cP, dP, pDigits, p, pDigits);
   NN_AssignZero (mQ, nDigits);
+
+  DivCount = NN_ModExpCount();
+  printf("First ModExp count: %d\n", DivCount);
+  NN_ResetCount();
+
+  //printf("Starting 2nd ModExp..\n");
   NN_ModExp (mQ, cQ, dQ, pDigits, q, pDigits);
-  
+
+  DivCount = NN_ModExpCount();
+  printf("Second ModExp count: %d\n", DivCount);
+
   /* Chinese Remainder Theorem:
        m = ((((mP - mQ) mod p) * qInv) mod p) * q + mQ.
    */

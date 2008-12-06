@@ -10,10 +10,16 @@
 #include "nn.h"
 #include "digit.h"
 
+#ifdef PRET
+#include "deadline.h"
+#endif
+
 static NN_DIGIT NN_AddDigitMult PROTO_LIST 
   ((NN_DIGIT *, NN_DIGIT *, NN_DIGIT, NN_DIGIT *, unsigned int));
 static NN_DIGIT NN_SubDigitMult PROTO_LIST 
   ((NN_DIGIT *, NN_DIGIT *, NN_DIGIT, NN_DIGIT *, unsigned int));
+
+static unsigned int DivCount = 0;
 
 static unsigned int NN_DigitBits PROTO_LIST ((NN_DIGIT));
 
@@ -380,14 +386,25 @@ unsigned int cDigits, dDigits;
         ciBits -= 2;
       }
     }
-
+#ifdef PRET
+    DEAD0(110527); //663162/6 - because 6 threads
+#endif
     for (j = 0; j < ciBits; j += 2, ci <<= 2) {
+      
       /* Compute t = t^4 * b^s mod d, where s = two MSB's of ci.
        */
       NN_ModMult (t, t, t, d, dDigits);
       NN_ModMult (t, t, t, d, dDigits);
-      if ((s = DIGIT_2MSB (ci)) != 0)
+      if ((s = DIGIT_2MSB (ci)) != 0) {
         NN_ModMult (t, t, bPower[s-1], d, dDigits);
+      }
+      	DivCount++;
+#ifdef PRET
+      if ( (j + 2) >= ciBits )
+	DEAD0(0);
+      else
+	DEAD0(110527);
+#endif
     }
   }
   
@@ -619,4 +636,12 @@ NN_DIGIT a;
       break;
     
   return (i);
+}
+
+unsigned int NN_ModExpCount () {
+  return DivCount;
+}
+
+void NN_ResetCount () {
+  DivCount = 0;
 }

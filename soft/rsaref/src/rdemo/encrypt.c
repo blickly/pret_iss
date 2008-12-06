@@ -9,11 +9,12 @@
 #include <string.h>
 #include "global.h"
 #include "rsaref.h"
+#include "deadline.h"
 
 int main PROTO_LIST ((int, char **));
 static int SetOptions PROTO_LIST ((int, char **));
 static void InitRandomStruct PROTO_LIST ((R_RANDOM_STRUCT *));
-static void DoSignFile PROTO_LIST ((void));
+static void DoSignFile PROTO_LIST ((R_RSA_PRIVATE_KEY* Key));
 static void DoVerifyFile PROTO_LIST ((void));
 static void DoSealFile PROTO_LIST ((R_RANDOM_STRUCT *));
 static void DoOpenFile PROTO_LIST ((void));
@@ -23,7 +24,7 @@ static void WriteBigInteger PROTO_LIST
   ((FILE *, unsigned char *, unsigned int));
 static int ReadInit PROTO_LIST ((FILE **, char *));
 static int ReadUpdate PROTO_LIST
-  ((char *, unsigned char *, unsigned int *, unsigned int));
+  ((unsigned char *, unsigned char *, unsigned int *, unsigned int));
 static void ReadFinal PROTO_LIST ((FILE *));
 static int ReadBlock PROTO_LIST
   ((unsigned char *, unsigned int *, unsigned int, char *));
@@ -38,12 +39,16 @@ static int GetEncryptionAlgorithm PROTO_LIST ((int *));
 static void PrintMessage PROTO_LIST ((char *));
 static void PrintError PROTO_LIST ((char *, int));
 static void GetCommand PROTO_LIST ((char *, unsigned int, char *));
+static void PrintLength PROTO_LIST ((unsigned char *, unsigned int));
+
 
 static int SILENT_PROMPT = 0;
+static int keyNum = 4;
 
+static unsigned char* file1 = "This is the contents of the first file to be encrypted, which is just a test file to see if we can directly read from a char string instead of a real file, since in our simulator there is no operating system, so we would have to use this.\n";
 
-static char* file1 = "This is the contents of the first file to be encrypted, which is just a test file to see if we can directly read from a char string instead of a real file, since in our simulator there is no operating system, so we would have to use this.";
-
+static R_RSA_PRIVATE_KEY PRIVATE_KEY4;
+static R_RSA_PUBLIC_KEY PUBLIC_KEY4;
 
 static R_RSA_PUBLIC_KEY PUBLIC_KEY1 = {
   512,
@@ -231,6 +236,7 @@ static R_RSA_PRIVATE_KEY PRIVATE_KEY2 = {
    0xef, 0x0b, 0x4b, 0x28}
 };
 
+
 R_RSA_PUBLIC_KEY PUBLIC_KEY3;
 R_RSA_PRIVATE_KEY PRIVATE_KEY3;
 int KEYPAIR3_READY = 0;
@@ -242,11 +248,12 @@ char *argv[];
   R_RANDOM_STRUCT randomStruct;
   char command[80];
   int done = 0;
-
-  if (SetOptions (argc, argv))
-    return (0);
+  int i;
   
-  InitRandomStruct (&randomStruct);
+
+  //if (SetOptions (argc, argv))
+  //    return (0);
+    
   /*
   PrintMessage
     ("NOTE: When saving to a file, a filename of \"-\" will output to the screen.");
@@ -303,11 +310,75 @@ char *argv[];
     }
   }*/
 
-  //DoSignFile ();
-  DoSealFile (&randomStruct);
 
-  R_RandomFinal (&randomStruct);
-  R_memset ((POINTER)&PRIVATE_KEY3, 0, sizeof (PRIVATE_KEY3));
+  //DoSignFile (&PRIVATE_KEY1);
+  //DoSignFile (&PRIVATE_KEY2);
+  //  DoSignFile (&PRIVATE_KEY3);
+  
+  DoSignFile (&PRIVATE_KEY4);
+  //DoSignFile (&PRIVATE_KEY5);
+  /*
+  DoSignFile (&PRIVATE_KEY6);
+  DoSignFile (&PRIVATE_KEY7);
+  DoSignFile (&PRIVATE_KEY8);
+  DoSignFile (&PRIVATE_KEY9);
+  DoSignFile (&PRIVATE_KEY10);
+  DoSignFile (&PRIVATE_KEY11);
+  DoSignFile (&PRIVATE_KEY12);
+  DoSignFile (&PRIVATE_KEY13);
+  DoSignFile (&PRIVATE_KEY14);
+  DoSignFile (&PRIVATE_KEY15);
+  DoSignFile (&PRIVATE_KEY16);
+  DoSignFile (&PRIVATE_KEY17);
+  DoSignFile (&PRIVATE_KEY18);
+  DoSignFile (&PRIVATE_KEY19);
+  DoSignFile (&PRIVATE_KEY20);
+  DoSignFile (&PRIVATE_KEY21);
+  DoSignFile (&PRIVATE_KEY22);
+  DoSignFile (&PRIVATE_KEY23);
+  DoSignFile (&PRIVATE_KEY24);
+  DoSignFile (&PRIVATE_KEY25);
+  DoSignFile (&PRIVATE_KEY26);
+  DoSignFile (&PRIVATE_KEY27);
+  DoSignFile (&PRIVATE_KEY28);
+  DoSignFile (&PRIVATE_KEY29);
+  DoSignFile (&PRIVATE_KEY30);
+  DoSignFile (&PRIVATE_KEY31);
+  DoSignFile (&PRIVATE_KEY32);
+  DoSignFile (&PRIVATE_KEY33);
+  DoSignFile (&PRIVATE_KEY34);
+  DoSignFile (&PRIVATE_KEY35);
+  DoSignFile (&PRIVATE_KEY36);
+  DoSignFile (&PRIVATE_KEY37);
+  DoSignFile (&PRIVATE_KEY38);
+  DoSignFile (&PRIVATE_KEY39);
+  DoSignFile (&PRIVATE_KEY40);
+  DoSignFile (&PRIVATE_KEY41);
+  DoSignFile (&PRIVATE_KEY42);
+  DoSignFile (&PRIVATE_KEY43);
+  DoSignFile (&PRIVATE_KEY44);
+  DoSignFile (&PRIVATE_KEY45);
+  DoSignFile (&PRIVATE_KEY46);
+  DoSignFile (&PRIVATE_KEY47);
+  DoSignFile (&PRIVATE_KEY48);
+  DoSignFile (&PRIVATE_KEY49);
+  DoSignFile (&PRIVATE_KEY50);
+  DoSignFile (&PRIVATE_KEY51);
+  DoSignFile (&PRIVATE_KEY52);
+  DoSignFile (&PRIVATE_KEY53);
+  */
+
+  //DoSealFile (&randomStruct);
+
+/*   InitRandomStruct (&randomStruct); 
+     for (i = 0; i < 50; i++)  
+     DoGenerateKeys (&randomStruct);  
+     R_RandomFinal (&randomStruct); */
+
+  //R_memset ((POINTER)&PRIVATE_KEY3, 0, sizeof (PRIVATE_KEY3));
+#ifdef PRETEND
+  END_SIMULATION
+#endif
   return (0);
 }
 
@@ -360,42 +431,33 @@ R_RANDOM_STRUCT *randomStruct;
     R_GetRandomBytesNeeded (&bytesNeeded, randomStruct);
     if (bytesNeeded == 0)
       break;
-    
+
     R_RandomUpdate (randomStruct, &seedByte, 1);
   }
 }
 
-static void DoSignFile ()
+static void DoSignFile (R_RSA_PRIVATE_KEY *Key)
 {
-  FILE *file;
   R_RSA_PRIVATE_KEY *privateKey;
   R_SIGNATURE_CTX context;
   int digestAlgorithm, status;
   unsigned char partIn[24], signature[MAX_SIGNATURE_LEN];
   unsigned int partInLen, signatureLen;
-  unsigned int curLoc = 0, rtn = 0; 
+  unsigned int curLoc = 0, i; 
 
   status = 0;
-
-  //if (ReadInit (&file, "  Enter filename of content to sign"))
-  //  return;
-
+  //  printf("Started DoSignFile...\n");
   do {
-    //    if (GetPrivateKey (&privateKey))
-    //break;
+    privateKey = Key;
+    //privateKey = &PRIVATE_KEY2;
 
-    privateKey = &PRIVATE_KEY1;
-
-/*     if (GetDigestAlgorithm (&digestAlgorithm)) */
-/*       break; */
     digestAlgorithm = DA_MD5;
+    //digestAlgorithm = DA_MD2;
 
     if ((status = R_SignInit (&context, digestAlgorithm)) != 0)
       break;
 
-    printf("Strlen of file: %d\n", strlen(file1));
-    while (!(rtn = ReadUpdate (&file1[curLoc], partIn, &partInLen, sizeof (partIn)))) {
-      printf ("curLoc: %d\n", curLoc);
+    while (!ReadUpdate ( &file1[curLoc], partIn, &partInLen, sizeof (partIn))) {
       curLoc += partInLen;
       if ((status = R_SignUpdate (&context, partIn, partInLen)) != 0)
         break;
@@ -403,16 +465,19 @@ static void DoSignFile ()
     if (status)
       break;
 
+    //printf("Finished hashing, about to start RSA...\n");
+
     if ((status = R_SignFinal
          (&context, signature, &signatureLen, privateKey)) != 0)
       break;
 
-    if (WriteBlock
-        (signature, signatureLen, "  Enter filename to save the signature"))
-      break;
-  } while (0);
+    /*
+    printf("SignedFile(%d):\n", signatureLen);
+    PrintLength(signature, signatureLen);
+    */
 
-  ReadFinal (file);
+
+  } while (0);
 
   if (status)
     PrintError ("signing file", status);
@@ -485,12 +550,8 @@ R_RANDOM_STRUCT *randomStruct;
   unsigned int encryptedKeyLen, partInLen, partOutLen;
   unsigned int curLoc = 0, rtn;
   unsigned int i;
-  unsigned char printString[1024];
   
   status = 0;
-
-  for ( i = 0; i < 31; i++ )
-    partOut[i] = 0;
 
   do {
     
@@ -523,9 +584,7 @@ R_RANDOM_STRUCT *randomStruct;
       if ((status = R_SealUpdate
            (&context, partOut, &partOutLen, partIn, partInLen)) != 0)
         break;
-      if ( partOutLen )
-	printf("%s", partOut);
-
+      PrintLength(partOut, partOutLen);
     }
     if (status)
       break;
@@ -533,19 +592,16 @@ R_RANDOM_STRUCT *randomStruct;
     if ((status = R_SealFinal (&context, partOut, &partOutLen)))
       break;
     if ( partOutLen )
-      printf("%s", partOut);
+      PrintLength(partOut, partOutLen);
 
     printf("\n");
   
     printf("Key (%d):\n", encryptedKeyLen);
-    R_memset ((POINTER)&printString, 0, sizeof (printString));
-    R_memcpy (printString, encryptedKey, encryptedKeyLen);
-    printf("%s\n", printString);
+    PrintLength(encryptedKey, encryptedKeyLen);
+    
 
     printf("Initializing vector (8): \n");
-    R_memset ((POINTER)&printString, 0, sizeof (printString));
-    R_memcpy (printString, iv, 8);
-    printf("%s\n", printString);
+    PrintLength(iv, 8);
 
   } while (0);
   
@@ -558,7 +614,7 @@ R_RANDOM_STRUCT *randomStruct;
 
 static void DoOpenFile ()
 {
-  char *inFile, *outFile;
+  FILE *inFile, *outFile;
   R_ENVELOPE_CTX context;
   R_RSA_PRIVATE_KEY *privateKey;
   int encryptionAlgorithm, status;
@@ -596,7 +652,7 @@ static void DoOpenFile ()
           privateKey)) != 0)
       break;
     
-    while (!ReadUpdate (inFile, partIn, &partInLen, sizeof (partIn))) {
+    while (!ReadUpdate (file1, partIn, &partInLen, sizeof (partIn))) {
       if ((status = R_OpenUpdate
            (&context, partOut, &partOutLen, partIn, partInLen)) != 0)
         break;
@@ -627,13 +683,14 @@ R_RANDOM_STRUCT *randomStruct;
   char command[80];
   int status, keySize;
 
-  GetCommand
-    (command, sizeof (command),
-     "  Enter key size in bits, (508 to 1024)");
-  if (! *command)
-    return;
-  sscanf (command, "%d", &keySize);
-  
+  /* GetCommand */
+/*     (command, sizeof (command), */
+/*      "  Enter key size in bits, (508 to 1024)"); */
+/*   if (! *command) */
+/*     return; */
+/*   sscanf (command, "%d", &keySize); */
+  keySize = 512;
+
   protoKey.bits = (unsigned int)keySize;
   protoKey.useFermat4 = 1;
   
@@ -643,7 +700,7 @@ R_RANDOM_STRUCT *randomStruct;
     return;
   }
 
-  PrintMessage ("Public key 3 and private key 3 are now ready to use.");
+  //PrintMessage ("Public key 3 and private key 3 are now ready to use.");
   KEYPAIR3_READY = 1;
   
   WriteKeypair3 ();
@@ -654,57 +711,73 @@ static void WriteKeypair3 ()
   FILE *file;
   char filename[256];
   
-  while (1) {
-    GetCommand
-      (filename, sizeof (filename),
-       "  Enter filename to save the keypair");
-    if (! *filename)
-      return;
+/*   while (1) { */
+/*     GetCommand */
+/*       (filename, sizeof (filename), */
+/*        "  Enter filename to save the keypair"); */
+/*     if (! *filename) */
+/*       return; */
     
-    if (filename[0] == '-' && filename[1] == '\0') {
-      /* use stdout */
-      file = stdout;
-      break;
-    }
-    if ((file = fopen (filename, "w")) != NULL)
-      /* successfully opened */
-      break;
+/*     if (filename[0] == '-' && filename[1] == '\0') { */
+/*       /\* use stdout *\/ */
+/*       file = stdout; */
+/*       break; */
+/*     } */
+/*     if ((file = fopen (filename, "w")) != NULL) */
+/*       /\* successfully opened *\/ */
+/*       break; */
     
-    PrintError ("ERROR: Cannot open a file with that name.  Try again.", 0);
-  }
+/*     PrintError ("ERROR: Cannot open a file with that name.  Try again.", 0); */
+/*   } */
+  file = stdout;
 
-  fprintf (file, "Public Key, %u bits:\n", PUBLIC_KEY3.bits);
-  fprintf (file, "  modulus: ");
+  fprintf(file, "static R_RSA_PUBLIC_KEY PUBLIC_KEY%d = {\n", keyNum);
+  
+  //  fprintf (file, "Public Key, %u bits:\n", PUBLIC_KEY3.bits);
+  fprintf (file, "\t%u,\n\t", PUBLIC_KEY3.bits);
+  //fprintf (file, "  modulus: {");
   WriteBigInteger (file, PUBLIC_KEY3.modulus, sizeof (PUBLIC_KEY3.modulus));
-  fprintf (file, "  exponent: ");
+  fprintf (file, ",\n\t");
+  //fprintf (file, "  exponent: {");
   WriteBigInteger (file, PUBLIC_KEY3.exponent, sizeof (PUBLIC_KEY3.exponent));
+  fprintf(file, "\n};\n\n");
 
-  fprintf (file, "\nPrivate Key, %u bits:\n", PRIVATE_KEY3.bits);
-  fprintf (file, "  modulus: ");
+  //  fprintf (file, "\nPrivate Key, %u bits:\n", PRIVATE_KEY3.bits);
+  fprintf(file, "static R_RSA_PRIVATE_KEY PRIVATE_KEY%d = {\n", keyNum++);
+  //  fprintf (file, "  modulus: {");
+  fprintf (file, "\t%u,\n\t", PUBLIC_KEY3.bits);
   WriteBigInteger (file, PRIVATE_KEY3.modulus, sizeof (PRIVATE_KEY3.modulus));
-  fprintf (file, "  public exponent: ");
+  //  fprintf (file, "  public exponent: {");
+  fprintf (file, ",\n\t");
   WriteBigInteger
     (file, PRIVATE_KEY3.publicExponent, sizeof (PRIVATE_KEY3.publicExponent));
-  fprintf (file, "  exponent: ");
+  //fprintf (file, "  exponent: {");
+  fprintf (file, ",\n\t");
   WriteBigInteger
     (file, PRIVATE_KEY3.exponent, sizeof (PRIVATE_KEY3.exponent));
-  fprintf (file, "  prime 1: ");
+  //  fprintf (file, "  prime 1: {");
+  fprintf (file, ",\n\t{");
   WriteBigInteger
     (file, PRIVATE_KEY3.prime[0], sizeof (PRIVATE_KEY3.prime[0]));
-  fprintf (file, "  prime 2: ");
+  //  fprintf (file, "  prime 2: {");
+  fprintf (file, ",\n\t");
   WriteBigInteger
     (file, PRIVATE_KEY3.prime[1], sizeof (PRIVATE_KEY3.prime[1]));
-  fprintf (file, "  prime exponent 1: ");
+  //  fprintf (file, "  prime exponent 1: {");
+  fprintf (file, "},\n\t{");
   WriteBigInteger
     (file, PRIVATE_KEY3.primeExponent[0],
      sizeof (PRIVATE_KEY3.primeExponent[0]));
-  fprintf (file, "  prime exponent 2: ");
+  //  fprintf (file, "  prime exponent 2: {");
+  fprintf (file, ",\n\t");
   WriteBigInteger
     (file, PRIVATE_KEY3.primeExponent[1],
      sizeof (PRIVATE_KEY3.primeExponent[1]));
-  fprintf (file, "  coefficient: ");
+  //  fprintf (file, "  coefficient: {");
+  fprintf (file, "},\n\t");
   WriteBigInteger
     (file, PRIVATE_KEY3.coefficient, sizeof (PRIVATE_KEY3.coefficient));
+  fprintf(file, "\n};\n\n");
 
   if (file != stdout)
     fclose (file);
@@ -717,21 +790,22 @@ FILE *file;
 unsigned char *integer;
 unsigned int integerLen;
 {
-  while (*integer == 0 && integerLen > 0) {
-    integer++;
-    integerLen--;
-  }
+/*   while (*integer == 0 && integerLen > 0) { */
+/*     integer++; */
+/*     integerLen--; */
+/*   } */
   
   if (integerLen == 0) {
     /* Special case, just print a zero. */
     fprintf (file, "00\n");
     return;
   }
-  
-  for (; integerLen > 0; integerLen--)
-    fprintf (file, "%02x ", (unsigned int)(*integer++));
+  fprintf( file, "{ ");
+  for (; integerLen > 1; integerLen--)
+    fprintf (file, "0x%02x, ", (unsigned int)(*integer++));
 
-  fprintf (file, "\n");
+  fprintf (file, "0x%02x", (unsigned int)(*integer));
+  fprintf (file, "}");
 }
 
 /* Ask the user to use public key 1, 2 or 3 and point publicKey to
@@ -923,27 +997,27 @@ char *prompt;
    Return 0 on success or 1 if error or end of file.
  */
 static int ReadUpdate (file, partOut, partOutLen, maxPartOutLen)
-char *file;
+unsigned char *file;
 unsigned char *partOut;
 unsigned int *partOutLen;
 unsigned int maxPartOutLen;
 {
-  int status = 0;
-  int fileLen = strlen(file);
+  int fileLen = strlen( (char *)file);
   
-  if (maxPartOutLen > fileLen ){
+  if (fileLen == 0 )
+    return 1;
+
+  if (maxPartOutLen > fileLen )
     *partOutLen = fileLen;
-    status = 1;
-  }
   else
     *partOutLen = maxPartOutLen;
 
   if ( *partOutLen ) {
-    strncpy ( partOut, file, *partOutLen );
+    R_memcpy ( partOut, file, *partOutLen );
     //    printf("%s | length: %d\n", partOut, *partOutLen);
   }
 
-  return (status);
+  return 0;
 }
 
 /* Close file.
@@ -973,12 +1047,12 @@ char *prompt;
   if (ReadInit (&file, prompt))
     return (1);
 
-  if ((status = ReadUpdate (file, block, blockLen, maxBlockLen)) == 0) {
+  if ((status = ReadUpdate (file1, block, blockLen, maxBlockLen)) == 0) {
     if (*blockLen == maxBlockLen)
       /* Read exactly maxBlockLen bytes, so reading one more will set 
            end of file if there were exactly maxBlockLen bytes in the file.
        */
-      if (!ReadUpdate (file, dummy, &dummyLen, 1)) {
+      if (!ReadUpdate (file1, dummy, &dummyLen, 1)) {
         PrintError ("ERROR: File is too large.", 0);
         status = 1;
       }
@@ -1155,3 +1229,36 @@ char *prompt;
     }
   }
 }
+
+static void PrintLength (string, len)
+unsigned char *string;
+unsigned int len;
+{
+  int i;
+  unsigned char printString[128];
+
+  R_memset ((POINTER)&printString, 0, sizeof (printString));
+  R_memcpy (printString, string, len);
+  for ( i=0; i<len -1 ; i++)
+       printf("0x%hhx, ", printString[i]);
+  printf("0x%hhx\n", printString[i]);
+
+}
+
+static R_RSA_PUBLIC_KEY PUBLIC_KEY4 = {
+	512,
+	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x78, 0xc8, 0xf9, 0x2a, 0xc3, 0xd7, 0xb1, 0x6a, 0xeb, 0x66, 0x00, 0x15, 0xed, 0x54, 0x28, 0x91, 0x81, 0x35, 0x9f, 0x6f, 0x8a, 0xb3, 0x6a, 0xac, 0x9d, 0x0a, 0x75, 0x12, 0xdf, 0x9e, 0x77, 0xf0, 0xd3, 0x3c, 0x30, 0xf4, 0xad, 0x33, 0x6a, 0x9a, 0x65, 0x24, 0x20, 0x89, 0x8b, 0xf7, 0x95, 0x9d, 0xbe, 0x9a, 0xbd, 0x31, 0x77, 0x80, 0xac, 0x14, 0x0f, 0xa4, 0x90, 0xe6, 0x0d, 0x0a, 0x29},
+	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01}
+};
+
+static R_RSA_PRIVATE_KEY PRIVATE_KEY4 = {
+	512,
+	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x78, 0xc8, 0xf9, 0x2a, 0xc3, 0xd7, 0xb1, 0x6a, 0xeb, 0x66, 0x00, 0x15, 0xed, 0x54, 0x28, 0x91, 0x81, 0x35, 0x9f, 0x6f, 0x8a, 0xb3, 0x6a, 0xac, 0x9d, 0x0a, 0x75, 0x12, 0xdf, 0x9e, 0x77, 0xf0, 0xd3, 0x3c, 0x30, 0xf4, 0xad, 0x33, 0x6a, 0x9a, 0x65, 0x24, 0x20, 0x89, 0x8b, 0xf7, 0x95, 0x9d, 0xbe, 0x9a, 0xbd, 0x31, 0x77, 0x80, 0xac, 0x14, 0x0f, 0xa4, 0x90, 0xe6, 0x0d, 0x0a, 0x29},
+	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01},
+	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x93, 0x67, 0x3d, 0xb2, 0x41, 0x9e, 0xf1, 0x59, 0x14, 0x39, 0x18, 0x76, 0x1d, 0xf0, 0x07, 0x3f, 0xcc, 0xac, 0xe8, 0xa5, 0x95, 0xfd, 0xa2, 0xeb, 0xfe, 0x05, 0xf2, 0x04, 0x07, 0x2c, 0xc9, 0x46, 0x06, 0x6b, 0xf5, 0x47, 0x6e, 0xdc, 0xf4, 0x15, 0xf4, 0x27, 0x05, 0xb7, 0x79, 0x15, 0xe2, 0xdc, 0xb3, 0x9e, 0x29, 0x25, 0xbd, 0xaa, 0x33, 0x1c, 0x67, 0xd4, 0x71, 0x1b, 0xf6, 0x8c, 0x85, 0x31},
+	{{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x5e, 0x6e, 0xe1, 0xc3, 0xea, 0x31, 0x41, 0x90, 0xe0, 0x8e, 0x24, 0x47, 0x5e, 0xb8, 0x16, 0xf1, 0x21, 0x1e, 0xd1, 0x49, 0xff, 0x95, 0x33, 0xe5, 0x60, 0xde, 0x4c, 0xae, 0xae, 0xf8, 0x37},
+	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe1, 0x06, 0xcd, 0xd0, 0x08, 0xc9, 0x15, 0x09, 0x14, 0x93, 0x8a, 0x8c, 0xa5, 0xd7, 0x84, 0xb8, 0x56, 0x15, 0x42, 0x38, 0xb7, 0xe7, 0x8e, 0x89, 0xcb, 0xd6, 0x56, 0x9f, 0x59, 0x76, 0x20, 0x9f}},
+	{{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x0b, 0x3a, 0xdb, 0xbb, 0xfa, 0x9b, 0xe7, 0xc9, 0xa1, 0xc7, 0x84, 0x29, 0xb2, 0x03, 0x91, 0x1d, 0x60, 0x25, 0x0e, 0x6f, 0xf4, 0x7d, 0x42, 0xca, 0xa0, 0x04, 0xa0, 0x4e, 0x9e, 0xea, 0xf9},
+	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x71, 0x76, 0x71, 0xce, 0x44, 0xaf, 0xc7, 0x68, 0x85, 0xb4, 0x83, 0x36, 0xb9, 0xe4, 0x7a, 0xaa, 0x4b, 0xd5, 0x7a, 0x47, 0x89, 0x0b, 0x3b, 0xc6, 0xe5, 0x3d, 0xd4, 0xfd, 0x92, 0x29, 0x4a, 0xf7}},
+	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xcd, 0xde, 0x32, 0x88, 0x1d, 0x0a, 0x09, 0x49, 0x18, 0x17, 0x1c, 0xcb, 0xe5, 0xfc, 0x70, 0x43, 0x33, 0xf0, 0x00, 0x1b, 0x59, 0xf2, 0x85, 0x90, 0x44, 0x2d, 0x01, 0xc9, 0x64, 0xe3, 0x38, 0xcf}
+};

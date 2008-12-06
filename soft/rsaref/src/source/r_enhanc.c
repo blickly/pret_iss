@@ -137,7 +137,7 @@ R_RSA_PRIVATE_KEY *privateKey;                  /* signer's RSA private key */
       status = RE_PRIVATE_KEY;
       break;
     }
-
+    
     /* Reset for another verification. Assume Init won't fail */
     R_DigestInit
       (&context->digestContext, context->digestContext.digestAlgorithm);

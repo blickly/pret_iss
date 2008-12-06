@@ -24,7 +24,7 @@ INCL =  -I. -I$(RSAREFDIR) #-I$(STDINCDIR)
 PROG = all
 
 # Normal C flags.
-CFLAGS = $(INCL) -O -c -DPROTOTYPES=1
+CFLAGS = $(INCL) -O -c -DPROTOTYPES=1 -g
 MFLAGS = -I. -I$(RSAREFDIR)
 
 # The location of the common source directory.
