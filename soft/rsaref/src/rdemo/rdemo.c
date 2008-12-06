@@ -746,7 +746,7 @@ R_RSA_PUBLIC_KEY **publicKey;
       return (1);
       
     case '1':
-      *publicKey = &PUBLIC_KEY4;
+      *publicKey = &PUBLIC_KEY1;
       return (0);
       
     case '2':
@@ -789,7 +789,7 @@ R_RSA_PRIVATE_KEY **privateKey;
       return (1);
       
     case '1':
-      *privateKey = &PRIVATE_KEY4;
+      *privateKey = &PRIVATE_KEY1;
       return (0);
       
     case '2':

@@ -240,6 +240,8 @@ static R_RSA_PRIVATE_KEY PRIVATE_KEY2 = {
 R_RSA_PUBLIC_KEY PUBLIC_KEY3;
 R_RSA_PRIVATE_KEY PRIVATE_KEY3;
 int KEYPAIR3_READY = 0;
+unsigned char digestInfo[34] = { 0x30, 0x20, 0x30, 0xc, 0x6, 0x8, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0xd, 0x2, 0x5, 0x5, 0x0, 0x4, 0x10, 0x5, 0x6d, 0xc0, 0x4d, 0xed, 0x9c, 0x42, 0x11, 0x55, 0xa7, 0x85, 0x1f, 0x4b, 0x3c, 0x3f, 0x66 };
+
 
 int main (argc, argv)
 int argc;
@@ -318,14 +320,13 @@ R_RANDOM_STRUCT *randomStruct;
 static void DoSignFile (R_RSA_PRIVATE_KEY *Key)
 {
   R_RSA_PRIVATE_KEY *privateKey;
-  R_SIGNATURE_CTX context;
   int digestAlgorithm, status;
   unsigned char partIn[24], signature[MAX_SIGNATURE_LEN];
   unsigned int partInLen, signatureLen;
   unsigned int curLoc = 0, i; 
 
   status = 0;
-  //  printf("Started DoSignFile...\n");
+
   do {
     privateKey = Key;
     //privateKey = &PRIVATE_KEY2;
@@ -333,36 +334,17 @@ static void DoSignFile (R_RSA_PRIVATE_KEY *Key)
     digestAlgorithm = DA_MD5;
     //digestAlgorithm = DA_MD2;
 
-    if ((status = R_SignInit (&context, digestAlgorithm)) != 0)
-      break;
-
-    while (!ReadUpdate ( &file1[curLoc], partIn, &partInLen, sizeof (partIn))) {
-      curLoc += partInLen;
-      if ((status = R_SignUpdate (&context, partIn, partInLen)) != 0)
-        break;
-    }
-    if (status)
-      break;
-
     //printf("Finished hashing, about to start RSA...\n");
 
-    if ((status = R_SignFinal
-         (&context, signature, &signatureLen, privateKey)) != 0)
+    if ((status = R_SignFinal2
+         (digestInfo, signature, &signatureLen, privateKey)) != 0)
       break;
-
-    /*
-    printf("SignedFile(%d):\n", signatureLen);
-    PrintLength(signature, signatureLen);
-    */
-
-
+    
   } while (0);
 
   if (status)
     PrintError ("signing file", status);
 
-  R_memset ((POINTER)&context, 0, sizeof (context));
-  R_memset ((POINTER)partIn, 0, sizeof (partIn));
 }
 
 static void DoVerifyFile ()
