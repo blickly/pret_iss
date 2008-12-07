@@ -380,17 +380,17 @@ unsigned int cDigits, dDigits;
     
     /* Scan past leading zero bits of most significant digit.
      */
-    if (i == (int)(cDigits - 1)) {
-      while (! DIGIT_2MSB (ci)) {
-        ci <<= 2;
-        ciBits -= 2;
-      }
-    }
-#ifdef PRET
-    DEAD0(110527); //663162/6 - because 6 threads
-#endif
+/*     if (i == (int)(cDigits - 1)) { */
+/*       while (! DIGIT_2MSB (ci)) { */
+/*         ci <<= 2; */
+/*         ciBits -= 2; */
+/*       } */
+/*     } */
+
     for (j = 0; j < ciBits; j += 2, ci <<= 2) {
-      
+#ifdef PRET
+      DEAD0(110527); //663162/6 - because 6 threads
+#endif
       /* Compute t = t^4 * b^s mod d, where s = two MSB's of ci.
        */
       NN_ModMult (t, t, t, d, dDigits);
@@ -398,12 +398,10 @@ unsigned int cDigits, dDigits;
       if ((s = DIGIT_2MSB (ci)) != 0) {
         NN_ModMult (t, t, bPower[s-1], d, dDigits);
       }
-      	DivCount++;
+      
+      DivCount++;
 #ifdef PRET
-      if ( (j + 2) >= ciBits )
-	DEAD0(0);
-      else
-	DEAD0(110527);
+      DEAD0(0);
 #endif
     }
   }
