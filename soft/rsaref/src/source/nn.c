@@ -380,13 +380,14 @@ unsigned int cDigits, dDigits;
     
     /* Scan past leading zero bits of most significant digit.
      */
-/*     if (i == (int)(cDigits - 1)) { */
-/*       while (! DIGIT_2MSB (ci)) { */
-/*         ci <<= 2; */
-/*         ciBits -= 2; */
-/*       } */
-/*     } */
-
+#ifndef BYPASSZERO
+    if (i == (int)(cDigits - 1)) {
+      while (! DIGIT_2MSB (ci)) {
+        ci <<= 2;
+        ciBits -= 2;
+      }
+    }
+#endif
     for (j = 0; j < ciBits; j += 2, ci <<= 2) {
 #ifdef PRET
       DEAD0(110527); //663162/6 - because 6 threads
