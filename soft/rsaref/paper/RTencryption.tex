@@ -1,0 +1,157 @@
+
+%
+%  $Description: Author guidelines and sample document in LaTeX 2.09$
+%
+%  $Author: mankit $
+%  $Date: 2008/05/20 07:24:15 $
+%  $Revision: 1.41 $
+%
+
+\documentclass[times, 10pt,twocolumn]{article}
+\usepackage{latex8}
+\usepackage{times}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{color}
+%\documentstyle[times,art10,twocolumn,lat ex8]{article}
+
+%-------------------------------------------------------------------------
+% take the % away on next line to produce the final camera-ready version
+\pagestyle{empty}
+
+%-------------------------------------------------------------------------
+\begin{document}
+
+  \title{An Architecture  Guaranteed Service for Wide Area Network}
+
+  \author{Isaac Liu, Dai Bui \\
+    Center for Hybrid and Embedded Software Systems, EECS \\
+    University of California, Berkeley \\
+    Berkeley, CA 94720, USA \\
+    \{\tt liuisaac, daib\}@eecs.berkeley.edu
+  }
+
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+Provide a network architecture for use of real time, not just for multimedia purpose, but also control applications which often need stringent real-time latency guarantees.
+
+\end{abstract}
+
+%------------------------------------------------------------------------------
+\section{Introduction}
+Requirements
+\begin{itemize}
+\item Need protocol to reserve bandwidth
+\item Need routers and switches to honor reservation
+\item Application need to specify bandwidth
+\item Control policy, determine if it has enough bandwidth
+\item !!Need to characterize delay, link delay + router delay
+\end{itemize}
+
+Application
+\begin{itemize}
+\item Cyber Physical Systems
+\item Control applications over the network (remote surgery)
+\item BRAND - Berkeley realtime application network, use wide area for distribution of sensors
+\item Online gaming, voice
+\end{itemize}
+
+\section{Issues}
+\begin{itemize}
+\item How to interact with LAN?? - Do we need this???
+\item Router Architecture vs simulation platform
+\begin{itemize}
+\item queues? (Priority queues or FIFO?)
+\item packet switch - store and forward vs cut-through
+\item Classifier logic, scheduler logic? Where does it go? 
+\end{itemize}
+ 
+\end{itemize}
+
+
+Ideas:
+\begin{itemize}
+\item Attempt to bridge time trigger synchronous control on wide area network
+\item RSVP + time trigger - Reserve bandwidth, and then interleave the sensor applications
+\item Periodic sensing of sensor and actuator
+\end{itemize}
+
+Protocols
+\begin{itemize}
+\item RSVP - simply specifies route reservation
+\end{itemize}   
+
+\section{Related work}
+
+Other Proposals:
+\begin{itemize}
+\item As demand increases, ISP will increase bandwidth
+\item Content distribution networks - mostly for multimedia, Put contents everywhere, so everyone can access and stream it faster, applicable to multimedia
+\item multicast overlay
+\end{itemize}
+
+Other groups:
+\begin{itemize}
+\item DARPA - NGI (Next generation Internet)
+\item AVICI - Company that has white papers on reliable routing and real-time IP
+\item Real-time Ethernet / Synchronous Ethernet
+\item RTnet - Real Time internet Stack
+\item Real time multimedia networks
+\end{itemize}
+
+Papers:
+\begin{itemize}
+\item Domenico Ferrari - A Scheme for Real-Time Channel Establishment in Wide area Networks (and follow on papers)
+\item Caglan M. Aras, James F. Jurose - Real-Time Communications in Packet-Switched Networks (evaluation of different schemes)
+\item Jennifer Rexford - Router Architecture for Real-time communication in multi-computer Networks
+\end{itemize}
+
+
+
+\section{Background}
+% 1 - 1.5 page
+\subsection{Current Internet Structure}
+
+\subsection{Requirements}
+
+\section{Deployment}
+Need to talk about how to deploy a wide area real time network
+
+
+%Jackie
+
+\section{Implementation}
+\subsection{Routing Protocol}
+
+
+\section {Simulation}
+
+\section{Results}
+
+% Jia 1.5 -2 page
+\subsection{Application}
+
+\subsection{Platform}
+
+\subsection{Results and Analysis}
+
+
+\section{Future Work}
+
+\section{Conclusion}
+
+\bibliographystyle{latex8}
+\bibliography{RTInternet}
+
+%-------------------------------------------------------------------------
+
+
+
+\end{document}
+
