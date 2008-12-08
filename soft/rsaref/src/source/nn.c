@@ -380,7 +380,7 @@ unsigned int cDigits, dDigits;
     
     /* Scan past leading zero bits of most significant digit.
      */
-#ifndef BYPASSZERO
+#ifdef BYPASSZERO
     if (i == (int)(cDigits - 1)) {
       while (! DIGIT_2MSB (ci)) {
         ci <<= 2;
