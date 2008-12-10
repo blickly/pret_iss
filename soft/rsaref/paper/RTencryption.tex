@@ -71,8 +71,9 @@ Eliminating side channel attacks for encryptions
 \section{Background}
 % 1 - 1.5 page
 \subsection{Encryption}
-
+The goal of encryption is to make information illegible to anyone without special knowledge, generally expressed as a key.  It is naturally of tremendous worth in the Information Age, especially to entities such as governments and businesses, which have known adversaries.  Encryption algorithms generally use a so-called trapdoor function, which is easy to compute in one direction but difficult (according to current knowledge) to compute in the other direction without an additional piece of information.  These functions are based on operations such as prime factorization or taking discrete logarithms; as years of concerted effort has failed to produce an efficient algorithm to invert them, the cryptographic algorithms founded on them are used with a large amount of confidence in the algorithms' security.
 \subsection{Side Channel Attacks}
+Traditional attacks on cryptographic algorithms use only the input and output of the algorithm, treating it like a monolithic black box.  In contrast, side channel attacks circumvent the mathematical complexity of reversing encryption by getting additional data about the encryption process.  [insert diagrams of info. leakage here]  Depending on the algorithm and its implementation, a wide variety of information leaks may exist on a number of different physical channels.
 \subsubsection{Timing attacks}
 \subsubsection{Caching attacks}
 \subsubsection{Branch Predictor attacks}
