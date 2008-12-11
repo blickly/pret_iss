@@ -1,4 +1,3 @@
-
 %
 %  $Description: Author guidelines and sample document in LaTeX 2.09$
 %
@@ -82,12 +81,21 @@ Caching attacks use a spy thread running concurrently with the encryption progra
 Similar to caching attacks, branch predictor attacks involve a spy program running concurrently with the encryption program.  In this case, the spy thread fills all entries in the branch predictor table with a known value and constantly checks up on those values.  By counting the cycles required for a branch, the spy program detects any change in the state of the branch predictor and therefore infers the control flow of the encryption thread, revealing information about the key.
 \subsubsection{Power attacks}
 Power attacks use the changing power consumption of the processor to infer the activity of the encryption software over time.  Differences in algorithm activity based on the key will be revealed by the fluctuations they create in processor energy use.  Power attacks require measurement of the power intake of the processor, and are thus generally impossible without physical access to the target hardware, but this is no obstacle in cases such as consumer electronics.
-\section{PRET}
+
+\section{Elimination of Side Channel attacks}
+We can begin see a pattern in all of the side channel attacks that are mentioned above. The attacker collects information from the underlying hardware, and use it to infer information regarding the encryption algorithm, which can lead to exposure of the secret key. \cite{Kelsey98sidechannel} offers a more in-depth report on side-channel cryptanalysis and provide examples of them. 
+
+Computer architects have made amazing advancements in architecture design to allow for faster processing. The introduction and improvement of branch predictors and caches allow for better speculative execution. Hardware threading mechanisms such as simultaneous multi-threading improve the utilization and throughput of the processor. However, these improvements come at a cost. Because a portion of the speedups are gained from speculative execution, the amount of complexity required to maintain state and recovery is enormous. As a result, programs executed on modern processors have unpredictable and uncontrollable execution times. 
+
+The branch predictor side channel attack and cache side channel attack both attack a single shared resource from the hardware. By writing a spy process to hog up that resource, you can easily monitor another thread's access to the same resource and therefore monitor the activity of the thread. The timing side channel attack attacks the execution time difference of a processor, which is indirectly caused by its unpredictable hardware components
+
+\subsection{PRET}
 
 
 \section{Implementation}
 
 \section{Results}
+
 
 
 \section{Conclusion}
@@ -97,7 +105,4 @@ Power attacks use the changing power consumption of the processor to infer the a
 
 %-------------------------------------------------------------------------
 
-
-
 \end{document}
-
