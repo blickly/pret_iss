@@ -15,11 +15,12 @@
 \usepackage{graphicx}
 \usepackage{fancyvrb}
 \usepackage{color}
+\usepackage[small]{caption}
 %\documentstyle[times,art10,twocolumn,lat ex8]{article}
 
 %-------------------------------------------------------------------------
 % take the % away on next line to produce the final camera-ready version
-\pagestyle{empty}
+%\pagestyle{empty}
 
 %-------------------------------------------------------------------------
 \begin{document}
@@ -66,6 +67,8 @@ Eliminating side channel attacks for encryptions
 \section{Introduction}
 In order for a secure software to be truly secure, its underlying hardware must also be secure. In other words, the underlying hardware must not emit any information regarding the secure process that's executing on the hardware. 
 
+Kelsey et al.~\cite{Kelsey98sidechannel} introduce the idea of side-channel cryptanalysis, which is cryptanalysis using implementation data. 
+
 Computer architects have made amazing advancements in architecture design to allow for faster processing. The introduction and improvement of pipelines, branch predictors and caches allow for better speculative execution. Hardware threading mechanisms such as simultaneous multi-threading improve the utilization and throughput of the processor. However, these improvements come at a cost. Because these mechanisms improve performance by speculatively executing instructions, the complexity required to maintain state and recovery is enormous. Programs executed on modern processors now have improved average case performance, but unpredictable and non-repeatable execution times. Edwards and Lee\cite{edwards2007case} argued, for the purpose of Real Time Systems, that we needed to reconsider the importance of predictability and repeatability in the core design of the architecture. We argue that this reconsideration is also needed for security systems, because secure software is only as secure as its underlying execution platform. 
 
 
@@ -73,6 +76,8 @@ Computer architects have made amazing advancements in architecture design to all
 
 \section{Background}
 % 1 - 1.5 page
+\textcolor{red}{David, make sure to mention some proposed solutions for each one. I mention in the next paragraph that these individual solutions mentioned in this paragraph are helpful, but they don't tackle the root cause.}
+
 \subsection{Encryption}
 The goal of encryption is to make information illegible to anyone without special knowledge, generally expressed as a key.  It is naturally of tremendous worth in the Information Age, especially to entities such as governments and businesses, which have known adversaries.  Encryption algorithms generally use a so-called trapdoor function, which is easy to compute in one direction but difficult (according to current knowledge) to compute in the other direction without an additional piece of information.  These functions are based on operations such as prime factorization or taking discrete logarithms; as years of concerted effort has failed to produce an efficient algorithm to invert them, the cryptographic algorithms founded on them are used with a large amount of confidence in the algorithms' security.  That is, given all details of the encryption algorithm except for the key, an adversary will not be able to read the encoded information with any reasonable amount of computational power.  [image: traditional model of cryptography]
 \subsection{Side Channel Attacks}
@@ -86,15 +91,23 @@ Similar to caching attacks, branch predictor attacks involve a spy program runni
 \subsubsection{Power attacks}
 Power attacks use the changing power consumption of the processor to infer the activity of the encryption software over time.  Differences in algorithm activity based on the key will be revealed by the fluctuations they create in processor energy use.  Power attacks require measurement of the power intake of the processor, and are thus generally impossible without physical access to the target hardware, but this is no obstacle in cases such as consumer electronics.
 
-\section{Elimination of Side Channel attacks}
-We can begin see a pattern in all of the side channel attacks that are mentioned above. The attacker collects information from the implementation on the underlying hardware, and use it to infer information regarding the encryption algorithm, which can lead to exposure of the secret key. Kelsey et al.~\cite{Kelsey98sidechannel} introduce the idea of side-channel cryptanalysis, which is cryptanalysis using implementation data. The branch predictor side channel attack and cache side channel attack both attack a single shared resource from the hardware. By writing a spy process to hog up that resource, you can easily monitor another thread's access to the same resource and therefore monitor the activity of the thread. The timing side channel attack attacks the algorithm's uncontrollable execution time on the processor. 
+\section{Elimination of Software Side Channel Attacks}
+We can see a pattern in all of the side channel attacks that are mentioned above. The attacker collects information from the implementation on the underlying hardware, and use it to infer information regarding the encryption algorithm, which can lead to exposure of the secret key. The branch predictor side channel attack and cache side channel attack both attack a single shared resource from the hardware. By writing a spy process to hog up that resource, you can easily monitor another thread's access to the same resource and therefore monitor the activity of the thread. The timing side channel attack attacks the algorithm's uncontrollable execution time on the processor, and predicts the execution flow to obtain the encryption key. Several individual methods have been proposed for to counter the attacks, but they don't tackle the principle cause of the vulnerability -- the uncontrollable and unpredictable execution of software on modern computer architectures. Lickly and Liu~\cite{pret_cases08} introduced PRET (PREcision Timed Architecture), an architecture that delivers predictable timing along with predictable function and performance. This architecture tackles the root cause of side channel attacks by design, eliminating the vulnerability.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=.25]{./images/top_arch.pdf}
+  \caption{Block Diagram of PRET Architecture}
+  \label{fig:top_arch}
+\end{figure}
 
-
+A block level diragram of the PRET architecture is shown in figure~\ref{fig:top_arch}. We present an overview of the architecture in the context of eliminating side channels attacks, and refer interested users to ~\cite{pret_cases08} for more details.
+%\begin{wrapfigure}{r}{0pt}
+%  \end{wrapfigure}
 \subsection{PRET}
 
 
-\section{Implementation}
+
 
 \section{Results}
 
