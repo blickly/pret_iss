@@ -45,14 +45,11 @@
  * Create a new wheeled memory with the given delays and memory window size
  * (measured in cycles).
  *
- * Note that in order to guarantee fairness, the window size must be
- * relatively prime to the number of threads.  In order to ensure this,
- * the constructor sanitizes the given memory window size.
  */
 wheeled_mem::wheeled_mem(int l_d, int t_d, cycle_counter* cyc, int mem_win)
         : lat_d(l_d),
         throughput_d(t_d),
-        MEMORY_WINDOW(ROUND_UP(mem_win - 1, NUM_THREADS) + 1) {
+        MEMORY_WINDOW(mem_win) {
     counter = cyc;
     accessing = false;
     remaining_cycles = 0;
@@ -134,7 +131,7 @@ vector<uint32_t> wheeled_mem::get_data_stream(uint32_t start_addr, int num_words
     return data_stream;
 }
 
-int wheeled_mem::burst_words_returned(int tid, int num_words) {
+int wheeled_mem::burst_words_transferred(int tid, int num_words) {
     // If we aren't accessing, we know zero bytes have been transferred
     if (tid != current_thread() || !accessing) {
         assert(remaining_cycles == 0);
@@ -154,7 +151,6 @@ void wheeled_mem::behavior() {
     if (remaining_cycles != 0) {
         --remaining_cycles;
     }
-
 }
 
 
@@ -193,7 +189,4 @@ int wheeled_mem::current_thread() {
     int window_cycle = counter->get_cycles() % (MEMORY_WINDOW * NUM_THREADS);
     int tid = window_cycle / MEMORY_WINDOW;
     return (1 + tid) % NUM_THREADS;
-}
-
-wheeled_mem::~wheeled_mem() {
 }

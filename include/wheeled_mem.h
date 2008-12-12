@@ -37,20 +37,91 @@
 #include <vector>
 #include <stdint.h>
 
+enum AccessorType { BURST, GLOBAL };
+
+///////////////////////////////////////////////////////////////////////
+/// wheeled_mem
+/**
+ * The wheeled memory class provides a time triggered interface to memory.
+ * It uses a simple round-robin schedule to arbitrate among multiple threads.
+ * Each thread is allocated a certain amount of time, called its memory
+ * window, in which it must make its access.  If a thread tries to make an
+ * access when it is not its turn, that thread must stall until the start of
+ * its next memory window.
+ *
+ * @author  Ben Lickly
+ * @version $Id$
+ * @Pt.ProposedRating red blickly
+ * @Pt.AcceptedRating
+ */
 class wheeled_mem : public mem_location {
 public:
-    enum AccessorType { BURST, GLOBAL, DMA };
+    /** Create a new wheeled memory unit with the given delays.
+     *  The latency delay is how many cycles it takes to get the first word,
+     *  and the throughput delay is how long it takes to get subsequent words
+     *  when in burst mode.  The memory window parameter tells the length of
+     *  a single thread's memory window.
+     *  @param latency_delay Cycles to get first word.
+     *  @param throughput_delay Cycles to get streaming words in burst mode.
+     *  @param cyc Pointer to core cycle counter.
+     *  @param mem_win Cycles of the memory window of a single thread.
+     */
+    wheeled_mem(int latency_delay, int throughput_delay, cycle_counter* cyc, int mem_win);
+
+    /** Create a new wheeled memory unit with the given delays.
+     *  The latency delay is how many cycles it takes to get the first word,
+     *  and the throughput delay is how long it takes to get subsequent words
+     *  when in burst mode.
+     *  Since this constructor does not specify a memory window size,
+     *  the minimal size that can accomodate the longest burst access is assumed.
+     *  @param latency_delay Cycles to get first word.
+     *  @param throughput_delay Cycles to get streaming words in burst mode.
+     *  @param cyc Pointer to core cycle counter.
+     */
     wheeled_mem(int latency_delay, int throughput_delay, cycle_counter* cyc);
-    wheeled_mem(int l_d, int t_d, cycle_counter* cyc, int mem_win);
-    virtual ~wheeled_mem();
+
+    /** Determine if the memory wheel is stalled for the given thread
+     *  and address.  This is the function that enforces the schedule of
+     *  the threads accessing the memory wheel.
+     *  @param tid The thread id of the requesting thread
+     *  @param addr The address being requested
+     *  @return True if the memory location is stalled.  Otherwise false.
+     */
     virtual bool is_stalled(int tid, uint32_t addr);
+
+    /** Return the word of data at the given address, as well as whether
+     *  that access stalls.
+     *  @param tid The thread id of the requesting thread
+     *  @param addr The address being requested
+     *  @param stalled Whether this memory location is stalled or not.
+     *  @return The word read at that address by that thread.
+     */
     virtual uint32_t read(int tid, uint32_t addr, bool& stalled);
 
+    /** Return a burst of words from memory starting at the given address,
+     *  as well as whether that access stalls.
+     *  @param tid The thread id of the requesting thread
+     *  @param addr The address being requested
+     *  @param stalled Whether this memory location is stalled or not.
+     *  @param num_words The number of words in the burst.
+     *  @return The sequence of words starting at that address.
+     */
     virtual vector<uint32_t> read_burst(int tid,
                                         uint32_t addr,
                                         bool& stalled,
                                         int num_words);
-    virtual int burst_words_returned(int tid, int num_words);
+
+    /** Return the number of words that have been successfully transferred
+     *  in an ongoing burst transfer.
+     *  @param tid The thread id of the requesting thread
+     *  @param num_words The total number of words in the burst.
+     *  @return The number of words successfully transferred.
+     */
+    virtual int burst_words_transferred(int tid, int num_words);
+
+    /** Update internal state of the memory wheel to take into account a
+     *  single cycle passing.
+     */
     virtual void behavior();
 
 protected:
@@ -71,7 +142,6 @@ protected:
     const int lat_d;
     const int throughput_d;
     const int MEMORY_WINDOW;
-
 };
 
 #endif
