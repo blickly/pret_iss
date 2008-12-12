@@ -125,7 +125,7 @@ Fast access on-chip memories is a requirement for modern processors. The the hig
 
 Unlike the branch predictor, removing fast access memories in not an option, since it will result in a huge performance overhead. Instead, we use scratchpad memories as an alternative to caches. Scratchpad memory brings the control over the fast access memory to software. The compiler can pre-allocate the data locations in the fast access memory, resulting in predictable performance (since we always know which accesses are hits or misses). The software may also control the loading of scratchpad memories at run time by using Direct Memory Access instructions without a lost of predictability. Ongoing research have shown methods to efficiently manage the scratchpads~\cite{avissar2002oma, Bandyopadhyay:EECS-2006-105, Patel:EECS-2008-115} to optimize the performance of program, but is beyond the scope of this paper. 
 
-
+Because of the duplication of scratchpad memories for each hardware thread, a cross hardware thread cache side channel attack is not possible because each thread has its own separate physical scratchpad memory, unlike simultaneous multi-threaded architectures. Although unlikely, but if multiple software threads were running on a single hardware thread, then two software threads would share the same scratchpad. However, because the allocation of memory on the scratchpad is software controlled, any underlying software thread supervisor would have complete control over the scratchpad allocation. One could imagine a management scheme similar to virtual memory for scratchpads to separate access for each thread. 
 
 \subsubsection {Instruction Set Architecture}
 
