@@ -90,6 +90,14 @@ public:
      *  @return The word read at that address by that thread.
      */
     virtual uint32_t read(int tid, uint32_t addr, bool& stalled);
+    
+    /** Writes the given word to the given address, if possible.
+     *  @param tid The thread id of the writing thread
+     *  @param addr The address being written to
+     *  @param data The data being written
+     *  @param stalled Whether this memory location is stalled or not.
+     */
+    virtual void write(int tid, uint32_t addr, uint32_t data, bool& stalled);
 
     /** Return a burst of words from memory starting at the given address,
      *  as well as whether that access stalls.

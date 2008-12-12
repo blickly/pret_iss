@@ -69,13 +69,7 @@ public:
      *  @param data The data being written
      *  @param stalled Whether this memory location is stalled or not
      */
-    virtual void write(int tid, uint32_t addr, uint32_t data, bool& stalled) {
-        stalled = is_stalled(tid, addr);
-        if (stalled) {
-            return;
-        }
-        mem.add_address(addr, data);
-    }
+    virtual void write(int tid, uint32_t addr, uint32_t data, bool& stalled) = 0;
 
     /** Update any internal state of the memory location to take into account
      *  that one cycle has passed.
@@ -96,17 +90,6 @@ public:
      *  not be altered.
      */
     memory_unit mem;
-
-protected:
-///////////////////////////////////////////////////////////////////////
-///                      protected methods                          ///
-    /** Determine if this memory location is stalled for the given thread
-     *  and address.
-     *  @param tid The thread id of the requesting thread
-     *  @param addr The address being requested
-     *  @return True if the memory location is stalled.  Otherwise false.
-     */
-    virtual bool is_stalled(int tid, uint32_t addr) = 0;
 };
 
 

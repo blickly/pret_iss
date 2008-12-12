@@ -83,13 +83,6 @@ public:
 protected:
 ///////////////////////////////////////////////////////////////////////
 ///                      protected methods                          ///
-    /** Tell if a memory-mapped IO location is stalled.
-     * Due to the single-cycle latency, this is never stalled.
-     *  @param tid The thread id of the requesting thread (ignored)
-     *  @param mem_addr The global address being requested
-     *  @return False, since the scratchpad is never stalled.
-     */
-    virtual bool is_stalled(int tid, uint32_t mem_addr);
 
 private:
 ///////////////////////////////////////////////////////////////////////
@@ -103,6 +96,14 @@ private:
      *  @param data Word of data to write.
      */
     void out_uart(uint32_t data);
+    
+    /** Tell if a memory-mapped IO location is stalled.
+     *  Due to the single-cycle latency, this is never stalled.
+     *  @param tid The thread id of the requesting thread (ignored)
+     *  @param mem_addr The global address being requested
+     *  @return True if the IO location is stalled. False, otherwise.
+     */
+    virtual bool is_stalled(int tid, uint32_t mem_addr);
 
 };
 

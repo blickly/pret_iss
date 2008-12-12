@@ -112,9 +112,16 @@ bool wheeled_mem::is_stalled_helper(AccessorType acc, int tid, uint32_t addr, in
  * longer before the memory can be accessed.
  */
 uint32_t wheeled_mem::read(int tid, uint32_t addr, bool& stalled) {
-
     stalled = is_stalled(tid, addr);
     return mem[addr];
+}
+
+void wheeled_mem::write(int tid, uint32_t addr, uint32_t data, bool& stalled) {
+    stalled = is_stalled(tid, addr);
+    if (stalled) {
+        return;
+    }
+    mem.add_address(addr, data);
 }
 
 vector<uint32_t> wheeled_mem::read_burst(int tid, uint32_t start_addr, bool& stalled, int num_words) {

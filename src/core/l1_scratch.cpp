@@ -41,11 +41,6 @@ l1_scratch::l1_scratch() {
 
 void l1_scratch::behavior() {}
 
-bool l1_scratch::is_stalled(int tid, uint32_t mem_addr) {
-    // For simplicity, scratchpads never stall.
-    return false;
-}
-
 /*
  * Return the data that is stored at the given memory location,
  * as well as a boolean for whether the read needs to stall for
@@ -56,10 +51,20 @@ uint32_t l1_scratch::read(int tid, uint32_t mem_addr, bool& stalled) {
         cerr << "Cannot read address not in scratchpad: 0x"
              << hex << mem_addr << endl;
     }
-    stalled = is_stalled(tid, mem_addr);
+    // Scratchpads never stall
+    stalled = false;
     return mem[mem_addr];
 }
 
+void l1_scratch::write(int tid, uint32_t mem_addr, uint32_t data, bool& stalled){
+    if (!is_addr_in_spm(mem_addr)) {
+        cerr << "Cannot write address not in scratchpad: 0x"
+             << hex << mem_addr << ", data: 0x" << data << endl;
+    }
+    // Scratchpads never stall
+    stalled = false;
+    mem.add_address(mem_addr, data);
+}
 
 void l1_scratch::update_addr(uint32_t mem_addr, uint32_t inst) {
     if (!is_addr_in_spm(mem_addr)) {

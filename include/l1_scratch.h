@@ -70,17 +70,30 @@ public:
 
 /////////            Normal memory location interface.
     /** Read a given (main-memory) address from the scratchpad, if available.
-     * Note that in order to conform to the mem_location interface, the
-     * address parameter corresponds to the global address of the data
-     * (that in the main memory) rather than the address within the
-     * scratchpad. An error is output when that address is not
-     * in the scratchpad.
+     *  Note that in order to conform to the mem_location interface, the
+     *  address parameter corresponds to the global address of the data
+     *  (that in the main memory) rather than the address within the
+     *  scratchpad. An error is output when that address is not
+     *  in the scratchpad.
      *  @param tid The thread id of the requesting thread (ignored)
      *  @param mem_addr The global address being requested
      *  @param stalled Always returns false, since the scratchpad is never stalled.
      *  @return The word of data read at that location.
      */
     virtual uint32_t read(int tid, uint32_t mem_addr, bool& stalled);
+    
+    /** Writes the given word to the given (main-memory) address, if possible.
+     *  Note that in order to conform to the mem_location interface, the
+     *  address parameter corresponds to the global address of the data
+     *  (that in the main memory) rather than the address within the
+     *  scratchpad. An error is output when that address is not
+     *  in the scratchpad.
+     *  @param tid The thread id of the writing thread
+     *  @param addr The address being written to
+     *  @param data The data being written
+     *  @param stalled Whether this memory location is stalled or not
+     */
+    virtual void write(int tid, uint32_t addr, uint32_t data, bool& stalled);
 
 /////////            Scratchpad management interface.
     /** Move the given data with the given global address into the given
@@ -119,14 +132,6 @@ protected:
      *  @return True if it is a valid scratchpad address. False, otherwise.
      */
     bool in_spm_range(uint32_t spm_addr);
-
-    /** Tell if a scratchpad is stalled.
-     * Due to the single-cycle latency, this scratchpad is never stalled.
-     *  @param tid The thread id of the requesting thread (ignored)
-     *  @param mem_addr The global address being requested
-     *  @return False, since the scratchpad is never stalled.
-     */
-    virtual bool is_stalled(int tid, uint32_t mem_addr);
 
 ///////////////////////////////////////////////////////////////////////
 ///                     protected variables                         ///
