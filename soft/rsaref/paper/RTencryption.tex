@@ -16,6 +16,7 @@
 \usepackage{fancyvrb}
 \usepackage{color}
 \usepackage[small]{caption}
+\usepackage{sidecap}
 %\documentstyle[times,art10,twocolumn,lat ex8]{article}
 
 %-------------------------------------------------------------------------
@@ -112,11 +113,6 @@ Similar to caching attacks, branch predictor attacks involve a spy program runni
 Power attacks use the changing power consumption of the processor to infer the activity of the encryption software over time.  Differences in algorithm activity based on the key will be revealed by the fluctuations they create in processor energy use.  Power attacks require measurement of the power intake of the processor, and are thus generally impossible without physical access to the target hardware, but this is no obstacle in cases such as consumer electronics.  Countermeasures to this sort of attack can be placed in software or hardware; software-based approaches include unconditional execution of operations with large power characteristics, operating on pieces of the secret at a time, and interleaving random computations with the sensitive operations.  Hardware approaches include randomized clocking, power filtering, and power buffering.  Hardware is more expensive to secure than software, but may be necessary depending on the level of security required.\cite{mmthesis}
 
 
-
-\section{PRET}
-
-
-
 \section{Elimination of Side Channel Attacks}
 We can see a pattern in all of the side channel attacks that are mentioned above. The attacker collects information from the implementation on the underlying hardware, and use it to infer information regarding the encryption algorithm, which can lead to exposure of the secret key. The branch predictor side channel attack and cache side channel attack both attack a single shared resource from the hardware. By writing a spy process to hog up that resource, you can easily monitor another thread's access to the same resource and therefore monitor the activity of the thread. The timing side channel attack attacks the algorithm's uncontrollable execution time on the processor, and predicts the execution flow to obtain the encryption key. Several individual methods have been proposed for to counter the attacks, but they don't tackle the principle cause of the vulnerability -- the uncontrollable and unpredictable execution of software on modern computer architectures. Lickly and Liu~\cite{pret_cases08} introduced PRET (PREcision Timed Architecture), an architecture that delivers predictable timing along with predictable function and performance. This architecture tackles the root cause of side channel attacks by design, eliminating the vulnerability.
 
@@ -151,9 +147,21 @@ Fast access on-chip memories is a requirement for modern processors. The the hig
 
 Unlike the branch predictor, removing fast access memories in not an option, since it will result in a huge performance overhead. Instead, we use scratchpad memories as an alternative to caches. Scratchpad memory brings the control over the fast access memory to software. The compiler can pre-allocate the data locations in the fast access memory, resulting in predictable performance (since we always know which accesses are hits or misses). The software may also control the loading of scratchpad memories at run time by using Direct Memory Access instructions without a lost of predictability. Ongoing research have shown methods to efficiently manage the scratchpads~\cite{avissar2002oma, Bandyopadhyay:EECS-2006-105, Patel:EECS-2008-115} to optimize the performance of program, but is beyond the scope of this paper. 
 
-Because of the duplication of scratchpad memories for each hardware thread, a cross hardware thread cache side channel attack is not possible because each thread has its own separate physical scratchpad memory, unlike simultaneous multi-threaded architectures. Although unlikely, but if multiple software threads were running on a single hardware thread, then two software threads would share the same scratchpad. However, because the allocation of memory on the scratchpad is software controlled, any underlying software thread supervisor would have complete control over the scratchpad allocation. One could imagine a management scheme similar to virtual memory for scratchpads to separate access for each thread. 
+Unlike on simultaneous multi-threaded architectures, a cross hardware thread cache side channel attack is not possible because each thread has its own separate physical scratchpad memory. If multiple software threads were to run on a single hardware thread, then two software threads would share the same scratchpad. However, because the allocation of memory on the scratchpad is software controlled, any underlying software thread supervisor would have complete control over the scratchpad allocation. One could imagine a management scheme similar to virtual memory for scratchpads to separate access for each thread. Again, by the design of the architecture to preserve predictable and repeatable timing, we removed the vulnerability that causes caching attacks.
 
-\subsubsection {Instruction Set Architecture}
+\subsubsection {Instruction Set Architecture Extension}
+Even with a timing predictable architecture that executes instructions in a deterministic way, algorithms and programs naturally introduce different run times because each iteration may follow a different path in the code. Clever Instruction Set Architecture's (ISA) designs have bridged the developer and the machine extremely well, providing simple enough instructions for the machine to be kept simple, and yet still provide expressability to the programmer. However, this level of abstraction has failed to bring temporal semantics of the underlying architecture up to the software level. As a result, the only way to control execution time is through programming external timers and interrupts, which the hardware must support. This is both tedious and difficult to program, and the resulting code is non portable. 
+
+Ip and Edwards~\cite{ip2006processor} propose a processor extension that allow explicit timing control at the ISA level. They introduce a deadline instruction that allows the user to specify how long a block of code will run. The basic operation is shown in figure~\ref{fig:deadline}.
+
+\begin{SCfigure}
+  \centering
+  \includegraphics[scale=.85]{./images/deadlineExp.pdf}
+  \caption{By enclosing deadline instructions, we }
+  \label{fig:deadline}
+\end{SCfigure}
+
+
 
 \section{Case Study}
 \subsection{RSA vulnerability}
