@@ -121,7 +121,8 @@ We can see a pattern in all of the side channel attacks that are mentioned above
   \label{fig:top_arch}
 \end{figure}
 
-We present an overview of the PRET architecture in the context of eliminating side channel attacks, and refer interested users to \cite{pret_cases08} for more details. We assume the reader has a basic understanding of computer architectures, such as how pipelining and caches work. Readers that aren't familiar with these terms are advised to see \cite{patterson2005coa} for an introduction.
+We present an overview of the PRET architecture in the context of eliminating side channels attacks, and refer interested users to ~\cite{pret_cases08} for more details. We assume the reader has a basic understanding of computer architecture, such as how pipelining and caches work. Readers that aren't familiar with these terms are advised to see \cite{patterson2005coa} for an introduction.
+
 %\begin{wrapfigure}{r}{0pt}
 %  \end{wrapfigure}
 \subsection{PRET Architecture}
@@ -150,15 +151,16 @@ Unlike on simultaneous multi-threaded architectures, a cross hardware thread cac
 \subsubsection {Instruction Set Architecture Extension}
 Even with a timing predictable architecture that executes instructions in a deterministic way, algorithms and programs naturally introduce different run times because each iteration may follow a different path in the code. Clever Instruction Set Architecture's (ISA) designs have bridged the developer and the machine extremely well, providing simple enough instructions for the machine to be kept simple, and yet still provide expressability to the programmer. However, this level of abstraction has failed to bring temporal semantics of the underlying architecture up to the software level. As a result, the only way to control execution time is through programming external timers and interrupts, which the hardware must support. This is both tedious and difficult to program, and the resulting code is non portable. 
 
-Ip and Edwards~\cite{ip2006processor} propose a processor extension that allow explicit timing control at the ISA level. They introduce a deadline instruction that allows the user to specify how long a block of code will run. The basic operation is shown in figure~\ref{fig:deadline}.
+Ip and Edwards~\cite{ip2006processor} propose a processor extension that allow explicit timing control at the ISA level. They introduce deadline registers which are decremented each clock cycle if it contains a value other than zero. Deadline instructions load values in the deadline register when the register is zero. A basic example is shown in figure~\ref{fig:deadline}.
 
 \begin{SCfigure}
   \centering
   \includegraphics[scale=.85]{./images/deadlineExp.pdf}
-  \caption{By enclosing deadline instructions, we }
+  \caption{By enclosing the add instruction with deadlines, we ensure that the 2 add's are executed 8 cycles apart. \$t0 a deadline register. When a deadline instruction is encountered, the program does not progress forward until the deadline register is decremented to 0.}
   \label{fig:deadline}
 \end{SCfigure}
 
+This allows control over execution time of the program at the software level, without dealing with interrupts and external timers. This extension along with a predictable architecture allow programmers full control over the run time of a program, allowing them to write predictable and precision timed code. 
 
 
 \section{Case Study}
