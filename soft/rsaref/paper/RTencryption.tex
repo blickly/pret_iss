@@ -78,55 +78,40 @@ Computer architects have made amazing advancements in architecture design to all
 
 \section{Background}
 % 1 - 1.5 page
-\textcolor{red}{David, make sure to mention some proposed solutions for each one. I mention in the next paragraph that these individual solutions mentioned in this paragraph are helpful, but they don't tackle the root cause.}
 
 \subsection{Encryption}
-The goal of encryption is to make information illegible to anyone without special knowledge, generally expressed as a key.  Encryption algorithms generally use a so-called trapdoor function, which is easy to compute in one direction but difficult (according to current knowledge) to compute in the other direction without an additional piece of information.  These functions are based on operations such as prime factorization or taking discrete logarithms; as years of concerted effort has failed to produce an efficient algorithm to invert them, the cryptographic algorithms founded on them are used with a large amount of confidence in the algorithms' security.  That is, given all details of the encryption algorithm except for the key, an adversary will not be able to read the encoded information with any reasonable amount of computational power.
+The goal of encryption is to make information illegible to anyone without special knowledge, generally expressed as a key.  Encryption algorithms generally use a so-called trapdoor function, which is easy to compute in one direction but difficult (according to current knowledge) to compute in the other direction without an additional piece of information.  These functions are based on operations such as prime factorization or taking discrete logarithms; as years of concerted effort has failed to produce an efficient algorithm to invert them, the cryptographic algorithms founded on them are used with a large amount of confidence in the algorithms' security.  That is, given all details of the encryption algorithm except for the key, an adversary will not be able to obtain the encoded information using any reasonable amount of computational power.
 \begin{figure}[ht]
   \centering
   \includegraphics[scale=.25]{./images/traditional_model.png}
   \caption{Traditional Model of Cryptography}
   \label{fig:top_arch}
 \end{figure}
+
 \subsection{Side Channel Attacks}
-Traditional attacks on cryptographic algorithms use only the input and output of the algorithm, treating it like a monolithic black box.  However, this does not reflect reality.  Algorithms must be implemented in software and run on hardware, which have various properties that change as a result of the cryptographic algorithm's execution.  Side channel attacks use additional data about the encryption process, obtained via observing these information leaks, to circumvent the mathematical complexity of reversing encryption.  Depending on the algorithm and its implementation, a wide variety of information leaks may exist on a number of different physical channels.  The attacks which exploit these channels differ greatly in the difficulty of implementation (or the information is easier or harder to get), ranging from utterly simple in the case of timing attacks to requiring physical access in the case of power attacks.
+Traditional attacks on cryptographic algorithms use only the input and output of the algorithm, treating it like a monolithic black box.  However, this does not reflect reality.  Algorithms must be implemented in software and run on hardware, which have various properties that change as a result of the cryptographic algorithm's execution.  Side channel attacks use additional data about the encryption process, obtained via observing these information leaks, to circumvent the computational complexity of reversing encryption.  Depending on the algorithm and its implementation, a wide variety of information leaks may exist on a number of different physical channels.  To access and use this leaked information can be very easy or very difficult depending on which channel one is attempting to exploit; for example, getting timing information for a timing attack is as simple as determining the latency between request and response, whereas a power attack requires the attacker to physically access the target system.
+%I think the above works better than:
+%The attacks which exploit these channels differ greatly in the difficulty of implementation (or the information is easier or harder to get), ranging from utterly simple in the case of timing attacks to requiring physical access in the case of power attacks.
 \begin{figure}[ht]
   \centering
   \includegraphics[scale=.25]{./images/side_channel_model.png}
   \caption{Model of Cryptography with Side Channels}
   \label{fig:top_arch}
 \end{figure}
+
 \subsubsection{Timing attacks}
 Timing attacks observe variation in the time spent by an encryption algorithm, often with a known input, and use this information to deduce the key.  These attacks generally require a source of feedback on the accuracy of the estimations of the key, which may be gained by submitting  These timing data are often compared to a duplicate of the encrypting hardware belonging to the attacker over various keys, enabling better feedback.  Vulnerability to this attack depends on the software implementation of the algorithm, but is rather widespread due to the general drive toward fast algorithms.  The obvious countermeasure is to make the algorithm execute in the same amount of time for any input, but this is difficult due to the unpredictability of compiler optimizations, instruction timings, memory accesses, and so on.  A more useful solution is to obscure the inputs to a vulnerable operation via message blinding\cite{mmthesis}; in RSA this is possible by creating a random pair $(v_{i},v_{f})$ where $v_{f}^{-1}=v_{i}^e$, $e$ being the public exponent, then running the modular exponentiation on $M\cdot v_{i}$ mod $N$ and returning the output multiplied by $v_{f}$\cite{Kocher96timingattacks}.
+
 \subsubsection{Caching attacks}
 Caching attacks use a spy thread running concurrently with the encryption program on the target hardware.  The spy thread constantly accesses memory to occupy all lines in the cache, and detects the encryption thread's loading of data from different locations in memory by timing the return of the data; if the encrypting program has evicted the spy thread's data for its own use, the spy thread's load operation will take longer.  For some algorithms, such as AES\cite{2004-bernstein-cachetiming}, this enables information about the key (which has precomputed components) to be obtained directly; for others, such as some RSA implementations\cite{Percival05cachemissing}, the program detectably accesses different workspaces in memory due to control flow based on key bits.  These attacks can be partially handled by security-aware thread scheduling and totally prevented by reworking the algorithm to execute code and access memory independently of the input data and key.  The latter would be a tremendous deviation from standard practice and require the significant reworking or abandonment of many existing algorithms; as such, it is rarely pursued.
+
 \subsubsection{Branch Predictor attacks}
-Similar to caching attacks, branch predictor attacks involve a spy program running concurrently with the encryption program.  In this case, the spy thread fills all entries in the branch predictor table with a known value and constantly checks up on those values.  By counting the CPU cycles required to execute a branch, the spy program detects any change in the state of the branch predictor and therefore infers the control flow of the encryption thread, revealing information about the key.  This attack can be prevented simply by never using secret information to determine a branch, most likely through clever use of arithmetic in lieu of conditionals.  This is similar in concept to the dramatic reworking suggested to prevent caching attacks, and thus not often practiced.
+Similar to caching attacks, branch predictor attacks involve a spy program running concurrently with the encryption program.  In this case, the spy thread fills all entries in the branch predictor table with a known value and constantly checks up on those values.  By counting the CPU cycles required to execute a branch, the spy program detects any change in the state of the branch predictor and therefore infers the control flow of the encryption thread, revealing information about the key.  For some algorithms, this attack is capable of obtaining the entire key after spying on only a single encryption operation\cite{branchpredict}.  This attack can be prevented simply by never using secret information to determine a branch, for example through clever use of arithmetic in lieu of conditionals.  This is similar in concept to the dramatic reworking suggested to prevent caching attacks, and thus not often practiced.
+
 \subsubsection{Power attacks}
 Power attacks use the changing power consumption of the processor to infer the activity of the encryption software over time.  Differences in algorithm activity based on the key will be revealed by the fluctuations they create in processor energy use.  Power attacks require measurement of the power intake of the processor, and are thus generally impossible without physical access to the target hardware, but this is no obstacle in cases such as consumer electronics.  Countermeasures to this sort of attack can be placed in software or hardware; software-based approaches include unconditional execution of operations with large power characteristics, operating on pieces of the secret at a time, and interleaving random computations with the sensitive operations.  Hardware approaches include randomized clocking, power filtering, and power buffering.  Hardware is more expensive to secure than software, but may be necessary depending on the level of security required.\cite{mmthesis}
 
-\subsection{RSA vulnerability}
-The central RSA algorithm is based primarily around modular exponentiation.  It takes the form of 
 
-\begin{center}\fbox{\parbox{6cm}{INPUT: M, N, d = $(d_{n-1}d_{n-2} . . . d_{1}d_{0})_{2}$ 
-
-OUTPUT: S = M$^{d}$ mod N 
-
-1\hspace{2mm}S $\leftarrow$ 1 
-
-2\hspace{2mm}for j = n - 1 $. . .$ 0 do 
-
-3\hspace{4mm}S $\leftarrow$ S$^{2}$ mod N
-
-4\hspace{4mm}if d$_{j}$ = 1 then 
-
-5\hspace{6mm}S $\leftarrow$ S $\cdot$ M mod N 
-
-6\hspace{2mm}return S 
-}}\end{center}
-
-\section{Related Work}
-Paul Kocher outlined\cite{Kocher96timingattacks} a notional side-channel timing attack on RSA and Diffie-Hellman algorithms that requires a large number of plaintext-cyphertext pairs and detailed knowledge of the target implementation.  By simulating the target system for predicted keys, the actual key could be derived one bit at a time via his method.  
 
 \section{PRET}
 
@@ -170,7 +155,9 @@ Because of the duplication of scratchpad memories for each hardware thread, a cr
 
 \subsubsection {Instruction Set Architecture}
 
-\section{Results}
+\section{Case Study}
+\subsection{RSA vulnerability}
+The central computation of the RSA algorithm is based primarily around modular exponentiation.  It takes the form of 
 \begin{figure}[ht]
   \centering
   \includegraphics[scale=.3]{./images/ModExp.pdf}
@@ -178,12 +165,31 @@ Because of the duplication of scratchpad memories for each hardware thread, a cr
   \label{fig:modexp}
 \end{figure}
 
+
 \begin{figure}[ht]
   \centering
   \includegraphics[scale=.3]{./images/RSA.pdf}
   \caption{Run time of RSA operation}
   \label{fig:rsa}
 \end{figure}
+
+\begin{center}\fbox{\parbox{6cm}{INPUT: M, N, d = $(d_{n-1}d_{n-2} . . . d_{1}d_{0})_{2}$ 
+OUTPUT: S = M$^{d}$ mod N 
+
+\hspace{2mm}S $\leftarrow$ 1 
+
+\hspace{2mm}for j = n - 1 $. . .$ 0 do 
+
+\hspace{4mm}S $\leftarrow$ S$^{2}$ mod N
+
+\hspace{4mm}if d$_{j}$ = 1 then 
+
+\hspace{6mm}S $\leftarrow$ S $\cdot$ M mod N 
+
+\hspace{2mm}return S 
+}}\end{center}
+
+Paul Kocher outlined\cite{Kocher96timingattacks} a notional side-channel timing attack on this algorithm that requires a large number of plaintext-cyphertext pairs and detailed knowledge of the target implementation.  By simulating the target system for predicted keys, the actual key could be derived one bit at a time.  An improved method \cite{DKLMQW98} demonstrated the ability to obtain even a 512-bit key in a reasonable amount of time.  Our analysis of the algorithm demonstrated that a significant portion of the variation in the algorithm's execution time could be attributed to the branch in the loop above.  When the reference implementation of RSA (RSAREF 2.0) was ported to the PRET architecture, single iterations of the loop varied in execution time almost exclusively due to the value of d$_{j}$ as seen in Graph {\color{red}Whatever}.
 
 
 \section{Conclusion}
