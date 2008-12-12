@@ -56,7 +56,7 @@ uint32_t l1_scratch::read(int tid, uint32_t mem_addr, bool& stalled) {
     return mem[mem_addr];
 }
 
-void l1_scratch::write(int tid, uint32_t mem_addr, uint32_t data, bool& stalled){
+void l1_scratch::write(int tid, uint32_t mem_addr, uint32_t data, bool& stalled) {
     if (!is_addr_in_spm(mem_addr)) {
         cerr << "Cannot write address not in scratchpad: 0x"
              << hex << mem_addr << ", data: 0x" << data << endl;

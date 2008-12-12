@@ -96,7 +96,7 @@ private:
      *  @param data Word of data to write.
      */
     void out_uart(uint32_t data);
-    
+
     /** Tell if a memory-mapped IO location is stalled.
      *  Due to the single-cycle latency, this is never stalled.
      *  @param tid The thread id of the requesting thread (ignored)

@@ -81,7 +81,7 @@ public:
      *  @return The word of data read at that location.
      */
     virtual uint32_t read(int tid, uint32_t mem_addr, bool& stalled);
-    
+
     /** Writes the given word to the given (main-memory) address, if possible.
      *  Note that in order to conform to the mem_location interface, the
      *  address parameter corresponds to the global address of the data

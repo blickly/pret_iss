@@ -82,7 +82,7 @@ bool wheeled_mem::is_stalled_helper(AccessorType acc, int tid, uint32_t addr, in
     // We only keep track of the requested addr to assert that we don't
     // get multiple conflicting accesses to the wheel.
     static uint32_t requested_addr;
-    
+
     // If it isn't our turn, we must stall
     if (tid != current_thread() || (!is_scheduled(acc, tid) && !accessing)) {
         assert(!accessing);

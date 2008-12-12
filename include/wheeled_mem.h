@@ -90,7 +90,7 @@ public:
      *  @return The word read at that address by that thread.
      */
     virtual uint32_t read(int tid, uint32_t addr, bool& stalled);
-    
+
     /** Writes the given word to the given address, if possible.
      *  @param tid The thread id of the writing thread
      *  @param addr The address being written to
@@ -128,7 +128,7 @@ public:
 protected:
 ///////////////////////////////////////////////////////////////////////
 ///                     protected methods                           ///
-    /** Determine if the memory wheel is stalled on a single access 
+    /** Determine if the memory wheel is stalled on a single access
      *  for the given thread and address.
      *  @param tid The thread id of the requesting thread.
      *  @param addr The address being requested.
@@ -136,7 +136,7 @@ protected:
      */
     virtual bool is_stalled(int tid, uint32_t addr);
 
-    /** Determine if the memory wheel is stalled on a burst access 
+    /** Determine if the memory wheel is stalled on a burst access
      *  for the given thread and address.
      *  @param tid The thread id of the requesting thread.
      *  @param addr The address being requested.
@@ -155,21 +155,21 @@ protected:
      */
     bool is_stalled_helper(AccessorType acc, int tid, uint32_t addr, int num_words);
 
-    /** Return the thread ID of the thread whose memory window is currently 
+    /** Return the thread ID of the thread whose memory window is currently
      *  active.
      *  @return The thread id of the requesting thread.
      */
     int current_thread();
 
     /** Determine whether the given accessor and thread are allowed to
-     *  start an acess or not. 
+     *  start an acess or not.
      *  @param acc The type of wheel access.
      *  @param tid The thread id of the requesting thread.
      *  @return True, if the thread has time to make the requested access
      *      within its window. False, otherwise.
      */
     virtual bool is_scheduled(AccessorType acc, int tid);
-    
+
 
     /** Return the total delay of the given access method.
      *  @param acc The type of wheel access.
@@ -184,7 +184,7 @@ private:
     /** Pointer to the cycle counter of this core.
      */
     cycle_counter* counter;
-    
+
     /** Boolean is true if a thread is currently making a memory access
      *  through the wheel.
      */
@@ -193,21 +193,21 @@ private:
     /** The number of cycles remaining in the current memory access.
      */
     int remaining_cycles;
-    
+
     /** The thread ID of the thread that is making the current memory access.
      */
     int accessor_tid;
 
-    /** Lantency in cycles to get a access a single word, 
+    /** Lantency in cycles to get a access a single word,
      *  or the first word of a burst transfer.
      */
     const int lat_d;
 
-    /** Cycles needed to get subsequent words after the first during a 
-     *  burst transfer. 
+    /** Cycles needed to get subsequent words after the first during a
+     *  burst transfer.
      */
     const int throughput_d;
-    
+
     /** Cycles in the memory window of a single thread.
      */
     const int MEMORY_WINDOW;
