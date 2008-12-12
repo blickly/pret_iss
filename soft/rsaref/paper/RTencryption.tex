@@ -158,20 +158,6 @@ Because of the duplication of scratchpad memories for each hardware thread, a cr
 \section{Case Study}
 \subsection{RSA vulnerability}
 The central computation of the RSA algorithm is based primarily around modular exponentiation.  It takes the form of 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[scale=.3]{./images/ModExp.pdf}
-  \caption{Run time of Modular Exponent operation}
-  \label{fig:modexp}
-\end{figure}
-
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[scale=.3]{./images/RSA.pdf}
-  \caption{Run time of RSA operation}
-  \label{fig:rsa}
-\end{figure}
 
 \begin{center}\fbox{\parbox{6cm}{INPUT: M, N, d = $(d_{n-1}d_{n-2} . . . d_{1}d_{0})_{2}$ 
 OUTPUT: S = M$^{d}$ mod N 
@@ -189,7 +175,23 @@ OUTPUT: S = M$^{d}$ mod N
 \hspace{2mm}return S 
 }}\end{center}
 
-Paul Kocher outlined\cite{Kocher96timingattacks} a notional side-channel timing attack on this algorithm that requires a large number of plaintext-cyphertext pairs and detailed knowledge of the target implementation.  By simulating the target system for predicted keys, the actual key could be derived one bit at a time.  An improved method \cite{DKLMQW98} demonstrated the ability to obtain even a 512-bit key in a reasonable amount of time.  Our analysis of the algorithm demonstrated that a significant portion of the variation in the algorithm's execution time could be attributed to the branch in the loop above.  When the reference implementation of RSA (RSAREF 2.0) was ported to the PRET architecture, single iterations of the loop varied in execution time almost exclusively due to the value of d$_{j}$ as seen in Graph {\color{red}Whatever}.
+Paul Kocher outlined\cite{Kocher96timingattacks} a notional side-channel timing attack on this algorithm that requires a large number of plaintext-cyphertext pairs and detailed knowledge of the target implementation.  By simulating the target system for predicted keys, the actual key could be derived one bit at a time.  An improved method \cite{DKLMQW98} demonstrated the ability to obtain even a 512-bit key in a reasonable amount of time.  Our analysis of the algorithm demonstrated that a significant portion of the variation in the algorithm's execution time could be attributed to the branch in the loop above.  When the reference implementation of RSA (RSAREF 2.0) was ported to the PRET architecture, single iterations of the loop varied in execution time almost exclusively due to the value of d$_{j}$.  As seen in Figure \ref{fig:modexp}, each iteration took approximately either 440 or 660 kilocycles, with very little deviation from the two means.  This is far more than sufficient for a successful timing attack; 0.2\% of that difference was adequate in one case! \cite{DKLMQW98}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=.3]{./images/ModExp.pdf}
+  \caption{Run time of Modular Exponent operation}
+  \label{fig:modexp}
+\end{figure}
+
+\subsection{Removing the vulnerability}
+By adding a PRET deadline statement to the body of the loop, the bimodality of the execution time is totally eliminated, as seen in Figure \ref{fig:modexp}.  As enforced by the deadline, all iterations take the same amount of time.  Additionally, placing a deadline on this loop eliminates the vast majority of the variation in the runtime of the entire program.  Figure \ref{fig:rsa} shows the large-scale effect:  Without the deadline, different keys exhibit significant diversity in algorithm execution time.  When the deadline is added, the fluctuation is dramatically reduced, and what variations from the mean exist are not even obviously correlated to the variations that existed before.  This indicates that the much smaller abnormalities that have been revealed stem from a different source.  The algorithm contains other branches that affect runtime, but evidently none so significant as the one in the loop, mooted by the deadline.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=.3]{./images/RSA.pdf}
+  \caption{Run time of RSA operation}
+  \label{fig:rsa}
+\end{figure}
 
 
 \section{Conclusion}
