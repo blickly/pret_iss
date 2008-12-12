@@ -91,7 +91,7 @@ Similar to caching attacks, branch predictor attacks involve a spy program runni
 \subsubsection{Power attacks}
 Power attacks use the changing power consumption of the processor to infer the activity of the encryption software over time.  Differences in algorithm activity based on the key will be revealed by the fluctuations they create in processor energy use.  Power attacks require measurement of the power intake of the processor, and are thus generally impossible without physical access to the target hardware, but this is no obstacle in cases such as consumer electronics.
 
-\section{Elimination of Software Side Channel Attacks}
+\section{Elimination of Side Channel Attacks}
 We can see a pattern in all of the side channel attacks that are mentioned above. The attacker collects information from the implementation on the underlying hardware, and use it to infer information regarding the encryption algorithm, which can lead to exposure of the secret key. The branch predictor side channel attack and cache side channel attack both attack a single shared resource from the hardware. By writing a spy process to hog up that resource, you can easily monitor another thread's access to the same resource and therefore monitor the activity of the thread. The timing side channel attack attacks the algorithm's uncontrollable execution time on the processor, and predicts the execution flow to obtain the encryption key. Several individual methods have been proposed for to counter the attacks, but they don't tackle the principle cause of the vulnerability -- the uncontrollable and unpredictable execution of software on modern computer architectures. Lickly and Liu~\cite{pret_cases08} introduced PRET (PREcision Timed Architecture), an architecture that delivers predictable timing along with predictable function and performance. This architecture tackles the root cause of side channel attacks by design, eliminating the vulnerability.
 
 \begin{figure}[ht]
@@ -101,11 +101,11 @@ We can see a pattern in all of the side channel attacks that are mentioned above
   \label{fig:top_arch}
 \end{figure}
 
-A block level diragram of the PRET architecture is shown in figure~\ref{fig:top_arch}. We present an overview of the architecture in the context of eliminating side channels attacks, and refer interested users to ~\cite{pret_cases08} for more details.
+We present an overview of the architecture in the context of eliminating side channels attacks, and refer interested users to ~\cite{pret_cases08} for more details.
 %\begin{wrapfigure}{r}{0pt}
 %  \end{wrapfigure}
 \subsection{PRET}
-
+A block level diagram of the PRET architecture is shown in figure~\ref{fig:top_arch}. The core integer pipeline unit of the PRET architecture implements a thread-interleaved pipelined. It interfaces with      
 
 
 
