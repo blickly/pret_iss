@@ -40,7 +40,7 @@
 \thispagestyle{empty}
 
 \begin{abstract}
-Eliminating side channel attacks for encryptions
+Side-channel attacks exploit information-leaky implementations of cryptographic algorithms to find the encryption key.  Many information leaks are created by hardware elements designed to increase execution speed, which has come at the expense of predictable execution time.  PRET is an architecture designed for total predictability with respectable speed.  We show that programs on the PRET architecture are immune to a number of side-channel attacks, using RSA as a case study.
 \end{abstract}
 
 %encryption info
@@ -54,24 +54,21 @@ Eliminating side channel attacks for encryptions
 %-Results
 %	Plots of data and timing information
 
-\section{Outline and Breakdown}
-\begin{itemize}
-\item abstract, Introduction  - Isaac
-\item Related Work - David
-\item Encryption and Side Channel Attacks - David
-\item PRET  - Isaac 
-\item Results  - Isaac
-\item Conclusion and future work - David
-\end{itemize}
+%\section{Outline and Breakdown}
+%\begin{itemize}
+%\item abstract, Introduction  - Isaac
+%\item Related Work - David
+%\item Encryption and Side Channel Attacks - David
+%\item PRET  - Isaac 
+%\item Results  - Isaac
+%\item Conclusion and future work - David
+%\end{itemize}
 
 %------------------------------------------------------------------------------
 \section{Introduction}
-In order for a secure software to be truly secure, its underlying hardware must also be secure. In other words, the underlying hardware must not emit any information regarding the secure process that's executing on the hardware. 
+In order for secure software to be truly secure, its underlying hardware must also be secure. In other words, the underlying hardware must not emit any information regarding the secure process that's executing on the hardware.  If information is emitted, it may be exploited by side-channel cryptanalysis, an idea introduced by Kelsey et al.~\cite{Kelsey98sidechannel}, which is cryptanalysis using implementation-derived data.
 
-
-Kelsey et al.~\cite{Kelsey98sidechannel} introduce the idea of side-channel cryptanalysis, which is cryptanalysis using implementation data. 
-
-Computer architects have made amazing advancements in architecture design to allow for faster processing. The introduction and improvement of pipelines, branch predictors and caches allow for better speculative execution. Hardware threading mechanisms such as simultaneous multi-threading improve the utilization and throughput of the processor. However, these improvements come at a cost. Because these mechanisms improve performance by speculatively executing instructions, the complexity required to maintain state and recovery is enormous. Programs executed on modern processors now have improved average case performance, but unpredictable and non-repeatable execution times. Edwards and Lee\cite{edwards2007case} argued, for the purpose of Real Time Systems, that we needed to reconsider the importance of predictability and repeatability in the core design of the architecture. We argue that this reconsideration is also needed for security systems, because secure software is only as secure as its underlying execution platform. 
+Computer architects have made amazing advancements in architecture design to allow for faster processing. The introduction and improvement of pipelines, branch predictors and caches allow for better speculative execution. Hardware threading mechanisms such as simultaneous multi-threading improve the utilization and throughput of the processor. However, these improvements come at a cost. Because these mechanisms improve performance by speculatively executing instructions, the complexity required to maintain state and recovery is enormous. Programs executed on modern processors now have improved average case performance, but unpredictable and unrepeatable execution times. Edwards and Lee\cite{edwards2007case} argued, for the purpose of Real Time Systems, that we needed to reconsider the importance of predictability and repeatability in the core design of the architecture. We argue that this reconsideration is also needed for security systems, because secure software is only as secure as its underlying execution platform. 
 
 
 
