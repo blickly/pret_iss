@@ -39,7 +39,7 @@
 
 class wheeled_mem : public mem_location {
 public:
-    enum AccessorType { burst, GLOBAL, DMA };
+    enum AccessorType { BURST, GLOBAL, DMA };
     wheeled_mem(int latency_delay, int throughput_delay, cycle_counter* cyc);
     wheeled_mem(int l_d, int t_d, cycle_counter* cyc, int mem_win);
     virtual ~wheeled_mem();

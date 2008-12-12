@@ -49,7 +49,7 @@ struct memory_controller;
  *
  * @author  Ben Lickly, Hiren Paterl
  * @version $Id:$
- * @Pt.ProposedRating red ben
+ * @Pt.ProposedRating red blickly
  * @Pt.AcceptedRating
  */
 

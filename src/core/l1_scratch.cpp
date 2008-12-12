@@ -42,12 +42,8 @@ l1_scratch::l1_scratch() {
 void l1_scratch::behavior() {}
 
 bool l1_scratch::is_stalled(int tid, uint32_t mem_addr) {
-#ifdef USE_PDMA
-    return (!is_addr_in_spm(mem_addr));
-#else
-    // For simplicity, never make scratchpads stall when not using PDMA.
+    // For simplicity, scratchpads never stall.
     return false;
-#endif
 }
 
 /*

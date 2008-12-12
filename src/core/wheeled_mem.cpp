@@ -35,7 +35,7 @@
 #include "assert.h"
 
 #define ROUND_UP(x,y) ( (((x) + (y) - 1) / (y)) * (y) )
-#ifndef USE_burst
+#ifndef USE_BURST
 #define MAX_WORDS 1
 #else
 #define MAX_WORDS 4
@@ -80,7 +80,7 @@ bool wheeled_mem::is_stalled(int tid, uint32_t addr) {
 }
 
 bool wheeled_mem::is_stalled_burst(int tid, uint32_t addr, int num_words) {
-    return is_stalled_helper(burst, tid, addr, num_words);
+    return is_stalled_helper(BURST, tid, addr, num_words);
 }
 
 bool wheeled_mem::is_stalled_helper(AccessorType acc, int tid, uint32_t addr, int num_words) {
@@ -140,7 +140,7 @@ int wheeled_mem::burst_words_returned(int tid, int num_words) {
         assert(remaining_cycles == 0);
         return 0;
     } else {
-        int counted_cycles = get_delay(burst, num_words) - remaining_cycles;
+        int counted_cycles = get_delay(BURST, num_words) - remaining_cycles;
         if (counted_cycles < lat_d) {
             return 0;
         } else {

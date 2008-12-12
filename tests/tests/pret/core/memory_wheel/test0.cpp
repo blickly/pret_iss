@@ -52,10 +52,10 @@ int sc_main(int argc, char *argv[]) {
     cyc_cnt(clock);
 #endif /* _NO_SYSTEMC_ */
 
-    wheeled_mem wmem(MEM_DELAY - 1, PDMA_DELAY, &cyc_cnt);
+    wheeled_mem wmem(MEM_DELAY - 1, BURST_DELAY, &cyc_cnt);
 
     cout << "Memory Latency: " << MEM_DELAY - 1 << endl;
-    cout << "DMA Latency: " << PDMA_DELAY << endl;
+    cout << "DMA Latency: " << BURST_DELAY << endl;
     /* The real test starts from here. */
 
     /* Begin by loading something in the main memory. */

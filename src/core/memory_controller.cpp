@@ -101,7 +101,7 @@ uint32_t memory_controller::read_data(int tid, uint32_t addr, bool& stalled) {
 
 void memory_controller::_setup(cycle_counter* cyc) {
     _inst_scratchpad = new l1_scratch*[NUM_THREADS];
-    _main_mem = new wheeled_mem(MEM_DELAY - 1, PDMA_DELAY, cyc);
+    _main_mem = new wheeled_mem(MEM_DELAY - 1, BURST_DELAY, cyc);
     _mem_mapped_io = new mem_mapped_io();
 
 }

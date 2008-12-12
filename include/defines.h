@@ -97,7 +97,7 @@
 
 /** Access delay from the programmable DMA.
  */
-#define PDMA_DELAY 4
+#define BURST_DELAY 4
 
 ///////////////////////////////////////////////////////////////////////
 ///                Register window specific defines.                ///
