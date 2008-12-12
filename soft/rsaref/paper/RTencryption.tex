@@ -149,14 +149,14 @@ Unlike the branch predictor, removing fast access memories is not an option, sin
 Unlike on simultaneous multi-threaded architectures, a cross-hardware-thread cache side channel attack is not possible because each thread has its own separate physical scratchpad memory. If multiple software threads were to run on a single hardware thread, then two software threads would share the same scratchpad. However, because the allocation of memory on the scratchpad is software controlled, any underlying software thread supervisor would have complete control over the scratchpad allocation. One could imagine a management scheme similar to virtual memory for scratchpads to separate access for each thread. Again, by designing the architecture to preserve predictable and repeatable timing, we have removed the vulnerability that enables caching attacks.
 
 \subsubsection {Instruction Set Architecture Extension}
-Even with a timing-predictable architecture that executes instructions in a deterministic way, algorithms and programs naturally introduce different run times because each iteration may follow a different path in the code. Clever Instruction Set Architecture (ISA) designs have connected the developer and the machine extremely well, providing simple enough instructions for the machine to be kept simple, and yet still provide expressability to the programmer. However, this level of abstraction has failed to bring temporal semantics of the underlying architecture up to the software level. As a result, the only way to control execution time is through programming external timers and interrupts, which the hardware must support. This is both tedious and difficult to program, and the resulting code is non-portable. 
+Even with a timing-predictable architecture that executes instructions in a deterministic way, algorithms and programs naturally introduce varying run times because each iteration may follow a different path in the code. Clever Instruction Set Architecture (ISA) designs have connected the developer and the machine extremely well, providing simple enough instructions for the machine to be kept simple, and yet still provide expressability to the programmer. However, this level of abstraction has failed to bring temporal semantics of the underlying architecture up to the software level. As a result, the only way to control execution time is through programming external timers and interrupts, which the hardware must support. This is both tedious and difficult to program, and the resulting code is non-portable. 
 
 Ip and Edwards~\cite{ip2006processor} propose a processor extension that allow explicit timing control at the ISA level. They introduce deadline registers which are decremented each clock cycle if it contains a value other than zero. Deadline instructions load values in the deadline register when the register is zero. A basic example is shown in figure~\ref{fig:deadline}.
 
 \begin{SCfigure}
   \centering
   \includegraphics[scale=.85]{./images/deadlineExp.pdf}
-  \caption{By enclosing the add instruction with deadlines, we ensure that the 2 add's are executed 8 cycles apart. \$t0 a deadline register. When a deadline instruction is encountered, the program does not progress forward until the deadline register is decremented to 0.}
+  \caption{By enclosing the add instruction with deadlines, we ensure that the 2 adds are executed 8 cycles apart. \$t0 is a deadline register. When a deadline instruction is encountered, the program does not progress forward until the deadline register is decremented to 0.}
   \label{fig:deadline}
 \end{SCfigure}
 
@@ -202,6 +202,8 @@ By adding a PRET deadline statement to the body of the loop, the bimodality of t
   \label{fig:rsa}
 \end{figure}
 
+\subsection{Remaining vulnerabilities}
+Although the primary timing channel information leak is closed, some variation in runtime still exists.  As 422 cycles of variation with a key bit is enough to permit a timing attack\cite{DKLMQW98}, it is possible that timing leaks still exist.  Even if this is not the case, adding deadline instructions merely converts a timing vulnerability into a power vulnerability, as the processor will consume less power while waiting for the deadline register to count down.  Measuring power consumption instead of time elapsed will reveal variations very similar to those observed in execution time when there were no deadlines.  Depending on the application's demands, this may be acceptable.  Even power attacks could be prevented with additional architecture features; as the PRET architecture is intended for real-time applications rather than security applications, it is not designed to burn power while waiting, but such functionality could be added.
 
 \section{Conclusion}
 
