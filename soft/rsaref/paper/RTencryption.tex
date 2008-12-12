@@ -82,20 +82,20 @@ Computer architects have made amazing advancements in architecture design to all
 
 \subsection{Encryption}
 The goal of encryption is to make information illegible to anyone without special knowledge, generally expressed as a key.  Encryption algorithms generally use a so-called trapdoor function, which is easy to compute in one direction but difficult (according to current knowledge) to compute in the other direction without an additional piece of information.  These functions are based on operations such as prime factorization or taking discrete logarithms; as years of concerted effort has failed to produce an efficient algorithm to invert them, the cryptographic algorithms founded on them are used with a large amount of confidence in the algorithms' security.  That is, given all details of the encryption algorithm except for the key, an adversary will not be able to read the encoded information with any reasonable amount of computational power.
-% \begin{figure}[ht]
-%   \centering
-%   \includegraphics[scale=.25]{./images/traditional_model.png}
-%   \caption{Traditional Model of Cryptography}
-%   \label{fig:top_arch}
-% \end{figure}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=.25]{./images/traditional_model.png}
+  \caption{Traditional Model of Cryptography}
+  \label{fig:top_arch}
+\end{figure}
 \subsection{Side Channel Attacks}
 Traditional attacks on cryptographic algorithms use only the input and output of the algorithm, treating it like a monolithic black box.  However, this does not reflect reality.  Algorithms must be implemented in software and run on hardware, which have various properties that change as a result of the cryptographic algorithm's execution.  Side channel attacks use additional data about the encryption process, obtained via observing these information leaks, to circumvent the mathematical complexity of reversing encryption.  Depending on the algorithm and its implementation, a wide variety of information leaks may exist on a number of different physical channels.  The attacks which exploit these channels differ greatly in the difficulty of implementation (or the information is easier or harder to get), ranging from utterly simple in the case of timing attacks to requiring physical access in the case of power attacks.
-% \begin{figure}[ht]
-%   \centering
-%   \includegraphics[scale=.25]{./images/side_channel_model.png}
-%   \caption{Model of Cryptography with Side Channels}
-%   \label{fig:top_arch}
-% \end{figure}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=.25]{./images/side_channel_model.png}
+  \caption{Model of Cryptography with Side Channels}
+  \label{fig:top_arch}
+\end{figure}
 \subsubsection{Timing attacks}
 Timing attacks observe variation in the time spent by an encryption algorithm, often with a known input, and use this information to deduce the key.  These attacks generally require a source of feedback on the accuracy of the estimations of the key, which may be gained by submitting  These timing data are often compared to a duplicate of the encrypting hardware belonging to the attacker over various keys, enabling better feedback.  Vulnerability to this attack depends on the software implementation of the algorithm, but is rather widespread due to the general drive toward fast algorithms.  The obvious countermeasure is to make the algorithm execute in the same amount of time for any input, but this is difficult due to the unpredictability of compiler optimizations, instruction timings, memory accesses, and so on.  A more useful solution is to obscure the inputs to a vulnerable operation via message blinding\cite{mmthesis}; in RSA this is possible by creating a random pair $(v_{i},v_{f})$ where $v_{f}^{-1}=v_{i}^e$, $e$ being the public exponent, then running the modular exponentiation on $M\cdot v_{i}$ mod $N$ and returning the output multiplied by $v_{f}$\cite{Kocher96timingattacks}.
 \subsubsection{Caching attacks}
