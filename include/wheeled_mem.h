@@ -80,15 +80,6 @@ public:
      */
     wheeled_mem(int latency_delay, int throughput_delay, cycle_counter* cyc);
 
-    /** Determine if the memory wheel is stalled for the given thread
-     *  and address.  This is the function that enforces the schedule of
-     *  the threads accessing the memory wheel.
-     *  @param tid The thread id of the requesting thread
-     *  @param addr The address being requested
-     *  @return True if the memory location is stalled.  Otherwise false.
-     */
-    virtual bool is_stalled(int tid, uint32_t addr);
-
     /** Return the word of data at the given address, as well as whether
      *  that access stalls.
      *  @param tid The thread id of the requesting thread
@@ -125,6 +116,15 @@ public:
     virtual void behavior();
 
 protected:
+    /** Determine if the memory wheel is stalled for the given thread
+     *  and address.  This is the function that enforces the schedule of
+     *  the threads accessing the memory wheel.
+     *  @param tid The thread id of the requesting thread
+     *  @param addr The address being requested
+     *  @return True if the memory location is stalled.  Otherwise false.
+     */
+    virtual bool is_stalled(int tid, uint32_t addr);
+
     bool is_stalled_burst(int tid, uint32_t addr, int num_words);
     bool is_stalled_helper(AccessorType acc, int tid, uint32_t addr, int num_words);
     int current_thread();

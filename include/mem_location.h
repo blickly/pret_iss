@@ -54,14 +54,6 @@ class mem_location {
 public:
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///
-    /** Determine if this memory location is stalled for the given thread
-     *  and address.
-     *  @param tid The thread id of the requesting thread
-     *  @param addr The address being requested
-     *  @return True if the memory location is stalled.  Otherwise false.
-     */
-    virtual bool is_stalled(int tid, uint32_t addr) = 0;
-
     /** Return the word of memory at the given address, as well as whether
      *  that access stalls.
      *  @param tid The thread id of the requesting thread
@@ -104,6 +96,17 @@ public:
      *  not be altered.
      */
     memory_unit mem;
+
+protected:
+///////////////////////////////////////////////////////////////////////
+///                      protected methods                          ///
+    /** Determine if this memory location is stalled for the given thread
+     *  and address.
+     *  @param tid The thread id of the requesting thread
+     *  @param addr The address being requested
+     *  @return True if the memory location is stalled.  Otherwise false.
+     */
+    virtual bool is_stalled(int tid, uint32_t addr) = 0;
 };
 
 

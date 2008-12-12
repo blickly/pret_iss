@@ -64,14 +64,6 @@ public:
      */
     virtual void behavior();
 
-    /** Tell if a memory-mapped IO location is stalled.
-     * Due to the single-cycle latency, this is never stalled.
-     *  @param tid The thread id of the requesting thread (ignored)
-     *  @param mem_addr The global address being requested
-     *  @return False, since the scratchpad is never stalled.
-     */
-    virtual bool is_stalled(int tid, uint32_t mem_addr);
-
     /** Read a given memory-mapped address, if available.
      *  @param tid The thread id of the requesting thread
      *  @param mem_addr The memory-mapped address being read
@@ -88,7 +80,20 @@ public:
      */
     virtual void write(int tid, uint32_t addr, uint32_t data, bool& stalled);
 
+protected:
+///////////////////////////////////////////////////////////////////////
+///                      protected methods                          ///
+    /** Tell if a memory-mapped IO location is stalled.
+     * Due to the single-cycle latency, this is never stalled.
+     *  @param tid The thread id of the requesting thread (ignored)
+     *  @param mem_addr The global address being requested
+     *  @return False, since the scratchpad is never stalled.
+     */
+    virtual bool is_stalled(int tid, uint32_t mem_addr);
+
 private:
+///////////////////////////////////////////////////////////////////////
+///                      private methods                            ///
     /** Write the given data to the file on our simulation platform.
      *  @param data Word of data to write.
      */
