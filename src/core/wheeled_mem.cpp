@@ -53,7 +53,6 @@ wheeled_mem::wheeled_mem(int l_d, int t_d, cycle_counter* cyc, int mem_win)
     counter = cyc;
     accessing = false;
     remaining_cycles = 0;
-    requested_addr = 0;
 }
 
 /*
@@ -69,7 +68,6 @@ wheeled_mem::wheeled_mem(int l_d, int t_d, cycle_counter* cyc)
     counter = cyc;
     accessing = false;
     remaining_cycles = 0;
-    requested_addr = 0;
 }
 
 bool wheeled_mem::is_stalled(int tid, uint32_t addr) {
@@ -81,8 +79,10 @@ bool wheeled_mem::is_stalled_burst(int tid, uint32_t addr, int num_words) {
 }
 
 bool wheeled_mem::is_stalled_helper(AccessorType acc, int tid, uint32_t addr, int num_words) {
-    //  cout << "wheeled_mem:: accessing: " << dec << accessing << ", remaining_cycles: " <<  remaining_cycles << endl;
-
+    // We only keep track of the requested addr to assert that we don't
+    // get multiple conflicting accesses to the wheel.
+    static uint32_t requested_addr;
+    
     // If it isn't our turn, we must stall
     if (tid != current_thread() || (!is_scheduled(acc, tid) && !accessing)) {
         assert(!accessing);
@@ -119,10 +119,6 @@ uint32_t wheeled_mem::read(int tid, uint32_t addr, bool& stalled) {
 
 vector<uint32_t> wheeled_mem::read_burst(int tid, uint32_t start_addr, bool& stalled, int num_words) {
     stalled = is_stalled_burst(tid, start_addr, num_words);
-    return get_data_stream(start_addr, num_words);
-}
-
-vector<uint32_t> wheeled_mem::get_data_stream(uint32_t start_addr, int num_words) {
     vector<uint32_t> data_stream;
     for (uint32_t addr = start_addr ; addr < start_addr + 4 * num_words;
             addr += 4) {

@@ -56,6 +56,8 @@ enum AccessorType { BURST, GLOBAL };
  */
 class wheeled_mem : public mem_location {
 public:
+///////////////////////////////////////////////////////////////////////
+///                      public methods                             ///
     /** Create a new wheeled memory unit with the given delays.
      *  The latency delay is how many cycles it takes to get the first word,
      *  and the throughput delay is how long it takes to get subsequent words
@@ -116,31 +118,90 @@ public:
     virtual void behavior();
 
 protected:
-    /** Determine if the memory wheel is stalled for the given thread
-     *  and address.  This is the function that enforces the schedule of
-     *  the threads accessing the memory wheel.
-     *  @param tid The thread id of the requesting thread
-     *  @param addr The address being requested
-     *  @return True if the memory location is stalled.  Otherwise false.
+///////////////////////////////////////////////////////////////////////
+///                     protected methods                           ///
+    /** Determine if the memory wheel is stalled on a single access 
+     *  for the given thread and address.
+     *  @param tid The thread id of the requesting thread.
+     *  @param addr The address being requested.
+     *  @return True if the memory wheel is stalled.  Otherwise false.
      */
     virtual bool is_stalled(int tid, uint32_t addr);
 
+    /** Determine if the memory wheel is stalled on a burst access 
+     *  for the given thread and address.
+     *  @param tid The thread id of the requesting thread.
+     *  @param addr The address being requested.
+     *  @param num_wrods The number of words requested.
+     *  @return True if the memory wheel is stalled.  Otherwise false.
+     */
     bool is_stalled_burst(int tid, uint32_t addr, int num_words);
-    bool is_stalled_helper(AccessorType acc, int tid, uint32_t addr, int num_words);
-    int current_thread();
-    vector<uint32_t> get_data_stream(uint32_t start_addr, int num_words);
 
+    /** Determine if the memory wheel is stalled for the given
+     *  thread, address, and access type.
+     *  @param acc The type of wheel access.
+     *  @param tid The thread id of the requesting thread.
+     *  @param addr The address being requested.
+     *  @param num_words The number of words requested.
+     *  @return True if the memory wheel is stalled.  Otherwise false.
+     */
+    bool is_stalled_helper(AccessorType acc, int tid, uint32_t addr, int num_words);
+
+    /** Return the thread ID of the thread whose memory window is currently 
+     *  active.
+     *  @return The thread id of the requesting thread.
+     */
+    int current_thread();
+
+    /** Determine whether the given accessor and thread are allowed to
+     *  start an acess or not. 
+     *  @param acc The type of wheel access.
+     *  @param tid The thread id of the requesting thread.
+     *  @return True, if the thread has time to make the requested access
+     *      within its window. False, otherwise.
+     */
     virtual bool is_scheduled(AccessorType acc, int tid);
+    
+
+    /** Return the total delay of the given access method.
+     *  @param acc The type of wheel access.
+     *  @param num_words The number of words requested.
+     *  @return The number of cycles the given access would take.
+     */
     virtual int get_delay(AccessorType acc, int num_words);
 
+private:
+///////////////////////////////////////////////////////////////////////
+///                      private variables                          ///
+    /** Pointer to the cycle counter of this core.
+     */
     cycle_counter* counter;
+    
+    /** Boolean is true if a thread is currently making a memory access
+     *  through the wheel.
+     */
     bool accessing;
-    int remaining_cycles;
-    int accessor_tid;
-    uint32_t requested_addr;
 
+    /** The number of cycles remaining in the current memory access.
+     */
+    int remaining_cycles;
+    
+    /** The thread ID of the thread that is making the current memory access.
+     */
+    int accessor_tid;
+
+    /** Lantency in cycles to get a access a single word, 
+     *  or the first word of a burst transfer.
+     */
     const int lat_d;
+
+    /** Cycles needed to get subsequent words after the first during a 
+     *  burst transfer. 
+     */
     const int throughput_d;
+    
+    /** Cycles in the memory window of a single thread.
+     */
     const int MEMORY_WINDOW;
 };
 
