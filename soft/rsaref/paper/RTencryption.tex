@@ -66,7 +66,9 @@ Side-channel attacks exploit information-leaky implementations of cryptographic 
 
 %------------------------------------------------------------------------------
 \section{Introduction}
-In order for secure software to be truly secure, its underlying hardware must also be secure. In other words, the underlying hardware must not emit any information regarding the secure process that's executing on the hardware.  If information is emitted, it may be exploited by side-channel cryptanalysis, an idea introduced by Kelsey et al.~\cite{Kelsey98sidechannel}, which is cryptanalysis using implementation-derived data.
+In order for secure software to be truly secure, its underlying hardware must also be secure. In other words, the underlying hardware must not emit any information about the secure process that's executing on the hardware. If any information is emitted, it may be exploited by the attacker to gain advantage for an attack. Encryption is at the heart of every secure system. By scrambling sensitive messages with a key, private information is kept private because even if the message is intercepted, the advisory has cannot understand the message. This is basis for authentication servers, secure connections and many more. A good encryption algorithm contains strong mathematical properties that even if the advisory eves drop on the encrypted message and knows the original message, it will still take an enormous amount of time to obtain the key by brute force.  
+
+However, attackers soon realized that instead of directly attacking the mathematical properties of the algorithm, it can instead gather information from the underlying implementation, and gain a huge advantage in retrieving the key. These attacks are called side channel attacks. Time channel attack uses the run time variance of encryption algorithms to retrieve the key. Branch predictor attacks uses information from the hardware branch predictor to follow control flow of the encryption algorithm, gaining insight of the key. Cache attacks uses information from the caches to see what data is accessed in the encryption algorithm, in order to derive the key. Power channel attacks analyzes the power dissipated for the encryption to recover the key. 
 
 Computer architects have made amazing advancements in architecture design to allow for faster processing. The introduction and improvement of pipelines, branch predictors and caches allow for better speculative execution. Hardware threading mechanisms such as simultaneous multi-threading improve the utilization and throughput of the processor. However, these improvements come at a cost. Because these mechanisms improve performance by speculatively executing instructions, the complexity required to maintain state and recovery is enormous. Programs executed on modern processors now have improved average case performance, but unpredictable and unrepeatable execution times. Edwards and Lee\cite{edwards2007case} argued, for the purpose of Real Time Systems, that we needed to reconsider the importance of predictability and repeatability in the core design of the architecture. We argue that this reconsideration is also needed for security systems, because secure software is only as secure as its underlying execution platform. 
 
@@ -157,8 +159,7 @@ Ip and Edwards~\cite{ip2006processor} propose a processor extension that allow e
   \label{fig:deadline}
 \end{SCfigure}
 
-This allows control over execution time of the program at the software level, without dealing with interrupts and external timers. This extension along with a predictable architecture allow programmers full control over the run time of a program, allowing them to write predictable and precision timed code. 
-
+This allows control over execution time of the program at the software level, without dealing with interrupts and external timers. This extension along with a predictable architecture allow programmers full control over the run time of a program, allowing them to write predictable and precision timed code and defend against timing side channel attacks. 
 
 \section{Case Study}
 \subsection{RSA Vulnerability}
