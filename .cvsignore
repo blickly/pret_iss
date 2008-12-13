@@ -1,9 +1,0 @@
-run.x
-local.defs
-pret.so
-pret.dll
-libpret.a
-dump
-*.pyc
-.project
-.pydevproject
