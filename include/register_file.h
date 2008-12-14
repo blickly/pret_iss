@@ -24,10 +24,6 @@
   PT_COPYRIGHT_VERSION_2
   COPYRIGHTENDKEY
 
-  $Author$
-  $Date$
-  $Id$
-
 */
 
 #ifndef _REGISTER_FILE_H_
@@ -43,22 +39,79 @@
 #include "instruction.h"
 #include <stdint.h>
 
-struct register_file {
+///////////////////////////////////////////////////////////////////////
+/// register_file
+/**
+ * The register_file class provides a representation of the processor 
+ * registers. It includes the global registers and the window registers.
+ *
+ * @author  Isaac Liu
+ * @version $Id$
+ * @Pt.ProposedRating red blickly
+ * @Pt.AcceptedRating
+ */
+class register_file {
 
-    register_file();
-    register_file(const register_file& rf);
+///////////////////////////////////////////////////////////////////////
+///                      public methods                             ///
+ public:
+  /** Create the register file 
+   */
+  register_file();
+  
+  /** Initialize the register file with values 
+   *
+   * @param initial_register the values to initialize the register file with
+   */
+  register_file(const register_file& initial_register);
 
-    int get_reg(REGISTER_NUMBER rs, WINDOW_POINTER wp);
-    void set_reg(REGISTER_NUMBER rs, uint32_t value, WINDOW_POINTER wp);
-    void regdump(WINDOW_POINTER wp);
+  /** Get the value of a register
+   *
+   * @return returns the register value
+   * @param register_number the register number
+   * @param window_pointer the current window pointer
+   */
+    int get_reg(REGISTER_NUMBER register_number, WINDOW_POINTER window_pointer);
+
+
+   /** Set the value of a register
+   *
+   * @param register_number the register number
+   * @param value the value to set the register to
+   * @param window_pointer the current window pointer
+   */
+    void set_reg(REGISTER_NUMBER register_number, uint32_t value, WINDOW_POINTER window_pointer);
+
+
+    /** Print to <i>cout</i> stream the debugging output for the  
+     * register file in the pipeline. This is only enabled if <i>DBG_PIPE</i> flag or
+     *  other debugging flags are enabled during compilation.
+     */
+    void regdump(WINDOW_POINTER window_pointer);
+
+    /** Reset the window registers to zero
+     */
     void reset_register_window();
 
-    bool operator==(const register_file& rf);
-    void operator=(const register_file& rf);
 
-    // Data members
-    uint32_t gReg[8];
-    uint32_t wReg[16*REGISTER_WINDOWS];
+    /** Overloaded equality operator.
+     *
+     * @param is_register register file to check if equal.
+     */
+    bool operator==(const register_file& is_register);
+
+    /** Overloaded assignment operator.
+     *
+     * @param from_register register to be assigned from
+     */
+    void operator=(const register_file& from_register);
+
+
+///////////////////////////////////////////////////////////////////////
+///                      private variables                          ///
+ private:
+    uint32_t _gReg[8]; //Global Registers
+    uint32_t _wReg[16*REGISTER_WINDOWS]; //Register Window
 
 
 };
