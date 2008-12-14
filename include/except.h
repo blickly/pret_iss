@@ -24,10 +24,6 @@
   PT_COPYRIGHT_VERSION_2
   COPYRIGHTENDKEY
 
-  $Author$
-  $Date$
-  $Id$
-
 */
 
 #ifndef _EXCEPT_H_
@@ -42,12 +38,26 @@
 #include "module_base.h"
 #include "hw_thread_ptr.h"
 #include "dma.h"
-
+///////////////////////////////////////////////////////////////////////
+/// exception
+/**
+ * This class commits the instruction once no exception is detected.
+ * When an instruction is committed, it is written back to the register 
+ * file. This stage also modifies the PC after it detects a branch.
+ *
+ *
+ * @author: hiren
+ * $Date$
+ * @version $Id$
+ * @Pt.ProposedRating red hiren
+ * @Pt.AcceptedRating
+ */
 class except : public module_base {
-public:
+ public:
+	//Constructor
     except(const sc_module_name& str);
     // Ports
-
+	
     // Inputs
     sc_in< hw_thread_ptr > in;
 
@@ -57,28 +67,58 @@ public:
 
     uint32_t addr_calc(const hw_thread_ptr& ht);
     //instruction const& inst);
+
+    //FIXME: Might need to move the branch PC stuff to execute stage
     bool branch_check(const hw_thread_ptr& ht);
     //    bool branch_check(instruction const &inst, unsigned char icc);
 
-    // Entry function
+///////////////////////////////////////////////////////////////////////
+///                      public methods                             ///
 #ifdef _NO_SYSTEMC_
+    /** Takes an instruction from the input in and checks the
+     *  instruction for any stalls. If a stall occured, then 
+     *  the instruction is not committed, or else the instruction
+     *  is committed by writing the register values to the registers
+     *  or setting the next PC value if it's a branch.
+     *  @param in_thread Incoming thread from the memory stage.
+     */
     void behavior(hw_thread_ptr& in);
 #else
+    /** Takes an instruction from the in port and checks the
+     *  instruction for any stalls. If a stall occured, then 
+     *  the instruction is not committed, or else the instruction
+     *  is committed by writing the register values to the registers
+     *  or setting the next PC value if it's a branch.
+     *  @param in_thread Incoming thread from the memory stage.
+     */
     void behavior();
-#endif
+#endif /* _NO_SYSTEMC_ */
 
+    /** Print to <i>cout</i> stream the debugging output for this stage
+       *  in the pipeline. This is only enabled if <i>DBG_PIPE</i> flag is
+       *  enabled during compilation.
+       */
     void debug(const hw_thread_ptr& ht);
     bool dead_stalled(const hw_thread_ptr& ht);
 
     bool fetch_stalled(const hw_thread_ptr& ht);
     void inc_pc(const hw_thread_ptr& ht);
 
-    void set_dword_state(const hw_thread_ptr& ht);
     bool mem_stalled(const hw_thread_ptr& ht);
+    void set_dword_state(const hw_thread_ptr& ht);
     void write_regs(const hw_thread_ptr& ht);
     void write_special_regs(const hw_thread_ptr& ht);
-private:
+
+///////////////////////////////////////////////////////////////////////
+///                      private methods                             ///
+ private:
+    /** Disable default constructor.
+     */
     except();
+
+    /** Check whether the current thread in a stage can processed or not.
+     *  @param hardware_thread The hardware thread.
+     */
     bool _is_not_valid_hwthread(const hw_thread_ptr& ht);
 };
 #endif
