@@ -207,7 +207,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
         if (hardware_thread->inst.is_signed_multiply()) {
             uint32_t  rs1 = (hardware_thread->inst.get_op1_value());
             uint32_t rs2 = (hardware_thread->inst.get_op2_value());
-            uint32_t y = (hardware_thread->spec_regs.y);
+            uint32_t y = (hardware_thread->spec_regs.get_y());
             uint32_t rsd;
             uint32_t  temp_rsd;
 
@@ -220,7 +220,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
             /// (2): Righardware_thread shift by one
             rs1 = rs1 >> 1;
             /// Replace MSB with N xor V
-            bool b = (hardware_thread->spec_regs.icc & 0x08) ^(hardware_thread->spec_regs.icc & 0x02);
+            bool b = (hardware_thread->spec_regs.get_icc() & 0x08) ^(hardware_thread->spec_regs.get_icc() & 0x02);
             rs1 |= (b << 31) ; //rs1.set(32, b);
             /// (3): Check if LSB of Y reg is 1.
             if ((y & 1) == false) { // if (y[0] == false) {
@@ -238,7 +238,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
             y |= (lsb_rs1 << 31); //y[31] = lsb_rs1;
 
             /// Restore updated register values
-            hardware_thread->spec_regs.y = y;
+            hardware_thread->spec_regs.set_y(y);
             hardware_thread->inst.set_op1_value(rs1);
             hardware_thread->inst.set_op2_value(rs2);
             hardware_thread->inst.set_alu_result(rsd);

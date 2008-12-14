@@ -120,7 +120,7 @@ bool hw_thread::operator==(const hw_thread& hardware_thread) {
 }
 
 void hw_thread::regdump() {
-    regs.regdump(spec_regs.curr_wp);
+  regs.regdump(spec_regs.get_curr_wp());
     cout << hex << setfill('0') << "pc : " << setw(8) << _pc << "    ";
 
     // This is assuming that if the _branch_slot is 0 then basically npc

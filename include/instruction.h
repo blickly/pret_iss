@@ -320,7 +320,7 @@ public:
 
     /** Overloaded equality operator.
      *
-     * @is_instruction Instruction to check if equal.
+     * @param is_instruction Instruction to check if equal.
      */
     bool operator==(const instruction& is_instruction) const;
 
