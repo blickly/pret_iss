@@ -35,35 +35,35 @@
 #include <assert.h>
 #include <iomanip>
 
-uint32_t except::addr_calc(const hw_thread_ptr& ht) {
+uint32_t except::addr_calc(const hw_thread_ptr& hardware_thread) {
     //instruction const& inst) {
-    if (ht->inst.is_branch()) {
-        return ht->inst.get_pc() + (ht->inst.get_disp22()*4);
-    } else if (ht->inst.is_call()) {
-        return ht->inst.get_pc() + (ht->inst.get_disp30()*4);
+    if (hardware_thread->inst.is_branch()) {
+        return hardware_thread->inst.get_pc() + (hardware_thread->inst.get_disp22()*4);
+    } else if (hardware_thread->inst.is_call()) {
+        return hardware_thread->inst.get_pc() + (hardware_thread->inst.get_disp30()*4);
     } else {
         assert(false);
     }
 
     return 0;
 }
-bool except::branch_check(const hw_thread_ptr& ht) {
+bool except::branch_check(const hw_thread_ptr& hardware_thread) {
 //bool except::branch_check(const instruction& inst, unsigned char icc) {
-    bool neg = ht->spec_regs.icc & 0x08;
-    bool zero = ht->spec_regs.icc & 0x04;
-    bool ovfl = ht->spec_regs.icc & 0x02;
-    bool carry = ht->spec_regs.icc & 0x01;
+    bool neg = hardware_thread->spec_regs.icc & 0x08;
+    bool zero = hardware_thread->spec_regs.icc & 0x04;
+    bool ovfl = hardware_thread->spec_regs.icc & 0x02;
+    bool carry = hardware_thread->spec_regs.icc & 0x01;
 
-    if (!ht->inst.is_branch() && ! ht->inst.is_call()) {
+    if (!hardware_thread->inst.is_branch() && ! hardware_thread->inst.is_call()) {
         return false;
-    } else if (ht->inst.is_call()) {
+    } else if (hardware_thread->inst.is_call()) {
         return true;
-    } else if (ht->inst.get_conditional_branch() == BRCH_BA) {
+    } else if (hardware_thread->inst.get_conditional_branch() == BRCH_BA) {
         return true;
-    } else if (ht->inst.get_conditional_branch() == BRCH_BN) {
+    } else if (hardware_thread->inst.get_conditional_branch() == BRCH_BN) {
         return false;
     } else {
-        switch (ht->inst.get_conditional_branch()) {
+        switch (hardware_thread->inst.get_conditional_branch()) {
         case BRCH_BNE:
             return !zero;
         case  BRCH_BE:
@@ -99,102 +99,102 @@ bool except::branch_check(const hw_thread_ptr& ht) {
 }
 
 #ifdef _NO_SYSTEMC_
-void except::behavior(hw_thread_ptr & ht) {
+void except::behavior(hw_thread_ptr & hardware_thread) {
 #else
 void except::behavior() {
-    hw_thread_ptr ht = in.read();
+    hw_thread_ptr hardware_thread = in.read();
 #endif /* _NO_SYSTEMC_ */
 
     /* Check if the hardware thread is enabled */
-    if (_is_not_valid_hwthread(ht)) {
+    if (_is_not_valid_hwthread(hardware_thread)) {
         return;
     }
     /* Everytime an instruction goes through this stage, increase its
        cycle count to 6 */
-    ht->cnt_cycles += 6;
+    hardware_thread->cnt_cycles += 6;
 
     /* If fetch stage is stalled then just increment the cycle count
     and return. */
-    if (ht->is_fetch_stalled()) {
+    if (hardware_thread->is_fetch_stalled()) {
         return;
     }
 
-    debug(ht);
+    debug(hardware_thread);
 
     /* If the current instruction is a double word then set a flag to
        note it */
-    set_dword_state(ht);
+    set_dword_state(hardware_thread);
 
     /* If deadline is causing a stall then let skip out of this stage */
-    if (dead_stalled(ht)) {
+    if (dead_stalled(hardware_thread)) {
         return;
     }
 
     /* If the instruction fetch caused a stall then skip out of this
        stage */
-    if (fetch_stalled(ht)) {
+    if (fetch_stalled(hardware_thread)) {
         return;
     }
     /* If memory is causing a stall then skip out of this stage */
-    if (mem_stalled(ht)) {
+    if (mem_stalled(hardware_thread)) {
         return;
     }
 
-    if (!ht->is_db_word_stalled()) {
+    if (!hardware_thread->is_db_word_stalled()) {
         /* Increment the PC based */
-        inc_pc(ht);
+        inc_pc(hardware_thread);
     }
 
-    write_regs(ht);
-    write_special_regs(ht);
+    write_regs(hardware_thread);
+    write_special_regs(hardware_thread);
 
     /* Increment the number of instructions executed */
-    ht->cnt_instr++;
+    hardware_thread->cnt_instr++;
 
 }
 
-bool except::dead_stalled(const hw_thread_ptr& ht) {
+bool except::dead_stalled(const hw_thread_ptr& hardware_thread) {
 
     /****************************************
      //ADDED FOR DEADLINE INSTRUCTION
      //IF DEADLINE IS NOT REACHED, NULL MEANS DON'T COMMIT
      //ANYTHING, SO WE CAN JUST RETURN FROM THIS STAGE
      ****************************************************************/
-    if (ht->is_deadline_stalled()) {
+    if (hardware_thread->is_deadline_stalled()) {
 #ifdef DBG_REG
-        //   ht->spec_regs.dump();
-        ht->spec_regs.dump_deadline_timers();
+        //   hardware_thread->spec_regs.dump();
+        hardware_thread->spec_regs.dump_deadline_timers();
 
 #endif
         //HACK!!! NEED TO CHANGE!!
         //STALLED BUT WANT TO UPDATE MAILBOX
-        if (ht->spec_regs.pll_loaded && ht->inst.is_write_special_registers()) {
-            ht->spec_regs.pll_load[ht->inst.get_rd() - 8] = ht->inst.get_alu_result();
+        if (hardware_thread->spec_regs.pll_loaded && hardware_thread->inst.is_write_special_registers()) {
+            hardware_thread->spec_regs.pll_load[hardware_thread->inst.get_rd() - 8] = hardware_thread->inst.get_alu_result();
         }
         return true;
     }
     return false;
 }
 
-void except::debug(const hw_thread_ptr& ht) {
+void except::debug(const hw_thread_ptr& hardware_thread) {
 #ifdef DBG_PIPE
     cout << "*eXcept*" << "  (" << sc_time_stamp() << ") ";
-    cout << "hw_thread's id: " << ht->get_id() << ", pc: 0x" << hex << ht._handle->PC << ", " << hex << ht->inst;
-    cout << "\t+ pc: " << hex << ht->PC << " branch: " << ht->get_delayed_branch_address() << " icc: " << hex << (uint32_t)(ht->spec_regs.icc) << dec << endl;
+    cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex << hardware_thread._handle->PC << ", " << hex << hardware_thread->inst;
+    cout << "\t+ pc: " << hex << hardware_thread->PC << " branch: " << hardware_thread->get_delayed_branch_address() << " icc: " << hex << (uint32_t)(hardware_thread->spec_regs.icc) << dec << endl;
 #endif
 
 #ifdef DBG_INST_TRACE
 
     cout <<  "( " << sc_time_stamp() << " ) "
-         << hex <<  "pc: " << setw(8) << setfill('0') << ht->PC << "\t"
-         <<  ht->inst << endl;
+         << hex <<  "pc: " << setw(8) << setfill('0') << hardware_thread->PC << "\t"
+         <<  hardware_thread->inst << endl;
 #endif
 
 #ifdef DBG_UNMIP
-    if (ht->inst.unimp) {
-        cerr << "thread id: " << ht->get_id()
-             << ", pc: 0x" << hex << ht._handle->PC
-             << ", " << hex << ht->inst << endl;
+    if (hardware_thread->inst.unimp) {
+        cerr << "thread id: " << hardware_thread->get_id()
+             << ", pc: 0x" << hex << hardware_thread._handle->PC
+             << ", " << hex << hardware_thread->inst << endl;
         cerr << "\t+ INSTRUCTION IS NOT IMPLEMENTED" << endl;
     }
 #endif
@@ -210,185 +210,185 @@ except::except(const sc_module_name & str): module_base(str) {
 #endif
 }
 
-bool except::fetch_stalled(const hw_thread_ptr& ht) {
+bool except::fetch_stalled(const hw_thread_ptr& hardware_thread) {
     /* A stall from the fetch stage causes the exception stage to skip out
      just after the deadline registers are updated */
-    return (ht->is_fetch_stalled());
+    return (hardware_thread->is_fetch_stalled());
 };
 
-bool except::_is_not_valid_hwthread(const hw_thread_ptr& ht) {
-    return (ht.is_null() || !ht->is_enabled());
+bool except::_is_not_valid_hwthread(const hw_thread_ptr& hardware_thread) {
+    return (hardware_thread.is_null() || !hardware_thread->is_enabled());
 }
 
-bool except::mem_stalled(const hw_thread_ptr& ht) {
+bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     /* A stall from the memory causes the exception stage to skip out
      just after the deadline registers are updated */
-    return (ht->is_memory_stalled());
+    return (hardware_thread->is_memory_stalled());
 };
 
-void except::set_dword_state(const hw_thread_ptr& ht) {
+void except::set_dword_state(const hw_thread_ptr& hardware_thread) {
 
     // HDP: If the instruction is a double anything we need to redo the
     // instruction except we need to increment the destination address.
-    if ((ht->inst.is_db_word()) && (!ht->is_db_word_stalled())) {
+    if ((hardware_thread->inst.is_db_word()) && (!hardware_thread->is_db_word_stalled())) {
         // The PC is no longer incremented if a db_word is recognized.
         // Set the thread's double word flag to true.
-        ht->set_db_word_stalled(true);
-        //    cout << "DOUBLE WORD: " << " rs1: " << ht->inst.rs1 << endl;
+        hardware_thread->set_db_word_stalled(true);
+        //    cout << "DOUBLE WORD: " << " rs1: " << hardware_thread->inst.rs1 << endl;
     }
 
 }
 
-void except::inc_pc(const hw_thread_ptr& ht) {
+void except::inc_pc(const hw_thread_ptr& hardware_thread) {
 
     //If no exception
-    if (ht->inst.is_write_icc()) {
-        ht->spec_regs.icc = ht->inst.get_icc();
+    if (hardware_thread->inst.is_write_icc()) {
+        hardware_thread->spec_regs.icc = hardware_thread->inst.get_icc();
     }
 
     // We must execute the delayed instruction stored in the branch
     // slot. If there is none in the branch_slot then we can simply
     // forward the PC.
-    if (ht->get_delayed_branch_address()) {
+    if (hardware_thread->get_delayed_branch_address()) {
         // If there is double instruction in the delay slot then we need to make
         // sure to not set the PC to the branch slot instruction until we have
         // finished processing the delay slot instruction.
 
         // Make sure the instruction's db_word is not set.
-        if (!ht->inst.is_db_word()) {
-            ht->set_pc(ht->get_delayed_branch_address());
-            ht->set_delayed_branch_address(0);
+        if (!hardware_thread->inst.is_db_word()) {
+            hardware_thread->set_pc(hardware_thread->get_delayed_branch_address());
+            hardware_thread->set_delayed_branch_address(0);
         }
     } else {
-        ht->set_pc(ht->get_pc() + 4);
+        hardware_thread->set_pc(hardware_thread->get_pc() + 4);
     }
 
-    if (branch_check(ht)) {
-        //    if (branch_check(ht->inst, ht->spec_regs.icc)) {
-        if (!(ht->inst.is_branch() && ht->inst.is_annul() && ht->inst.get_conditional_branch() == BRCH_BA)) {
-            ht->set_delayed_branch_address(ht->get_pc() + addr_calc(ht) - 4);
+    if (branch_check(hardware_thread)) {
+        //    if (branch_check(hardware_thread->inst, hardware_thread->spec_regs.icc)) {
+        if (!(hardware_thread->inst.is_branch() && hardware_thread->inst.is_annul() && hardware_thread->inst.get_conditional_branch() == BRCH_BA)) {
+            hardware_thread->set_delayed_branch_address(hardware_thread->get_pc() + addr_calc(hardware_thread) - 4);
         } else {
-            ht->set_pc(ht->get_pc() + addr_calc(ht) - 4);
+            hardware_thread->set_pc(hardware_thread->get_pc() + addr_calc(hardware_thread) - 4);
         }
-    } else if (ht->inst.is_jump()) {
+    } else if (hardware_thread->inst.is_jump()) {
 #ifdef DBG_PIPE
-        cout << "\t+ inst.pc = " << ht->inst.pc << endl;
+        cout << "\t+ inst.pc = " << hardware_thread->inst.pc << endl;
 #endif
-        ht->set_delayed_branch_address(ht->inst.get_alu_result());
+        hardware_thread->set_delayed_branch_address(hardware_thread->inst.get_alu_result());
     }  else
-        if (ht->inst.is_branch() && ht->inst.is_annul()) {
-            ht->set_pc(ht->get_pc() + 4);
+        if (hardware_thread->inst.is_branch() && hardware_thread->inst.is_annul()) {
+            hardware_thread->set_pc(hardware_thread->get_pc() + 4);
         }
 
-    if (ht->inst.is_jump() || ht->inst.is_call()) {
-        ht->inst.set_alu_result(ht->get_pc() - 4);
+    if (hardware_thread->inst.is_jump() || hardware_thread->inst.is_call()) {
+        hardware_thread->inst.set_alu_result(hardware_thread->get_pc() - 4);
     }
 
 
 #ifdef DBG_PIPE
-    cout << "\t+ next PC: " << hex << ht->PC << ", branch slot: " << ht->get_delayed_branch_address() << dec << endl;
+    cout << "\t+ next PC: " << hex << hardware_thread->PC << ", branch slot: " << hardware_thread->get_delayed_branch_address() << dec << endl;
 
 
     //   cout << "Increment PC @ time " << sc_time_stamp() << ", old pc: "
-    //        << ht->PC - 4 << ", new pc: " << ht->PC << endl;
+    //        << hardware_thread->PC - 4 << ", new pc: " << hardware_thread->PC << endl;
     // FIXME: Add case to deal with thread stalls from memory accesses.
 
-    cout << "\t+ ALU Result in exception stage: " << ht->inst.get_alu_result() << endl;
+    cout << "\t+ ALU Result in exception stage: " << hardware_thread->inst.get_alu_result() << endl;
 #endif
 
 };
 
 
-void except::write_regs(const hw_thread_ptr& ht) {
+void except::write_regs(const hw_thread_ptr& hardware_thread) {
 
-    if (ht->inst.is_write_registers()) {
-        //    if ( ht->inst.is_call() || ht->inst.is_jump() )
+    if (hardware_thread->inst.is_write_registers()) {
+        //    if ( hardware_thread->inst.is_call() || hardware_thread->inst.is_jump() )
 
-        switch (ht->inst.get_select_special_register()) {
+        switch (hardware_thread->inst.get_select_special_register()) {
         case SREG_Y:
-            ht->regs.set_reg(ht->inst.get_rd(), ht->spec_regs.y , ht->spec_regs.curr_wp);
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.y , hardware_thread->spec_regs.curr_wp);
 
             break;
         case SREG_ASR:
-            ht->regs.set_reg(ht->inst.get_rd(), ht->spec_regs.asr[ht->inst.get_rs1()] , ht->spec_regs.curr_wp);
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.asr[hardware_thread->inst.get_rs1()] , hardware_thread->spec_regs.curr_wp);
             break;
         case SREG_PSR:
-            ht->regs.set_reg(ht->inst.get_rd(), ht->spec_regs.get_psr() , ht->spec_regs.curr_wp);
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_psr() , hardware_thread->spec_regs.curr_wp);
             break;
         case SREG_WIM:
-            ht->regs.set_reg(ht->inst.get_rd(), ht->spec_regs.wim , ht->spec_regs.curr_wp);
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.wim , hardware_thread->spec_regs.curr_wp);
             break;
         case SREG_TBR:
-            ht->regs.set_reg(ht->inst.get_rd(), ht->spec_regs.tbr , ht->spec_regs.curr_wp);
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.tbr , hardware_thread->spec_regs.curr_wp);
             break;
         default:
-            ht->regs.set_reg(ht->inst.get_rd(), ht->inst.get_alu_result(), ht->spec_regs.curr_wp);
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->inst.get_alu_result(), hardware_thread->spec_regs.curr_wp);
             break;
         }
 
 
 #ifdef DBG_REG
-        ht->regs.regdump(ht->spec_regs.curr_wp);
+        hardware_thread->regs.regdump(hardware_thread->spec_regs.curr_wp);
 #endif
 
 
 #ifdef DBG_REG
-        ht->spec_regs.dump();
-        ht->spec_regs.dump_deadline_timers();
+        hardware_thread->spec_regs.dump();
+        hardware_thread->spec_regs.dump_deadline_timers();
 #endif /* DBG_REG */
 
     }
 }
 
-void except::write_special_regs(const hw_thread_ptr& ht) {
+void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
 
-    if (ht->inst.is_write_special_registers()) {
-        switch (ht->inst.get_select_special_register()) {
+    if (hardware_thread->inst.is_write_special_registers()) {
+        switch (hardware_thread->inst.get_select_special_register()) {
         case SREG_Y:
-            ht->spec_regs.y = ht->inst.get_alu_result();
+            hardware_thread->spec_regs.y = hardware_thread->inst.get_alu_result();
             break;
         case SREG_ASR:
-            ht->spec_regs.asr[ht->inst.get_rd()] = ht->inst.get_alu_result();
+            hardware_thread->spec_regs.asr[hardware_thread->inst.get_rd()] = hardware_thread->inst.get_alu_result();
             break;
         case SREG_PSR:
-            ht->spec_regs.set_psr(ht->inst.get_alu_result());
+            hardware_thread->spec_regs.set_psr(hardware_thread->inst.get_alu_result());
             break;
         case SREG_WIM:
-            ht->spec_regs.wim = ht->inst.get_alu_result();
+            hardware_thread->spec_regs.wim = hardware_thread->inst.get_alu_result();
             break;
         case SREG_TBR:
-            ht->spec_regs.tbr = ht-> inst.get_alu_result();
+            hardware_thread->spec_regs.tbr = hardware_thread-> inst.get_alu_result();
             break;
         case SREG_DT:
-            if (ht->inst.get_rd() < NUM_DEADLINE_TIMERS) {
-                ht->spec_regs.dt[ht->inst.get_rd()] = ht->inst.get_alu_result();
+            if (hardware_thread->inst.get_rd() < NUM_DEADLINE_TIMERS) {
+                hardware_thread->spec_regs.dt[hardware_thread->inst.get_rd()] = hardware_thread->inst.get_alu_result();
 
                 /* If the value being set is 0, then it should not cause a warning. */
-                if (ht->inst.get_alu_result() != 0) {
-                    //                    cout << "dt value: " << hex << ht->inst.get_alu_result() << endl;
-                    ht->spec_regs.dt_status[ht->inst.get_rd()] = SET;
+                if (hardware_thread->inst.get_alu_result() != 0) {
+                    //                    cout << "dt value: " << hex << hardware_thread->inst.get_alu_result() << endl;
+                    hardware_thread->spec_regs.dt_status[hardware_thread->inst.get_rd()] = SET;
                 }
 
             } else {
-                ht->spec_regs.pll_load[ht->inst.get_rd()-8] = ht->inst.get_alu_result();
+                hardware_thread->spec_regs.pll_load[hardware_thread->inst.get_rd()-8] = hardware_thread->inst.get_alu_result();
             }
 
-            // printf("Should have written %d  to timer %d\n", ht->inst.get_alu_result(), ht->inst.get_rd());
+            // printf("Should have written %d  to timer %d\n", hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
             break;
         case SREG_CP:
             //            cout << "except:: SREG_CP write special registers" << endl;
             /*FIXME: Hiren More DMA to its own arch.version */
             // To a memory source address.
-            if (ht->inst.get_rd() == 0) {
-                //                cout << "except:: memory source, tid: " << ht->id << ", value: " << hex << ht->inst.get_alu_result() << endl;
-                coproc_dma->set_mem_source(ht->get_id(), ht->inst.get_alu_result());
+            if (hardware_thread->inst.get_rd() == 0) {
+                //                cout << "except:: memory source, tid: " << hardware_thread->id << ", value: " << hex << hardware_thread->inst.get_alu_result() << endl;
+                coproc_dma->set_mem_source(hardware_thread->get_id(), hardware_thread->inst.get_alu_result());
             }
 
             // To a spm target address. Start the transfer.
-            if (ht->inst.get_rd() == 1) {
-                //                cout << "except:: SPM target, tid: " << ht->id << ", value: " << hex << ht->inst.get_alu_result() << endl;
-                coproc_dma->set_spm_target(ht->get_id(), ht->inst.get_alu_result());
-                coproc_dma->make_transfer(ht);
+            if (hardware_thread->inst.get_rd() == 1) {
+                //                cout << "except:: SPM target, tid: " << hardware_thread->id << ", value: " << hex << hardware_thread->inst.get_alu_result() << endl;
+                coproc_dma->set_spm_target(hardware_thread->get_id(), hardware_thread->inst.get_alu_result());
+                coproc_dma->make_transfer(hardware_thread);
             }
             break;
         default:
@@ -398,8 +398,8 @@ void except::write_special_regs(const hw_thread_ptr& ht) {
 
 
 #ifdef DBG_REG
-        ht->spec_regs.dump();
-        ht->spec_regs.dump_deadline_timers();
+        hardware_thread->spec_regs.dump();
+        hardware_thread->spec_regs.dump_deadline_timers();
 #endif
     }
 }

@@ -54,23 +54,15 @@
  */
 class except : public module_base {
  public:
-	//Constructor
-    except(const sc_module_name& str);
-    // Ports
-	
-    // Inputs
+  //Constructor
+  except(const sc_module_name& str);
+
+///////////////////////////////////////////////////////////////////////
+///                      public variables                           ///
+    /** Input and output ports for SystemC.
+     */	
     sc_in< hw_thread_ptr > in;
-
     sc_port< dma_if > coproc_dma;
-    // Constructor
-
-
-    uint32_t addr_calc(const hw_thread_ptr& ht);
-    //instruction const& inst);
-
-    //FIXME: Might need to move the branch PC stuff to execute stage
-    bool branch_check(const hw_thread_ptr& ht);
-    //    bool branch_check(instruction const &inst, unsigned char icc);
 
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///
@@ -95,19 +87,60 @@ class except : public module_base {
 #endif /* _NO_SYSTEMC_ */
 
     /** Print to <i>cout</i> stream the debugging output for this stage
-       *  in the pipeline. This is only enabled if <i>DBG_PIPE</i> flag is
-       *  enabled during compilation.
+       *  in the pipeline. This is only enabled if <i>DBG_PIPE</i> flag or
+       *  other debugging flags are enabled during compilation.
+       *  @param hardware_thread The hardware thread.
        */
-    void debug(const hw_thread_ptr& ht);
-    bool dead_stalled(const hw_thread_ptr& ht);
+    void debug(const hw_thread_ptr& hardware_thread);
 
-    bool fetch_stalled(const hw_thread_ptr& ht);
-    void inc_pc(const hw_thread_ptr& ht);
+    /** Calulate the target hardware address if it's a branch 
+    *  @param hardware_thread The hardware thread.
+    */
+    uint32_t addr_calc(const hw_thread_ptr& hardware_thread);
 
-    bool mem_stalled(const hw_thread_ptr& ht);
-    void set_dword_state(const hw_thread_ptr& ht);
-    void write_regs(const hw_thread_ptr& ht);
-    void write_special_regs(const hw_thread_ptr& ht);
+    /** Check and see if a conditional branch is taken
+    *  @param hardware_thread The hardware thread.
+    */
+    bool branch_check(const hw_thread_ptr& hardware_thread);
+    //FIXME: Might need to move the branch PC stuff to execute stage
+
+    /** Check if the hardware is stalled due to waiting for deadlines
+    *  @param hardware_thread The hardware thread.
+    */
+    bool dead_stalled(const hw_thread_ptr& hardware_thread);
+
+    /** Check and see if the stall is from the fetch stage
+    *  @param hardware_thread The hardware thread.
+    */
+    bool fetch_stalled(const hw_thread_ptr& hardware_thread);
+
+    /** Increment the PC if it's not a branch. This function also
+     *  handles if the branch delay slot is occupied and a branch needs 
+     *  to occur
+     *  @param hardware_thread The hardware thread.
+     */
+    void inc_pc(const hw_thread_ptr& hardware_thread);
+
+    /** Check and see if the pipeline is stalled by memory
+    *  @param hardware_thread The hardware thread.
+    */
+    bool mem_stalled(const hw_thread_ptr& hardware_thread);
+
+    /** Check and see if a double instruction is issued in the pipeline
+    *  @param hardware_thread The hardware thread.
+    */
+    void set_dword_state(const hw_thread_ptr& hardware_thread);
+
+    /** Update the registers from the current instruction thread. Commit 
+     *  the instruction
+     *  @param hardware_thread The hardware thread.
+     */
+    void write_regs(const hw_thread_ptr& hardware_thread);
+
+    /** Update the special registers of the processor. Commit the instruction.
+    *  @param hardware_thread The hardware thread.
+    */
+    void write_special_regs(const hw_thread_ptr& hardware_thread);
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private methods                             ///
@@ -119,6 +152,6 @@ class except : public module_base {
     /** Check whether the current thread in a stage can processed or not.
      *  @param hardware_thread The hardware thread.
      */
-    bool _is_not_valid_hwthread(const hw_thread_ptr& ht);
+    bool _is_not_valid_hwthread(const hw_thread_ptr& hardware_thread);
 };
 #endif
