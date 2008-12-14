@@ -156,6 +156,12 @@ public:
      * @return Window pointer increment.
      */
     short get_increment_window_pointer() const;
+    
+    /** Get the instruction.
+     *
+     * @return instruction.
+     */
+    uint32_t get_instruction() const;
 
     /** Return the memory size being addressed by this instruction.
      *
