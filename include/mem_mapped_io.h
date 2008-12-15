@@ -80,10 +80,6 @@ public:
      */
     virtual void write(int tid, uint32_t addr, uint32_t data, bool& stalled);
 
-protected:
-///////////////////////////////////////////////////////////////////////
-///                      protected methods                          ///
-
 private:
 ///////////////////////////////////////////////////////////////////////
 ///                      private methods                            ///

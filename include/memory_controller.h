@@ -146,8 +146,7 @@ public:
      *  The instruction at that location is returned directly from this
      *  method and a boolean to tell weather the access stalled or not is
      *  returned through the final parameter.
-     *  @param tid The thread id ///////////////////////////////////////////////////////////////////////
-    ///                      public variables                           ///number of the requesting thread.
+     *  @param tid The thread id number of the requesting thread.
      *  @param addr The 32-bit address to be accessed.
      *  @param stalled An output parameter that tells if this access stalled.
      *  @return The actual 32-bits of instruction that were (or would be) read.
