@@ -45,7 +45,7 @@ struct memory_controller;
 /**
  * For static DMA the addresses held in a scratchpad are constant, and
  * these constants are specified in an external file.
- * The static_bound_parser reads these bounds from those files.
+ * The static bound parser reads these bounds from those files.
  *
  * @author  Ben Lickly, Hiren Paterl
  * @version $Id:$
@@ -54,15 +54,55 @@ struct memory_controller;
  */
 
 class static_bound_parser {
-
 public:
+///////////////////////////////////////////////////////////////////////
+///                      public methods                             ///
+    /** Construct a static bound parser with no associated memory controller.
+     */
     static_bound_parser();
+
+    /** Associate the given memory controller with the static bound parser.
+     *  The memory controller is used to determine where to store the bounds
+     *  that are parsed.
+     *  @param memc Pointer to the memory controller.
+     */
     void set_memory_controller(memory_controller* memc);
+
+    /** Parse the given file and set the bounds of the data scratchpad
+     *  for the given thread.
+     *  @param tid Thread ID of the data scratchpad.
+     *  @param dspm Name of the file that contains the bounds.
+     */
     void load_data_spm(const unsigned int tid, const string& dspm);
-    void load_spm(unsigned int tid, const string& spm);
-    void load_inst_spm(unsigned int tid, const string& ispm);
+
+    /** Parse the given file and set the bounds of the instruction scratchpad
+     *  for the given thread.
+     *  @param tid Thread ID of the instruction scratchpad.
+     *  @param ispm Name of the file that contains the bounds.
+     */
+    void load_inst_spm(const unsigned int tid, const string& ispm);
+
 private:
+///////////////////////////////////////////////////////////////////////
+///                      private methods                            ///
+    /** Parse the given file and set the bounds of the scratchpad
+     *  for the given thread.
+     *  @param tid Thread ID of the scratchpad.
+     *  @param spm Name of the file that contains the bounds.
+     */
+    void load_spm(const unsigned int tid, const string& spm);
+
+///////////////////////////////////////////////////////////////////////
+///                      private variables                          ///
+    /** Pointer to the associated memory controller.  This is used to
+     *  determine where to store the bounds that are parsed.
+     */
+
     memory_controller* _mem_cont;
+    /** The current address within the scratchpad.  We must keep track of
+     *  this here because the bounds file does not specify the scratchpad
+     *  address to which a main memory address is mapped.
+     */
     uint32_t spm_addr;
 
 };

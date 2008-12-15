@@ -41,19 +41,19 @@ void static_bound_parser::set_memory_controller(memory_controller* memc) {
 static_bound_parser::static_bound_parser(): _mem_cont(NULL) {
 }
 
-void static_bound_parser::load_data_spm(unsigned int tid, const string& dspm) {
+void static_bound_parser::load_data_spm(const unsigned int tid, const string& dspm) {
     load_spm(tid, dspm);
 }
 
-void static_bound_parser::load_inst_spm(unsigned int tid, const string& ispm) {
+void static_bound_parser::load_inst_spm(const unsigned int tid, const string& ispm) {
     load_spm(tid, ispm);
 }
 
-void static_bound_parser::load_spm(unsigned int tid, const string& spm) {
+void static_bound_parser::load_spm(const unsigned int tid, const string& spm) {
     /* Read the memory map file for instruction SPM. */
     ifstream file_spm(spm.c_str(), ios::in);
-    l1_scratch* current_scratchpad = &_mem_cont->get_spm_mem_loc(tid);
-    memory_unit* main_memory = &_mem_cont->get_main_mem_loc(0x3FFFFFFF).mem;
+    l1_scratch* const current_scratchpad = &_mem_cont->get_spm_mem_loc(tid);
+    memory_unit* const main_memory = &_mem_cont->get_main_mem_loc(0x3FFFFFFF).mem;
 
     if (file_spm.is_open()) {
         uint32_t min = 0;
@@ -67,7 +67,7 @@ void static_bound_parser::load_spm(unsigned int tid, const string& spm) {
             ss >> hex >> min >> max;
             if (line.size() > 0) {
                 for (uint32_t addr = min; addr < max + 4; addr += 4) {
-                    uint32_t data = (*main_memory)[addr];
+                    const uint32_t data = (*main_memory)[addr];
                     current_scratchpad->add_addr(addr, spm_addr, data);
                     spm_addr += 4;
                 }
