@@ -110,8 +110,8 @@ class register_file {
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
  private:
-    uint32_t _gReg[8]; //Global Registers
-    uint32_t _wReg[16*REGISTER_WINDOWS]; //Register Window
+    uint32_t _global_reg[8]; //Global Registers
+    uint32_t _window_reg[16*REGISTER_WINDOWS]; //Register Window
 
 
 };

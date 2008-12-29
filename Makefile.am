@@ -39,8 +39,6 @@ quick_tests: tests/Makefile
 
 ship_examples:
 	-mkdir examples/
-# Copy Basic
-	-cp tests/tests/pret/dma/basic ./examples/ -r
 
 # Copy ALL instructions and data in Janne
 	-cp tests/tests/pret/dma/janne ./examples/ -r
