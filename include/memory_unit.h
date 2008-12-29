@@ -107,7 +107,8 @@ public:
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
 private:
-    /** STL map<> datastructure to store the key and value pair of address and data.
+    /** STL map<> datastructure to store the key and value pair of
+     * address and data.
      */
     map< uint32_t, uint32_t > _mem;
 };
