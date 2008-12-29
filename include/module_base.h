@@ -52,7 +52,7 @@
  * @Pt.ProposedRating red hiren
  * @Pt.AcceptedRating
  */
-class module_base : public sc_module {
+class module_base: public sc_module {
 public:
     /** Construct a SystemC SC_METHOD process.
      */

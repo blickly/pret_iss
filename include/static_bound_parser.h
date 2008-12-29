@@ -27,7 +27,6 @@
   $Author: blickly $
   $Date:$
   $Id:$
-
 */
 
 #ifndef _STATIC_BOUND_PARSER_H_

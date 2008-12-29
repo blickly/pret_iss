@@ -35,7 +35,6 @@
 #include <systemc>
 #endif /* _NO_SYSTEMC_ */
 
-
 #include "module_base.h"
 #include "hw_thread_ptr.h"
 #include "wheeled_mem.h"

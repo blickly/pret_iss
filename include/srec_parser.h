@@ -54,7 +54,6 @@ struct memory_unit;
  */
 
 class srec_parser {
-
 public:
     /** Parse the given file as an SREC file and save the contents
      *  into the current memory unit.
