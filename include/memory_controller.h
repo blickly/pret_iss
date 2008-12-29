@@ -174,16 +174,16 @@ public:
 protected:
 ///////////////////////////////////////////////////////////////////////
 ///                      protected variables                        ///
-  /** Instantiates the objects for the protected variables. This is
-   * used internally by the constructor of the memory_controller
-   * object.
-   * @param cyc Cycle counter  pointer.
-   */
+    /** Instantiates the objects for the protected variables. This is
+     * used internally by the constructor of the memory_controller
+     * object.
+     * @param cyc Cycle counter  pointer.
+     */
     virtual void _setup(cycle_counter* cyc);
-  
-  l1_scratch** _inst_scratchpad;  /// Instruction scratchpad memories.
-  mem_location* _main_mem;        /// Main memory.
-  mem_location* _mem_mapped_io; /// Memory mapping.
+
+    l1_scratch** _inst_scratchpad;  /// Instruction scratchpad memories.
+    mem_location* _main_mem;        /// Main memory.
+    mem_location* _mem_mapped_io; /// Memory mapping.
 
 };
 #endif

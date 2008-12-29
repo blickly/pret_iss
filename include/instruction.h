@@ -156,7 +156,7 @@ public:
      * @return Window pointer increment.
      */
     short get_increment_window_pointer() const;
-    
+
     /** Get the instruction.
      *
      * @return instruction.

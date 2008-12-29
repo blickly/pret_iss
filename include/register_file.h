@@ -42,7 +42,7 @@
 ///////////////////////////////////////////////////////////////////////
 /// register_file
 /**
- * The register_file class provides a representation of the processor 
+ * The register_file class provides a representation of the processor
  * registers. It includes the global registers and the window registers.
  *
  * @author  Isaac Liu
@@ -54,36 +54,36 @@ class register_file {
 
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///
- public:
-  /** Create the register file 
-   */
-  register_file();
-  
-  /** Initialize the register file with values 
-   *
-   * @param initial_register the values to initialize the register file with
-   */
-  register_file(const register_file& initial_register);
+public:
+    /** Create the register file
+     */
+    register_file();
 
-  /** Get the value of a register
-   *
-   * @return returns the register value
-   * @param register_number the register number
-   * @param window_pointer the current window pointer
-   */
+    /** Initialize the register file with values
+     *
+     * @param initial_register the values to initialize the register file with
+     */
+    register_file(const register_file& initial_register);
+
+    /** Get the value of a register
+     *
+     * @return returns the register value
+     * @param register_number the register number
+     * @param window_pointer the current window pointer
+     */
     int get_reg(REGISTER_NUMBER register_number, WINDOW_POINTER window_pointer);
 
 
-   /** Set the value of a register
-   *
-   * @param register_number the register number
-   * @param value the value to set the register to
-   * @param window_pointer the current window pointer
-   */
+    /** Set the value of a register
+    *
+    * @param register_number the register number
+    * @param value the value to set the register to
+    * @param window_pointer the current window pointer
+    */
     void set_reg(REGISTER_NUMBER register_number, uint32_t value, WINDOW_POINTER window_pointer);
 
 
-    /** Print to <i>cout</i> stream the debugging output for the  
+    /** Print to <i>cout</i> stream the debugging output for the
      * register file in the pipeline. This is only enabled if <i>DBG_PIPE</i> flag or
      *  other debugging flags are enabled during compilation.
      */
@@ -109,7 +109,7 @@ class register_file {
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
- private:
+private:
     uint32_t _global_reg[8]; //Global Registers
     uint32_t _window_reg[16*REGISTER_WINDOWS]; //Register Window
 

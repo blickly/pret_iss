@@ -42,7 +42,7 @@
 /// exception
 /**
  * This class commits the instruction once no exception is detected.
- * When an instruction is committed, it is written back to the register 
+ * When an instruction is committed, it is written back to the register
  * file. This stage also modifies the PC after it detects a branch.
  *
  *
@@ -53,14 +53,14 @@
  * @Pt.AcceptedRating
  */
 class except : public module_base {
- public:
-  //Constructor
-  except(const sc_module_name& str);
+public:
+    //Constructor
+    except(const sc_module_name& str);
 
 ///////////////////////////////////////////////////////////////////////
 ///                      public variables                           ///
     /** Input and output ports for SystemC.
-     */	
+     */
     sc_in< hw_thread_ptr > in;
     sc_port< dma_if > coproc_dma;
 
@@ -68,7 +68,7 @@ class except : public module_base {
 ///                      public methods                             ///
 #ifdef _NO_SYSTEMC_
     /** Takes an instruction from the input in and checks the
-     *  instruction for any stalls. If a stall occured, then 
+     *  instruction for any stalls. If a stall occured, then
      *  the instruction is not committed, or else the instruction
      *  is committed by writing the register values to the registers
      *  or setting the next PC value if it's a branch.
@@ -77,7 +77,7 @@ class except : public module_base {
     void behavior(hw_thread_ptr& in);
 #else
     /** Takes an instruction from the in port and checks the
-     *  instruction for any stalls. If a stall occured, then 
+     *  instruction for any stalls. If a stall occured, then
      *  the instruction is not committed, or else the instruction
      *  is committed by writing the register values to the registers
      *  or setting the next PC value if it's a branch.
@@ -93,7 +93,7 @@ class except : public module_base {
        */
     void debug(const hw_thread_ptr& hardware_thread);
 
-    /** Calulate the target hardware address if it's a branch 
+    /** Calulate the target hardware address if it's a branch
     *  @param hardware_thread The hardware thread.
     */
     uint32_t addr_calc(const hw_thread_ptr& hardware_thread);
@@ -115,7 +115,7 @@ class except : public module_base {
     bool fetch_stalled(const hw_thread_ptr& hardware_thread);
 
     /** Increment the PC if it's not a branch. This function also
-     *  handles if the branch delay slot is occupied and a branch needs 
+     *  handles if the branch delay slot is occupied and a branch needs
      *  to occur
      *  @param hardware_thread The hardware thread.
      */
@@ -131,7 +131,7 @@ class except : public module_base {
     */
     void set_dword_state(const hw_thread_ptr& hardware_thread);
 
-    /** Update the registers from the current instruction thread. Commit 
+    /** Update the registers from the current instruction thread. Commit
      *  the instruction
      *  @param hardware_thread The hardware thread.
      */
@@ -144,7 +144,7 @@ class except : public module_base {
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private methods                             ///
- private:
+private:
     /** Disable default constructor.
      */
     except();

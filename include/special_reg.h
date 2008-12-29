@@ -43,13 +43,13 @@ enum DT_STATUS {
 ///////////////////////////////////////////////////////////////////////
 /// special_reg
 /**
- * The special register class provides a representation of the processor 
- * state registers. The processor state registers stores implementation 
- * specific information and the special states of the processor. This 
- * includes the integer condition code, the current window pointer, 
- * bits to record whether there is a coprocessor or floating point unit 
+ * The special register class provides a representation of the processor
+ * state registers. The processor state registers stores implementation
+ * specific information and the special states of the processor. This
+ * includes the integer condition code, the current window pointer,
+ * bits to record whether there is a coprocessor or floating point unit
  * etc. To understand what each value means, please read the sparc V8
- * manual that can be found online. 
+ * manual that can be found online.
  *
  * @author  Isaac Liu
  * @version $Id$
@@ -60,15 +60,15 @@ class special_reg {
 public:
 ///////////////////////////////////////////////////////////////////////
 ///                      public methods                             ///
-  /** Create the register file 
-   */
-  special_reg();
+    /** Create the register file
+     */
+    special_reg();
 
-  /** Initialize the special register with predifined values
-   *
-   *  @param initial_register the special_reg to be copied over
-   */
-  special_reg(const special_reg& initial_register);
+    /** Initialize the special register with predifined values
+     *
+     *  @param initial_register the special_reg to be copied over
+     */
+    special_reg(const special_reg& initial_register);
 
     /** Overloaded assignment operator.
      *
@@ -94,7 +94,7 @@ public:
      */
     uint32_t get_psr();
 
-    /** Print to <i>cout</i> stream the debugging output for the processor state 
+    /** Print to <i>cout</i> stream the debugging output for the processor state
      * register in the pipeline. This is only enabled if <i>DBG_PIPE</i> flag or
      *  other debugging flags are enabled during compilation.
      */
@@ -132,67 +132,67 @@ public:
      *
      * @param imp_ver the implementation version to set our processor to
      */
-    void set_imp_ver(unsigned char imp_ver); 
+    void set_imp_ver(unsigned char imp_ver);
 
     /** Sets the current window pointer value of the processor
      *
      * @param curr_wp the current window pointer to set our processor to
      */
-    void set_curr_wp (WINDOW_POINTER curr_wp); 
+    void set_curr_wp(WINDOW_POINTER curr_wp);
 
     /** Sets the integer condition code of the processor
      *
      * @param icc the integer condition code to set our processor to
      */
-    void set_icc (unsigned char icc); 
+    void set_icc(unsigned char icc);
 
     /** Sets the supervisor bit of the processor
      *
      * @param s the supervisor bit to set our processor to
      */
-    void set_s (bool s);  
+    void set_s(bool s);
 
     /** Sets the previous supervisor bit value of the processor
      *
      * @param ps the previous supervisor bit to set our processor to
      */
-    void set_ps (bool ps);
-    
+    void set_ps(bool ps);
+
     /** Sets the trap base register value of the processor
      *
      * @param tbr the trap base register to set our processor to
      */
-    void set_tbr (uint32_t tbr);
+    void set_tbr(uint32_t tbr);
 
     /** Sets the Window Invalid Mask Register value of the processor
      *
      * @param wim the Window Invalid Mask Register to set our processor to
      */
-    void set_wim (uint32_t wim); 
+    void set_wim(uint32_t wim);
 
     /** Sets the enable trap value of the processor
      *
      * @param et the enable trap value to set our processor to
      */
-    void set_et (bool et); 
+    void set_et(bool et);
 
     /** Sets the enable coprocessor value of the processor
      *
      * @param ec the enable coprocessor value to set our processor to
      */
-    void set_ec (bool ec); 
+    void set_ec(bool ec);
 
     /** Sets the enable floating point unit value of the processor
      *
      * @param ef the enable floating point unit value to set our processor to
      */
-    void set_ef (bool ef); 
+    void set_ef(bool ef);
 
     /** Sets the processor interrupt level of the processor
      *
      * @param pil the processor interrupt level to set our processor to
      */
-    void set_pil (unsigned char pil);
+    void set_pil(unsigned char pil);
 
     /** Sets the Ancillary State Registers value of the processor
      *
@@ -205,161 +205,161 @@ public:
      *
      * @param y the multiply/divide value to set our processor to
      */
-    void set_y (uint32_t y); 
+    void set_y(uint32_t y);
 
     /** Sets the deadline registers of the processor
      *
      * @param dt_value the value to set the deadline register to
      * @param dt_index the index of the Deadline Register to set the value to
      */
-    void set_dt (int32_t dt_value, int dt_index); 
+    void set_dt(int32_t dt_value, int dt_index);
 
     /** Sets the Phase Lock Loop Deadline Registers of the processor
      *
      * @param plldt_value the value to set the phase lock loop deadline register to
      * @param plldt_index the index of the Phase Lock Loop Deadline Register to set the value to
      */
-    void set_plldt (uint32_t plldt_value, int plldt_index); 
+    void set_plldt(uint32_t plldt_value, int plldt_index);
 
     /** Sets the Phase Lock Loop Load Registers of the processor
      *
      * @param pll_load_value the value to set the phase lock loop load register to
      * @param pll_load_index the index of the Phase Lock Loop Load Register to set the value to
      */
-    void set_pll_load (uint32_t pll_load_value, int pll_load_index); 
+    void set_pll_load(uint32_t pll_load_value, int pll_load_index);
 
     /** Sets the Phase Lock Loop Loaded value of the processor
      *
      * @param set_pll_loaded the Phase Lock Loop Loaded value to set our processor to
      */
-    void set_pll_loaded (bool pll_loaded); 
+    void set_pll_loaded(bool pll_loaded);
 
     /** Sets the deadline registers' status in the processor
      *
      * @param dt_status_value the value to set the deadline register status to
      * @param dt_status_index the index of the Deadline Register status to set the value to
      */
-    void set_dt_status (DT_STATUS dt_status_value, int dt_status_index); 
+    void set_dt_status(DT_STATUS dt_status_value, int dt_status_index);
 
 
     /** Gets the implementation version of the processor
      *
      * @return The implementation version of our processor
      */
-    unsigned char get_imp_ver(); 
+    unsigned char get_imp_ver();
 
     /** Gets the current window pointer value of the processor
      *
-     * @return The current window pointer of our processor 
+     * @return The current window pointer of our processor
      */
-    WINDOW_POINTER get_curr_wp (); 
+    WINDOW_POINTER get_curr_wp();
 
     /** Gets the integer condition code of the processor
      *
      * @return the integer condition code of our processor
      */
-    unsigned char get_icc (); 
+    unsigned char get_icc();
 
     /** Gets the supervisor bit of the processor
      *
      * @return The supervisor bit of our processor
      */
-    bool get_s ();  
+    bool get_s();
 
     /** Gets the previous supervisor bit value of the processor
      *
      * @return the previous supervisor bit of our processor
      */
-    bool get_ps ();
-    
+    bool get_ps();
+
     /** Gets the trap base register value of the processor
      *
      * @return the trap base register of our processor
      */
-    uint32_t get_tbr ();
+    uint32_t get_tbr();
 
     /** Gets the Window Invalid Mask Register value of the processor
      *
      * @return the Window Invalid Mask Register of our processor
      */
-    uint32_t get_wim (); 
+    uint32_t get_wim();
 
     /** Gets the enable trap value of the processor
      *
-     * @return the enable trap value of our processor 
+     * @return the enable trap value of our processor
      */
-    bool get_et (); 
+    bool get_et();
 
     /** Gets the enable coprocessor value of the processor
      *
      * @return enable coprocessor value from our processor
      */
-    bool get_ec (); 
+    bool get_ec();
 
     /** Gets the enable floating point unit value of the processor
      *
-     * @return the enable floating point unit value of our processor 
+     * @return the enable floating point unit value of our processor
      */
-    bool get_ef (); 
+    bool get_ef();
 
     /** Gets the processor interrupt level of the processor
      *
-     * @return the processor interrupt level of our processor 
+     * @return the processor interrupt level of our processor
      */
-    unsigned char get_pil ();
+    unsigned char get_pil();
 
     /** Gets the Ancillary State Registers value of the processor
      *
-     * @return the Ancillary State Register value of our processor 
+     * @return the Ancillary State Register value of our processor
      * @param asr_index the index of the Ancillary State Register to get the value of
      */
     uint32_t get_asr(int asr_index);
 
     /** Gets the multiply/divide value of the processor
      *
-     * @return the multiply/divide value of our processor 
+     * @return the multiply/divide value of our processor
      */
-    uint32_t get_y (); 
+    uint32_t get_y();
 
     /** Gets the deadline registers of the processor
      *
-     * @return the value of the deadline register 
+     * @return the value of the deadline register
      * @param dt_index the index of the Deadline Register to get the value of
      */
-    int32_t get_dt (int dt_index); 
+    int32_t get_dt(int dt_index);
 
     /** Gets the Phase Lock Loop Deadline Registers of the processor
      *
-     * @return the value of the phase lock loop deadline register 
+     * @return the value of the phase lock loop deadline register
      * @param plldt_index the index of the Phase Lock Loop Deadline Register to get the value of
      */
-    uint32_t get_plldt (int plldt_index); 
+    uint32_t get_plldt(int plldt_index);
 
     /** Gets the Phase Lock Loop Load Registers of the processor
      *
-     * @return the value of the phase lock loop load register 
+     * @return the value of the phase lock loop load register
      * @param pll_load_index the index of the Phase Lock Loop Load Register to get the value of
      */
-    uint32_t get_pll_load (int pll_load_index); 
+    uint32_t get_pll_load(int pll_load_index);
 
     /** Gets the Phase Lock Loop Loaded value of the processor
      *
-     * @return the Phase Lock Loop Loaded value of our processor 
+     * @return the Phase Lock Loop Loaded value of our processor
      */
-    bool get_pll_loaded (); 
+    bool get_pll_loaded();
 
     /** Gets the deadline registers' status in the processor
      *
-     * @return the value of the deadline register status 
+     * @return the value of the deadline register status
      * @param dt_status_index the index of the Deadline Register status to get the value of
      */
-    DT_STATUS get_dt_status (int dt_status_index); 
+    DT_STATUS get_dt_status(int dt_status_index);
 
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
 
- private:
+private:
     unsigned char _imp_ver; //Implementation Version Number
     WINDOW_POINTER _curr_wp;  //Current window pointer
     unsigned char _icc; //Integer Condition Code
