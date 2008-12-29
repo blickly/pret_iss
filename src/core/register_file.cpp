@@ -24,8 +24,6 @@
   PT_COPYRIGHT_VERSION_2
   COPYRIGHTENDKEY
 
-  $Author$
-  $Date$
   $Id$
 
 */
@@ -36,23 +34,23 @@
 void register_file::operator=(const register_file & is_register) {
 
     for (uint32_t i = 0; i < 16*REGISTER_WINDOWS; i++) {
-        _wReg[i] = is_register._wReg[i];
+        _window_reg[i] = is_register._window_reg[i];
     }
 
     for (uint32_t i = 0; i < 8; i++) {
-        _gReg[i] = is_register._gReg[i];
+        _global_reg[i] = is_register._global_reg[i];
     }
 }
 
 bool register_file::operator==(const register_file& from_register) {
 
     for (uint32_t i = 0; i < 16*REGISTER_WINDOWS; i++) {
-        if (_wReg[i] != from_register._wReg[i])
+        if (_window_reg[i] != from_register._window_reg[i])
             return false;
     }
 
     for (uint32_t i = 0; i < 8; i ++) {
-        if (_gReg[i] != from_register._gReg[i])
+        if (_global_reg[i] != from_register._global_reg[i])
             return false;
     }
 
@@ -61,23 +59,23 @@ bool register_file::operator==(const register_file& from_register) {
 
 int register_file::get_reg(REGISTER_NUMBER register_number, WINDOW_POINTER window_pointer) {
     if (register_number < 8) {
-        return _gReg[register_number];
+        return _global_reg[register_number];
     } else {
         unsigned short window_addr = window_pointer * 16;
         unsigned short window_offset = register_number - 8;
         unsigned short window_size = 16 * REGISTER_WINDOWS;
-        return _wReg[(window_addr + window_offset) % window_size];
+        return _window_reg[(window_addr + window_offset) % window_size];
     }
 }
 
 void register_file::set_reg(REGISTER_NUMBER register_number, uint32_t value, WINDOW_POINTER window_pointer) {
     if (register_number < 8) {
-        _gReg[register_number] = value;
+        _global_reg[register_number] = value;
     } else {
         unsigned short window_addr = window_pointer * 16;
         unsigned short window_offset = register_number - 8;
         unsigned short window_size = 16 * REGISTER_WINDOWS;
-        _wReg[(window_addr + window_offset) % window_size] = value;
+        _window_reg[(window_addr + window_offset) % window_size] = value;
     }
 }
 
@@ -95,14 +93,14 @@ void register_file::regdump(WINDOW_POINTER window_pointer) {
         cout <<  uppercase << setfill('0') << setw(8) << hex << get_reg(i + 24, window_pointer) << "   "; //ins
         cout <<  uppercase << setfill('0') << setw(8) << hex << get_reg(i + 16, window_pointer) << "   "; //locals
         cout <<  uppercase << setfill('0') << setw(8) << hex << get_reg(i + 8, window_pointer) <<  "   "; // outs
-        cout <<  uppercase << setfill('0') << setw(8) << hex << _gReg[i]; // globals
+        cout <<  uppercase << setfill('0') << setw(8) << hex << _global_reg[i]; // globals
         cout << endl;
     }
 
     cout << "\nwindow ptr: " << dec << window_pointer;
-    //    cout << "g0 = " << hex << _gReg[0] << ", g1 = " << _gReg[1] << ", g2 = "<< _gReg[2];
-    //   cout << ", g3 = " << _gReg[3]  << ", g4 = "<< _gReg[4] << ", g5 = "<< _gReg[5];
-    //   cout << ", g6 = "<< _gReg[6]  << ", g7 = "<< _gReg[7] << endl;
+    //    cout << "g0 = " << hex << _global_reg[0] << ", g1 = " << _global_reg[1] << ", g2 = "<< _global_reg[2];
+    //   cout << ", g3 = " << _global_reg[3]  << ", g4 = "<< _global_reg[4] << ", g5 = "<< _global_reg[5];
+    //   cout << ", g6 = "<< _global_reg[6]  << ", g7 = "<< _global_reg[7] << endl;
     //   cout << "Window Pointer: " << dec << window_pointer << endl;
     //   cout << "(8)out0 = " << hex << get_reg(8, window_pointer) << ", (9)out1 = " << get_reg(9, window_pointer) << ", (10)out2 = "<< get_reg(10, window_pointer);
     //   cout << ", (11)out3 = " << get_reg(11, window_pointer)  << endl<< "(12)out4 = "<< get_reg(12, window_pointer) << ", (13)out5 = "<< get_reg(13, window_pointer);
@@ -121,9 +119,9 @@ void register_file::regdump(WINDOW_POINTER window_pointer) {
 //   cout << "-----------------------------------------------------" << endl;
 //   cout << "                     RegDump: " << sc_time_stamp() << endl;
 //   cout << "-----------------------------------------------------" << endl;
-//   cout << "g0 = " << hex << _gReg[0] << ", g1 = " << _gReg[1] << ", g2 = "<< _gReg[2];
-//   cout << ", g3 = " << _gReg[3]  << ", g4 = "<< _gReg[4] << ", g5 = "<< _gReg[5];
-//   cout << ", g6 = "<< _gReg[6]  << ", g7 = "<< _gReg[7] << endl;
+//   cout << "g0 = " << hex << _global_reg[0] << ", g1 = " << _global_reg[1] << ", g2 = "<< _global_reg[2];
+//   cout << ", g3 = " << _global_reg[3]  << ", g4 = "<< _global_reg[4] << ", g5 = "<< _global_reg[5];
+//   cout << ", g6 = "<< _global_reg[6]  << ", g7 = "<< _global_reg[7] << endl;
 //   cout << "Window Pointer: " << dec << wp << endl;
 //   cout << "(8)out0 = " << hex << get_reg(8, wp) << ", (9)out1 = " << get_reg(9, wp) << ", (10)out2 = "<< get_reg(10, wp);
 //   cout << ", (11)out3 = " << get_reg(11, wp)  << endl<< "(12)out4 = "<< get_reg(12, wp) << ", (13)out5 = "<< get_reg(13, wp);
@@ -140,7 +138,7 @@ void register_file::regdump(WINDOW_POINTER window_pointer) {
 
 void register_file::reset_register_window() {
     for (uint32_t i = 0; i < 16*REGISTER_WINDOWS; i++) {
-        _wReg[i] = 0;
+        _window_reg[i] = 0;
     }
 
 }
@@ -151,6 +149,6 @@ register_file::register_file(const register_file& initial_register) {
 
 register_file::register_file() {
     for (uint32_t i = 0; i < 8; i++) {
-        _gReg[i] = 0;
+        _global_reg[i] = 0;
     }
 }

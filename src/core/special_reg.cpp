@@ -201,7 +201,7 @@ void special_reg::operator=(const special_reg & from_register) {
         _asr[i] = from_register._asr[i];
     }
     for (uint32_t i = 0; i < NUM_DEADLINE_TIMERS; i++) {
-      _dt[i] = from_register._dt[i];
+        _dt[i] = from_register._dt[i];
         _dt_status[i] = from_register._dt_status[i];
     }
     for (uint32_t i = 0; i < NUM_PLL_TIMERS; i++) {
@@ -217,22 +217,22 @@ special_reg::special_reg(const special_reg& initial_register) {
 }
 
 special_reg::special_reg() {
-  _curr_wp = 0;
-  _icc = 0;
-  _s = false;
-  _ps = false;
-  _tbr = 0x20;
-  _wim = 0x2;
-  _et = false;
-  _ec = false;
-  _ef = false;
-  _pil = 0;
-  _imp_ver = 0;
-  _y = 0;
+    _curr_wp = 0;
+    _icc = 0;
+    _s = false;
+    _ps = false;
+    _tbr = 0x20;
+    _wim = 0x2;
+    _et = false;
+    _ec = false;
+    _ef = false;
+    _pil = 0;
+    _imp_ver = 0;
+    _y = 0;
 
     for (uint32_t i = 0; i < 32; i++) {
         if (17 == i)
-	  _asr[i] = 0xB07;
+            _asr[i] = 0xB07;
         else
             _asr[i] = 0;
     }
@@ -241,8 +241,8 @@ special_reg::special_reg() {
         _dt_status[i] = UNSET;
     }
     for (uint32_t i = 0; i < NUM_PLL_TIMERS; i++) {
-      _plldt[i] = 0;
-      _pll_load[i] = 0;
+        _plldt[i] = 0;
+        _pll_load[i] = 0;
     }
     _pll_loaded = false;
 
@@ -250,164 +250,164 @@ special_reg::special_reg() {
 }
 
 void special_reg::set_imp_ver(unsigned char imp_ver) {
-  _imp_ver = imp_ver;
+    _imp_ver = imp_ver;
 }
 
 
-void special_reg::set_curr_wp (WINDOW_POINTER curr_wp) {
-  _curr_wp = curr_wp;
+void special_reg::set_curr_wp(WINDOW_POINTER curr_wp) {
+    _curr_wp = curr_wp;
 }
 
 
-void special_reg::set_icc (unsigned char icc) {
-  _icc = icc;
+void special_reg::set_icc(unsigned char icc) {
+    _icc = icc;
 }
 
-void special_reg::set_s (bool s) {
-  _s = s;
+void special_reg::set_s(bool s) {
+    _s = s;
 }
 
-void special_reg::set_ps (bool ps) {
-  _ps = ps;
-}
-    
-void special_reg::set_tbr (uint32_t tbr) {
-  _tbr = tbr;
+void special_reg::set_ps(bool ps) {
+    _ps = ps;
 }
 
-
-void special_reg::set_wim (uint32_t wim) {
-  _wim = wim;
-}
-
-void special_reg::set_et (bool et) {
-  _et = et;
+void special_reg::set_tbr(uint32_t tbr) {
+    _tbr = tbr;
 }
 
 
-void special_reg::set_ec (bool ec) {
-  _ec = ec;
+void special_reg::set_wim(uint32_t wim) {
+    _wim = wim;
 }
 
-void special_reg::set_ef (bool ef) {
-  _ef = ef;
+void special_reg::set_et(bool et) {
+    _et = et;
 }
 
-void special_reg::set_pil (unsigned char pil) {
-  _pil = pil;
+
+void special_reg::set_ec(bool ec) {
+    _ec = ec;
+}
+
+void special_reg::set_ef(bool ef) {
+    _ef = ef;
+}
+
+void special_reg::set_pil(unsigned char pil) {
+    _pil = pil;
 }
 
 void special_reg::set_asr(uint32_t asr_value, int asr_index) {
-  _asr[asr_index] = asr_value;
+    _asr[asr_index] = asr_value;
 }
 
-void special_reg::set_y (uint32_t y) {
-  _y = y;
+void special_reg::set_y(uint32_t y) {
+    _y = y;
 }
 
-void special_reg::set_dt (int32_t dt_value, int dt_index) {
-  _dt[dt_index] = dt_value;
-}
-
-
-void special_reg::set_plldt (uint32_t plldt_value, int plldt_index) {
-  _plldt[plldt_index] = plldt_value;
+void special_reg::set_dt(int32_t dt_value, int dt_index) {
+    _dt[dt_index] = dt_value;
 }
 
 
-void special_reg::set_pll_load (uint32_t pll_load_value, int pll_load_index) {
-  _pll_load[pll_load_index] = pll_load_value;
-}
-
-void special_reg::set_pll_loaded (bool pll_loaded){
-  _pll_loaded = pll_loaded;
+void special_reg::set_plldt(uint32_t plldt_value, int plldt_index) {
+    _plldt[plldt_index] = plldt_value;
 }
 
 
-void special_reg::set_dt_status (DT_STATUS dt_status_value, int dt_status_index){
-  _dt_status[dt_status_index] = dt_status_value;
+void special_reg::set_pll_load(uint32_t pll_load_value, int pll_load_index) {
+    _pll_load[pll_load_index] = pll_load_value;
+}
+
+void special_reg::set_pll_loaded(bool pll_loaded) {
+    _pll_loaded = pll_loaded;
+}
+
+
+void special_reg::set_dt_status(DT_STATUS dt_status_value, int dt_status_index) {
+    _dt_status[dt_status_index] = dt_status_value;
 }
 
 
 unsigned char special_reg::get_imp_ver() {
-  return _imp_ver;
+    return _imp_ver;
 }
 
 
-WINDOW_POINTER special_reg::get_curr_wp () {
-  return _curr_wp;
+WINDOW_POINTER special_reg::get_curr_wp() {
+    return _curr_wp;
 }
 
 
-unsigned char special_reg::get_icc () {
-  return _icc;
+unsigned char special_reg::get_icc() {
+    return _icc;
 }
 
-bool special_reg::get_s () {
-  return _s;
-}
-
-
-bool special_reg::get_ps () {
-  return _ps;
-}
-    
-uint32_t special_reg::get_tbr () {
-  return _tbr;
+bool special_reg::get_s() {
+    return _s;
 }
 
 
-uint32_t special_reg::get_wim () {
-  return _wim;
+bool special_reg::get_ps() {
+    return _ps;
 }
 
-bool special_reg::get_et () {
-  return _et;
-}
-
-bool special_reg::get_ec () {
-  return _ec;
-}
-
-bool special_reg::get_ef () {
-  return _ef;
+uint32_t special_reg::get_tbr() {
+    return _tbr;
 }
 
 
-unsigned char special_reg::get_pil () {
-  return _pil;
+uint32_t special_reg::get_wim() {
+    return _wim;
+}
+
+bool special_reg::get_et() {
+    return _et;
+}
+
+bool special_reg::get_ec() {
+    return _ec;
+}
+
+bool special_reg::get_ef() {
+    return _ef;
+}
+
+
+unsigned char special_reg::get_pil() {
+    return _pil;
 }
 
 
 uint32_t special_reg::get_asr(int asr_index) {
-  return _asr[asr_index];
+    return _asr[asr_index];
 }
 
-uint32_t special_reg::get_y () {
-  return _y;
-}
-
-
-int32_t special_reg::get_dt (int dt_index) {
-  return _dt[dt_index];
+uint32_t special_reg::get_y() {
+    return _y;
 }
 
 
-uint32_t special_reg::get_plldt (int plldt_index) {
-  return _plldt[plldt_index];
+int32_t special_reg::get_dt(int dt_index) {
+    return _dt[dt_index];
 }
 
 
-uint32_t special_reg::get_pll_load (int pll_load_index) {
-  return _pll_load[pll_load_index];
-}
-
-bool special_reg::get_pll_loaded (){
-  return _pll_loaded;
+uint32_t special_reg::get_plldt(int plldt_index) {
+    return _plldt[plldt_index];
 }
 
 
-DT_STATUS special_reg::get_dt_status (int dt_status_index) {
-  return _dt_status[dt_status_index];
+uint32_t special_reg::get_pll_load(int pll_load_index) {
+    return _pll_load[pll_load_index];
+}
+
+bool special_reg::get_pll_loaded() {
+    return _pll_loaded;
+}
+
+
+DT_STATUS special_reg::get_dt_status(int dt_status_index) {
+    return _dt_status[dt_status_index];
 }
 

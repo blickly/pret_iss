@@ -74,7 +74,7 @@ void regacc::behavior() {
     _immediate_instruction(input_thread);
 
     input_thread->inst.set_op3_value(input_thread->regs.get_reg(input_thread->inst.get_rd(), input_thread->spec_regs.get_curr_wp()));
-    input_thread->spec_regs.set_curr_wp ( input_thread->spec_regs.get_curr_wp() + input_thread->inst.get_increment_window_pointer());
+    input_thread->spec_regs.set_curr_wp(input_thread->spec_regs.get_curr_wp() + input_thread->inst.get_increment_window_pointer());
     input_thread->spec_regs.set_curr_wp(input_thread->spec_regs.get_curr_wp() % REGISTER_WINDOWS);
 
     _debug_print(input_thread);
@@ -112,7 +112,7 @@ void regacc::_double_word_instruction(const hw_thread_ptr& hardware_thread) {
         // Reset the instruction's double word flag off since it's handled.
         hardware_thread->inst.set_db_word(false);
     } else {
-      hardware_thread->inst.set_op1_value(hardware_thread->regs.get_reg(hardware_thread->inst.get_rs1(), hardware_thread->spec_regs.get_curr_wp()));
+        hardware_thread->inst.set_op1_value(hardware_thread->regs.get_reg(hardware_thread->inst.get_rs1(), hardware_thread->spec_regs.get_curr_wp()));
     }
 
 }
@@ -132,20 +132,20 @@ void regacc::_destination_phaselockloop_deadlines(const hw_thread_ptr& hardware_
     /* This implements a mailbox transfer mechanism.
        If something is in the mailbox then we will stall no matter what.
     */
-  if (hardware_thread->spec_regs.get_pll_load(hardware_thread->inst.get_rd()-8) != 0) {
+    if (hardware_thread->spec_regs.get_pll_load(hardware_thread->inst.get_rd() - 8) != 0) {
         hardware_thread->set_deadline_stalled(true);
     }
     //IF WE HAVEN'T LOADED ANYTHING, AND MAILBOX IS CLEAR, WE LOAD IN MAILBOX
     //AND STALL UNTIL MAILBOX IS CLEARED
-  else if (hardware_thread->spec_regs.get_pll_load(hardware_thread->inst.get_rd() - 8) == 0 && !hardware_thread->spec_regs.get_pll_loaded()) {
+    else if (hardware_thread->spec_regs.get_pll_load(hardware_thread->inst.get_rd() - 8) == 0 && !hardware_thread->spec_regs.get_pll_loaded()) {
         hardware_thread->set_deadline_stalled(true);
         hardware_thread->inst.set_write_special_registers(true);
         hardware_thread->spec_regs.set_pll_loaded(true);
     }
     //IF WE LOADED SOMETHING ALREADY, AND MAILBOX IS CLEARED, WE ARE GOOD TO GO
-  else if (hardware_thread->spec_regs.get_pll_load(hardware_thread->inst.get_rd()-8) == 0 && hardware_thread->spec_regs.get_pll_loaded()) {
+    else if (hardware_thread->spec_regs.get_pll_load(hardware_thread->inst.get_rd() - 8) == 0 && hardware_thread->spec_regs.get_pll_loaded()) {
         //USED TO RESET THE PLL_LOADED BIT
-    hardware_thread->spec_regs.set_pll_loaded(false);
+        hardware_thread->spec_regs.set_pll_loaded(false);
     }
 
 }
@@ -154,7 +154,7 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
     /*  If the deadline is less than or equal to 0 then we
     *  should reset it if there is a new one availabile.
     */
-  if (hardware_thread->spec_regs.get_dt(hardware_thread->inst.get_rd()) <= 0) {
+    if (hardware_thread->spec_regs.get_dt(hardware_thread->inst.get_rd()) <= 0) {
         hardware_thread->inst.set_write_special_registers(true);
     } else {
         hardware_thread->set_deadline_stalled(true);
@@ -172,7 +172,7 @@ void regacc::_immediate_instruction(const hw_thread_ptr& hardware_thread) {
     if (hardware_thread->inst.is_immediate()) {
         hardware_thread->inst.set_op2_value(hardware_thread->inst.get_immediate_value());
     } else {
-      hardware_thread->inst.set_op2_value(hardware_thread->regs.get_reg(hardware_thread->inst.get_rs2(), hardware_thread->spec_regs.get_curr_wp()));
+        hardware_thread->inst.set_op2_value(hardware_thread->regs.get_reg(hardware_thread->inst.get_rs2(), hardware_thread->spec_regs.get_curr_wp()));
     }
 
 }

@@ -49,10 +49,10 @@ uint32_t except::addr_calc(const hw_thread_ptr& hardware_thread) {
 }
 bool except::branch_check(const hw_thread_ptr& hardware_thread) {
 //bool except::branch_check(const instruction& inst, unsigned char icc) {
-  bool neg = hardware_thread->spec_regs.get_icc() & 0x08;
-  bool zero = hardware_thread->spec_regs.get_icc() & 0x04;
-  bool ovfl = hardware_thread->spec_regs.get_icc() & 0x02;
-  bool carry = hardware_thread->spec_regs.get_icc() & 0x01;
+    bool neg = hardware_thread->spec_regs.get_icc() & 0x08;
+    bool zero = hardware_thread->spec_regs.get_icc() & 0x04;
+    bool ovfl = hardware_thread->spec_regs.get_icc() & 0x02;
+    bool carry = hardware_thread->spec_regs.get_icc() & 0x01;
 
     if (!hardware_thread->inst.is_branch() && ! hardware_thread->inst.is_call()) {
         return false;
@@ -169,7 +169,7 @@ bool except::dead_stalled(const hw_thread_ptr& hardware_thread) {
         //HACK!!! NEED TO CHANGE!!
         //STALLED BUT WANT TO UPDATE MAILBOX
         if (hardware_thread->spec_regs.get_pll_loaded() && hardware_thread->inst.is_write_special_registers()) {
-	  hardware_thread->spec_regs.set_pll_load(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd() - 8);
+            hardware_thread->spec_regs.set_pll_load(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd() - 8);
         }
         return true;
     }
@@ -243,7 +243,7 @@ void except::inc_pc(const hw_thread_ptr& hardware_thread) {
 
     //If no exception
     if (hardware_thread->inst.is_write_icc()) {
-      hardware_thread->spec_regs.set_icc( hardware_thread->inst.get_icc() );
+        hardware_thread->spec_regs.set_icc(hardware_thread->inst.get_icc());
     }
 
     // We must execute the delayed instruction stored in the branch
@@ -306,23 +306,23 @@ void except::write_regs(const hw_thread_ptr& hardware_thread) {
 
         switch (hardware_thread->inst.get_select_special_register()) {
         case SREG_Y:
-	  hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_y() , hardware_thread->spec_regs.get_curr_wp());
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_y() , hardware_thread->spec_regs.get_curr_wp());
 
             break;
         case SREG_ASR:
-	  hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_asr(hardware_thread->inst.get_rs1()) , hardware_thread->spec_regs.get_curr_wp());
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_asr(hardware_thread->inst.get_rs1()) , hardware_thread->spec_regs.get_curr_wp());
             break;
         case SREG_PSR:
-	  hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_psr() , hardware_thread->spec_regs.get_curr_wp());
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_psr() , hardware_thread->spec_regs.get_curr_wp());
             break;
         case SREG_WIM:
-	  hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_wim() , hardware_thread->spec_regs.get_curr_wp());
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_wim() , hardware_thread->spec_regs.get_curr_wp());
             break;
         case SREG_TBR:
-	  hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_tbr() , hardware_thread->spec_regs.get_curr_wp());
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->spec_regs.get_tbr() , hardware_thread->spec_regs.get_curr_wp());
             break;
         default:
-	  hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->inst.get_alu_result(), hardware_thread->spec_regs.get_curr_wp());
+            hardware_thread->regs.set_reg(hardware_thread->inst.get_rd(), hardware_thread->inst.get_alu_result(), hardware_thread->spec_regs.get_curr_wp());
             break;
         }
 
@@ -345,32 +345,32 @@ void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
     if (hardware_thread->inst.is_write_special_registers()) {
         switch (hardware_thread->inst.get_select_special_register()) {
         case SREG_Y:
-	  hardware_thread->spec_regs.set_y(hardware_thread->inst.get_alu_result());
+            hardware_thread->spec_regs.set_y(hardware_thread->inst.get_alu_result());
             break;
         case SREG_ASR:
-	  hardware_thread->spec_regs.set_asr(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
+            hardware_thread->spec_regs.set_asr(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
             break;
         case SREG_PSR:
             hardware_thread->spec_regs.set_psr(hardware_thread->inst.get_alu_result());
             break;
         case SREG_WIM:
-	  hardware_thread->spec_regs.set_wim(hardware_thread->inst.get_alu_result());
+            hardware_thread->spec_regs.set_wim(hardware_thread->inst.get_alu_result());
             break;
         case SREG_TBR:
-	  hardware_thread->spec_regs.set_tbr(hardware_thread-> inst.get_alu_result());
+            hardware_thread->spec_regs.set_tbr(hardware_thread-> inst.get_alu_result());
             break;
         case SREG_DT:
             if (hardware_thread->inst.get_rd() < NUM_DEADLINE_TIMERS) {
-	      hardware_thread->spec_regs.set_dt(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
+                hardware_thread->spec_regs.set_dt(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
 
                 /* If the value being set is 0, then it should not cause a warning. */
                 if (hardware_thread->inst.get_alu_result() != 0) {
                     //                    cout << "dt value: " << hex << hardware_thread->inst.get_alu_result() << endl;
-		  hardware_thread->spec_regs.set_dt_status(SET, hardware_thread->inst.get_rd());
+                    hardware_thread->spec_regs.set_dt_status(SET, hardware_thread->inst.get_rd());
                 }
 
             } else {
-	      hardware_thread->spec_regs.set_pll_load(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd()-8);
+                hardware_thread->spec_regs.set_pll_load(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd() - 8);
             }
 
             // printf("Should have written %d  to timer %d\n", hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
