@@ -41,13 +41,13 @@ ship_examples:
 	-mkdir examples/
 
 # Copy ALL instructions and data in Janne
-	-cp tests/tests/pret/dma/janne ./examples/ -r
+	-cp tests/tests/pret/dma/janne/janne ./examples/ -r
 
 # Copy Smile example
-	-cp tests/tests/pret/sys/smile ./examples/ -r
+	-cp tests/tests/pret/sys/smile/smile ./examples/ -r
 
 # Copy Smile example
-	-cp tests/tests/pret/sys/synchronization ./examples/ -r
+	-cp tests/tests/pret/sys/synchronization/synchronization ./examples/ -r
 
 # Remove .svn directories.
 	-find ./examples/ -name ".svn" | xargs rm -r

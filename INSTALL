@@ -23,12 +23,13 @@ ENHANCEMENTS, OR MODIFICATIONS.
 
 						PT_COPYRIGHT_VERSION_2
 						COPYRIGHTENDKEY
-$Author$
-$Date$
 $Id$
 */
 
-Compiling PRET from CVS without SystemC
+More instructions on installation, compiling, and executing examples is documented in $PRET_ISS/doc/pret_simulator.html. 
+
+
+Compiling PRET from SVN without SystemC
 ---------------------------------------
 $ ./bootstrap.sh
 -- Must set environment variable PRET_ISS (example with
@@ -39,7 +40,7 @@ $ ./configure
 $ make
 
 
-Compiling PRET from CVS with SystemC
+Compiling PRET from SVN with SystemC
 ------------------------------------
 $ ./bootstrap.sh
 -- Must set environment variables SYSTEMC and PRET_ISS (example with
@@ -66,21 +67,28 @@ cycle number is optional and used to run the simulator for that many
 number of cycles. The file pointed by file name only needs the
 directory path.
 
-Test simulator
---------------
-$ cd tests
-$ source exports.sh
-$ ./scripts/verify.pl pret/core/instruction/test0.cpp
+Examples
+-----------------
+Three examples are provided with this release. They are:
 
-Execute Quick Test Suite
-------------------------
-These are a subset of the full regression suite that can be used for a sanity check when
-adding functionalities that potentially affect the behavior.
++ bubsort: A bubble sort algorithm,
++ smile : An example using timing instructions that produce a smiley
+          face,
++ synchronization: A mutual exclusion example using timing instructions.
 
-$ source tests/exports.sh
-$ make quick_tests
+Running the Examples
+---------------------
 
-Execute Regression Suite
-------------------------
-$ source tests/exports.sh
-$ make regression
+There are two steps in running the examples. The first is to compile
+the example, and the second is to use the PRET simulator to execute
+the compiled binaries. We provide a script
+($PRET_ISS/scripts/compile_threads.py) that takes the directory as an
+argument to compile the example. Executing the simulator takes two
+arguments: the directory of the compiled binaries and the number of
+cycles to execute the simulator.
+
+Procedure to run smile example:
+$ cd $PRET_ISS
+$ ./scripts/compile_threads.py examples/smile
+$ src/pret examples/smile -1
+

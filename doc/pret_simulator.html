@@ -1009,11 +1009,9 @@ Note that ''deadline.h'' contains the macros for inlining the deadline instructi
 <div title="DefaultTiddlers" modifier="YourName" created="200809260134" modified="200809260134" changecount="8">
 <pre>[[GettingStarted]]</pre>
 </div>
-<div title="Direct Memory Access" modifier="Hiren D. Patel" created="200809282154" modified="200809290050" tags="DMA" changecount="15">
-<pre>There are three methods for allocation instructions and data to the scratchpad memories. They are:
-# Static memory allocation for instruction and data 
-# Transfer instructions in program code
-These two methods are explained here.
+<div title="Direct Memory Access" modifier="Hiren Patel" created="200809282154" modified="200812300558" tags="DMA" changecount="17">
+<pre>Currently there is one method to load instructions and data into the scratchpads. That is to statically load the contents during initialization.
+
 ! Static Memory Allocation for Instruction and Data
 A static memory allocation map can be specified in text files. We have certain naming conventions; ''thread0.c'' has an instruction memory allocation file ''thread0.ispm'' and data memory allocation in file ''thread0.dspm''. Every thread can have a corresponding allocation file for instruction and/or data. The file format is simple. It accepts a pair of addresses that form an address range to be loaded into the scratchpad memories. If the allocation files exist in the directory with the SREC files, then they will be loaded; otherwise, no instructions and data are preloaded into the scratchpad memory.
 !! Example of a simple ''thread0.ispm''
@@ -1037,27 +1035,7 @@ To load all instruction and data onto the scratchpad memories, we provide memory
 {{{
 40080000 400FFFFF
 }}}
-! Transfer Instructions In Program Code
-We provide instructions to transfer instructions and data from main memory to the respective scratchpads.  Currently we only transfer four words (32-bits) at a time at the cost of one windowed access through the memory wheel. To enable this, we have added two instructions: 1) Set the source address in main memory, 2) Set the destination address in scratchpad memory and perform the transfer. The co-processor instruction encoding ''CPOP1'' and ''CPOP2'' are used. The instructions use the co-processor instructions from the SPARC ISA. Refer to [[SPARC Manual|http://www.sparc.org/standards/V8.pdf]]: Appendix B pg 149.  The approach used for setting these registers is similar to the deadline instruction. They are wrapped in the following macros:
-
-Store the source address to a register: 0xC1A00001
-{{{
-#define STCMEM( mem_addr )                               \
-   asm volatile (&quot;mov %0, %%g1 \n\t .word 0xC1A00001&quot; \
-                  : /* no outputs */                  \
-                  : &quot;r&quot; (mem_addr)                     \
-                  : &quot;g1&quot;)
-}}}
-Store the destination address to a register: 0 xC3A00001
-{{{
-// Destination register 1              
-#define STCSPM( spm_addr )                               \
-   asm volatile (&quot;mov %0, %%g1 \n\t .word 0xC3A00001&quot; \
-                  : /* no outputs */                  \
-                  : &quot;r&quot; (spm_addr)                     \
-                  : &quot;g1&quot;)
-}}}
-Note that whenever you set the destination address the transfer begins using the source from the source register.  There is a basic example in the tests directory under: $PRET_ISS/examples/basic. This serves only as an example of using the instructions but does not do anything really useful. </pre>
+</pre>
 </div>
 <div title="GettingStarted" modifier="Hiren D. Patel" created="200809260133" modified="200809271622" tags="hsD" changecount="10">
 <pre>To get started with this blank TiddlyWiki, you'll need to modify the following tiddlers:
@@ -1066,7 +1044,7 @@ Note that whenever you set the destination address the transfer begins using the
 * DefaultTiddlers: Contains the names of the tiddlers that you want to appear when the TiddlyWiki is opened
 You'll also need to enter your username for signing your edits: &lt;&lt;option txtUserName&gt;&gt;</pre>
 </div>
-<div title="MainMenu" modifier="YourName" created="200809260133" modified="200809280130" changecount="28">
+<div title="MainMenu" modifier="Hiren Patel" created="200809260133" modified="200812300550" changecount="29">
 <pre>[[Home|GettingStarted]]
 !!''Installation''
 [[Requirements]]
@@ -1078,6 +1056,8 @@ You'll also need to enter your username for signing your edits: &lt;&lt;option t
 [[Direct Memory Access]]
 !!''Debugger''
 [[CSIM]]
+!!''Examples''
+[[Running]]
 !!''Miscellaneous''
 [[People]]
 [[References]]
@@ -1569,6 +1549,24 @@ config.macros.personLookup.handler = function(place,macroName,params) {
 # [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]]
 ! Optional
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
+</div>
+<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200812300556" changecount="4">
+<pre>The pret executable is compiled in src/. The arguments for the simulator are a file name followed by a cycle number. The file name points to a file that contains the directory with the SREC files. The cycle number is optional and used to run the simulator for that many number of cycles. The file pointed by file name only needs the directory path.
+
+Three examples are provided with this release. They are:
+# bubsort: A bubble sort algorithm,
+# smile : An example using timing instructions that produce a smiley face,
+# synchronization: A mutual exclusion example using timing instructions.
+
+There are two steps in running the examples. The first is to compile the example, and the second is to use the PRET simulator to execute the compiled binaries. We provide a script
+($PRET_ISS/scripts/compile_threads.py) that takes the directory as an argument to compile the example. Executing the simulator takes two arguments: the directory of the compiled binaries and the number of cycles to execute the simulator.
+
+Procedure to run smile example:
+{{{
+$ cd $PRET_ISS
+$ ./scripts/compile_threads.py examples/smile
+$ src/pret examples/smile -1
+}}}</pre>
 </div>
 <div title="SiteSubtitle" modifier="Hiren D. Patel" created="200809260133" modified="200809271556" changecount="9">
 <pre>A Simulator for a Precision Timed (PRET) Architecture</pre>
