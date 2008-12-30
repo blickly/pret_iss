@@ -933,6 +933,27 @@ config.macros.bibtex.handler = function(place,macroName,params) {
 //}}}
 // //===</pre>
 </div>
+<div title="CSIM" modifier="Ben Lickly" created="200812302256" modified="200812302259" changecount="8">
+<pre>A debugging interface to our simulator called CSIM is provided in the PRET relaese.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
+
+From inside CSIM, one can type help to get a list of the valid commands.  Many of the commands use a similar syntax to TSIM, the simulator for the SPARC soft-core from Gaisler Research.  The most commonly used ones are as follows.
+* break/lbreak/unbreak: Create or remove breakpoints at a given address or label.
+* run: Run the program for a specified number of cycles.
+* tra: Trace through the program for a specified number of cycles, printing out each instruction. 
+* reg/dt:  Print the contents of the normal registers, special registers, and deadline timers.
+* thread/unthread: Change which threads are being observed.
+* cycle:  Print out the current clock cycle.
+
+Example running the synchronization example:
+{{{
+$ cd $PRET_ISS
+$ ./scripts/compile_threads.py examples/synchronization
+$ scripts/csim.py examples/synchronization
+csim&gt; run
+()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+csim&gt; 
+}}}</pre>
+</div>
 <div title="Compiling" modifier="Hiren D. Patel" created="200809261830" modified="200809271621" tags="Compilation" changecount="18">
 <pre>! Setup Environment Variables
 * Assuming a ''bash'' shell.
