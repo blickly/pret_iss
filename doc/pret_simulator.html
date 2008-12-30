@@ -1550,12 +1550,12 @@ config.macros.personLookup.handler = function(place,macroName,params) {
 ! Optional
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
 </div>
-<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200812300556" changecount="4">
+<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200812300712" changecount="6">
 <pre>The pret executable is compiled in src/. The arguments for the simulator are a file name followed by a cycle number. The file name points to a file that contains the directory with the SREC files. The cycle number is optional and used to run the simulator for that many number of cycles. The file pointed by file name only needs the directory path.
 
 Three examples are provided with this release. They are:
-# bubsort: A bubble sort algorithm,
-# smile : An example using timing instructions that produce a smiley face,
+# janne: A multimedia algorithm,
+# smile : An example using timing instructions that produces a smiley face,
 # synchronization: A mutual exclusion example using timing instructions.
 
 There are two steps in running the examples. The first is to compile the example, and the second is to use the PRET simulator to execute the compiled binaries. We provide a script
@@ -1566,7 +1566,9 @@ Procedure to run smile example:
 $ cd $PRET_ISS
 $ ./scripts/compile_threads.py examples/smile
 $ src/pret examples/smile -1
-}}}</pre>
+}}}
+
+Note that each of these examples has a file with an ''.ispm'' or ''.dspm'' extension. Those indicate the instructions and data that are loaded onto the scratchpad memories during initialization. Removing those files results in loading the instructions and data from the main memory.</pre>
 </div>
 <div title="SiteSubtitle" modifier="Hiren D. Patel" created="200809260133" modified="200809271556" changecount="9">
 <pre>A Simulator for a Precision Timed (PRET) Architecture</pre>

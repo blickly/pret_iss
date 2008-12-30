@@ -46,14 +46,14 @@ ship_examples:
 # Copy Smile example
 	-cp tests/tests/pret/sys/smile/smile ./examples/ -r
 
-# Copy Smile example
-	-cp tests/tests/pret/sys/synchronization/synchronization ./examples/ -r
+# Copy Synchronization example
+	-cp tests/tests/pret/dma/sync_example_cases/sync_example_cases ./examples/ -r
 
 # Remove .svn directories.
 	-find ./examples/ -name ".svn" | xargs rm -r
 
 ship_clean: ship_examples
 	-rm -rf tests/ soft/ adm/ autom4te.cache/ build-aux/ logs/ oldfiles/
-	-find . -name ".svn" | xargs rm -r	
+	-find . -name ".svn" | xargs rm -r	 
 
 
