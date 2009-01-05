@@ -4,7 +4,7 @@
 #include "tool.h"
 #include "debug.h"
 
-volatile unsigned int * _fd = ( DWORD )( 0x80000600 );
+volatile unsigned int * _fd = ( DWORD* )( 0x80000600 );
 void file_write( char * buf, int len )
 {
         int i = 0;

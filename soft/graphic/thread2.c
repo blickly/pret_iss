@@ -170,7 +170,7 @@ void locate_sprite_direct( int id, int x, int y, int width, int height )
 void update_screen( )
 {
 	// refresh the vga screen buffer
-	vga_copy_into_back_buffer( _background, 0, 0, 640, 480 );
+	vga_copy_into_back_buffer( *_background, 0, 0, 640, 480 );
 
 	int i = 0;
 	for( i = 1; i < 5; i++ )
