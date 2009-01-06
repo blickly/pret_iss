@@ -56,7 +56,7 @@ public:
     mem(const sc_module_name& str);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 #ifdef _NO_SYSTEMC_
     /** Beform the behavior of the memory access pipeline stage.
      *  If the current operation for the thread is a memory operation
@@ -84,7 +84,7 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                             ///
+//                       public variables                             ///
 public:
     /** Connection to the data memory unit.
      */
@@ -103,7 +103,7 @@ private:
      */
     mem();
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                             ///
+//                       private methods                             ///
     /** Print to <i>cout</i> stream the debugging output for this
      *  stage in the pipeline. This is only enabled if <i>DBG_PIPE</i>
      *  and <i>DBG_MEM</i> flags are enabled during compilation.

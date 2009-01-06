@@ -58,7 +58,7 @@ using namespace std;
 class instruction {
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
     /** Create a NOP instruction.
      */
@@ -517,7 +517,7 @@ public:
     void set_write_memory(const bool& write_memory);
 
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                          ///
+//                       private methods                          ///
 private:
     /** Initialize the data elements to be reasonable default values.
      * By default, an instruction does performs a null operation.
@@ -525,7 +525,7 @@ private:
     void initialize();
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 private:
     ALU _aluop; /// ALU operation type.
     int _alu_result; /// ALU computation result.

@@ -62,7 +62,7 @@ public:
     regacc(const sc_module_name& name);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 #ifdef _NO_SYSTEMC_
     /** Takes an instruction from the input <i>in</i> and retrivies
      *  the register values from the register file. It sets the
@@ -84,7 +84,7 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
     /** Input and output ports for SystemC.
      */
     sc_in< hw_thread_ptr > in;
@@ -96,7 +96,7 @@ private:
     regacc();
 
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                            ///
+//                       private methods                            ///
     /** Returns true if the hardware thread is not initialized yet.
      *  @param ht The hardware thread pointer.
      */

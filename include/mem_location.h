@@ -53,7 +53,7 @@
 class mem_location {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Return the word of memory at the given address, as well as whether
      *  that access stalls.
      *  @param tid The thread id of the requesting thread
@@ -84,7 +84,7 @@ public:
     virtual ~mem_location() {};
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
     /** The underlying memory unit can be accessed for cases such as
      *  debugging where the simultaion time and stall pattern should
      *  not be altered.

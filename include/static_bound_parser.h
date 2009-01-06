@@ -55,7 +55,7 @@ struct memory_controller;
 class static_bound_parser {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Construct a static bound parser with no associated memory controller.
      */
     static_bound_parser();
@@ -83,7 +83,7 @@ public:
 
 private:
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                            ///
+//                       private methods                            ///
     /** Parse the given file and set the bounds of the scratchpad
      *  for the given thread, starting at the given scratchpad address
      *  (to distinguish between instruction addresses and data addresses).
@@ -94,7 +94,7 @@ private:
     void load_spm(const unsigned int tid, const string& spm, uint32_t start_addr);
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
     /** Pointer to the associated memory controller.  This is used to
      *  determine where to store the bounds that are parsed.
      */

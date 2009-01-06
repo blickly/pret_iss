@@ -59,7 +59,7 @@ enum DT_STATUS {
 class special_reg {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Create the register file
      */
     special_reg();
@@ -357,7 +357,7 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 
 private:
     unsigned char _imp_ver; //Implementation Version Number

@@ -76,7 +76,7 @@ public:
     ~hw_thread_controller();
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
 #ifndef _NO_SYSTEMC_
     /** Implements a round-robin scheduling of the threads. There are
@@ -136,7 +136,7 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
 public:
     /** Output port connected to the fetch stage.
      */
@@ -154,14 +154,14 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                          ///
+//                       private methods                          ///
 private:
     /** Disable the default constructor.
      */
     hw_thread_controller();
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 
     /** An array of six hardware threads. These are allocated in the
      *  constructor and deleted in the destructor. <i>NUM_THREADS</i> is

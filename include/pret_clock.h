@@ -50,7 +50,7 @@ public:
      */
     pret_clock(const unsigned int& period);
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
     /** Return the period of the clock instance.
     */
@@ -66,7 +66,7 @@ public:
     void tick();
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 private:
     /* Variable _count increments every tick. If it has incremented
      * _period counts more then a period is complete.

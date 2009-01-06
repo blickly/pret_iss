@@ -61,7 +61,7 @@ public:
     execute(const sc_module_name& name);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             //
+//                       public methods                             //
 #ifdef _NO_SYSTEMC_
     /** Takes an instruction from the input in and executes the
      *  instruction. The executed instruction is forwarded to the next
@@ -91,7 +91,7 @@ public:
     unsigned char geticc(const hw_thread_ptr& hardware_thread);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
     /** This is an input port which receives a hardware thread pointer
      *  from the register access stage.
      */
@@ -102,7 +102,7 @@ public:
     sc_out< hw_thread_ptr > out;
 
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                            ///
+//                       private methods                            ///
 private:
     /** Disallow the use of the default constructor.
      */

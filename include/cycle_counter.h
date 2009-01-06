@@ -56,7 +56,7 @@ public:
      */
     cycle_counter(const sc_module_name& nm);
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
     /** Increments the cycles variable every invocation of cycles.
      */
@@ -73,7 +73,7 @@ private:
     cycle_counter();
 
 ///////////////////////////////////////////////////////////////////////
-///                      private  variables                         ///
+//                       private  variables                         ///
 #ifdef _NO_SYSTEMC_
     /** Variable to count the cycles.
      */

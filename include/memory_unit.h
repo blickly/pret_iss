@@ -58,7 +58,7 @@ public:
      */
     memory_unit();
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
     /** Adds the address and data into the memory unit. If
      *  the address specified by <i>addr</i> already contains data then
@@ -105,7 +105,7 @@ public:
     bool has_address(const uint32_t& addr) const;
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 private:
     /** STL map<> datastructure to store the key and value pair of
      * address and data.

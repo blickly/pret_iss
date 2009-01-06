@@ -78,7 +78,7 @@ public:
     ~core();
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
     /** Execute one cycle of the processor.
      */
@@ -177,7 +177,7 @@ public:
     bool run_for_instruction(int instruction_count);
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 private:
     /** Pointers assigned to the instances of main clock (_clock) and a
      *  phase lock-loop clock (_pll_clock).

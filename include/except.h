@@ -58,14 +58,14 @@ public:
     except(const sc_module_name& str);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
     /** Input and output ports for SystemC.
      */
     sc_in< hw_thread_ptr > in;
     sc_port< dma_if > coproc_dma;
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 #ifdef _NO_SYSTEMC_
     /** Takes an instruction from the input in and checks the
      *  instruction for any stalls. If a stall occured, then
@@ -143,7 +143,7 @@ public:
     void write_special_regs(const hw_thread_ptr& hardware_thread);
 
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                             ///
+//                       private methods                             ///
 private:
     /** Disable default constructor.
      */

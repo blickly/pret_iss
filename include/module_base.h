@@ -67,7 +67,7 @@ public:
     virtual ~module_base();
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Implements the behavior specific to the process.
      */
     virtual void behavior();
@@ -77,7 +77,7 @@ public:
     SC_HAS_PROCESS(module_base);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
 public:
     /** SystemC main clock.
      */
@@ -111,7 +111,7 @@ public:
     virtual ~module_base();
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                           ///
+//                       private variables                           ///
 private:
     /** Unique string identifier for the classes.
      */

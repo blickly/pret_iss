@@ -121,7 +121,7 @@ public:
     }
 private:
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
     hw_thread* _handle;
 };
 #endif /* _HW_THREAD_PTR_H_ */

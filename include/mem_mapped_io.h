@@ -52,7 +52,7 @@
 class mem_mapped_io : public mem_location {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Construct and initialize a memory-mapped
      * This method is responsible for initializing any memory-mapped
      * addresses that must be set before program execution.
@@ -82,7 +82,7 @@ public:
 
 private:
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                            ///
+//                       private methods                            ///
     /** Write the given data to the file on our simulation platform.
      *  @param data Word of data to write.
      */

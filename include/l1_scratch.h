@@ -58,7 +58,7 @@
 class l1_scratch : public mem_location {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Create an empty scratchpad.
      */
     l1_scratch();
@@ -68,7 +68,7 @@ public:
      */
     virtual void behavior();
 
-/////////            Normal memory location interface.
+////////             Normal memory location interface.
     /** Read a given (main-memory) address from the scratchpad, if available.
      *  Note that in order to conform to the mem_location interface, the
      *  address parameter corresponds to the global address of the data
@@ -95,7 +95,7 @@ public:
      */
     virtual void write(int tid, uint32_t addr, uint32_t data, bool& stalled);
 
-/////////            Scratchpad management interface.
+////////             Scratchpad management interface.
     /** Move the given data with the given global address into the given
      * location in the scratchpad.
      * If there is existing data at that scratchpad location, it will be
@@ -125,7 +125,7 @@ public:
     void dbg_print_valid_addr();
 
 ///////////////////////////////////////////////////////////////////////
-///                      protected methods                          ///
+//                       protected methods                          ///
 protected:
     /** Check if a given scratchpad address is valid on the scratchpad.
      *  @param spm_addr The scratchpad address to check.
@@ -134,7 +134,7 @@ protected:
     bool in_spm_range(uint32_t spm_addr);
 
 ///////////////////////////////////////////////////////////////////////
-///                     protected variables                         ///
+//                      protected variables                         ///
     /** Map of scratchpad addresses to main memory adresses.
      * mem_location already contains a memory unit for the l1_scratch.
      * This contains the physical address of main memory and the

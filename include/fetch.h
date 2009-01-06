@@ -62,7 +62,7 @@ public:
 
     virtual ~fetch();
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
 #ifdef _NO_SYSTEMC_
     /** The behavior of the fetch stage takes the hardware thread
@@ -89,7 +89,7 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
 public:
     /** This is an input port which receives a hardware thread pointer
      *  from the thread controller.
@@ -110,7 +110,7 @@ public:
     sc_out< hw_thread_ptr > out;
 
 ///////////////////////////////////////////////////////////////////////
-///                      private methods                            ///
+//                       private methods                            ///
 private:
     /** Disallow the use of the default constructor.
      */

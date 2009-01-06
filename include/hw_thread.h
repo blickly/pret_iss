@@ -74,7 +74,7 @@ public:
     hw_thread(const hw_thread& hardware_thread);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
     /** Returns the thread id.
      *
@@ -222,7 +222,7 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////
-///                      public  variables                          ///
+//                       public  variables                          ///
 
     unsigned int cnt_cycles; // Count the number of cycles this thread executes.
     unsigned int cnt_instr; // Count the number of instructions this thread executes.
@@ -232,7 +232,7 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 private:
     bool _enabled;          // If the thread is enabled.
     uint32_t _branch_slot;  // Delay branch  address.

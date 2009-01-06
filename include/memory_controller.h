@@ -84,7 +84,7 @@ struct fetch_stage_if : public sc_interface {
 class memory_controller : public module_base, public fetch_stage_if, public mem_stage_if {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Construct and initialize the memory controller.
      *  @param str Unique string idetifier for the memory controller.
      *  @param cyc Cycle counter with which to synchronize controller behavior.
@@ -166,14 +166,14 @@ public:
     void write_data(int tid, uint32_t addr, uint32_t data, bool& stalled);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
     /** Port to connect to blocking DMA unit.
      */
     sc_port<dma_if> blocking_dma;
 
 protected:
 ///////////////////////////////////////////////////////////////////////
-///                      protected variables                        ///
+//                       protected variables                        ///
     /** Instantiates the objects for the protected variables. This is
      * used internally by the constructor of the memory_controller
      * object.

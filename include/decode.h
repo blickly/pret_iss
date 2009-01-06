@@ -53,7 +53,7 @@ public:
     decode(const sc_module_name& name);
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 #ifdef _NO_SYSTEMC_
     /** Takes an instruction from the input in and decodes the
      *  instruction. The decoded instruction is forwarded to the next
@@ -73,7 +73,7 @@ public:
 #endif /* _NO_SYSTEMC_ */
 
 ///////////////////////////////////////////////////////////////////////
-///                      public variables                           ///
+//                       public variables                           ///
     /** Input and output ports for SystemC.
      */
     sc_in< hw_thread_ptr > in;

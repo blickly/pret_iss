@@ -89,7 +89,7 @@ public:
 template <typename T>
 class sc_in {
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
     /** Read an input from the input port.
      *
@@ -99,7 +99,7 @@ public:
         return _object;
     }
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 private:
     T _object;
 };
@@ -119,7 +119,7 @@ template <typename T>
 class sc_out {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Write the output value.
      *
      * @param output Output value
@@ -128,7 +128,7 @@ public:
         _object = output;
     }
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 private:
     T _object;
 };
@@ -148,7 +148,7 @@ template <typename T>
 class sc_port {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Set the port object.
      *
      * @param port Port object to be set.
@@ -165,7 +165,7 @@ public:
         return _object;
     }
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                             ///
+//                       private variables                             ///
 private:
     T* _object;
 };

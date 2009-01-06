@@ -31,7 +31,7 @@
 #define _DEFINES_H_
 
 ///////////////////////////////////////////////////////////////////////
-///                      Debug specific flags.                      ///
+//                       Debug specific flags.                      ///
 
 
 /** Print out debugging information for the pipeline.
@@ -72,7 +72,7 @@
 //#define DBG_WARN_MISSED_DEADLINE
 
 ///////////////////////////////////////////////////////////////////////
-///                      Thread specific defines.                   ///
+//                       Thread specific defines.                   ///
 /** Maximum number of threads.
  */
 #define MAX_THREAD 1000
@@ -82,7 +82,7 @@
 #define NUM_THREADS 6
 
 ///////////////////////////////////////////////////////////////////////
-///                      Memory specific defines.                   ///
+//                       Memory specific defines.                   ///
 /** The number of cycles for a slot in the memory wheel's window.
  */
 #define MEM_DELAY 15
@@ -100,13 +100,13 @@
 #define BURST_DELAY 4
 
 ///////////////////////////////////////////////////////////////////////
-///                Register window specific defines.                ///
+//                 Register window specific defines.                ///
 /** Number of register windows.
  */
 #define REGISTER_WINDOWS 128
 
 ///////////////////////////////////////////////////////////////////////
-///                Deadline timer specific defines.                 ///
+//                 Deadline timer specific defines.                 ///
 /**  Number of deadline timers.
  */
 #define NUM_DEADLINE_TIMERS 8
@@ -116,14 +116,14 @@
 #define NUM_PLL_TIMERS 1
 
 ///////////////////////////////////////////////////////////////////////
-///                DMA specific defines.                            ///
+//                 DMA specific defines.                            ///
 /** Conventional DMA that allows adding instructions in the program to
  *  transfer the instructions from main memory to scratchpad.
  */
 #define USE_BLOCKING_DMA
 
 ///////////////////////////////////////////////////////////////////////
-///                Simulation specific defines.                     ///
+//                 Simulation specific defines.                     ///
 /** Return from the simulation with special instruction.
  */
 #define END_SIMULATION \

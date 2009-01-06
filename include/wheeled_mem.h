@@ -57,7 +57,7 @@ enum AccessorType { BURST, GLOBAL };
 class wheeled_mem : public mem_location {
 public:
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
     /** Create a new wheeled memory unit with the given delays.
      *  The latency delay is how many cycles it takes to get the first word,
      *  and the throughput delay is how long it takes to get subsequent words
@@ -127,7 +127,7 @@ public:
 
 protected:
 ///////////////////////////////////////////////////////////////////////
-///                     protected methods                           ///
+//                      protected methods                           ///
     /** Determine if the memory wheel is stalled on a single access
      *  for the given thread and address.
      *  @param tid The thread id of the requesting thread.
@@ -180,7 +180,7 @@ protected:
 
 private:
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
     /** Pointer to the cycle counter of this core.
      */
     cycle_counter* counter;

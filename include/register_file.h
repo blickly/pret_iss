@@ -53,7 +53,7 @@
 class register_file {
 
 ///////////////////////////////////////////////////////////////////////
-///                      public methods                             ///
+//                       public methods                             ///
 public:
     /** Create the register file
      */
@@ -108,7 +108,7 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////
-///                      private variables                          ///
+//                       private variables                          ///
 private:
     uint32_t _global_reg[8]; //Global Registers
     uint32_t _window_reg[16*REGISTER_WINDOWS]; //Register Window
