@@ -88,7 +88,7 @@ void l1_scratch::add_addr(uint32_t mem_addr, uint32_t spm_addr,
                           uint32_t data) {
     if (!in_spm_range(spm_addr)) {
         cerr << "Error: Request made to invalid scratchpad address 0x"
-             << hex << spm_addr << endl;
+             << hex << spm_addr << ", mem address 0x" << mem_addr << endl;
         return;
     }
 

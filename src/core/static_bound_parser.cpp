@@ -32,24 +32,26 @@
 #include "memory_unit.h"
 #include "memory_controller.h"
 
+#define INST_SCRATCH_START 0
+#define DATA_SCRATCH_START (SCRATCH_SIZE / 2)
+
 
 void static_bound_parser::set_memory_controller(memory_controller* memc) {
     _mem_cont = memc;
-    spm_addr = 0;
 }
 
 static_bound_parser::static_bound_parser(): _mem_cont(NULL) {
 }
 
 void static_bound_parser::load_data_spm(const unsigned int tid, const string& dspm) {
-    load_spm(tid, dspm);
+    load_spm(tid, dspm, DATA_SCRATCH_START);
 }
 
 void static_bound_parser::load_inst_spm(const unsigned int tid, const string& ispm) {
-    load_spm(tid, ispm);
+    load_spm(tid, ispm, INST_SCRATCH_START);
 }
 
-void static_bound_parser::load_spm(const unsigned int tid, const string& spm) {
+void static_bound_parser::load_spm(const unsigned int tid, const string& spm, uint32_t scratch_start_addr) {
     /* Read the memory map file for instruction SPM. */
     ifstream file_spm(spm.c_str(), ios::in);
     l1_scratch* const current_scratchpad = &_mem_cont->get_spm_mem_loc(tid);
@@ -65,9 +67,17 @@ void static_bound_parser::load_spm(const unsigned int tid, const string& spm) {
             //cout << "got line: " << line << endl;
             istringstream ss(line);
             ss >> hex >> min >> max;
+            uint32_t spm_addr = scratch_start_addr;
+            uint32_t scratch_end_addr = scratch_start_addr + SCRATCH_SIZE / 2;
             if (line.size() > 0) {
                 for (uint32_t addr = min; addr < max + 4; addr += 4) {
                     const uint32_t data = (*main_memory)[addr];
+                    if (spm_addr >= scratch_end_addr) {
+                      cerr << "Error: Overloaded scratchpad for thread " 
+                           << tid << " at scratchpad address 0x" << hex 
+                           << spm_addr << endl;
+                      return;
+                    }
                     current_scratchpad->add_addr(addr, spm_addr, data);
                     spm_addr += 4;
                 }

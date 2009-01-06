@@ -85,24 +85,20 @@ private:
 ///////////////////////////////////////////////////////////////////////
 ///                      private methods                            ///
     /** Parse the given file and set the bounds of the scratchpad
-     *  for the given thread.
+     *  for the given thread, starting at the given scratchpad address
+     *  (to distinguish between instruction addresses and data addresses).
      *  @param tid Thread ID of the scratchpad.
      *  @param spm Name of the file that contains the bounds.
+     *  @param start_addr The address of the beginning of this scratchpad.
      */
-    void load_spm(const unsigned int tid, const string& spm);
+    void load_spm(const unsigned int tid, const string& spm, uint32_t start_addr);
 
 ///////////////////////////////////////////////////////////////////////
 ///                      private variables                          ///
     /** Pointer to the associated memory controller.  This is used to
      *  determine where to store the bounds that are parsed.
      */
-
     memory_controller* _mem_cont;
-    /** The current address within the scratchpad.  We must keep track of
-     *  this here because the bounds file does not specify the scratchpad
-     *  address to which a main memory address is mapped.
-     */
-    uint32_t spm_addr;
 
 };
 #endif
