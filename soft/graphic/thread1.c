@@ -21,7 +21,22 @@
 #include "vga.c"
 #include "emul.c"
 
-static int n_frame = 0;
+#define VGA_EMUL
+#ifdef VGA_EMUL
+#undef DEAD_PLL
+#define DEAD_PLL		//
+#undef	IOWR_32DIRECT
+#define	IOWR_32DIRECT	//
+#undef	IOWR_8DIRECT
+#define	IOWR_8DIRECT	//
+//#undef PRINT
+//#define	PRINT	printf
+#else
+#endif
+
+#ifdef VGA_EMUL
+volatile static int n_frame = 0;
+#endif
 
 INT main( )
 {
@@ -29,18 +44,23 @@ INT main( )
 	DWORD i = 0;
 	DWORD j = 0;
 	volatile DWORD * p_color_line = NULL;
-	
+
 	PRINT( "The VGA driver started\n" );
 
+#ifdef VGA_EMUL
+	printf( "VGA emul mode\n" );
+
+	const int DUMP_FRAME = 3;
+
 	// initialize the driver
-	SET_PLL_CLK( VGA_CLK );
 	if( vga_emul_init( ) == FALSE )
 	{
 		PRINT( "FILE OPEN ERROR!\n" );
 	}
+#endif
 
 	while( !vga_is_refreshing( ) );
-	printf( "vga refresh\n" );
+	printf( "vga initial refresh\n" );
 
 	DEAD_PLL( N_VGA_CLK_V_SYNC );
 
@@ -61,7 +81,14 @@ INT main( )
 		{
 			vga_toggle_graphic_buffer( );
 			printf( "vga refreshed\n" );
+#ifdef	VGA_EMUL
 			n_frame++;
+			printf( "n_frame: %d\n", n_frame );
+			if( n_frame == DUMP_FRAME )
+			{
+				printf( "start dump\n" );
+			}
+#endif
 		}
 
 		DEAD_PLL( N_VGA_CLK_H_SYNC );
@@ -75,7 +102,7 @@ INT main( )
 			IOWR_8DIRECT( IO_ADDR_VGA, 1, VGA_CONTROL_H_SYNC_ON );
 			//p_color_line = &_screen[ _current_buffer ][ i ][ 0 ];	// access the screen memory in advance
 			p_color_line = ( _screen + ( *( _current_buffer ) * VGA_RESOLUTION_HEIGHT * N_COL_SCREEN ) + ( i * N_COL_SCREEN ) );	// access the screen memory in advance
-			j = N_COL_SCREEN;
+			j = N_COL_SCREEN - 1;
 			DEAD_PLL( N_VGA_CLK_H_BP );
 			IOWR_8DIRECT( IO_ADDR_VGA, 1, VGA_CONTROL_H_SYNC_OFF );
 			PRINT( "HSYNC PROCESSED\n" );
@@ -85,12 +112,20 @@ INT main( )
 			PRINT( "BP PIXEL PROCESSED\n" );
 
 			// draw horizontal pixels
+
 			do
 			{
+#ifdef VGA_EMUL
+				if( n_frame == DUMP_FRAME )
+				{
+					vga_emul_plot_pixel( *p_color_line );
+				}
+#else
 				DEADPLLI( "10" );
-				IOWR_32DIRECT( IO_ADDR_VGA, 0, tmp );
-				tmp = *( p_color_line++ );
-			} while( ( int ) p_color_line != limit );
+				IOWR_32DIRECT( IO_ADDR_VGA, 0, *p_color_line );
+#endif
+				p_color_line++;
+			} while( j-- );
 
 			// process front-porch pixel
 			DEAD_PLL( N_VGA_CLK_H_FP );
@@ -99,18 +134,20 @@ INT main( )
 			PRINT( "FP PIXEL PROCESSED\n" );
 		}
 
-		printf( "FRAME DRAWING END: %d\n", i );
+		//printf( "FRAME DRAWING END: %d\n", i );
+
+#ifdef VGA_EMUL
+		if( n_frame == DUMP_FRAME )
+		{
+			printf( "end dump\n" );
+		}
+#endif
 
 		// process front-porch line
 		IOWR_32DIRECT( IO_ADDR_VGA, 0, VGA_COLOR_V_FP );
 		DEAD_PLL( N_VGA_CLK_V_FP - N_VGA_CLK_H_SYNC );
 		DEAD_PLL( N_VGA_CLK_V_SYNC );
 		PRINT( "FP LINE PROCESSED\n" );
-	}
-	
-	if( vga_emul_terminate( ) == FALSE )
-	{
-		PRINT( "FILE CLOSE ERROR!\n" );
 	}
 	
 	return 0;

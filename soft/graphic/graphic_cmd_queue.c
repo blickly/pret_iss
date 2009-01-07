@@ -118,12 +118,9 @@ VOID graphic_flush_recv_command_queue( )
 {
 	//prevent compiler optimization
 	volatile int t = 0xFFFF;
-	printf( "acuire request\n" );
 	*( _is_flushing_recv_command ) = TRUE;
 	while( *( _is_flushing_recv_command ) == TRUE )
 	{
 		t--;
 	}
-
-	printf( "queue toggled\n" );
 }

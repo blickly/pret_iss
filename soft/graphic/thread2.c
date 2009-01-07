@@ -24,7 +24,7 @@
 
 
 DWORD _background[ 480 ][ 640 / 16 ] = {0, };
-DWORD _sprite[ 64 ][ 64 / 16 ] = { 0, };
+DWORD _sprite[ 5 ][ 64 ][ 64 / 16 ] = { 0, };
 
 DWORD _sprite_position_x[ 5 ] = { 0,};
 DWORD _sprite_position_y[ 5 ] = { 0,};
@@ -106,12 +106,10 @@ static VOID plot_dot( ID_GRAPHIC_LAYER id, DWORD x, DWORD y, DWORD thickness, DW
 				_background[ y + i ][ ( x + j ) / N_VGA_PIXEL_PER_ONCE ] &= ~( 0x03 << shift );
 				_background[ y + i ][ ( x + j ) / N_VGA_PIXEL_PER_ONCE ] |= ( ( color & 0x03 ) << shift );
 				break;
-				case 1:
-				shift = ( ( x + j ) % N_VGA_PIXEL_PER_ONCE ) * 2;
-				_sprite[ y + i ][ ( x + j ) / N_VGA_PIXEL_PER_ONCE ] &= ~( 0x03 << shift );
-				_sprite[ y + i ][ ( x + j ) / N_VGA_PIXEL_PER_ONCE ] |= ( ( color & 0x03 ) << shift );
-				break;
 				default:
+				shift = ( ( x + j ) % N_VGA_PIXEL_PER_ONCE ) * 2;
+				_sprite[ id - 1 ][ y + i ][ ( x + j ) / N_VGA_PIXEL_PER_ONCE ] &= ~( 0x03 << shift );
+				_sprite[ id - 1 ][ y + i ][ ( x + j ) / N_VGA_PIXEL_PER_ONCE ] |= ( ( color & 0x03 ) << shift );
 				break;
 			}
 		}
@@ -158,10 +156,10 @@ void locate_sprite_direct( int id, int x, int y, int width, int height )
 	{
 		for( j = 0; j < width; j++ )
 		{
-			if( ( _sprite[ i ][ j / 16 ] >> ( 2 * ( j % 16 ) ) ) & 0x03 != 0 )
+			if( ( _sprite[ id - 1 ][ i ][ j / 16 ] >> ( 2 * ( j % 16 ) ) ) & 0x03 != 0 )
 			{
 				//plot_dot( 0, 100 + j, 100 + i, 1, ( _sprite[ i ][ j / 16 ] >> ( j % 16 ) ) & 0x03 );
-				vga_set_color( i + y, j + x, ( _sprite[ i ][ j / 16 ] >> ( 2 * ( j % 16 ) ) ) & 0x03 );
+				vga_set_color( i + y, j + x, ( _sprite[ id - 1 ][ i ][ j / 16 ] >> ( 2 * ( j % 16 ) ) ) & 0x03 );
 			}
 		}
 	}
@@ -169,15 +167,17 @@ void locate_sprite_direct( int id, int x, int y, int width, int height )
 
 void update_screen( )
 {
+	PRINT( "drawing back buffer\n" );
 	// refresh the vga screen buffer
 	vga_copy_into_back_buffer( *_background, 0, 0, 640, 480 );
 
 	int i = 0;
-	for( i = 1; i < 5; i++ )
+	for( i = 1; i < 6; i++ )
 	{
 		locate_sprite_direct( i, _sprite_position_x[ i ], _sprite_position_y[ i ], 64, 64 );
 	}
 
+	PRINT( "update screen\n" );
 	vga_refresh_screen( );
 
 }
@@ -192,7 +192,7 @@ INT main( )
 	// initialize graphic driver
 	graphic_init_queue( );
 
-	printf("queue init\n");
+	PRINT("queue init\n");
 
 //*	
 	while( TRUE )
@@ -204,7 +204,7 @@ INT main( )
 			// if new command request received, toggle command queue to get the command
 			if( *( _is_flushing_recv_command ) )
 			{
-				//printf( "%d\n", *( _is_call_new_command ) );
+				//PRINT( "%d\n", *( _is_call_new_command ) );
 				graphic_toggle_command_queue( );
 			}
 			*( _is_flushing_recv_command ) = FALSE;
@@ -219,10 +219,11 @@ INT main( )
 			break;
 			case GRAPHIC_COMMAND_PLOT_LINE:
 			plot_line( current_command.arg[ 0 ], current_command.arg[ 1 ], current_command.arg[ 2 ], current_command.arg[ 3 ], current_command.arg[ 4 ], current_command.arg[ 5 ], current_command.arg[ 6 ] );
-			printf("plot line\n");			
+			PRINT( "plot line\n" );			
 			break;
 			case GRAPHIC_COMMAND_MOVE_DIRECT:
 			move_direct( current_command.arg[ 0 ], current_command.arg[ 1 ], current_command.arg[ 2 ] );
+			PRINT( "move direct\n" );
 			break;
 			case GRAPHIC_COMMAND_MOVE_VECTOR:
 			break;

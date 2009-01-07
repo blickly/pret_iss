@@ -36,10 +36,10 @@ INT main( )
 
 	graphic_init( );
 
-	printf( "drawing start\n" );
+	//printf( "drawing start\n" );
 
-	graphic_plot_line( 0, 0, 0, 640, 480, 5, 0x01 );
-	graphic_plot_line( 0, 0, 480, 640, 0, 5, 0x01 );
+//	graphic_plot_line( 0, 0, 0, 640, 480, 5, 0x01 );
+//	graphic_plot_line( 0, 0, 480, 640, 0, 5, 0x01 );
 
 	graphic_plot_line( 1, 3, 3, 60, 18, 3, 0x01 );
 	graphic_plot_line( 1, 3, 3, 18, 18, 3, 0x01 );
@@ -48,7 +48,7 @@ INT main( )
 	graphic_move_direct( 1, 290, 380 );
 	graphic_update_screen( );
 
-	printf( "drawing end\n" );
+	//printf( "drawing end\n" );
 
 
 	while( TRUE )
