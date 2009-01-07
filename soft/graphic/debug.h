@@ -17,8 +17,10 @@
 
 #ifdef DBG
 #define PRINT printf
+#define PRINTS puts
 #else
 #define PRINT
+#define PRINTS
 #endif
 
 #endif //DEBUG_H
