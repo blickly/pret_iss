@@ -73,10 +73,10 @@ void static_bound_parser::load_spm(const unsigned int tid, const string& spm, ui
                 for (uint32_t addr = min; addr < max; addr += 4) {
                     const uint32_t data = (*main_memory)[addr];
                     if (spm_addr >= scratch_end_addr) {
-                      cerr << "Error: Overloaded scratchpad for thread " 
-                           << tid << " at scratchpad address 0x" << hex 
-                           << spm_addr << endl;
-                      return;
+                        cerr << "Error: Overloaded scratchpad for thread "
+                             << tid << " at scratchpad address 0x" << hex
+                             << spm_addr << endl;
+                        return;
                     }
                     current_scratchpad->add_addr(addr, spm_addr, data);
                     spm_addr += 4;

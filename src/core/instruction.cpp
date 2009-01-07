@@ -655,7 +655,7 @@ short instruction::get_increment_window_pointer() const {
 }
 
 uint32_t instruction::get_instruction() const {
-  return _inst;
+    return _inst;
 }
 
 MEMORY_SIZE instruction::get_memory_size() const {
