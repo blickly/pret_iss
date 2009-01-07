@@ -70,7 +70,9 @@ void print_setup(core * c) {
     cout << "SystemC Simulation" << endl;
 #endif
 
-    cout << "\n -------------------- Core configuration ------------- " << endl;
+    cout << endl << "---------------------------------------------------- " << endl;
+    cout << "\tPRET Configuration" << endl;
+    cout << "---------------------------------------------------- " << endl;
     cout << "Number of threads         : " << dec << NUM_THREADS << endl;
     cout << "Number of register windows: " << REGISTER_WINDOWS << endl;
     cout << "Number of deadline timers : " << NUM_DEADLINE_TIMERS << endl;
@@ -84,11 +86,13 @@ void print_setup(core * c) {
     cout << "Main memory delay          : " << MEM_DELAY << endl;
 
     cout << "Instruction/Data scratchpads  " << endl;
+    
 //     cout << "Starting PC for each thread: " << endl;
 //     for (unsigned int i = 0; i < NUM_THREADS; i++ ) {
 //       cout << " +thread " << i << ": " << hex << c->get_pc(i) << endl;
 //     }
 //     cout << endl;
+    cout << "---------------------------------------------------- " << endl;
 }
 
 #ifdef _NO_SYSTEMC_
@@ -125,7 +129,14 @@ int sc_main(int argc, char * argv[]) {
     /* ----------------------------- */
     /* Put the code you want to time */
     /* ----------------------------- */
+
+    cout << endl << "---------------------------------------------------- " << endl;
+    cout << "\t Start Simulation" << endl;
+    cout << "---------------------------------------------------- " << endl;
+
     db.run(num_cycles);
+    cout << "---------------------------------------------------- " << endl;
+
     /* ----------------------------- */
     gettimeofday(&etv, NULL);
 
@@ -133,7 +144,10 @@ int sc_main(int argc, char * argv[]) {
 
 
     /// Print out the instructions executed for every thread.
-    cout << "\n ----------------- Statistics -------------------" << endl;
+    cout << endl << "---------------------------------------------------- " << endl;
+    cout << "\t Simulation Statistics" << endl;
+    cout << "---------------------------------------------------- " << endl;
+
     /* This is another method for generating execution time values */
     /*
        printf("end time usec: %ld, sec: %ld\n", etv.tv_usec, etv.tv_sec);
