@@ -16,8 +16,7 @@
 //#define DBG
 
 #ifdef DBG
-#define PRINT printf
-#define PRINTS puts
+#define PRINT puts
 #else
 #define PRINT
 #define PRINTS

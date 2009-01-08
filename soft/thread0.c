@@ -1,17 +1,9 @@
+//#include<stdio.h>
 #include "deadline.h"
-
-#define NULL 0
 
 int main()
 {
-  int i;
-  int *iptr=NULL;
-  
-  iptr= (int*)malloc(sizeof(int));
-  
-  *iptr = 2;
-
-  printf("Wow i think malloc works! Int is: %d\n", *iptr);
-
-  return 0;
+ puts("Wow i think malloc works\n");
+ END_SIMULATION;
+ return 0;
 }

@@ -11,7 +11,7 @@
  * 
  */
 
-#include <stdio.h>
+//#include <stdio.h>
 #include "types.h"
 #include "deadline.h"
 #include "vga.h"
@@ -31,6 +31,9 @@
 #define	IOWR_8DIRECT	//
 //#undef PRINTS
 //#define	PRINTS	puts
+//#undef PRINT
+//#define	PRINT	printf
+
 #else
 #endif
 
@@ -83,6 +86,7 @@ INT main( )
 			puts( "vga refreshed\n" );
 #ifdef	VGA_EMUL
 			n_frame++;
+			//			puts( "n_frame: %d\n", n_frame );
 			if( n_frame == DUMP_FRAME )
 			{
 				puts( "start dump\n" );
