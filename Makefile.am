@@ -49,6 +49,9 @@ ship_examples:
 # Copy Synchronization example
 	-cp tests/tests/pret/dma/sync_example_cases/sync_example_cases ./examples/ -r
 
+# Copy graphic example
+	-cp soft/graphic ./examples/ -r
+
 # Remove .svn directories.
 	-find ./examples/ -name ".svn" | xargs rm -r
 

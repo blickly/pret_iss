@@ -28,11 +28,5 @@ COPYRIGHTENDKEY
 $@author: hiren $
 $@version: README 698 2008-06-27 23:51:27Z hiren $
 
-
-Requirements:
-1) Autotools to run autoconf, and automake.
-2) Python for debugger and compile scripts.
-3) Perl for running the regression.
-4) Set environment variable PRET_ISS.
-
-Please see INSTALL for further instructions.
+Please see INSTALL for installation instructions and doc/pret_simulator.html
+for the manual.
