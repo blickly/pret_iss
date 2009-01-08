@@ -161,48 +161,6 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
     case ALU_MUL:
         /// Hiren: Going to use SystemC data types for easier
         /// maniuplation of 64 bits.
-#ifndef _NO_SYSTEMC_
-        /// If signed multiplication
-        if (hardware_thread->inst.is_signed_multiply()) {
-            sc_uint<32> rs1(hardware_thread->inst.get_op1_value());
-            sc_uint<32> rs2(hardware_thread->inst.get_op2_value());
-            sc_uint<32> y(hardware_thread->spec_regs.y);
-            sc_uint<32> rsd;
-            sc_uint<32> temp_rsd;
-
-            /// Used in step (6) to replace MSB of (y) with LSB of rs1
-            /// (unshifted)
-            bool lsb_rs1 = rs1[0];
-            /// Page 110 from Sparc v8 manual
-            /// (1): Select immediate or rs2's value.
-            /// rs2 holds the appropriate value.
-            /// (2): Righardware_thread shift by one
-            rs1 = rs1 >> 1;
-            /// Replace MSB with N xor V
-            bool b = (hardware_thread->spec_regs.icc & 0x08) ^(hardware_thread->spec_regs.icc & 0x02);
-            rs1.set(32, b);
-            /// (3): Check if LSB of Y reg is 1.
-            if (y[0] == false) {
-                /// Add 0 to the shifted value in rs1 ?
-                temp_rsd = rs1;
-            } else {
-                /// rs1 is added to the multiplier (rs2)
-                temp_rsd = rs1 + rs2;
-            }
-            /// Step (4)
-            rsd = temp_rsd;
-            /// Step (5) should be done from setting wicc=true and adding ALU_MUL cases
-            /// Step (6)
-            y = y >> 1;
-            y[31] = lsb_rs1;
-
-            /// Restore updated register values
-            hardware_thread->spec_regs.y = y.to_uint();
-            hardware_thread->inst.set_op1_value(rs1.to_uint());
-            hardware_thread->inst.set_op2_value(rs2.to_uint());
-            hardware_thread->inst.set_alu_result(rsd.to_uint());
-        }
-#else
         /// If signed multiplication
         if (hardware_thread->inst.is_signed_multiply()) {
             uint32_t  rs1 = (hardware_thread->inst.get_op1_value());
@@ -243,8 +201,6 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
             hardware_thread->inst.set_op2_value(rs2);
             hardware_thread->inst.set_alu_result(rsd);
         }
-
-#endif
         break;
     default:
         break;
