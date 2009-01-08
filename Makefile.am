@@ -31,6 +31,7 @@
 
 SUBDIRS=src scripts tests
 
+# Remove all the targets below for release.
 regression: tests/Makefile
 	make -f tests/Makefile regression
 
@@ -56,7 +57,7 @@ ship_examples:
 	-find ./examples/ -name ".svn" | xargs rm -r
 
 ship_clean: ship_examples
-	-rm -rf tests/ soft/ adm/ autom4te.cache/ build-aux/ logs/ oldfiles/
+	-rm -rf tests/ soft/ adm/ autom4te.cache/ build-aux/ logs/ oldfiles/ format_code.sh
 	-find . -name ".svn" | xargs rm -r	 
 
 

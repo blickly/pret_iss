@@ -348,6 +348,7 @@ fi
 	
 if test "$FAILED" == "no" 
 then
+# Christopher: Remove the tests/Makefile target for the release.
 AC_OUTPUT([Makefile
 	   src/Makefile
 	   src/core/Makefile
