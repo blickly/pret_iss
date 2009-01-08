@@ -21,10 +21,10 @@
 #include "vga.c"
 #include "emul.c"
 
-#define VGA_EMUL
+//#define VGA_EMUL
 #ifdef VGA_EMUL
-#undef DEAD_PLL
-#define DEAD_PLL		//
+#undef DEADPLL
+#define DEADPLL
 #undef	IOWR_32DIRECT
 #define	IOWR_32DIRECT	//
 #undef	IOWR_8DIRECT
@@ -62,7 +62,7 @@ INT main( )
 	while( !vga_is_refreshing( ) );
 	puts( "vga initial refresh\n" );
 
-	DEAD_PLL( N_VGA_CLK_V_SYNC );
+	DEADPLL( N_VGA_CLK_V_SYNC );
 
 	while( TRUE )
 	{
@@ -71,7 +71,7 @@ INT main( )
 		// process vsync
 		IOWR_32DIRECT( IO_ADDR_VGA, 0, VGA_COLOR_V_SYNC );
 		IOWR_8DIRECT( IO_ADDR_VGA, 1, VGA_CONTROL_V_SYNC_ON );
-		DEAD_PLL( N_VGA_CLK_V_BP );
+		DEADPLL( N_VGA_CLK_V_BP );
 		IOWR_8DIRECT( IO_ADDR_VGA, 1, VGA_CONTROL_V_SYNC_OFF );
 		PRINTS( "VSYNC PROCESSED\n" );
 		
@@ -90,7 +90,7 @@ INT main( )
 #endif
 		}
 
-		DEAD_PLL( N_VGA_CLK_H_SYNC );
+		DEADPLL( N_VGA_CLK_H_SYNC );
 		PRINTS( "BP LINE PROCESSED\n" );
 		
 		// draw field
@@ -102,7 +102,7 @@ INT main( )
 			//p_color_line = &_screen[ _current_buffer ][ i ][ 0 ];	// access the screen memory in advance
 			p_color_line = ( _screen + ( *( _current_buffer ) * VGA_RESOLUTION_HEIGHT * N_COL_SCREEN ) + ( i * N_COL_SCREEN ) );	// access the screen memory in advance
 			j = N_COL_SCREEN - 1;
-			DEAD_PLL( N_VGA_CLK_H_BP );
+			DEADPLL( N_VGA_CLK_H_BP );
 			IOWR_8DIRECT( IO_ADDR_VGA, 1, VGA_CONTROL_H_SYNC_OFF );
 			PRINTS( "HSYNC PROCESSED\n" );
 			int tmp = *p_color_line;
@@ -111,7 +111,6 @@ INT main( )
 			PRINTS( "BP PIXEL PROCESSED\n" );
 
 			// draw horizontal pixels
-
 			do
 			{
 #ifdef VGA_EMUL
@@ -120,16 +119,16 @@ INT main( )
 					vga_emul_plot_pixel( *p_color_line );
 				}
 #else
+				__asm( "HERE:\n" );
 				DEADPLLI( "10" );
 				IOWR_32DIRECT( IO_ADDR_VGA, 0, *p_color_line );
 #endif
-				p_color_line++;
-			} while( j-- );
+			} while( p_color_line++ < limit );
 
 			// process front-porch pixel
-			DEAD_PLL( N_VGA_CLK_H_FP );
+			DEADPLL( N_VGA_CLK_H_FP );
 			IOWR_32DIRECT( IO_ADDR_VGA, 0, VGA_COLOR_H_FP );
-			DEAD_PLL( N_VGA_CLK_H_SYNC );
+			DEADPLL( N_VGA_CLK_H_SYNC );
 			PRINTS( "FP PIXEL PROCESSED\n" );
 		}
 
@@ -144,8 +143,8 @@ INT main( )
 
 		// process front-porch line
 		IOWR_32DIRECT( IO_ADDR_VGA, 0, VGA_COLOR_V_FP );
-		DEAD_PLL( N_VGA_CLK_V_FP - N_VGA_CLK_H_SYNC );
-		DEAD_PLL( N_VGA_CLK_V_SYNC );
+		DEADPLL( N_VGA_CLK_V_FP - N_VGA_CLK_H_SYNC );
+		DEADPLL( N_VGA_CLK_V_SYNC );
 		PRINTS( "FP LINE PROCESSED\n" );
 	}
 	

@@ -13,15 +13,6 @@
 #ifndef TOOL_H
 #define TOOL_H
 
-#define DEAD_TIMER
-#ifdef DEAD_TIMER
-#define DEAD( timeout )      asm( "mov %0, %%g1 \n\t .word 0xC3600001" : : "r" ( timeout ) : "g1" )
-#define DEAD_PLL( timeout )     asm( "mov %0, %%g1 \n\t .word 0xC3600001" : : "r" ( timeout ) : "g1" )
-#else
-#define DEAD
-#define DEAD_PLL
-#endif
-
 #define SET_PLL_CLK( hz )
 
 #define IOWR_8DIRECT( base, offset, data ) { *( base + offset ) = ( data & 0xFF ); }
