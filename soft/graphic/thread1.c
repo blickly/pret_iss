@@ -21,7 +21,7 @@
 #include "vga.c"
 #include "emul.c"
 
-//#define VGA_EMUL
+#define VGA_EMUL
 #ifdef VGA_EMUL
 #undef DEADPLL
 #define DEADPLL
@@ -119,7 +119,6 @@ INT main( )
 					vga_emul_plot_pixel( *p_color_line );
 				}
 #else
-				__asm( "HERE:\n" );
 				DEADPLLI( "10" );
 				IOWR_32DIRECT( IO_ADDR_VGA, 0, *p_color_line );
 #endif
