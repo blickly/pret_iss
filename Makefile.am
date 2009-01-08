@@ -31,7 +31,7 @@
 
 SUBDIRS=src scripts tests
 
-# Remove all the targets below for release.
+# Christopher: Remove all the targets below for release.
 regression: tests/Makefile
 	make -f tests/Makefile regression
 
