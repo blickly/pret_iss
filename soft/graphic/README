@@ -1,0 +1,7 @@
+/*
+  Example : VGA graphic example.
+  Synopsis: This example implements the VGA driver. It is used in the context of a sprite-based drawing of an arcade game. 
+  Author  : Sungjun Kim
+  
+*/
+
