@@ -15,7 +15,10 @@ $ ./scripts/compile_threads.py examples/janne/
 3. Executing the example.
 $ ./src/pret.exe examples/janne -1
 
- -------------------- Core configuration -------------
+---------------------------------------------------- 
+	PRET Configuration
+----------------------------------------------------
+
 Number of threads         : 6
 Number of register windows: 128
 Number of deadline timers : 8
@@ -26,6 +29,11 @@ Clock setup
 Memory hierarchy
 Main memory delay          : 15
 Instruction/Data scratchpads
+----------------------------------------------------
+
+---------------------------------------------------- 
+	 Start Simulation
+---------------------------------------------------- 
 (a,b) = (3,-9)
 (a,b) = (14,11)
 (a,b) = (17,23)
@@ -35,8 +43,12 @@ Instruction/Data scratchpads
 (a,b) = (27,47)
 (a,b) = (29,37)
 (a,b) = (31,27)
+---------------------------------------------------- 
 
- ----------------- Statistics -------------------
+
+---------------------------------------------------- 
+	 Simulation Statistics
+---------------------------------------------------- 
 Cycles executed : -1
 
 thread[0], , # cycles: 114024
