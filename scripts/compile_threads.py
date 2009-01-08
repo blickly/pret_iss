@@ -99,7 +99,7 @@ def get_max_address(srec_file):
 
 def start_at(addr):
    """Return the flags needed to compile code starting at the given address"""
-   return ' -Ttext=0x%X' % addr
+   return ' -Ttext=0x%X -Tdata=0x%X ' % (addr, addr + int(thread_spacing,16)/2)
 
 def align(addr):
    """Align address to next possible 32-bit aligned address"""
