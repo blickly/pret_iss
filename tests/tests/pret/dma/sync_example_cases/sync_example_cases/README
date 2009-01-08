@@ -1,0 +1,9 @@
+/*
+  Example : Simple mutual exclusion example using timing instructions.
+  Synopsis: This is a producer/consumer example where the mutual
+exclusion is enforced through the use of timing instructions, and
+being able to precisely determine the execution times of operations on
+it.
+  Author  : Ben Lickly and Hiren Patel
+  
+*/
