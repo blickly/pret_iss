@@ -10,8 +10,10 @@ Running the Example
 ---------------------------------------
 1. Go to the $PRET_ISS top directory.
 $ cd $PRET_ISS
+
 2. Compile the example.
 $ ./scripts/compile_threads.py examples/janne/
+
 3. Executing the example.
 $ ./src/pret.exe examples/janne -1
 
