@@ -29,6 +29,7 @@
 #
 ####################################################################
 
+# Christopher: Remove tests from this directory list
 SUBDIRS=src scripts tests
 
 # Christopher: Remove all the targets below for release.
