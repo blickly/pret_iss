@@ -43,22 +43,22 @@ ship_examples:
 	-mkdir examples/
 
 # Copy ALL instructions and data in Janne
-	-cp tests/tests/pret/dma/janne/janne ./examples/ -r
+	-cp -r tests/tests/pret/dma/janne/janne ./examples/ 
 
 # Copy Smile example
-	-cp tests/tests/pret/sys/smile/smile ./examples/ -r
+	-cp -r tests/tests/pret/sys/smile/smile ./examples/ 
 
 # Copy Synchronization example
-	-cp tests/tests/pret/dma/sync_example_cases/sync_example_cases ./examples/ -r
+	-cp -r tests/tests/pret/dma/sync_example_cases/sync_example_cases ./examples/
 
 # Copy graphic example
-	-cp soft/graphic ./examples/ -r
+	-cp -r soft/graphic ./examples/
 
 # Remove .svn directories.
-	-find ./examples/ -name ".svn" | xargs rm -r
+	-find ./examples/ -name ".svn" | xargs rm -rf
 
 ship_clean: ship_examples
 	-rm -rf tests/ soft/ adm/ autom4te.cache/ build-aux/ logs/ oldfiles/ format_code.sh
-	-find . -name ".svn" | xargs rm -r	 
+	-find . -name ".svn" | xargs rm -rf	 
 
 
