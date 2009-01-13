@@ -29,31 +29,4 @@
 #
 ####################################################################
 
-SUBDIRS=src scripts tests
-
-regression: tests/Makefile
-	make -f tests/Makefile regression
-
-quick_tests: tests/Makefile
-	make -f tests/Makefile quick_tests 
-
-ship_examples:
-	-mkdir examples/
-# Copy ALL instructions and data in Janne
-	-cp -r tests/tests/pret/dma/janne/janne ./examples/ 
-# Copy Smile example
-	-cp -r tests/tests/pret/sys/smile/smile ./examples/ 
-# Copy Synchronization example
-	-cp -r tests/tests/pret/dma/sync_example_cases/sync_example_cases ./examples/
-# Copy graphic example
-	-cp -r soft/graphic ./examples/
-# Remove .svn directories.
-	-find ./examples/ -name ".svn" | xargs rm -rf
-
-ship_clean: ship_examples
-	-rm -rf tests/ soft/ adm/ autom4te.cache/ build-aux/ logs/ oldfiles/ format_code.sh
-	-find . -name ".svn" | xargs rm -rf	 
-	-find . -name "*~" | xargs rm -f
-	-mv Makefile.dist.am Makefile.am
-
-
+SUBDIRS=src scripts
