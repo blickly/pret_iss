@@ -37,7 +37,12 @@ regression: tests/Makefile
 quick_tests: tests/Makefile
 	make -f tests/Makefile quick_tests 
 
-ship_examples:
+ship:
+# Make shipping directory
+	mkdir ../pret_ship
+	cp -r . ../pret_ship
+	cd ../pret_ship
+# Start changes
 	-mkdir examples/
 # Copy ALL instructions and data in Janne
 	-cp -r tests/tests/pret/dma/janne/janne ./examples/ 
@@ -47,10 +52,7 @@ ship_examples:
 	-cp -r tests/tests/pret/dma/sync_example_cases/sync_example_cases ./examples/
 # Copy graphic example
 	-cp -r soft/graphic ./examples/
-# Remove .svn directories.
-	-find ./examples/ -name ".svn" | xargs rm -rf
-
-ship_clean: ship_examples
+# Remove .svn and other directories.
 	-rm -rf tests/ soft/ adm/ autom4te.cache/ build-aux/ logs/ oldfiles/ format_code.sh
 	-find . -name ".svn" | xargs rm -rf	 
 	-find . -name "*~" | xargs rm -f
