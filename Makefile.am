@@ -57,5 +57,6 @@ ship:
 	-find ${SHIP_DIR} -name ".svn" | xargs rm -rf	 
 	-find ${SHIP_DIR} -name "*~" | xargs rm -f
 	-cp Makefile.dist.am ${SHIP_DIR}/Makefile.am
+	-cp configure.dist.in ${SHIP_DIR}/configure.in
 
 
