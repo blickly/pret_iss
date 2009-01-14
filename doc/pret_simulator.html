@@ -2158,6 +2158,28 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 
 //}}}</pre>
 </div>
+<div title="Todo" modifier="YourName" created="200901140028" changecount="1">
+<pre>Add active web link
+Add berkeley copyright
+check into CVS web
+
+Release:
+Make a copy to remove .svn, don't do it in current directory
+change Makefile.am
+after ship_clean. bootstrap errors:
+configure.in: installing `build-aux/install-sh'
+configure.in: installing `build-aux/mkinstalldirs'
+configure.in: installing `build-aux/missing'
+configure.in:45: installing `build-aux/py-compile'
+Makefile.am:33: required directory ./tests does not exist
+src/Makefile.am: installing `build-aux/depcomp'
+Makefile.am:33: required directory ./tests does not exist
+autoreconf: automake failed with exit status: 1
+
+Make a new makefile.am to copy in the new directory to be shipped
+add .txt extension
+try it on newton</pre>
+</div>
 <div title="Usage" modifier="Hiren D. Patel" created="200809262106" modified="200809262158" changecount="7">
 <pre>* The simulator binary is compiled in ''$PRET_ISS/src/''. The simulator must be executed with the following arguments:
 ** {{{&lt;path-to-srec-folder&gt;}}}: A folder location with the programs that are going to be loaded in the simulator. For every thread there is a ''.c'' file. We compile this into SREC files. Please look at one of the samples in ''$PRET_ISS/samples''. The ''Makefile''s can be reused from there. 
