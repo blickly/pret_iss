@@ -251,7 +251,7 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
 esac
 	
 AC_ARG_ENABLE(debugger,
-[  --disable-debugger    Do not compile debugger ],
+[  --disable-debugger          Do not compile debugger ],
 [case "${enableval}" in
   yes) debugger=true ;;
   no)  debugger=false ;;
@@ -260,7 +260,7 @@ esac],[debugger=true])
 AM_CONDITIONAL(DEBUGGER, test x$debugger = xtrue)
 
 AC_ARG_ENABLE(systemc,
-[  --enable-systemc    Compile with SystemC ],
+[  --enable-systemc          Compile with SystemC ],
 [case "${enableval}" in
   yes) systemc=true ;;
   no)  systemc=false ;;
@@ -269,7 +269,7 @@ esac],[systemc=false])
 AM_CONDITIONAL(USESYSTEMC, test x$systemc = xtrue)
 
 AC_ARG_ENABLE(fpic,
-[  --enable-fpic    Use position independent code (-fPIC) ],
+[  --enable-fpic          Use position independent code (-fPIC) ],
 [case "${enableval}" in
   yes) fpic=true ;;
   no)  fpic=false ;;
