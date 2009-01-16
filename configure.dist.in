@@ -251,16 +251,16 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
 esac
 	
 AC_ARG_ENABLE(debugger,
-[  --enable-debugger    Compile debugger ],
+[  --disable-debugger          Do not compile debugger ],
 [case "${enableval}" in
   yes) debugger=true ;;
   no)  debugger=false ;;
-  *) AC_MSG_ERROR(bad value ${enableval} for --enable-debugger) ;;
-esac],[debugger=false])
+  *) AC_MSG_ERROR(bad value ${enableval} for --disable-debugger) ;;
+esac],[debugger=true])
 AM_CONDITIONAL(DEBUGGER, test x$debugger = xtrue)
 
 AC_ARG_ENABLE(systemc,
-[  --enable-systemc    Compile with SystemC ],
+[  --enable-systemc          Compile with SystemC ],
 [case "${enableval}" in
   yes) systemc=true ;;
   no)  systemc=false ;;
@@ -269,7 +269,7 @@ esac],[systemc=false])
 AM_CONDITIONAL(USESYSTEMC, test x$systemc = xtrue)
 
 AC_ARG_ENABLE(fpic,
-[  --enable-fpic    Use position independent code (-fPIC) ],
+[  --enable-fpic          Use position independent code (-fPIC) ],
 [case "${enableval}" in
   yes) fpic=true ;;
   no)  fpic=false ;;
@@ -348,12 +348,12 @@ fi
 	
 if test "$FAILED" == "no" 
 then
-
+# Christopher: Remove the tests/Makefile target for the release.
 AC_OUTPUT([Makefile
 	   src/Makefile
 	   src/core/Makefile
 	   src/debugger/Makefile
-	   scripts/Makefile ])
+	   scripts/Makefile  ])
 fi
 
 # dnl Dump a summary of configure process
