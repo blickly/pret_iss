@@ -33,8 +33,6 @@
 bin_PROGRAMS=pret 
 pret_SOURCES=main.cpp
 
-
-
 if DEBUGGER
   COND_DBG=debugger
 else
