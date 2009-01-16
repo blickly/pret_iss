@@ -251,12 +251,12 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
 esac
 	
 AC_ARG_ENABLE(debugger,
-[  --enable-debugger    Compile debugger ],
+[  --disable-debugger    Do not compile debugger ],
 [case "${enableval}" in
   yes) debugger=true ;;
   no)  debugger=false ;;
-  *) AC_MSG_ERROR(bad value ${enableval} for --enable-debugger) ;;
-esac],[debugger=false])
+  *) AC_MSG_ERROR(bad value ${enableval} for --disable-debugger) ;;
+esac],[debugger=true])
 AM_CONDITIONAL(DEBUGGER, test x$debugger = xtrue)
 
 AC_ARG_ENABLE(systemc,
