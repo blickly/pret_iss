@@ -370,9 +370,17 @@ class CalSim(cmd.Cmd):
       try:
          n = int(args)
       except ValueError:
-         n = 10000000
-      for i in range(n):
+         n = 0
+
+      if n==0:
+        print 'Error: Please specify number of cycle to execute'
+        return
+
+      i = 0
+      while i < n or n == -1: 
+      #for i in range(n):
          simend = 1
+         i = i + 1
          (bp, simend) = self.one_step(trace = False, stop_break = True)
          if  simend == 0 or bp == True: # (if a breakpoint was hit)
             break
