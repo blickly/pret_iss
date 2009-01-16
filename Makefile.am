@@ -53,7 +53,7 @@ ship:
 # Copy graphic example
 	-cp -r soft/graphic ${SHIP_DIR}/examples/
 # Remove .svn and other directories.
-	-rm -rf ${SHIP_DIR}/tests/ ${SHIP_DIR}/soft/ ${SHIP_DIR}/adm/ ${SHIP_DIR}/autom4te.cache/ ${SHIP_DIR}/build-aux/ ${SHIP_DIR}/logs/ ${SHIP_DIR}/oldfiles/,${SHIP_DIR}/format_code.sh
+	-rm -rf ${SHIP_DIR}/tests/ ${SHIP_DIR}/soft/ ${SHIP_DIR}/adm/ ${SHIP_DIR}/autom4te.cache/ ${SHIP_DIR}/build-aux/ ${SHIP_DIR}/logs/ ${SHIP_DIR}/oldfiles/ ${SHIP_DIR}/format_code.sh
 	-find ${SHIP_DIR} -name ".svn" | xargs rm -rf	 
 	-find ${SHIP_DIR} -name "*~" | xargs rm -f
 	-cp Makefile.dist.am ${SHIP_DIR}/Makefile.am
