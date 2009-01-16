@@ -42,7 +42,7 @@ DAMAGE.
 <link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml' />
 <!--}}}-->
 <!--PRE-HEAD-END-->
-<title> PRET vX.X Simulator Documentation - A Simulator for a Precision Timed (PRET) Architecture </title>
+<title> PRET Simulator v1.0 Documentation - A Simulator for a Precision Timed (PRET) Architecture </title>
 <style id="styleArea" type="text/css">
 #saveTest {display:none;}
 #messageArea {display:none;}
@@ -1027,8 +1027,11 @@ We use a script to automatically compile and map the threads to the correct addr
 Note that ''deadline.h'' contains the macros for inlining the deadline instruction. ''prom.S'' is the boot code.
 </pre>
 </div>
-<div title="DefaultTiddlers" modifier="YourName" created="200809260134" modified="200809260134" changecount="8">
-<pre>[[GettingStarted]]</pre>
+<div title="Contact" modifier="Hiren Patel" created="200901161933" changecount="1">
+<pre>Visit [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
+</div>
+<div title="DefaultTiddlers" modifier="Hiren Patel" created="200809260134" modified="200901161927" changecount="9">
+<pre>[[Home]]</pre>
 </div>
 <div title="Direct Memory Access" modifier="Hiren Patel" created="200809282154" modified="200812300558" tags="DMA" changecount="17">
 <pre>Currently there is one method to load instructions and data into the scratchpads. That is to statically load the contents during initialization.
@@ -1058,15 +1061,13 @@ To load all instruction and data onto the scratchpad memories, we provide memory
 }}}
 </pre>
 </div>
-<div title="GettingStarted" modifier="Hiren D. Patel" created="200809260133" modified="200809271622" tags="hsD" changecount="10">
-<pre>To get started with this blank TiddlyWiki, you'll need to modify the following tiddlers:
-* SiteTitle &amp; SiteSubtitle: The title and subtitle of the site, as shown above (after saving, they will also appear in the browser title bar)
-* MainMenu: The menu (usually on the left)
-* DefaultTiddlers: Contains the names of the tiddlers that you want to appear when the TiddlyWiki is opened
-You'll also need to enter your username for signing your edits: &lt;&lt;option txtUserName&gt;&gt;</pre>
+<div title="Home" modifier="Hiren Patel" created="200809260133" modified="200901161919" tags="hsD" changecount="20">
+<pre>The PRET project is a collaborative effort lead by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/release/pret_simulator.html]].
+
+This documentation provides information about installing, and running the PRET simulator. The most recent release documentation for the PRET simulator is at [[PRET Documentation |http://chess.eecs.berkeley.edu/pret/]].</pre>
 </div>
-<div title="MainMenu" modifier="Hiren Patel" created="200809260133" modified="200812300550" changecount="29">
-<pre>[[Home|GettingStarted]]
+<div title="MainMenu" modifier="Hiren Patel" created="200809260133" modified="200901161921" changecount="30">
+<pre>[[Home]]
 !!''Installation''
 [[Requirements]]
 [[Source Checkout]]
@@ -1426,9 +1427,9 @@ if (version.major+.1*version.minor+.01*version.revision&gt;=2.2) {
 }
 //}}}</pre>
 </div>
-<div title="NoticeBoard" modifier="TiddlyThemes" created="200701130013" modified="200709121209" tags="MochaTheme">
-<pre>Last Updated: 
-Copyright © 
+<div title="NoticeBoard" modifier="Hiren Patel" created="200701130013" modified="200901161940" tags="MochaTheme" changecount="1">
+<pre>Last Updated: Friday, 16 January, 2009.
+Copyright © 2008 - 2009 UC Regents; all rights reserved. 
 </pre>
 </div>
 <div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200809270704" tags="MochaTheme" changecount="1">
@@ -1458,12 +1459,16 @@ Copyright ©
 &lt;div id='contentFooter' refresh='content' tiddler='contentFooter'&gt;&lt;/div&gt;
 &lt;!--}}}--&gt;</pre>
 </div>
-<div title="People" modifier="Ben Lickly" created="200809262213" modified="200810291810" changecount="9">
+<div title="People" modifier="Hiren Patel" created="200809262213" modified="200901161922" changecount="12">
 <pre>! Faculty
 &lt;&lt;person FDE &quot;Edward A. Lee&quot; http://www.eecs.berkeley.edu/~eal&gt;&gt;
 &lt;&lt;FDE&gt;&gt;
+Edward A. Lee is the Robert S. Pepper Distinguished Professor and former chair of the Electrical Engineering and Computer Sciences (EECS) department at U.C. Berkeley. His research interests center on design, modeling, and simulation of embedded, real-time computational systems. He is a director of Chess, the Berkeley Center for Hybrid and Embedded Software Systems, and is the director of the Berkeley Ptolemy project. He is co-author of five books and numerous papers. He has led the development of several influential open-source software packages, including Ptolemy, Ptolemy II, HyVisual, and VisualSense. His bachelors degree (B.S.) is from Yale University (1979), his masters (S.M.) from MIT (1981), and his Ph.D. from U. C. Berkeley (1986). From 1979 to 1982 he was a member of technical staff at Bell Telephone Laboratories in Holmdel, New Jersey, in the Advanced Data Communications Laboratory. He is a co-founder of BDTI, Inc., where he is currently a Senior Technical Advisor, and has consulted for a number of other companies. He is a Fellow of the IEEE, was an NSF Presidential Young Investigator, and won the 1997 Frederick Emmons Terman Award for Engineering Education. 
 &lt;&lt;person FDE &quot;Stephen A. Edwards&quot; http://www1.cs.columbia.edu/~sedwards/&gt;&gt;
 &lt;&lt;FDE&gt;&gt;
+ Stephen A. Edwards is a tenured associate professor in the Computer Science Department of Columbia University. He obtained his Ph.D from the University of California, Berkeley in 1997, his MS from Berkeley in 1994, and his BS from the California Institute of Technology in 1992, all in Electrical Engineering. Before pursuing his academic career in 2001, he worked for two Electronic Design Automation (EDA) companies, Simplex Solutions, now part of Cadence, and Synopsys.
+
+Professor Edwards and his group explore automating the creation of software for embedded systems: application-specific computers hiding in a growing number of industrial and consumer systems. They have developed numerous compilation techniques for the Esterel synchronous language for real-time control and are also developing domain-specific languages for device drivers and communication protocols. 
 ! Postdoctoral Researchers
 &lt;&lt;person FDE &quot;Hiren D. Patel&quot; http://www.eecs.berkeley.edu/~hiren&gt;&gt;
 &lt;&lt;FDE&gt;&gt;
@@ -1594,8 +1599,8 @@ Note that each of these examples has a file with an ''.ispm'' or ''.dspm'' exten
 <div title="SiteSubtitle" modifier="Hiren D. Patel" created="200809260133" modified="200809271556" changecount="9">
 <pre>A Simulator for a Precision Timed (PRET) Architecture</pre>
 </div>
-<div title="SiteTitle" modifier="Hiren D. Patel" created="200809260132" modified="200809261923" changecount="9">
-<pre>[[PRET]] vX.X Simulator Documentation</pre>
+<div title="SiteTitle" modifier="Hiren Patel" created="200809260132" modified="200901161921" changecount="11">
+<pre>[[PRET]] Simulator v1.0 Documentation</pre>
 </div>
 <div title="Source Checkout" modifier="Ben Lickly" created="200809261828" modified="200809270026" tags="SVN" changecount="19">
 <pre>If you have access to the repository, you can check it out from SVN over ssh:
@@ -2158,28 +2163,6 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 
 //}}}</pre>
 </div>
-<div title="Todo" modifier="YourName" created="200901140028" changecount="1">
-<pre>Add active web link
-Add berkeley copyright
-check into CVS web
-
-Release:
-Make a copy to remove .svn, don't do it in current directory
-change Makefile.am
-after ship_clean. bootstrap errors:
-configure.in: installing `build-aux/install-sh'
-configure.in: installing `build-aux/mkinstalldirs'
-configure.in: installing `build-aux/missing'
-configure.in:45: installing `build-aux/py-compile'
-Makefile.am:33: required directory ./tests does not exist
-src/Makefile.am: installing `build-aux/depcomp'
-Makefile.am:33: required directory ./tests does not exist
-autoreconf: automake failed with exit status: 1
-
-Make a new makefile.am to copy in the new directory to be shipped
-add .txt extension
-try it on newton</pre>
-</div>
 <div title="Usage" modifier="Hiren D. Patel" created="200809262106" modified="200809262158" changecount="7">
 <pre>* The simulator binary is compiled in ''$PRET_ISS/src/''. The simulator must be executed with the following arguments:
 ** {{{&lt;path-to-srec-folder&gt;}}}: A folder location with the programs that are going to be loaded in the simulator. For every thread there is a ''.c'' file. We compile this into SREC files. Please look at one of the samples in ''$PRET_ISS/samples''. The ''Makefile''s can be reused from there. 
@@ -2201,8 +2184,8 @@ $ ./src/pret &lt;path-to-srec-folder&gt; &lt;# cycles&gt;
 &lt;div class='tagged' macro='tags'&gt;&lt;/div&gt;
 &lt;!--}}}--&gt;</pre>
 </div>
-<div title="contentFooter" modifier="TiddlyThemes" created="200701130013" modified="200709121209" tags="MochaTheme">
-<pre>[[TiddlyWiki|http://www.tiddlywiki.com]] © Osmosoft
+<div title="contentFooter" modifier="Hiren Patel" created="200701130013" modified="200901161924" tags="MochaTheme" changecount="2">
+<pre>Copyright © 2008 - 2009 UC Regents; all rights reserved. 
 </pre>
 </div>
 <div title="footerhack" modifier="TiddlyThemes" created="200701130013" modified="200709121209" tags="systemConfig MochaTheme">
