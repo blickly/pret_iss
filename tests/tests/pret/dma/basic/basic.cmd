@@ -1,2 +1,2 @@
 cycle
-run
+run -1
