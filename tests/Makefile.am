@@ -75,4 +75,4 @@ distclean:
 
 INCLUDES =-I@top_srcdir@/include
 
-EXTRA_DIST=tests/pret/core tests/pret/dma tests/pret/pdma tests/pret/sys scripts scripts-linux scripts-linux64 scripts-macosx scripts-win2k scripts-gccsparcOS5 exports.sh
+EXTRA_DIST=tests/pret/core tests/pret/dma tests/pret/pdma tests/pret/sys scripts scripts-linux scripts-linux64 scripts-macosx scripts-win2k scripts-gccsparcOS5
