@@ -1424,7 +1424,7 @@ config.macros.gotoTiddler= {
 	}
 //}}}</pre>
 </div>
-<div title="Home" modifier="Hiren Patel" created="200809260133" modified="200901171301" tags="Welcome" changecount="22">
+<div title="Home" modifier="Isaac Liu" created="200809260133" modified="200901172102" tags="Welcome" changecount="25">
 <pre>The PRET project is a collaborative effort lead by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/release/pret_simulator.html]].
 
 This documentation provides information about installing, and running the PRET simulator. The most recent release documentation for the PRET simulator is at [[PRET Documentation |http://chess.eecs.berkeley.edu/pret/]].</pre>
@@ -1549,9 +1549,8 @@ function $() {
 }
 //}}}</pre>
 </div>
-<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901171929" changecount="14">
-<pre>&lt;&lt;gotoTiddler width:10em&gt;&gt;
-!!''Miscellaneous''
+<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901172002" changecount="15">
+<pre>!!''Miscellaneous''
 [[People]]
 [[References]]
 [[Contact]]
@@ -1562,7 +1561,7 @@ function $() {
 [[Ptolemy|http://ptolemy.eecs.berkeley.edu]]
 </pre>
 </div>
-<div title="MainMenu" modifier="Isaac Liu" created="200809260133" modified="200901171844" changecount="34">
+<div title="MainMenu" modifier="Isaac Liu" created="200809260133" modified="200901172025" changecount="38">
 <pre>[[Home]]
 !!''Installation''
 [[Requirements]]
@@ -1582,9 +1581,10 @@ function $() {
 <pre>&lt;html&gt;&lt;a href=&quot;javascript:;&quot;&gt;Goto:&lt;/a&gt;&lt;/html&gt; &lt;&lt;gotoTiddler width:10em;&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;newJournal 'DD MMM YYYY'&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel 'options »' 'Change TiddlyWiki advanced options'&gt;&gt;
 </pre>
 </div>
-<div title="Navigation" modifier="Isaac Liu" created="200901171620" modified="200901171836" changecount="3">
-<pre>Site Navigation:
-&lt;&lt;back&gt;&gt; | &lt;&lt;history&gt;&gt; | &lt;&lt;forward&gt;&gt;</pre>
+<div title="Navigation" modifier="Isaac Liu" created="200901171620" modified="200901172023" changecount="8">
+<pre>&lt;&lt;search&gt;&gt;
+&lt;&lt;back&gt;&gt; | &lt;&lt;history&gt;&gt; | &lt;&lt;forward&gt;&gt;
+</pre>
 </div>
 <div title="NestedSlidersPlugin" modifier="Hiren D. Patel" created="200809262250" modified="200809262305" tags="systemConfig" changecount="4">
 <pre>/***
@@ -1933,12 +1933,12 @@ Saturday, 17 January, 2009
 <div title="PRET_ISS" modifier="YourName" created="200901171218" changecount="3">
 <pre>Environment variable set to the directory of the PRET simulator.</pre>
 </div>
-<div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200901171933" tags="MochaTheme" changecount="39">
+<div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200901172042" tags="MochaTheme" changecount="54">
 <pre>&lt;!--{{{--&gt;
 &lt;div id='header' class='header'&gt;
 &lt;div id='contentHeader' refresh='content' tiddler='contentHeader'&gt;&lt;/div&gt;
-&lt;div class='headerShadow'&gt;
-&lt;span class='searchBar' macro='search'&gt;&lt;/span&gt;
+&lt;div class='headerShadow' style=&quot;width: 100%&quot;&gt;
+&lt;span id='siteNav' refresh='content' tiddler='Navigation'&gt;&lt;/span&gt;&amp;nbsp;
 &lt;span class='siteTitle' refresh='content' tiddler='SiteTitle'&gt;&lt;/span&gt;&amp;nbsp;
 &lt;span class='siteSubtitle' refresh='content' tiddler='SiteSubtitle'&gt;&lt;/span&gt;
 &lt;/div&gt;
@@ -1948,7 +1948,6 @@ Saturday, 17 January, 2009
 
 &lt;/div&gt;
 &lt;div id='sidebar'&gt;
-&lt;div id='siteNav' refresh='content' tiddler='Navigation'&gt;&lt;/div&gt;
 &lt;div id='sidebarMenu' refresh='content' tiddler='LeftBarMenu'&gt;&lt;/div&gt;
 &lt;span id='noticeBoard' refresh='content' tiddler='NoticeBoard'&gt;&lt;/span&gt;
 &lt;/div&gt;
@@ -2189,7 +2188,7 @@ Even if you do not have SVN access, you can still check out the source anonymous
 svn co svn://source.eecs.berkeley.edu/chess/pret/trunk/pret_iss
 }}}</pre>
 </div>
-<div title="StyleSheet" modifier="Isaac Liu" created="200709121208" modified="200901171938" tags="MochaTheme" changecount="34">
+<div title="StyleSheet" modifier="Isaac Liu" created="200709121208" modified="200901172100" tags="MochaTheme" changecount="45">
 <pre>/*{{{*/
 /*Mocha TiddlyWiki Theme*/
 /*Version 1.0*/
@@ -2215,7 +2214,7 @@ width: 1000px;
 border-bottom: 4px solid #948979;
 }
 
-.headerShadow {	padding: 2.6em 0em 0.5em 0em; }
+.headerShadow {	padding: 2.6em 0em 1em 0em; }
 
 .siteTitle {
 			font-family: 'Trebuchet MS' sans-serif;
@@ -2241,7 +2240,7 @@ float:left;
 margin-bottom:1em;
 display:inline;
 text-align:left;
-padding: 2em 0.5em 0.5em 0em;
+padding: 15px 0.5em 0.5em 0em;
 width:13em;
 font-size:1em;
 margin-left: 10px;
@@ -2258,7 +2257,7 @@ margin-right: 10px;
 }
 
 #displayArea {
-	margin-top: 15px;
+	margin-top: 10px;
        width: auto;
 }
 
@@ -2342,11 +2341,11 @@ margin-right: 10px;
 #sidebarOptions {line-height:1.4em;}
 
 		.tiddler {
-			padding-bottom: 40px;
-			border-bottom: 1px solid #DDDDDD; 
+			padding-bottom: 20px;
+			
                         
 		}
-.title {color:#CC6633;}
+.title {color:#CC6633; border-bottom:1px solid #ccc; padding-bottom:6px; font-size: 23px; font-variant: small-caps;}
 .subtitle, .subtitle a { color: #999999; font-size: 1.0em;margin:0.2em;}
 .shadow .title{color:#948979;}
 
@@ -2519,10 +2518,11 @@ h3 {font-size: 14px;}
 .searchBar {float:right;font-size: 1.0em;}
 .searchBar .button {color:#999;display:block;}
 .searchBar .button:hover {border:1px solid #fff;color:#4F4B45;}
-.searchBar input {			
+
+#siteNav .input {			
                         background-color: #FFF;
 			color: #999999;
-			border: 1px solid #CCC;		margin-right:3px;
+			border: 1px solid #CCC;		margin-right:10px;
 }
 
 #sidebarOptions .button:active, #sidebarOptions .highlight {background:#F5F5F5;}
@@ -2551,9 +2551,18 @@ h3 {font-size: 14px;}
 #header {display:inline-block;}
 /*}}}*/</pre>
 </div>
-<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901171940" changecount="26">
+<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901172050" changecount="55">
 <pre>/*{{{*/
-#siteNav { padding-top: 20px; }
+.searchButton {display: block;}
+#siteNav {float: right; font-size: .9em;}
+#siteNav .button {color:#999; }
+#siteNav a{padding-top: 3px;}
+#siteNav .button:hover {border:1px solid #fff;color:#4F4B45;}
+#siteNav input {			
+                        background-color: #FFF;
+			color: #999999;
+			border: 1px solid #CCC;		margin-right:3px;
+}
 
 #sidebarMenu a {
 			display: block;
@@ -2798,8 +2807,8 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 
 //}}}</pre>
 </div>
-<div title="ToolbarCommands" modifier="Isaac Liu" created="200901171836" changecount="4">
-<pre>|~ViewToolbar|+editTiddler permalink|
+<div title="ToolbarCommands" modifier="Isaac Liu" created="200901171836" modified="200901172033" changecount="5">
+<pre>|~ViewToolbar|+editTiddler permalink &lt;&lt;back&gt;&gt; &lt;&lt;forward&gt;&gt;|
 |~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|</pre>
 </div>
 <div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901171231" tags="Usage" changecount="8">
