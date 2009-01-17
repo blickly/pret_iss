@@ -46,6 +46,7 @@ dist-hook:
 # Copy graphic example
 	cp -r soft/graphic $(distdir)/examples/
 	cp -r tests $(distdir)
+	rm -f $(distdir)/tests/Makefile
 
 regression: tests/Makefile
 	make -f tests/Makefile regression
