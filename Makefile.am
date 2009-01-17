@@ -54,4 +54,6 @@ regression: tests/Makefile
 quick_tests: tests/Makefile
 	make -f tests/Makefile quick_tests 
 
+install:
+	@echo "No install targets"
 
