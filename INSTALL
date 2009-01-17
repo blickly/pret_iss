@@ -29,9 +29,8 @@ $Id$
 More instructions on installation, compiling, and executing examples is documented in $PRET_ISS/doc/pret_simulator.html. 
 
 
-Compiling PRET from SVN without SystemC
+Compiling PRET without SystemC
 ---------------------------------------
-$ ./bootstrap.sh
 -- Must set environment variable PRET_ISS (example with
 bash shell)
 -- Note that `pwd` returns the current directory path
@@ -40,9 +39,8 @@ $ ./configure
 $ make
 
 
-Compiling PRET from SVN with SystemC
+Compiling PRET with SystemC
 ------------------------------------
-$ ./bootstrap.sh
 -- Must set environment variables SYSTEMC and PRET_ISS (example with
 bash shell)
 $ export SYSTEMC=<path-to-systemc>
@@ -54,8 +52,9 @@ $ make
 
 Compiling PRET's debugger
 -------------------------
--- Use flag --enable-debugger to compile the debugger.
-$ ./configure --enable-debugger
+-- By default the debugger is built. 
+-- To disable use flag --disable-debugger.
+$ ./configure --disable-debugger
 
 Running the simulator
 ---------------------
@@ -71,10 +70,11 @@ Examples
 -----------------
 Three examples are provided with this release. They are:
 
-+ bubsort: A bubble sort algorithm,
++ janne: A multimedia algorithm,
 + smile : An example using timing instructions that produce a smiley
           face,
-+ synchronization: A mutual exclusion example using timing instructions.
++ sync_example_cases: A mutual exclusion example using timing instructions,
++ graphic: The video game graphic drawing.
 
 Running the Examples
 ---------------------
@@ -92,12 +92,16 @@ $ cd $PRET_ISS
 $ ./scripts/compile_threads.py examples/smile
 $ src/pret examples/smile -1
 
-Alternatively, the debugger, if compiled (--enable-debugger) can be
-used to execute the example as well.
+Alternatively, the debugger can be used to execute the example as well.
 $ cd $PRET_ISS
 $ ./scripts/compile_threads.py examples/smile
 $ ./scripts/csim  examples/smile
 csim> run -1
 
+
+Compiling Source from SVN 
+------------------------------------
+-- Must execute boostrap.sh before compiling PRET as mentioned above.
+$ ./bootstrap.sh
 
 

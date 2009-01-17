@@ -933,7 +933,7 @@ config.macros.bibtex.handler = function(place,macroName,params) {
 //}}}
 // //===</pre>
 </div>
-<div title="CSIM" modifier="Ben Lickly" created="200812302256" modified="200812302259" changecount="8">
+<div title="CSIM" modifier="Hiren Patel" created="200812302256" modified="200901171230" tags="CSIM" changecount="10">
 <pre>A debugging interface to our simulator called CSIM is provided in the PRET relaese.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
 
 From inside CSIM, one can type help to get a list of the valid commands.  Many of the commands use a similar syntax to TSIM, the simulator for the SPARC soft-core from Gaisler Research.  The most commonly used ones are as follows.
@@ -949,57 +949,55 @@ Example running the synchronization example:
 $ cd $PRET_ISS
 $ ./scripts/compile_threads.py examples/synchronization
 $ scripts/csim.py examples/synchronization
-csim&gt; run
+csim&gt; run -1
 ()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 csim&gt; 
 }}}</pre>
 </div>
-<div title="Compiling" modifier="Hiren D. Patel" created="200809261830" modified="200809271621" tags="Compilation" changecount="18">
+<div title="Compiling" modifier="Hiren Patel" created="200809261830" modified="200901171231" tags="Compiling Source" changecount="27">
 <pre>! Setup Environment Variables
-* Assuming a ''bash'' shell.
+* Assuming a ''bash'' shell. 
 {{{
 $ cd &lt;path-to-checkout&gt;/pret_iss
 $ export PRET_ISS=`pwd`
 }}}
 Note that `pwd` returns the current directory path so make sure to be in the directory where ''pret_iss'' was checked out. Alternatively, the ''PRET_ISS'' environment can be set permanently in ''.bashrc''. Please consult online bash manuals to do so. 
 ! Compiling PRET 
-* Generate ''configure'' script.
-{{{
-$ ./bootstrap.sh
-}}}
 * Configure provides three options to consider:
-# {{{--enable-debugger}}}: To build a Python based debugger
+# {{{--disable-debugger}}}: To disable building the Python based debugger
 # {{{--enable-systemc}}}: Must be used when building with SystemC
 # {{{--enable-fpic}}}: Mainly used for building on 64bit machines 
 Configure with debugger.
 {{{
-$ ./configure --enable-debugger
+$ ./configure 
 }}}
 * Make the simulator
 {{{
 $ make
 }}}
+* The PRET binary is compiled as &quot;$PRET_ISS/src/pret&quot;, and the debugger is located at &quot;$PRET_ISS/scripts/csim.py&quot;.
 ! Compiling PRET with SystemC
 * Please refer to installation instructions for SystemC on their website. 
 * Set another environment variable for SystemC.
 {{{
 $ export SYSTEMC=&lt;path-to-systemc&gt;
 }}}
-* Generate configure script.
-{{{
-$ ./bootstrap.sh
-}}}
 * Configure with SystemC and enable debugger
 {{{
-$ ./configure --enable-systemc --enable-debugger
+$ ./configure --enable-systemc 
 }}}
 * Make the simulator
 {{{
 $ make
 }}}
-</pre>
+! Compiling Source from SVN
+* Before the steps mentioned above, execute the script to generate the &quot;configure&quot; script.
+{{{
+$ ./bootstrap.sh
+}}}
+* Follow the above mentioned steps</pre>
 </div>
-<div title="Compiling Programs" modifier="Hiren D. Patel" created="200809262115" modified="200809290135" changecount="8">
+<div title="Compiling Programs" modifier="Hiren Patel" created="200809262115" modified="200901171231" tags="Compiling Programs" changecount="9">
 <pre>There are six ''.c'' programs that are compiled and loaded into the individual threads of the PRET simulator. We have a naming convention with ''thread0.c'' being the program for the 0th thread. There must be C programs for each thread; so, ''thread0.c'' to ''thread5.c'' should be defined.
 
 These thread programs are compiled using the [[SPARC ELF|Requirements]] GCC toolchain. Ensure that the ''sparc-elf-gcc'' executable is in the $PATH environment variable.
@@ -1008,7 +1006,6 @@ We use a script to automatically compile and map the threads to the correct addr
 {{{
 |-- Makefile
 |-- deadline.h
-|-- prom.S
 |-- thread0.c
 |-- thread0.makefile
 |-- thread1.c
@@ -1024,7 +1021,7 @@ We use a script to automatically compile and map the threads to the correct addr
 |-- thread_common.makefile
 }}}
 
-Note that ''deadline.h'' contains the macros for inlining the deadline instruction. ''prom.S'' is the boot code.
+Note that ''deadline.h'' contains the macros for inlining the deadline instruction. 
 </pre>
 </div>
 <div title="Contact" modifier="Hiren Patel" created="200901161933" changecount="1">
@@ -1033,14 +1030,14 @@ Note that ''deadline.h'' contains the macros for inlining the deadline instructi
 <div title="DefaultTiddlers" modifier="Hiren Patel" created="200809260134" modified="200901161927" changecount="9">
 <pre>[[Home]]</pre>
 </div>
-<div title="Direct Memory Access" modifier="Hiren Patel" created="200809282154" modified="200812300558" tags="DMA" changecount="17">
-<pre>Currently there is one method to load instructions and data into the scratchpads. That is to statically load the contents during initialization.
+<div title="Direct Memory Access" modifier="Hiren Patel" created="200809282154" modified="200901171227" tags="DMA" changecount="19">
+<pre>Currently there is one method to load instructions and data into the scratchpads. That is to statically load the contents during initialization. 
 
 ! Static Memory Allocation for Instruction and Data
 A static memory allocation map can be specified in text files. We have certain naming conventions; ''thread0.c'' has an instruction memory allocation file ''thread0.ispm'' and data memory allocation in file ''thread0.dspm''. Every thread can have a corresponding allocation file for instruction and/or data. The file format is simple. It accepts a pair of addresses that form an address range to be loaded into the scratchpad memories. If the allocation files exist in the directory with the SREC files, then they will be loaded; otherwise, no instructions and data are preloaded into the scratchpad memory.
 !! Example of a simple ''thread0.ispm''
 {{{
-4000000  40009df4
+40000000  40009df4
 }}}
 !! Example of a simple ''thread0.dspm''
 Here, we specify individual addresses by specifying the start and end of a range to be the same address.
@@ -1050,23 +1047,23 @@ Here, we specify individual addresses by specifying the start and end of a range
 4000b284 4000b284
 }}}
 !! All Instruction and Data on Scratchpad Memories
-To load all instruction and data onto the scratchpad memories, we provide memory allocation files that specify the entire range for instruction and data for each thread. These are straightforward and can be created based on the memory map. For example, 512KB assigned to instruction and data for ''thread0'' has the following memory allocation files.
-!! Example of 512KB of Instructions -- ''thread0.ispm''
+To load all instruction and data onto the scratchpad memories, we provide memory allocation files that specify the entire range for instruction and data for each thread. These are straightforward and can be created based on the memory map. 
+!! Example of  of 24Kb Instructions -- ''thread0.ispm''
 {{{
-4000000  4007FFFF
+40000000  40006100
 }}}
-!! Example of 512KB of Data  -- ''thread0.dspm''
+!! Example of 32Kb of Data  -- ''thread0.dspm''
 {{{
-40080000 400FFFFF
+400F8000 40100000
 }}}
 </pre>
 </div>
-<div title="Home" modifier="Hiren Patel" created="200809260133" modified="200901161919" tags="hsD" changecount="20">
+<div title="Home" modifier="YourName" created="200809260133" modified="200901171221" tags="Welcome" changecount="21">
 <pre>The PRET project is a collaborative effort lead by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/release/pret_simulator.html]].
 
 This documentation provides information about installing, and running the PRET simulator. The most recent release documentation for the PRET simulator is at [[PRET Documentation |http://chess.eecs.berkeley.edu/pret/]].</pre>
 </div>
-<div title="MainMenu" modifier="Hiren Patel" created="200809260133" modified="200901161921" changecount="30">
+<div title="MainMenu" modifier="Hiren Patel" created="200809260133" modified="200901171237" changecount="33">
 <pre>[[Home]]
 !!''Installation''
 [[Requirements]]
@@ -1080,6 +1077,7 @@ This documentation provides information about installing, and running the PRET s
 [[CSIM]]
 !!''Examples''
 [[Running]]
+[[Regression]]
 !!''Miscellaneous''
 [[People]]
 [[References]]
@@ -1432,6 +1430,9 @@ if (version.major+.1*version.minor+.01*version.revision&gt;=2.2) {
 Copyright © 2008 - 2009 UC Regents; all rights reserved. 
 </pre>
 </div>
+<div title="PRET_ISS" modifier="YourName" created="200901171218" changecount="3">
+<pre>Environment variable set to the directory of the PRET simulator.</pre>
+</div>
 <div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200809270704" tags="MochaTheme" changecount="1">
 <pre>&lt;!--{{{--&gt;
 &lt;div id='header' class='header'&gt;
@@ -1554,16 +1555,36 @@ config.macros.personLookup.handler = function(place,macroName,params) {
 //}}}
 </pre>
 </div>
-<div title="References" modifier="Hiren D. Patel" created="200809262246" modified="200809271619" changecount="55">
-<pre>&lt;&lt;bibtex &quot;@InProceedings{PRETCASES08, author = {Ben Lickly and Isaac Liu and Sungjun Kim and Hiren D. Patel and Stephen A. Edwards and Edward A. Lee},  title = {Predictable Programming on a Precision Timed Architecture}, booktitle = {CASES}, month = {October},    year = {2008},  url = {http://chess.eecs.berkeley.edu/pubs/475.html}}&quot;&gt;&gt;
-&lt;&lt;PRETCASES08&gt;&gt;
-&lt;&lt;bibtex &quot;@TechReport{Patel:EECS-2008-115,   author = {Hiren D. Patel and Ben Lickly and Bas Burgers and Edward A. Lee},    title = {A Timing Requirements-Aware Scratchpad Memory Allocation Scheme for a Precision Timed Architecture},    institution = {EECS Department -- University of California at Berkeley},    year = {2008},  month = {September},    url = {http://www.eecs.berkeley.edu/Pubs/TechRpts/2008/EECS-2008-115.html},    number = {UCB/EECS-2008-115}}&quot;&gt;&gt;
-&lt;&lt;Patel:EECS-2008-115&gt;&gt;
-&lt;&lt;bibtex &quot;@InProceedings{DSRT08, author = {Shanna Shaye Forbes and Hugo A. Andrade and Hiren              D. Patel and Edward A. Lee},    title = {An Automated Mapping of Timed Functional              Specification to A Precision Timed Architecture},  booktitle = {Proceedings of the 12-th IEEE International Symposium on Distributed Simulation and Real Time Applications},    month = {October},    year = {2008}, url = {http://chess.eecs.berkeley.edu/pubs/482.html}}&quot; &gt;&gt;
-&lt;&lt;DSRT08&gt;&gt;
-&lt;&lt;bibtex &quot;@presentation{Lee06Case, author = {Edward A. Lee},    title = {The Case for Precision Timed (PRET) Machines},    day = {30},    month = {November},    year = {2006},  url = {http://chess.eecs.berkeley.edu/pubs/203.html}}&quot;&gt;&gt;
-&lt;&lt;Lee06Case&gt;&gt;
+<div title="References" modifier="Hiren Patel" created="200809262246" modified="200901171248" tags="References" changecount="64">
+<pre>Edward A. Lee, [[The Case for Precision Timed (PRET) Machines|http://chess.eecs.berkeley.edu/pubs/203.html]], November, 2006.
+
+Stephen A. Edwards and Edward A. Lee, [[The Case for Precision Timed (PRET) Machines|http://www.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-149.html]], EECS Department
+University of California, Berkeley Technical Report No. UCB/EECS-2006-149, November 17, 2006
+
+Ben Lickly and Isaac Liu and Sungjun Kim and Hiren D. Patel and Stephen A. Edwards and Edward A. Lee, [[Predictable Programming on a Precision Timed Architecture|{http://chess.eecs.berkeley.edu/pubs/475.html]], in proceedings of International Conference on Compilers, Architecture, and Synthesis from Embedded Systems (CASES), October, 2008. 
+
+Hiren D. Patel and Ben Lickly and Bas Burgers and Edward A. Lee, [[A Timing Requirements-Aware Scratchpad Memory Allocation Scheme for a Precision Timed Architecture|http://www.eecs.berkeley.edu/Pubs/TechRpts/2008/EECS-2008-115.html]], EECS Department University of California, Berkeley Technical Report No. UCB/EECS-2008-115, September 12, 2008.
+
+Shanna-Shaye Forbes and Hugo A. Andrade and Hiren D. Patel and Edward A. Lee, [[An Automated Mapping of Timed Functional Specification to A Precision Timed Architecture|http://chess.eecs.berkeley.edu/pubs/482.html]], in proceedings of the 12-th IEEE International Symposium on Distributed Simulation and Real Time Applications, October, 2008. 
+
 </pre>
+</div>
+<div title="Regression" modifier="Hiren Patel" created="200901171236" modified="200901171237" tags="Regression" changecount="3">
+<pre>In &quot;$PRET_ISS/tests&quot;, we provide a series of tests. 
+
+!Running Regression
+* Make sure the compilation is complete, and enter &quot;$PRET_ISS&quot; directory.
+{{{
+$ cd $PRET_ISS
+}}}
+* Source a file (bash shell) located in &quot;$PRET_ISS/tests/exports.sh&quot;.
+{{{
+$ source tests/exports.sh
+}}}
+* Execute the regression target.
+{{{
+$ make regression
+}}}</pre>
 </div>
 <div title="Requirements" modifier="Ben Lickly" created="200809261818" modified="200809270025" tags="Requirements" changecount="15">
 <pre>! Build Tools
@@ -1576,13 +1597,14 @@ config.macros.personLookup.handler = function(place,macroName,params) {
 ! Optional
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
 </div>
-<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200812300712" changecount="6">
+<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200901171230" tags="Running" changecount="8">
 <pre>The pret executable is compiled in src/. The arguments for the simulator are a file name followed by a cycle number. The file name points to a file that contains the directory with the SREC files. The cycle number is optional and used to run the simulator for that many number of cycles. The file pointed by file name only needs the directory path.
 
 Three examples are provided with this release. They are:
 # janne: A multimedia algorithm,
 # smile : An example using timing instructions that produces a smiley face,
-# synchronization: A mutual exclusion example using timing instructions.
+# sync_example_cases: A mutual exclusion example using timing instructions.
+# graphic: The video game graphic drawing.
 
 There are two steps in running the examples. The first is to compile the example, and the second is to use the PRET simulator to execute the compiled binaries. We provide a script
 ($PRET_ISS/scripts/compile_threads.py) that takes the directory as an argument to compile the example. Executing the simulator takes two arguments: the directory of the compiled binaries and the number of cycles to execute the simulator.
@@ -1967,6 +1989,9 @@ h3 {font-size: 14px;}
 #header {display:inline-block;}
 /*}}}*/</pre>
 </div>
+<div title="SystemC" modifier="YourName" created="200901171218" changecount="3">
+<pre>OSCI SystemC simulator available for download from [[SystemC Website|http://www.systemc.org.]]</pre>
+</div>
 <div title="TiddlersBarPlugin" modifier="Isaac Liu" created="200809262253" modified="200809270702" tags="systemConfig systemConfigForce" changecount="2">
 <pre>/***
 |''Name:''|TiddlersBarPlugin|
@@ -2163,7 +2188,7 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 
 //}}}</pre>
 </div>
-<div title="Usage" modifier="Hiren D. Patel" created="200809262106" modified="200809262158" changecount="7">
+<div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901171231" tags="Usage" changecount="8">
 <pre>* The simulator binary is compiled in ''$PRET_ISS/src/''. The simulator must be executed with the following arguments:
 ** {{{&lt;path-to-srec-folder&gt;}}}: A folder location with the programs that are going to be loaded in the simulator. For every thread there is a ''.c'' file. We compile this into SREC files. Please look at one of the samples in ''$PRET_ISS/samples''. The ''Makefile''s can be reused from there. 
 ** {{{&lt;# cycles&gt;}}}: An integer value for the number of cycles the simulation must execute. To continue execution until the termination of a program use ''-1''.
