@@ -34,8 +34,7 @@
 # 	cxx='echo "${CXXFLAGS}" |  sed -e 's/\//\\\//g''
 # 	cat scripts/verify.pl.in | sed -e 's/"pret_ccflags"/\" ${cxx} \"/' > scripts/verify.pl	
 
-bin_SCRIPTS=exports.sh verify.pl regression.h
-
+noinst_SCRIPTS=verify.pl regression.h exports.sh
 
 if USESYSTEMC
   ADDFLAG=
@@ -76,4 +75,4 @@ distclean:
 
 INCLUDES =-I@top_srcdir@/include
 
-
+EXTRA_DIST=tests/pret/core tests/pret/dma tests/pret/pdma tests/pret/sys scripts scripts-linux scripts-linux64 scripts-macosx scripts-win2k scripts-gccsparcOS5 exports.sh

@@ -32,7 +32,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(pret, 0.0.1, pret@chess.eecs)
+AC_INIT(pret, 1.0, pret@chess.eecs)
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AM_CONFIG_HEADER([config.h])

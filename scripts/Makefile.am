@@ -25,5 +25,27 @@
 # 						COPYRIGHTENDKEY
 ####################################################################
 
+bin_SCRIPTS= \
+	./compile_threads.py \
+	./code_block.py \
+	./csim.py \
+	./deadline_block.py \
+	./dump_reader.py \
+	./generate_alloc.py \
+	./profile_data.py \
+	./static_schedule.py \
+	./stats.py
+
+EXTRA_DIST= \
+	./compile_threads.py \
+	./code_block.py \
+	./csim.py \
+	./deadline_block.py \
+	./dump_reader.py \
+	./exports.sh.in \
+	./generate_alloc.py \
+	./profile_data.py \
+	./static_schedule.py \
+	./stats.py
 
 INCLUDES =-I@top_srcdir@/include

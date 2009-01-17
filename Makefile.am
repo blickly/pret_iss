@@ -31,6 +31,21 @@
 
 SUBDIRS=src scripts tests
 
+EXTRA_DIST= \
+	doc 
+
+dist-hook:
+# Start changes
+	mkdir $(distdir)/examples
+# Copy ALL instructions and data in Janne
+	cp -r tests/tests/pret/dma/janne/janne $(distdir)/examples/ 
+# Copy Smile example
+	cp -r tests/tests/pret/sys/smile/smile $(distdir)/examples/ 
+# Copy Synchronization example
+	cp -r tests/tests/pret/dma/sync_example_cases/sync_example_cases $(distdir)/examples/
+# Copy graphic example
+	cp -r soft/graphic $(distdir)/examples/
+
 regression: tests/Makefile
 	make -f tests/Makefile regression
 

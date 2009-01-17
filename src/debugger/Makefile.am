@@ -29,7 +29,11 @@
 #####################################################################
 PYMOD_SRC=./python_wrapper.cpp
 
-bin_SCRIPTS=setup.py
+noinst_SCRIPTS=setup.py
+
+EXTRA_DIST= \
+	python_wrapper.cpp \
+	setup.py.in
 
 if USEFPIC
   AM_CXXFLAGS=-fPIC
