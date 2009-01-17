@@ -45,6 +45,7 @@ dist-hook:
 	cp -r tests/tests/pret/dma/sync_example_cases/sync_example_cases $(distdir)/examples/
 # Copy graphic example
 	cp -r soft/graphic $(distdir)/examples/
+	cp -r tests $(distdir)
 
 regression: tests/Makefile
 	make -f tests/Makefile regression
