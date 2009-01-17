@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
        file_name : This is the file that has the location of the tests.
     */
 
-    string cmd_file = "/tests/tests/pret/dma/basic/basic.cmd";
+    string cmd_file = "/tests/tests/pret/dma/basic/basic.csim";
     string file_name = "/tests/tests/pret/dma/basic/basic/";
     string otxt_name = "rbasic.txt";
     string txt_name;
