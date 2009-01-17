@@ -1,1 +1,0 @@
-./conventional_dma_sync_example

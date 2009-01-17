@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
        file_name : This is the file that has the location of the tests.
     */
 
-    string file_name = "/tests/tests/pret/dma/conventional_dma_sync_example/conventional_dma_sync_example.txt";
-    string otxt_name = "rconventional_dma_sync_example.txt";
+    string file_name = "/tests/tests/pret/dma/two_run_sync/two_run_sync.txt";
+    string otxt_name = "rtwo_run_sync.txt";
     string txt_name;
     string load_file;
     /* Ensure that the include/regression.h set the PRET_ISS path
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
                 if (line.at(0) == '.') {
                     line.erase(line.begin());
                 }
-                load_file = pret_iss_path + "/tests/tests/pret/dma/conventional_dma_sync_example" + line;
+                load_file = pret_iss_path + "/tests/tests/pret/dma/two_run_sync" + line;
                 otxt << load_file << endl;
             }
 
