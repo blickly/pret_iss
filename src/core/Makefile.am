@@ -62,7 +62,6 @@ noinst_HEADERS= \
 	@top_srcdir@/include/pret_clock.h \
 	@top_srcdir@/include/regacc.h \
 	@top_srcdir@/include/register_file.h \
-	@top_srcdir@/include/regression.h \
 	@top_srcdir@/include/special_reg.h \
 	@top_srcdir@/include/srec_parser.h \
 	@top_srcdir@/include/static_bound_parser.h \
