@@ -1027,10 +1027,12 @@ Note that ''deadline.h'' contains the macros for inlining the deadline instructi
 <div title="Contact" modifier="Hiren Patel" created="200901161933" changecount="1">
 <pre>Visit [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
 </div>
-<div title="DefaultOptions" modifier="Isaac Liu" created="200901171752" tags="systemConfig" changecount="1">
-<pre>config.options.chkShowRightSidebar=false;</pre>
+<div title="DefaultOptions" modifier="Isaac Liu" created="200901171752" modified="200901180224" tags="systemConfig" changecount="8">
+<pre>config.options.chkSearchListTiddler = true;
+config.options.chkSearchShadows = false;
+config.options.txtSearchExcludeTags = &quot;excludeSearch systemConfig script&quot;</pre>
 </div>
-<div title="DefaultTiddlers" modifier="Hiren Patel" created="200809260134" modified="200901161927" changecount="9">
+<div title="DefaultTiddlers" modifier="Isaac Liu" created="200809260134" modified="200901180223" tags="excludeSearch" changecount="10">
 <pre>[[Home]]</pre>
 </div>
 <div title="Direct Memory Access" modifier="Hiren Patel" created="200809282154" modified="200901171227" tags="DMA" changecount="19">
@@ -1549,8 +1551,8 @@ function $() {
 }
 //}}}</pre>
 </div>
-<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901172002" changecount="15">
-<pre>!!''Miscellaneous''
+<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901180226" tags="excludeSearch" changecount="17">
+<pre>!!''About Us''
 [[People]]
 [[References]]
 [[Contact]]
@@ -1561,7 +1563,7 @@ function $() {
 [[Ptolemy|http://ptolemy.eecs.berkeley.edu]]
 </pre>
 </div>
-<div title="MainMenu" modifier="Isaac Liu" created="200809260133" modified="200901172025" changecount="38">
+<div title="MainMenu" modifier="Isaac Liu" created="200809260133" modified="200901180226" tags="excludeSearch" changecount="39">
 <pre>[[Home]]
 !!''Installation''
 [[Requirements]]
@@ -1577,11 +1579,11 @@ function $() {
 [[Running]]
 [[Regression]]</pre>
 </div>
-<div title="MochaSideBarOptions" modifier="Isaac Liu" created="200701130013" modified="200901171904" tags="MochaTheme" changecount="16">
+<div title="MochaSideBarOptions" modifier="Isaac Liu" created="200701130013" modified="200901180223" tags="MochaTheme excludeSearch" changecount="17">
 <pre>&lt;html&gt;&lt;a href=&quot;javascript:;&quot;&gt;Goto:&lt;/a&gt;&lt;/html&gt; &lt;&lt;gotoTiddler width:10em;&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;newJournal 'DD MMM YYYY'&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel 'options »' 'Change TiddlyWiki advanced options'&gt;&gt;
 </pre>
 </div>
-<div title="Navigation" modifier="Isaac Liu" created="200901171620" modified="200901172023" changecount="8">
+<div title="Navigation" modifier="Isaac Liu" created="200901171620" modified="200901180227" tags="excludeSearch" changecount="9">
 <pre>&lt;&lt;search&gt;&gt;
 &lt;&lt;back&gt;&gt; | &lt;&lt;history&gt;&gt; | &lt;&lt;forward&gt;&gt;
 </pre>
@@ -1933,7 +1935,7 @@ Saturday, 17 January, 2009
 <div title="PRET_ISS" modifier="YourName" created="200901171218" changecount="3">
 <pre>Environment variable set to the directory of the PRET simulator.</pre>
 </div>
-<div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200901172042" tags="MochaTheme" changecount="54">
+<div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200901180221" tags="MochaTheme excludeSearch" changecount="55">
 <pre>&lt;!--{{{--&gt;
 &lt;div id='header' class='header'&gt;
 &lt;div id='contentHeader' refresh='content' tiddler='contentHeader'&gt;&lt;/div&gt;
@@ -2085,7 +2087,7 @@ $ source tests/exports.sh
 $ make regression
 }}}</pre>
 </div>
-<div title="ReplaceDoubleClickPlugin" modifier="Isaac Liu" created="200901171837" modified="200901171839" tags="script" changecount="5">
+<div title="ReplaceDoubleClickPlugin" modifier="Isaac Liu" created="200901171837" modified="200901180224" tags="script" changecount="6">
 <pre>/%
 |Name|ReplaceDoubleClick|
 |Source|http://www.TiddlyTools.com/#ReplaceDoubleClick|
@@ -2168,7 +2170,479 @@ $ src/pret examples/smile -1
 
 Note that each of these examples has a file with an ''.ispm'' or ''.dspm'' extension. Those indicate the instructions and data that are loaded onto the scratchpad memories during initialization. Removing those files results in loading the instructions and data from the main memory.</pre>
 </div>
-<div title="Settings" modifier="Isaac Liu" created="200901171833" modified="200901171908" changecount="6">
+<div title="SearchOptionPlugin" modifier="Isaac Liu" created="200901180135" modified="200901180232" tags="systemConfig" changecount="18">
+<pre>/***
+|Name|SearchOptionsPlugin|
+|Source|http://www.TiddlyTools.com/#SearchOptionsPlugin|
+|Documentation|http://www.TiddlyTools.com/#SearchOptionsPluginInfo|
+|Version|3.0.3|
+|Author|Eric Shulman - ELS Design Studios|
+|License|http://www.TiddlyTools.com/#LegalStatements &lt;br&gt;and [[Creative Commons Attribution-ShareAlike 2.5 License|http://creativecommons.org/licenses/by-sa/2.5/]]|
+|~CoreVersion|2.1|
+|Type|plugin|
+|Requires||
+|Overrides|Story.prototype.search, TiddlyWiki.prototype.search, config.macros.search.onKeyPress|
+|Options|##Configuration|
+|Description|extend core search function with additional user-configurable options|
+Adds extra options to core search function including selecting which data items to search, enabling/disabling incremental key-by-key searches, and generating a ''list of matching tiddlers'' instead of immediately displaying all matches.  This plugin also adds syntax for rendering 'search links' within tiddler content to embed one-click searches using pre-defined 'hard-coded' search terms.
+!!!!!Documentation
+&gt;see [[SearchOptionsPluginInfo]]
+!!!!!Configuration
+&lt;&lt;&lt;
+Search in:
+&lt;&lt;option chkSearchTitles&gt;&gt; titles &lt;&lt;option chkSearchText&gt;&gt; text &lt;&lt;option chkSearchTags&gt;&gt; tags &lt;&lt;option chkSearchFields&gt;&gt; fields &lt;&lt;option chkSearchShadows&gt;&gt; shadows
+&lt;&lt;option chkSearchHighlight&gt;&gt; Highlight matching text in displayed tiddlers
+&lt;&lt;option chkSearchList&gt;&gt; Show list of matches
+&lt;&lt;option chkSearchListTiddler&gt;&gt; Write list to [[SearchResults]] tiddler
+&lt;&lt;option chkSearchTitlesFirst&gt;&gt; Show title matches first
+&lt;&lt;option chkSearchByDate&gt;&gt; Sort matching tiddlers by modification date (most recent first)
+&lt;&lt;option chkIncrementalSearch&gt;&gt; Incremental key-by-key search: {{twochar{&lt;&lt;option txtIncrementalSearchMin&gt;&gt;}}} or more characters,  {{threechar{&lt;&lt;option txtIncrementalSearchDelay&gt;&gt;}}} msec delay
+&lt;&lt;option chkSearchExcludeTags&gt;&gt; Exclude tiddlers tagged with:
+{{editor{&lt;&lt;option txtSearchExcludeTags&gt;&gt;}}}
+&lt;&lt;&lt;
+!!!!!Revisions
+&lt;&lt;&lt;
+2009.01.09 [3.0.3] added chkSearchHighlight to optionally disable highlighting of matched text
+|please see [[SearchOptionsPluginInfo]] for additional revision details|
+2005.10.18 [1.0.0] Initial Release
+&lt;&lt;&lt;
+!!!!!Code
+***/
+//{{{
+version.extensions.SearchOptionsPlugin= {major: 3, minor: 0, revision: 3, date: new Date(2009,1,9)};
+
+var co=config.options; // abbrev
+if (co.chkSearchTitles===undefined) co.chkSearchTitles=true;
+if (co.chkSearchText===undefined) co.chkSearchText=true;
+if (co.chkSearchTags===undefined) co.chkSearchTags=true;
+if (co.chkSearchFields===undefined) co.chkSearchFields=true;
+if (co.chkSearchTitlesFirst===undefined) co.chkSearchTitlesFirst=true;
+if (co.chkSearchList===undefined) co.chkSearchList=true;
+if (co.chkSearchHighlight===undefined) co.chkSearchHighlight=true;
+if (co.chkSearchListTiddler===undefined) co.chkSearchListTiddler=false;
+if (co.chkSearchByDate===undefined) co.chkSearchByDate=false;
+if (co.chkIncrementalSearch===undefined) co.chkIncrementalSearch=true;
+if (co.chkSearchShadows===undefined) co.chkSearchShadows=true;
+if (co.txtIncrementalSearchDelay===undefined) co.txtIncrementalSearchDelay=500;
+if (co.txtIncrementalSearchMin===undefined) co.txtIncrementalSearchMin=3;
+if (co.chkSearchExcludeTags===undefined) co.chkSearchExcludeTags=true;
+if (co.txtSearchExcludeTags===undefined) co.txtSearchExcludeTags=&quot;excludeSearch&quot;;
+if (config.macros.search.reportTitle==undefined)
+	config.macros.search.reportTitle=&quot;SearchResults&quot;; // note: not a cookie!
+config.macros.search.label+=&quot;\xa0&quot;; // a little bit of space just because it looks better
+//}}}
+// // searchLink: {{{[search[text to find]] OR [search[text to display|text to find]]}}}
+//{{{
+config.formatters.push( {
+	name: &quot;searchLink&quot;,
+	match: &quot;\\[search\\[&quot;,
+	lookaheadRegExp: /\[search\[(.*?)(?:\|(.*?))?\]\]/mg,
+	prompt: &quot;search for: '%0'&quot;,
+	handler: function(w)
+	{
+		this.lookaheadRegExp.lastIndex = w.matchStart;
+		var lookaheadMatch = this.lookaheadRegExp.exec(w.source);
+		if(lookaheadMatch &amp;&amp; lookaheadMatch.index == w.matchStart) {
+			var label=lookaheadMatch[1];
+			var text=lookaheadMatch[2]||label;
+			var prompt=this.prompt.format([text]);
+			var btn=createTiddlyButton(w.output,label,prompt,
+				function(){story.search(this.getAttribute(&quot;searchText&quot;))},&quot;searchLink&quot;);
+			btn.setAttribute(&quot;searchText&quot;,text);
+			w.nextMatch = this.lookaheadRegExp.lastIndex;
+		}
+	}
+});
+//}}}
+// // incremental search uses option settings instead of hard-coded delay and minimum input values
+//{{{
+var fn=config.macros.search.onKeyPress;
+fn=fn.toString().replace(/500/g, &quot;config.options.txtIncrementalSearchDelay||500&quot;);
+fn=fn.toString().replace(/&gt; 2/g, &quot;&gt;=(config.options.txtIncrementalSearchMin||3)&quot;);
+eval(&quot;config.macros.search.onKeyPress=&quot;+fn);
+//}}}
+// // REPLACE story.search() for option to &quot;show search results in a list&quot;
+//{{{
+Story.prototype.search = function(text,useCaseSensitive,useRegExp)
+{
+	var co=config.options; // abbrev
+	var re=new RegExp(useRegExp ? text : text.escapeRegExp(),useCaseSensitive ? &quot;mg&quot; : &quot;img&quot;);
+	if (config.options.chkSearchHighlight) highlightHack=re;
+	var matches = store.search(re,co.chkSearchByDate?&quot;modified&quot;:&quot;title&quot;,&quot;&quot;);
+	if (co.chkSearchByDate) matches=matches.reverse(); // most recent first
+	var q = useRegExp ? &quot;/&quot; : &quot;'&quot;;
+	clearMessage();
+	if (!matches.length) {
+		if (co.chkSearchListTiddler) discardSearchResults();
+		displayMessage(config.macros.search.failureMsg.format([q+text+q]));
+	} else {
+		if (co.chkSearchList||co.chkSearchListTiddler) 
+			reportSearchResults(text,matches);
+		else {
+			var titles = []; for(var t=0; t&lt;matches.length; t++) titles.push(matches[t].title);
+			this.closeAllTiddlers(); story.displayTiddlers(null,titles);
+			displayMessage(config.macros.search.successMsg.format([matches.length, q+text+q]));
+		}
+	}
+	highlightHack = null;
+}
+//}}}
+// // REPLACE store.search() for enhanced searching/sorting options
+//{{{
+TiddlyWiki.prototype.search = function(searchRegExp,sortField,excludeTag)
+{
+	var co=config.options; // abbrev
+	var tids = this.reverseLookup(&quot;tags&quot;,excludeTag,false,sortField);
+
+	// eliminate tiddlers tagged with excluded tags
+	if (co.chkSearchExcludeTags&amp;&amp;co.txtSearchExcludeTags.length) {
+		var ex=co.txtSearchExcludeTags.readBracketedList();
+		var temp=[]; for(var t=tids.length-1; t&gt;=0; t--)
+			if (!tids[t].tags.containsAny(ex)) temp.push(tids[t]);
+		tids=temp;
+	}
+
+	// scan for matching titles first...
+	var results = [];
+	if (co.chkSearchTitles) {
+		for(var t=0; t&lt;tids.length; t++)
+			if(tids[t].title.search(searchRegExp)!=-1)
+				results.push(tids[t]);
+		if (co.chkSearchShadows)
+			for (var t in config.shadowTiddlers)
+				if ((t.search(searchRegExp)!=-1) &amp;&amp; !store.tiddlerExists(t))
+					results.push((new Tiddler()).assign(t,config.shadowTiddlers[t]));
+	}
+	// then scan for matching text, tags, or field data
+	for(var t=0; t&lt;tids.length; t++) {
+		if (co.chkSearchText &amp;&amp; tids[t].text.search(searchRegExp)!=-1)
+			results.pushUnique(tids[t]);
+		if (co.chkSearchTags &amp;&amp; tids[t].tags.join(&quot; &quot;).search(searchRegExp)!=-1)
+			results.pushUnique(tids[t]);
+		if (co.chkSearchFields &amp;&amp; store.forEachField!=undefined)
+			store.forEachField(tids[t],
+				function(tid,field,val) {
+					if (val.search(searchRegExp)!=-1) results.pushUnique(tids[t]);
+				},
+				true); // extended fields only
+	}
+	// then check for matching text in shadows
+	if (co.chkSearchShadows)
+		for (var t in config.shadowTiddlers)
+			if ((config.shadowTiddlers[t].search(searchRegExp)!=-1) &amp;&amp; !store.tiddlerExists(t))
+				results.pushUnique((new Tiddler()).assign(t,config.shadowTiddlers[t]));
+
+	// if not 'titles first', or sorting by modification date,
+	// re-sort results to so titles, text, tag and field matches are mixed together
+	if(!sortField) sortField = &quot;title&quot;;
+	var bySortField=function (a,b) {if(a[sortField] == b[sortField]) return(0); else return (a[sortField] &lt; b[sortField]) ? -1 : +1; }
+	if (!co.chkSearchTitlesFirst || co.chkSearchByDate) results.sort(bySortField);
+
+	return results;
+}
+//}}}
+// // HIJACK core {{{&lt;&lt;search&gt;&gt;}}} macro to add &quot;report&quot; and &quot;simple inline&quot; output
+//{{{
+config.macros.search.SOP_handler=config.macros.search.handler;
+config.macros.search.handler = function(place,macroName,params)
+{
+	// if &quot;report&quot;, use SearchOptionsPlugin report generator for inline output
+	if (params[1]&amp;&amp;params[1].substr(0,6)==&quot;report&quot;) {
+		var keyword=params[0];
+		var options=params[1].split(&quot;=&quot;)[1]; // split &quot;report=option+option+...&quot;
+		var heading=params[2]?params[2].unescapeLineBreaks():&quot;&quot;;
+		var matches=store.search(new RegExp(keyword.escapeRegExp(),&quot;img&quot;),&quot;title&quot;,&quot;excludeSearch&quot;);
+		if (matches.length) wikify(heading+window.formatSearchResults(keyword,matches,options),place);
+	} else if (params[1]) {
+		var keyword=params[0];
+		var heading=params[1]?params[1].unescapeLineBreaks():&quot;&quot;;
+		var seperator=params[2]?params[2].unescapeLineBreaks():&quot;, &quot;;
+		var matches=store.search(new RegExp(keyword.escapeRegExp(),&quot;img&quot;),&quot;title&quot;,&quot;excludeSearch&quot;);
+		if (matches.length) {
+			var out=[];
+			for (var m=0; m&lt;matches.length; m++) out.push(&quot;[[&quot;+matches[m].title+&quot;]]&quot;);
+			wikify(heading+out.join(seperator),place);
+		}
+	} else
+		config.macros.search.SOP_handler.apply(this,arguments);
+};
+//}}}
+// // SearchResults panel handling
+//{{{
+setStylesheet(&quot;.searchResults { padding:1em 1em 0 1em; }&quot;,&quot;searchResults&quot;); // matches std tiddler padding
+
+config.macros.search.createPanel=function(text,matches,body) {
+
+	function getByClass(e,c) { var d=e.getElementsByTagName(&quot;div&quot;);
+		for (var i=0;i&lt;d.length;i++) if (hasClass(d[i],c)) return d[i]; }
+	var panel=createTiddlyElement(null,&quot;div&quot;,&quot;searchPanel&quot;,&quot;searchPanel&quot;);
+	this.renderPanel(panel,text,matches,body);
+	var oldpanel=document.getElementById(&quot;searchPanel&quot;);
+	if (!oldpanel) { // insert new panel just above tiddlers
+		var da=document.getElementById(&quot;displayArea&quot;);
+		da.insertBefore(panel,da.firstChild);
+	} else { // if panel exists
+		var oldwrap=getByClass(oldpanel,&quot;searchResults&quot;);
+		var newwrap=getByClass(panel,&quot;searchResults&quot;);
+		// if no prior content, just insert new content
+		if (!oldwrap) oldpanel.insertBefore(newwrap,null);
+		else {	// swap search results content but leave containing panel intact
+			oldwrap.style.display='block'; // unfold wrapper if needed
+			var i=oldwrap.getElementsByTagName(&quot;input&quot;)[0]; // get input field
+			if (i) { var pos=this.getCursorPos(i); i.onblur=null; } // get cursor pos, ignore blur
+			oldpanel.replaceChild(newwrap,oldwrap);
+			panel=oldpanel; // use existing panel
+		} 
+	}
+	this.showPanel(true,pos);
+	return panel;
+}
+
+config.macros.search.renderPanel=function(panel,text,matches,body) {
+
+	var wrap=createTiddlyElement(panel,&quot;div&quot;,null,&quot;searchResults&quot;);
+	wrap.onmouseover = function(e){ addClass(this,&quot;selected&quot;); }
+	wrap.onmouseout = function(e){ removeClass(this,&quot;selected&quot;); }
+	// create toolbar: &quot;open all&quot;, &quot;fold/unfold&quot;, &quot;close&quot;
+	var tb=createTiddlyElement(wrap,&quot;div&quot;,null,&quot;toolbar&quot;);
+	var b=createTiddlyButton(tb, &quot;open all&quot;, &quot;open all matching tiddlers&quot;, function() {
+		story.displayTiddlers(null,this.getAttribute(&quot;list&quot;).readBracketedList()); return false; },&quot;button&quot;);
+	var list=&quot;&quot;; for(var t=0;t&lt;matches.length;t++) list+='[['+matches[t].title+']] ';
+	b.setAttribute(&quot;list&quot;,list);
+	var b=createTiddlyButton(tb, &quot;fold&quot;, &quot;toggle display of search results&quot;, function() {
+		config.macros.search.foldPanel(this); return false; },&quot;button&quot;);
+	var b=createTiddlyButton(tb, &quot;close&quot;, &quot;dismiss search results&quot;,	function() {
+		config.macros.search.showPanel(false); return false; },&quot;button&quot;);
+	createTiddlyText(createTiddlyElement(wrap,&quot;div&quot;,null,&quot;title&quot;),&quot;Search for: &quot;+text); // title
+	wikify(body,createTiddlyElement(wrap,&quot;div&quot;,null,&quot;viewer&quot;)); // report
+	return panel;
+}
+
+config.macros.search.showPanel=function(show,pos) {
+	var panel=document.getElementById(&quot;searchPanel&quot;);
+	var i=panel.getElementsByTagName(&quot;input&quot;)[0];
+	i.onfocus=show?function(){config.macros.search.stayFocused(true);}:null;
+	i.onblur=show?function(){config.macros.search.stayFocused(false);}:null;
+	if (show &amp;&amp; panel.style.display==&quot;block&quot;) { // if shown, grab focus, restore cursor
+		if (i&amp;&amp;this.stayFocused()) { i.focus(); this.setCursorPos(i,pos); }
+		return;
+	}
+	if(!config.options.chkAnimate) {
+		panel.style.display=show?&quot;block&quot;:&quot;none&quot;;
+		if (!show) { removeChildren(panel); config.macros.search.stayFocused(false); }
+	} else {
+		var s=new Slider(panel,show,false,show?&quot;none&quot;:&quot;children&quot;);
+		s.callback=function(e,p){e.style.overflow=&quot;visible&quot;;}
+		anim.startAnimating(s);
+	}
+	return panel;
+}
+
+config.macros.search.foldPanel=function(button) {
+	var d=document.getElementById(&quot;searchPanel&quot;).getElementsByTagName(&quot;div&quot;);
+	for (var i=0;i&lt;d.length;i++) if (hasClass(d[i],&quot;viewer&quot;)) var v=d[i]; if (!v) return;
+	var show=v.style.display==&quot;none&quot;;
+	if(!config.options.chkAnimate)
+		v.style.display=show?&quot;block&quot;:&quot;none&quot;;
+	else {
+		var s=new Slider(v,show,false,&quot;none&quot;);
+		s.callback=function(e,p){e.style.overflow=&quot;visible&quot;;}
+		anim.startAnimating(s);
+	}
+	button.innerHTML=show?&quot;fold&quot;:&quot;unfold&quot;;
+	return false;
+}
+
+config.macros.search.stayFocused=function(keep) { // TRUE/FALSE=set value, no args=get value
+	if (keep===undefined) return this.keepReportInFocus;
+	this.keepReportInFocus=keep;
+	return keep
+}	
+
+config.macros.search.getCursorPos=function(i) {
+	var s=0; var e=0; if (!i) return { start:s, end:e };
+	try {
+		if (i.setSelectionRange) // FF
+			{ s=i.selectionStart; e=i.selectionEnd; }
+		if (document.selection &amp;&amp; document.selection.createRange) { // IE
+			var r=document.selection.createRange().duplicate();
+			var len=r.text.length; s=0-r.moveStart('character',-100000); e=s+len;
+		}
+	}catch(e){};
+	return { start:s, end:e };
+}
+config.macros.search.setCursorPos=function(i,pos) {
+	if (!i||!pos) return; var s=pos.start; var e=pos.end;
+	if (i.setSelectionRange) //FF
+		i.setSelectionRange(s,e);
+	if (i.createTextRange) // IE
+		{ var r=i.createTextRange(); r.collapse(true); r.moveStart(&quot;character&quot;,s); r.select(); }
+}
+//}}}
+// // SearchResults report generation
+// note: these functions are defined globally, so they can be more easily redefined to customize report formats//
+//{{{
+if (!window.reportSearchResults) window.reportSearchResults=function(text,matches)
+{
+	var cms=config.macros.search; // abbrev
+	var body=window.formatSearchResults(text,matches);
+	if (!config.options.chkSearchListTiddler) // show #searchResults panel
+		window.scrollTo(0,ensureVisible(cms.createPanel(text,matches,body)));
+	else { // write [[SearchResults]] tiddler
+		var title=cms.reportTitle;
+		var who=config.options.txtUserName;
+		var when=new Date();
+		var tags=&quot;excludeLists excludeSearch temporary&quot;;
+		var tid=store.getTiddler(title); if (!tid) tid=new Tiddler();
+		tid.set(title,body,who,when,tags);
+		store.addTiddler(tid);
+		// story.closeTiddler(title);
+		story.displayTiddler(null,title);
+	}
+}
+
+if (!window.formatSearchResults) window.formatSearchResults=function(text,matches,opt)
+{
+	var body='';
+	var title=config.macros.search.reportTitle
+	var q = config.options.chkRegExpSearch ? &quot;/&quot; : &quot;'&quot;;
+	if (!opt) var opt=&quot;all&quot;;
+	var parts=opt.split(&quot;+&quot;);
+	for (var i=0; i&lt;parts.length; i++) { var p=parts[i].toLowerCase();
+		if (p==&quot;again&quot;||p==&quot;all&quot;)   body+=window.formatSearchResults_again(text,matches);
+		if (p==&quot;summary&quot;||p==&quot;all&quot;) body+=window.formatSearchResults_summary(text,matches);
+		if (p==&quot;list&quot;||p==&quot;all&quot;)    body+=window.formatSearchResults_list(text,matches);
+		if (p==&quot;buttons&quot;||p==&quot;all&quot;) body+=window.formatSearchResults_buttons(text,matches);
+	}
+	return body;
+}
+
+if (!window.formatSearchResults_again) window.formatSearchResults_again=function(text,matches)
+{
+	var title=config.macros.search.reportTitle
+	var body='';
+	// search again
+	body+='{{span{&lt;&lt;search &quot;'+text.replace(/&quot;/g,'&amp;#x22;')+'&quot;&gt;&gt; /%\n';
+	body+='%/&lt;html&gt;&lt;input type=&quot;button&quot; value=&quot;search again&quot;';
+	body+=' onclick=&quot;var t=this.parentNode.parentNode.getElementsByTagName(\'input\')[0];';
+	body+=' config.macros.search.doSearch(t); return false;&quot;&gt;';
+	body+=' &lt;a href=&quot;javascript:;&quot; onclick=&quot;';
+	body+=' var e=this.parentNode.nextSibling;';
+	body+=' var show=e.style.display!=\'block\';';
+	body+=' if(!config.options.chkAnimate) e.style.display=show?\'block\':\'none\';';
+	body+=' else anim.startAnimating(new Slider(e,show,false,\'none\'));';
+	body+=' return false;&quot;&gt;options...&lt;/a&gt;';
+	body+='&lt;/html&gt;@@display:none;border-left:1px dotted;margin-left:1em;padding:0;padding-left:.5em;font-size:90%;/%\n';
+	body+='	%/&lt;&lt;option chkSearchTitles&gt;&gt;titles /%\n';
+	body+='	%/&lt;&lt;option chkSearchText&gt;&gt;text /%\n';
+	body+='	%/&lt;&lt;option chkSearchTags&gt;&gt;tags /%\n';
+	body+='	%/&lt;&lt;option chkSearchFields&gt;&gt;fields /%\n';
+	body+='	&lt;&lt;option chkCaseSensitiveSearch&gt;&gt;case-sensitive /%\n';
+	body+='	%/&lt;&lt;option chkRegExpSearch&gt;&gt;text patterns /%\n';
+	body+='	%/&lt;&lt;option chkSearchByDate&gt;&gt;sorted by date\n';
+	body+='	&lt;&lt;option chkSearchHighlight&gt;&gt; highlight matching text in displayed tiddlers\n';
+	body+='	&lt;&lt;option chkIncrementalSearch&gt;&gt;incremental key-by-key search: /%\n';
+	body+='	%/{{twochar{&lt;&lt;option txtIncrementalSearchMin&gt;&gt;}}} or more characters, /%\n';
+	body+='	%/{{threechar{&lt;&lt;option txtIncrementalSearchDelay&gt;&gt;}}} msec delay\n';
+	body+='@@}}}\n\n';
+	return body;
+}
+
+if (!window.formatSearchResults_summary) window.formatSearchResults_summary=function(text,matches)
+{
+	// summary: nn tiddlers found matching '...', options used
+	var body='';
+	var co=config.options; // abbrev
+	var title=config.macros.search.reportTitle
+	var q = co.chkRegExpSearch ? &quot;/&quot; : &quot;'&quot;;
+	body+=&quot;''&quot;+config.macros.search.successMsg.format([matches.length,q+&quot;{{{&quot;+text+&quot;}}}&quot;+q])+&quot;''\n&quot;;
+	var opts=[];
+	if (co.chkSearchTitles) opts.push(&quot;titles&quot;);
+	if (co.chkSearchText) opts.push(&quot;text&quot;);
+	if (co.chkSearchTags) opts.push(&quot;tags&quot;);
+	if (co.chkSearchFields) opts.push(&quot;fields&quot;);
+	if (co.chkSearchShadows) opts.push(&quot;shadows&quot;);
+	body+=&quot;~~&amp;nbsp; searched in &quot;+opts.join(&quot; + &quot;)+&quot;~~\n&quot;;
+	body+=(co.chkCaseSensitiveSearch||co.chkRegExpSearch?&quot;^^&amp;nbsp; using &quot;:&quot;&quot;)
+		+(co.chkCaseSensitiveSearch?&quot;case-sensitive &quot;:&quot;&quot;)
+		+(co.chkRegExpSearch?&quot;pattern &quot;:&quot;&quot;)
+		+(co.chkCaseSensitiveSearch||co.chkRegExpSearch?&quot;matching^^\n&quot;:&quot;&quot;);
+	return body;
+}
+
+if (!window.formatSearchResults_list) window.formatSearchResults_list=function(text,matches)
+{
+	// bullet list of links to matching tiddlers
+	var body='';
+	var pattern=co.chkRegExpSearch?text:text.escapeRegExp();
+	var sensitive=co.chkCaseSensitiveSearch?&quot;mg&quot;:&quot;img&quot;;
+	var link='{{tiddlyLinkExisting{&lt;html&gt;&lt;nowiki&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;'
+		+'if(config.options.chkSearchHighlight)'
+		+'	highlightHack=new RegExp(\x27'+pattern+'\x27,\x27'+sensitive+'\x27);'
+		+'story.displayTiddler(null,\x27%0\x27);'
+		+'highlightHack = null; return false;'
+		+'&quot; title=&quot;%1&quot;&gt;%0&lt;/a&gt;&lt;/html&gt;}}}';
+	for(var t=0;t&lt;matches.length;t++) {
+		var date=config.options.chkSearchByDate?(matches[t].modified.formatString('YYYY.0MM.0DD 0hh:0mm')+&quot; &quot;):&quot;&quot;;
+		var tid=store.getTiddler(matches[t].title); if (tid) var tip=tid.getSubtitle();
+		body+=&quot;* &quot;+date+link.format([matches[t].title,tip||''])+'\n';
+	}
+	return body;
+}
+
+if (!window.formatSearchResults_buttons) window.formatSearchResults_buttons=function(text,matches)
+{
+	// embed buttons only if writing SearchResults to tiddler
+	if (!config.options.chkSearchListTiddler) return &quot;&quot;;
+	// &quot;open all&quot; button
+	var title=config.macros.search.reportTitle;
+	var body=&quot;&quot;;
+	body+=&quot;@@diplay:block;&lt;html&gt;&lt;input type=\&quot;button\&quot; href=\&quot;javascript:;\&quot; &quot;
+		+&quot;onclick=\&quot;story.displayTiddlers(null,[&quot;;
+	for(var t=0;t&lt;matches.length;t++)
+		body+=&quot;'&quot;+matches[t].title.replace(/\'/mg,&quot;\\'&quot;)+&quot;'&quot;+((t&lt;matches.length-1)?&quot;, &quot;:&quot;&quot;);
+	body+=&quot;],1);\&quot; accesskey=\&quot;O\&quot; value=\&quot;open all matching tiddlers\&quot;&gt;&lt;/html&gt; &quot;;
+	// &quot;discard SearchResults&quot; button
+	body+=&quot;&lt;html&gt;&lt;input type=\&quot;button\&quot; href=\&quot;javascript:;\&quot; &quot;
+		+&quot;onclick=\&quot;discardSearchResults()\&quot; value=\&quot;discard &quot;+title+&quot;\&quot;&gt;&lt;/html&gt;&quot;;
+	body+=&quot;@@\n&quot;;
+	return body;
+}
+
+if (!window.discardSearchResults) window.discardSearchResults=function()
+{
+	// remove the tiddler
+	story.closeTiddler(config.macros.search.reportTitle);
+	store.deleteTiddler(config.macros.search.reportTitle);
+	store.notify(config.macros.search.reportTitle,true);
+}
+//}}}</pre>
+</div>
+<div title="SearchResults" modifier="Isaac Liu" created="200901180231" modified="200901180231" tags="excludeLists excludeSearch temporary">
+<pre>{{span{&lt;&lt;search &quot;Isaac&quot;&gt;&gt; /%
+%/&lt;html&gt;&lt;input type=&quot;button&quot; value=&quot;search again&quot; onclick=&quot;var t=this.parentNode.parentNode.getElementsByTagName('input')[0]; config.macros.search.doSearch(t); return false;&quot;&gt; &lt;a href=&quot;javascript:;&quot; onclick=&quot; var e=this.parentNode.nextSibling; var show=e.style.display!='block'; if(!config.options.chkAnimate) e.style.display=show?'block':'none'; else anim.startAnimating(new Slider(e,show,false,'none')); return false;&quot;&gt;options...&lt;/a&gt;&lt;/html&gt;@@display:none;border-left:1px dotted;margin-left:1em;padding:0;padding-left:.5em;font-size:90%;/%
+	%/&lt;&lt;option chkSearchTitles&gt;&gt;titles /%
+	%/&lt;&lt;option chkSearchText&gt;&gt;text /%
+	%/&lt;&lt;option chkSearchTags&gt;&gt;tags /%
+	%/&lt;&lt;option chkSearchFields&gt;&gt;fields /%
+	&lt;&lt;option chkCaseSensitiveSearch&gt;&gt;case-sensitive /%
+	%/&lt;&lt;option chkRegExpSearch&gt;&gt;text patterns /%
+	%/&lt;&lt;option chkSearchByDate&gt;&gt;sorted by date
+	&lt;&lt;option chkSearchHighlight&gt;&gt; highlight matching text in displayed tiddlers
+	&lt;&lt;option chkIncrementalSearch&gt;&gt;incremental key-by-key search: /%
+	%/{{twochar{&lt;&lt;option txtIncrementalSearchMin&gt;&gt;}}} or more characters, /%
+	%/{{threechar{&lt;&lt;option txtIncrementalSearchDelay&gt;&gt;}}} msec delay
+%/@@}}}
+
+''3 tiddlers found matching '{{{Isaac}}}'''
+~~&amp;nbsp; searched in titles + text + tags + fields~~
+* {{tiddlyLinkExisting{&lt;html&gt;&lt;nowiki&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;if(config.options.chkSearchHighlight)	highlightHack=new RegExp('Isaac','img');story.displayTiddler(null,'contentFooter');highlightHack = null; return false;&quot; title=&quot;contentFooter - Isaac Liu, Sat Jan 17 13:07:00 2009&quot;&gt;contentFooter&lt;/a&gt;&lt;/html&gt;}}}
+* {{tiddlyLinkExisting{&lt;html&gt;&lt;nowiki&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;if(config.options.chkSearchHighlight)	highlightHack=new RegExp('Isaac','img');story.displayTiddler(null,'References');highlightHack = null; return false;&quot; title=&quot;References - Hiren Patel, Sat Jan 17 04:48:00 2009&quot;&gt;References&lt;/a&gt;&lt;/html&gt;}}}
+* {{tiddlyLinkExisting{&lt;html&gt;&lt;nowiki&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;if(config.options.chkSearchHighlight)	highlightHack=new RegExp('Isaac','img');story.displayTiddler(null,'People');highlightHack = null; return false;&quot; title=&quot;People - Hiren Patel, Sat Jan 17 05:01:00 2009&quot;&gt;People&lt;/a&gt;&lt;/html&gt;}}}
+@@diplay:block;&lt;html&gt;&lt;input type=&quot;button&quot; href=&quot;javascript:;&quot; onclick=&quot;story.displayTiddlers(null,['contentFooter', 'References', 'People'],1);&quot; accesskey=&quot;O&quot; value=&quot;open all matching tiddlers&quot;&gt;&lt;/html&gt; &lt;html&gt;&lt;input type=&quot;button&quot; href=&quot;javascript:;&quot; onclick=&quot;discardSearchResults()&quot; value=&quot;discard SearchResults&quot;&gt;&lt;/html&gt;@@
+</pre>
+</div>
+<div title="Settings" modifier="Isaac Liu" created="200901171833" modified="200901180224" tags="excludeSearch" changecount="7">
 <pre>&lt;&lt;tiddler SideBarOptions&gt;&gt;
 +++[index »]&lt;&lt;tiddler SideBarTabs&gt;&gt;===</pre>
 </div>
@@ -2188,7 +2662,7 @@ Even if you do not have SVN access, you can still check out the source anonymous
 svn co svn://source.eecs.berkeley.edu/chess/pret/trunk/pret_iss
 }}}</pre>
 </div>
-<div title="StyleSheet" modifier="Isaac Liu" created="200709121208" modified="200901172112" tags="MochaTheme" changecount="46">
+<div title="StyleSheet" modifier="Isaac Liu" created="200709121208" modified="200901180223" tags="MochaTheme excludeSearch" changecount="47">
 <pre>/*{{{*/
 /*Mocha TiddlyWiki Theme*/
 /*Version 1.0*/
@@ -2551,7 +3025,7 @@ h3 {font-size: 14px;}
 #header {display:inline-block;}
 /*}}}*/</pre>
 </div>
-<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901172118" changecount="63">
+<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901180220" tags="excludeSearch" changecount="65">
 <pre>/*{{{*/
 .searchButton {display: block;}
 #siteNav {float: right; font-size: .9em;}
@@ -2593,7 +3067,7 @@ h3 {font-size: 14px;}
 
 #noticeBoard {font-size: 10px;}
 
-#contentHeader {background:#575352; color:#BFB6B3; clear: both; padding: 1.5em 0em .5em 1em;}
+#contentHeader {background:#575352; color:#BFB6B3; clear: both; padding: 0.25em 1em 0.5em 1em;}
 
 		
 		#contentHeader a {
@@ -2807,8 +3281,8 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 
 //}}}</pre>
 </div>
-<div title="ToolbarCommands" modifier="Isaac Liu" created="200901171836" modified="200901172033" changecount="5">
-<pre>|~ViewToolbar|+editTiddler permalink &lt;&lt;back&gt;&gt; &lt;&lt;forward&gt;&gt;|
+<div title="ToolbarCommands" modifier="Isaac Liu" created="200901171836" modified="200901180222" tags="excludeSearch" changecount="7">
+<pre>|~ViewToolbar|+editTiddler permalink|
 |~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|</pre>
 </div>
 <div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901171231" tags="Usage" changecount="8">
@@ -2821,7 +3295,7 @@ $ ./src/pret &lt;path-to-srec-folder&gt; &lt;# cycles&gt;
 }}}
 </pre>
 </div>
-<div title="ViewTemplate" modifier="Isaac Liu" created="200809271550" modified="200901171912" changecount="7">
+<div title="ViewTemplate" modifier="Isaac Liu" created="200809271550" modified="200901180221" tags="excludeSearch" changecount="8">
 <pre>&lt;!--{{{--&gt;
 &lt;div style='float: right;' class='toolbar' macro='toolbar [[ToolbarCommands::ViewToolbar]]'&gt;&lt;/div&gt;
 &lt;div class='title' macro='view title'&gt;&lt;/div&gt;
@@ -2833,8 +3307,8 @@ $ ./src/pret &lt;path-to-srec-folder&gt; &lt;# cycles&gt;
 <div title="contentFooter" modifier="Isaac Liu" created="200701130013" modified="200901172107" tags="MochaTheme" changecount="5">
 <pre>Copyright © 2008 - 2009 UC Regents; all rights reserved. | Site designed by [[Isaac Liu|http://www.isaacliu.info]] | Powered by [[TiddlyWiki|http://www.tiddlywiki.com]]</pre>
 </div>
-<div title="contentHeader" modifier="Isaac Liu" created="200901171934" modified="200901171940" changecount="3">
-<pre></pre>
+<div title="contentHeader" modifier="Isaac Liu" created="200901171934" modified="200901180131" changecount="4">
+<pre>UC Berkeley EECS Dept.</pre>
 </div>
 <div title="coreTweaks" modifier="Isaac Liu" created="200901171624" modified="200901171906" tags="systemConfig" changecount="6">
 <pre>/*{{{*/
