@@ -1552,11 +1552,10 @@ function $() {
 }
 //}}}</pre>
 </div>
-<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901181858" tags="excludeSearch" changecount="22">
+<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901181931" tags="excludeSearch" changecount="23">
 <pre>!!''Links''
 [[University of California, Berkeley, EECS Dept.|http://eecs.berkeley.edu]]
 [[University of Columbia, CS Dept.|http://www.cs.columbia.edu/]] 
-[[CHESS|http://chess.eecs.berkeley.edu]]
 [[PRET|http://chess.eecs.berkeley.edu/pret/]]
 [[Ptolemy|http://ptolemy.eecs.berkeley.edu]]
 </pre>
@@ -1928,8 +1927,8 @@ if (version.major+.1*version.minor+.01*version.revision&gt;=2.2) {
 }
 //}}}</pre>
 </div>
-<div title="NoticeBoard" modifier="Isaac Liu" created="200701130013" modified="200901181852" tags="MochaTheme" changecount="8">
-<pre>[img[chesslogo.jpg]][img[callogo.jpg]][img[culogo.jpg]]
+<div title="NoticeBoard" modifier="Isaac Liu" created="200701130013" modified="200901181934" tags="MochaTheme" changecount="11">
+<pre>[img[chesslogo.jpg][http://chess.eecs.berkeley.edu]][img[callogo.jpg][http://www.berkeley.edu]][img[culogo.jpg][http://www.columbia.edu]]
 Last Updated: 
 Saturday, 17 January, 2009
 </pre>
@@ -1937,9 +1936,9 @@ Saturday, 17 January, 2009
 <div title="PRET_ISS" modifier="YourName" created="200901171218" changecount="3">
 <pre>Environment variable set to the directory of the PRET simulator.</pre>
 </div>
-<div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200901181913" tags="MochaTheme excludeSearch" changecount="73">
+<div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200901181939" tags="MochaTheme excludeSearch" changecount="74">
 <pre>&lt;!--{{{--&gt;
-&lt;div id='header' class='header' macro='gradient vert [[ColorPalette::PrimaryMid]] [[ColorPalette::SecondaryPale]]'&gt;
+&lt;div id='header' class='header'&gt;
 &lt;div id='contentHeader' refresh='content' tiddler='contentHeader' &gt;&lt;/div&gt;
 &lt;div class='headerShadow' style=&quot;width: 100%&quot;&gt;
 &lt;span class='searchBar' macro='search'&gt;&lt;/span&gt;&amp;nbsp;
@@ -2665,7 +2664,7 @@ Even if you do not have SVN access, you can still check out the source anonymous
 svn co svn://source.eecs.berkeley.edu/chess/pret/trunk/pret_iss
 }}}</pre>
 </div>
-<div title="StyleSheet" modifier="Isaac Liu" created="200709121208" modified="200901181916" tags="MochaTheme excludeSearch" changecount="56">
+<div title="StyleSheet" modifier="Isaac Liu" created="200709121208" modified="200901181938" tags="MochaTheme excludeSearch" changecount="57">
 <pre>/*{{{*/
 /*Mocha TiddlyWiki Theme*/
 /*Version 1.0*/
@@ -2701,7 +2700,6 @@ border-bottom: 4px solid #948979;
 			margin-bottom: 30px;
 			//background-color: #FFF;
                         margin-left: 10px;
-                        color: #fff;
 }
 
 .siteTitle a{color:#CC6633; border-bottom:1px dotted #cc6633;}
@@ -2710,7 +2708,6 @@ border-bottom: 4px solid #948979;
 	font-size: 1.0em;
         display: block;
         margin: .5em 3em; color: #999999;
-        color: #666;
 }
 
 #mainMenu {
@@ -3030,7 +3027,7 @@ h3 {font-size: 14px;}
 #header {display:inline-block;}
 /*}}}*/</pre>
 </div>
-<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901181915" tags="excludeSearch" changecount="79">
+<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901181938" tags="excludeSearch" changecount="82">
 <pre>/*{{{*/
 .searchButton {display: block;}
 #siteNav {font-size: .9em;}
@@ -3072,7 +3069,7 @@ h3 {font-size: 14px;}
 
 #noticeBoard {font-size: 10px;}
 
-#contentHeader {background:transparent; color:#BFB6B3; clear: both; padding: 0.25em 1em 0.5em 1em;}
+#contentHeader {background:#575352; color:#BFB6B3; clear: both; padding: 0.25em 1em 0.5em 1em;}
 
 		
 		#contentHeader a {
@@ -3090,7 +3087,7 @@ h3 {font-size: 14px;}
 			border: 1px solid #CCC;		margin-right:3px;
 }
 
-#contentHeader {color: [[ColorPalette::SecondaryMid]];}
+.siteSubtitle { color: #666; }
 /*}}}*/</pre>
 </div>
 <div title="SystemC" modifier="YourName" created="200901171218" changecount="3">
