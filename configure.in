@@ -94,6 +94,7 @@ AC_SUBST(PYMOD)
 
 # Check the target so that we can appropriately add the suffix for SystemC
 # Hack to get it to work under Darwin which does not support uname -o
+# This is extracted from the SystemC install scripts.
 CXX_COMP=`basename $CXX`
 UNAME_MAC=`uname -s`
 UNAME_TARGET=
