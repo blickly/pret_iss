@@ -376,21 +376,11 @@ void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
             // printf("Should have written %d  to timer %d\n", hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
             break;
         case SREG_CP:
-            //            cout << "except:: SREG_CP write special registers" << endl;
             /*FIXME: Hiren More DMA to its own arch.version */
-            // To a memory source address.
-            if (hardware_thread->inst.get_rd() == 0) {
-                //                cout << "except:: memory source, tid: " << hardware_thread->id << ", value: " << hex << hardware_thread->inst.get_alu_result() << endl;
                 coproc_dma->set_mem_source(hardware_thread->get_id(), hardware_thread->inst.get_alu_result());
-            }
-
-            // To a spm target address. Start the transfer.
-            if (hardware_thread->inst.get_rd() == 1) {
-                //                cout << "except:: SPM target, tid: " << hardware_thread->id << ", value: " << hex << hardware_thread->inst.get_alu_result() << endl;
-                coproc_dma->set_spm_target(hardware_thread->get_id(), hardware_thread->inst.get_alu_result());
+                coproc_dma->set_spm_target(hardware_thread->get_id(), hardware_thread->inst.get_op3_value());
                 coproc_dma->make_transfer(hardware_thread);
-            }
-            break;
+                break;
         default:
             cout << "THIS SHOULD NEVER HAPPEN" << endl;
             break;

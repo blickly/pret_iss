@@ -225,11 +225,11 @@
  (*((volatile int*)0x80000600) = (c))
 
 #define DMAMV( mem_addr, spm_addr )                \
-   asm volatile ("mov %0, %%g1; .word 0xC1A00001;" \
-                 "mov %1, %%g1; .word 0xC3A00001;" \
+   asm volatile ("mov %0, %%g1; mov %1, %%g2;"     \
+                 ".word 0xC5A00001;"               \
                   : /* no outputs */               \
                   : "r" (mem_addr), "r" (spm_addr) \
-                  : "g1")
+                  : "g1", "g2")
 
 //#ifndef _DEADLINE_H
 //#define _DEADLINE_H
