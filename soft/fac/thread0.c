@@ -1,11 +1,16 @@
+/* This Thread sends commands to MMC card(which here in is emulated by thread 1).
 
+	Created by Devesh Dedhia
+
+**********************************************************************************/
+
+ 
 #include"mmc_init.c"
-//#include"globals.h"
 #include<stdio.h>
 #include"error.h"
 
-//#define END_SIM \
-  //asm(".word 0x22222222");
+#define END_SIM \
+asm(".word 0x22222222");
 
 unsigned int Transaction_speed;
 unsigned int Access_time;
@@ -14,11 +19,11 @@ void intialize_global_parameters();
 int main(){
 	intialize_global_parameters();
 	ErrorCode_t Error= NO_ERROR;
-	
-	printf("GO_TO_IDLE_STATE\n");
+
+	printf("Frequency set to 400KHz\n");
 	Error=SEND_GO_TO_IDLE_STATE();
 	if(Error!=NO_ERROR){		
-	printf("ERROR in response for GO_TO_IDLE_STATE command\n");
+	printf("ERROR in response for GO_TO_IDLE_STATE command\n\n");
 	return (1);
 	}	
 	//printf("SUCCESS for GO_TO_IDLE_STATE command\n\n");					
@@ -49,8 +54,9 @@ int main(){
 	{printf("MMC card with a transfer speeds less than 20Mhz are not supported");
 	}	
 	
-	Frequency_MMC=HIGH;				// set the frequency to 20MHz
-	
+	Frequency_MMC=HIGH;				
+
+	printf("Frequency set to 20MHz");
 	Access_time=Cal_Access_time(20);
 	if(Access_time>150000){
 	printf("MMC card with access times greater than 150000 clock cycles are not supported");
@@ -68,11 +74,9 @@ int main(){
 	return (1);
 	}	
 
-	printf("Read complete\n");	
+	printf("A block of 512 bytes read\n");	
 
-volatile char i = 1;
-	
-	while(i);
+	END_SIM;
 	return(0);
 }
 
