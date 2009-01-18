@@ -195,8 +195,7 @@ enum OP3_ARITHMETIC {
  */
 enum OP3_COPROC {
     // Coprocessor opcodes.
-    OP3_STC = 0x34,
-    OP3_CPOP1 = 0x36
+    OP3_MEM2SP = 0x34
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -246,7 +245,7 @@ enum SREG_MUX {
     SREG_WIM = 4,
     SREG_TBR = 5,
     SREG_DT = 6,
-    SREG_CP = 7
+    SREG_MEM2SP = 7
 };
 
 

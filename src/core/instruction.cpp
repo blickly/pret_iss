@@ -232,7 +232,6 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         cerr << "DETECTED DEADLINE INSTRUCTION IN WRONG PLACE\n" ;
         break;
     case OP3_WRY:
-
         _select_special_register = ((_rd != 0) ? SREG_ASR : SREG_Y);
         _write_special_registers = true;
         _aluop = ALU_XOR;
@@ -252,13 +251,6 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         _aluop = ALU_XOR;
         _write_special_registers = true;
         break;
-        // Perform the DMA transfer
-//  case OP3_CPOP1:
-//    cout << "COPROC: CPOP1" << endl;
-//    _write_special_registers = true;
-//    break;
-
-
     default:
         _unimplemented = true;
         break;
@@ -329,11 +321,11 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
         _select_special_register = SREG_DT;
         break;
         // These are opcodes added for DMA coprocessor instructions.
-    case OP3_STC:
+    case OP3_MEM2SP:
+        // FIXME: Why do deadline and DMA use _select_special_register?
         //        cout << "COPROC: STC" << endl;
         _aluop = ALU_ADD;
-        _select_special_register = SREG_CP;
-        _write_special_registers = true;
+        _select_special_register = SREG_MEM2SP;
         break;
     default:
         _unimplemented = true;
