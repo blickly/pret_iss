@@ -7,9 +7,9 @@
 // is able to execute faster than thread1 and win the race condition
 // on value.
 //#define raise_addr 0x40000000
-#define raise_addr 0x40001318
+#define raise_addr 0x40001310
 //#define lower_addr 0x40000000
-#define lower_addr 0x400013d8
+#define lower_addr 0x400013c8
 
 #define PERIOD 6000
 

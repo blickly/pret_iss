@@ -5,10 +5,11 @@
 // calculates the sum.  By putting it on the scratchpad, this thread
 // is able to execute faster than thread1 and win the race condition
 // on buf.
-#define loop_mem_addr 0x40000040 
+#define loop_mem_addr 0x40000060
 
 int main()
 {
+  DEAD(1000);
   int i;
   for (i = 0; i < 2; ++i) {  
     DEAD(2000);
