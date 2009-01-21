@@ -1036,10 +1036,10 @@ config.options.txtSearchExcludeTags = &quot;excludeSearch systemConfig script&qu
 <pre>[[Home]]</pre>
 </div>
 <div title="Direct Memory Access" modifier="Hiren Patel" created="200809282154" modified="200901171227" tags="DMA" changecount="19">
-<pre>Currently there is one method to load instructions and data into the scratchpads. That is to statically load the contents during initialization. 
+<pre>The current method to load instructions and data into the scratchpads is to statically load the contents during initialization. 
 
 ! Static Memory Allocation for Instruction and Data
-A static memory allocation map can be specified in text files. We have certain naming conventions; ''thread0.c'' has an instruction memory allocation file ''thread0.ispm'' and data memory allocation in file ''thread0.dspm''. Every thread can have a corresponding allocation file for instruction and/or data. The file format is simple. It accepts a pair of addresses that form an address range to be loaded into the scratchpad memories. If the allocation files exist in the directory with the SREC files, then they will be loaded; otherwise, no instructions and data are preloaded into the scratchpad memory.
+A static memory allocation map can be specified in text files. We have certain naming conventions; ''thread0.c'' has an instruction memory allocation file ''thread0.ispm'' and data memory allocation in file ''thread0.dspm''. Every thread can have a corresponding allocation file for instruction and/or data. The file format is simple. It accepts a pair of addresses that form an address range to be loaded into the scratchpad memories. The first address specifies the start of the allocation, and the second address specifies one past the end of the allocation. If the allocation files exist in the directory with the SREC files, then they will be loaded; otherwise, no instructions and data are preloaded into the scratchpad memory.
 !! Example of a simple ''thread0.ispm''
 {{{
 40000000  40009df4
