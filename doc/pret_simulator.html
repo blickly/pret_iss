@@ -954,7 +954,7 @@ csim&gt; run -1
 csim&gt; 
 }}}</pre>
 </div>
-<div title="Compiling" modifier="Hiren Patel" created="200809261830" modified="200901211529" tags="Compiling Source" changecount="49">
+<div title="Compiling" modifier="Hiren Patel" created="200809261830" modified="200901211540" tags="Compiling Source" changecount="50">
 <pre>* These instructions assume the user is using the ''bash'' shell.
 ! Untar Tarball
 * The distributed file must be untarred. The [[tar manual|http://www.gnu.org/software/tar/manual/index.html]] provides details on the tar command.
@@ -977,7 +977,7 @@ $ ./configure
 {{{
 $ make
 }}}
-* The PRET binary is compiled as &quot;$PRET_ISS/src/pret&quot;.
+* The PRET binary is compiled as &quot;$PRET_ISS/src/pret&quot;. Note that depending on the operating system used, the extension for this binary will differ. For example, on Cygwin the binary is compiled as ''$PRET_ISS/src/pret.exe''.
 ! Compiling PRET with SystemC
 * Please refer to installation instructions for SystemC on their website. 
 * Set another environment variable for SystemC.
@@ -1023,7 +1023,7 @@ Note that ''deadline.h'' contains the macros for defining the deadline instructi
 
 After successfully compiling your program, you will want to use the [[standalone simulator|Usage]], or debug with [[CSIM]]</pre>
 </div>
-<div title="Compiling Source" modifier="Hiren Patel" created="200901211502" modified="200901211532" changecount="11">
+<div title="Compiling Source" modifier="Hiren Patel" created="200901211502" modified="200901211541" changecount="12">
 <pre>* These instructions assume the user is using the ''bash'' shell.
 ! Compiling Source from SVN
 * Execute the ''bootstrap.sh'' script to generate ''configure''.
@@ -1045,7 +1045,7 @@ $ ./configure
 {{{
 $ make
 }}}
-* The PRET binary is compiled as &quot;$PRET_ISS/src/pret&quot;.
+* The PRET binary is compiled as &quot;$PRET_ISS/src/pret&quot;. Note that depending on the operating system used, the extension for this binary will differ. For example, on Cygwin the binary is compiled as ''$PRET_ISS/src/pret.exe''.
 ! Compiling PRET with SystemC
 * Please refer to installation instructions for SystemC on their website. 
 * Set another environment variable for SystemC.
@@ -3482,19 +3482,31 @@ $ mv out_fd.dmp out_fd.pbm.
 5. Use a PBM viewer to open the file.
 }}}</pre>
 </div>
-<div title="janne" modifier="Hiren Patel" created="200901210230" modified="200901211533" tags="Janne Example" changecount="12">
+<div title="janne" modifier="Hiren Patel" created="200901210230" modified="200901211550" tags="Janne Example" changecount="20">
 <pre>1. Go to the $PRET_ISS top directory.
 {{{
 $ cd $PRET_ISS
 }}}
 2. Compile the example.
+* When the source is untarred from the tarball:
 {{{
 $ ./scripts/compile_threads.py examples/janne/
 }}}
+* When the source is checked out from SVN:
+{{{
+$ ./scripts/compile_threads.py tests/tests/pret/dma/janne/janne/
+}}}
 3. Executing the example.
+* When the source is untarred from the tarball:
 {{{
 $ ./src/pret.exe examples/janne -1
-
+}}}
+* When the source is checked out from SVN:
+{{{
+$ ./src/pret.exe tests/tests/pret/dma/janne/janne/
+}}}
+4. Sample output
+{{{
 ----------------------------------------------------
 	PRET Configuration
 ----------------------------------------------------
