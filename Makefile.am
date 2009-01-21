@@ -44,7 +44,7 @@ dist-hook:
 # Copy Synchronization example
 	cp -r tests/tests/pret/dma/sync_example_cases/sync_example_cases $(distdir)/examples/
 # Copy graphic example
-	cp -r soft/graphic $(distdir)/examples/
+	cp -r tests/tests/pret/dma/graphic/graphic $(distdir)/examples/
 	cp -r tests $(distdir)
 	rm -f $(distdir)/tests/Makefile
 
