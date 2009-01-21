@@ -954,48 +954,44 @@ csim&gt; run -1
 csim&gt; 
 }}}</pre>
 </div>
-<div title="Compiling" modifier="YourName" created="200809261830" modified="200901210354" tags="Compiling Source" changecount="29">
-<pre>! Setup Environment Variables
-* Assuming a ''bash'' shell. 
+<div title="Compiling" modifier="Hiren Patel" created="200809261830" modified="200901211529" tags="Compiling Source" changecount="49">
+<pre>* These instructions assume the user is using the ''bash'' shell.
+! Untar Tarball
+* The distributed file must be untarred. The [[tar manual|http://www.gnu.org/software/tar/manual/index.html]] provides details on the tar command.
 {{{
-$ cd &lt;path-to-checkout&gt;/pret_iss
+$ tar -zxvf pret-1.0.tar.gz
+}}}
+! Setup Environment Variables
+{{{
+$ cd pret-1.0/
 $ export PRET_ISS=`pwd`
 }}}
-Note that `pwd` returns the current directory path so make sure to be in the directory where ''pret_iss'' was checked out. Alternatively, the ''PRET_ISS'' environment can be set permanently in ''.bashrc''. Please consult online bash manuals to do so. 
+Note that `pwd` returns the current directory path so make sure to be in the directory where ''pret-1.0'' tarball was untarred. Alternatively, the ''PRET_ISS'' environment can be set permanently in ''.bashrc''. Please consult online bash manuals to do so. 
 ! Compiling PRET 
-* Configure provides three options to consider:
-# {{{--disable-debugger}}}: To disable building the Python based debugger
-# {{{--enable-systemc}}}: Must be used when building with SystemC
-# {{{--enable-fpic}}}: Mainly used for building on 64bit machines 
-Configure with debugger.
+* The default configuration builds the C++ version of the simulator. 
+* Configure the default configuration.
 {{{
 $ ./configure 
 }}}
-* Make the simulator
+* Build the simulator.
 {{{
 $ make
 }}}
-* The PRET binary is compiled as &quot;$PRET_ISS/src/pret&quot;, and the debugger is located at &quot;$PRET_ISS/scripts/csim.py&quot;.
+* The PRET binary is compiled as &quot;$PRET_ISS/src/pret&quot;.
 ! Compiling PRET with SystemC
 * Please refer to installation instructions for SystemC on their website. 
 * Set another environment variable for SystemC.
 {{{
 $ export SYSTEMC=&lt;path-to-systemc&gt;
 }}}
-* Configure with SystemC and enable debugger
+*To use SystemC, the following option must be used with configure: {{{--enable-systemc}}}.
 {{{
 $ ./configure --enable-systemc 
 }}}
-* Make the simulator
+* Build the simulator.
 {{{
 $ make
 }}}
-! Compiling Source from SVN
-* Before the steps mentioned above, execute the script to generate the &quot;configure&quot; script.
-{{{
-$ ./bootstrap.sh
-}}}
-* Follow the above mentioned steps
 ! Trying Out the Simulator
 After compiling successfully, you can run the [[regression tests|Regression Tests]], or start compiling [[your own programs|Compiling Programs]] for the PRET architecture.</pre>
 </div>
@@ -1026,6 +1022,46 @@ We use a script to automatically compile and map the threads to the correct addr
 Note that ''deadline.h'' contains the macros for defining the deadline instructions. 
 
 After successfully compiling your program, you will want to use the [[standalone simulator|Usage]], or debug with [[CSIM]]</pre>
+</div>
+<div title="Compiling Source" modifier="Hiren Patel" created="200901211502" modified="200901211532" changecount="11">
+<pre>* These instructions assume the user is using the ''bash'' shell.
+! Compiling Source from SVN
+* Execute the ''bootstrap.sh'' script to generate ''configure''.
+{{{
+$ ./bootstrap.sh
+}}}
+! Setup Environment Variables
+{{{
+$ cd &lt;path-to-checkout&gt;/pret_iss
+$ export PRET_ISS=`pwd`
+}}}
+Note that ''&lt;path-to-checkout&gt;'' is the directory where the source was checked out from SVN. Also, note that `pwd` returns the current directory path so make sure to be in the ''&lt;path-to-checkout&gt;'' directory. Alternatively, the ''PRET_ISS'' environment can be set permanently in ''.bashrc''. Please consult online bash manuals to do so. 
+! Compiling PRET 
+* The default configuration builds the C++ version of the simulator. 
+{{{
+$ ./configure 
+}}}
+* Build the simulator.
+{{{
+$ make
+}}}
+* The PRET binary is compiled as &quot;$PRET_ISS/src/pret&quot;.
+! Compiling PRET with SystemC
+* Please refer to installation instructions for SystemC on their website. 
+* Set another environment variable for SystemC.
+{{{
+$ export SYSTEMC=&lt;path-to-systemc&gt;
+}}}
+*To use SystemC, the following option must be used with configure: {{{--enable-systemc}}}.
+{{{
+$ ./configure --enable-systemc 
+}}}
+* Build the simulator.
+{{{
+$ make
+}}}
+! Trying Out the Simulator
+After compiling successfully, you can run the [[regression tests|Regression Tests]], or start compiling [[your own programs|Compiling Programs]] for the PRET architecture.</pre>
 </div>
 <div title="Contact" modifier="Hiren Patel" created="200901161933" changecount="1">
 <pre>Visit [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
@@ -3446,7 +3482,7 @@ $ mv out_fd.dmp out_fd.pbm.
 5. Use a PBM viewer to open the file.
 }}}</pre>
 </div>
-<div title="janne" modifier="Hiren Patel" created="200901210230" modified="200901210236" tags="Janne Example" changecount="10">
+<div title="janne" modifier="Hiren Patel" created="200901210230" modified="200901211533" tags="Janne Example" changecount="12">
 <pre>1. Go to the $PRET_ISS top directory.
 {{{
 $ cd $PRET_ISS
