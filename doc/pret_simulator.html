@@ -1063,8 +1063,8 @@ $ make
 ! Trying Out the Simulator
 After compiling successfully, you can run the [[regression tests|Regression Tests]], or start compiling [[your own programs|Compiling Programs]] for the PRET architecture.</pre>
 </div>
-<div title="Contact" modifier="Hiren Patel" created="200901161933" changecount="1">
-<pre>Visit [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
+<div title="Contact" modifier="Hiren Patel" created="200901161933" modified="200901211728" changecount="2">
+<pre>Visit the [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
 </div>
 <div title="DefaultOptions" modifier="Isaac Liu" created="200901171752" modified="200901180224" tags="systemConfig" changecount="8">
 <pre>config.options.chkSearchListTiddler = true;
@@ -1101,6 +1101,9 @@ To load all instruction and data onto the scratchpad memories, we provide memory
 400F8000 40100000
 }}}
 </pre>
+</div>
+<div title="Download" modifier="Hiren Patel" created="200901211730" modified="200901211730" changecount="2">
+<pre>Download [[pret-1.0.tar.gz|http://chess.eecs.berkeley.edu/pret/src/pret1.0/pret-1.0.tar.gz]]</pre>
 </div>
 <div title="GotoPlugin" modifier="YourName" created="200901171610" tags="systemConfig" changecount="2">
 <pre>/***
@@ -2183,7 +2186,7 @@ Revisions:
 	}
 &lt;/script&gt;</pre>
 </div>
-<div title="Requirements" modifier="Hiren Patel" created="200809261818" modified="200901210252" tags="Requirements" changecount="19">
+<div title="Requirements" modifier="Hiren Patel" created="200809261818" modified="200901211727" tags="Requirements" changecount="20">
 <pre>! Supported Platforms
 The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-15), Linux, and Mac OSX. 
 ! Build Tools
@@ -2194,6 +2197,7 @@ The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-
 ! SPARC Toolchain
 # [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]]
 ! Optional
+We provide C++ and SystemC versions of the PRET simulator.  This enables the simulator to incorporate third-party hardware components defined using SystemC.
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
 </div>
 <div title="Running" modifier="Hiren Patel" created="200812300554" modified="200901210245" tags="Running" changecount="13">
@@ -3346,8 +3350,8 @@ $ ./src/pret &lt;path-to-srec-folder&gt; &lt;# cycles&gt;
 &lt;div class='tagClear'&gt;&lt;/div&gt;
 &lt;!--}}}--&gt;</pre>
 </div>
-<div title="contentFooter" modifier="Isaac Liu" created="200701130013" modified="200901172107" tags="MochaTheme" changecount="5">
-<pre>Copyright © 2008 - 2009 UC Regents; all rights reserved. | Site designed by [[Isaac Liu|http://www.isaacliu.info]] | Powered by [[TiddlyWiki|http://www.tiddlywiki.com]]</pre>
+<div title="contentFooter" modifier="Hiren Patel" created="200701130013" modified="200901211732" tags="MochaTheme" changecount="6">
+<pre>Copyright © 2008 - 2009 UC Regents; all rights reserved. </pre>
 </div>
 <div title="contentHeader" modifier="Isaac Liu" created="200901171934" modified="200901181847" changecount="5">
 <pre>University of California, Berkeley EECS Dept. &amp; University of Columbia CS Dept.</pre>
@@ -3401,19 +3405,31 @@ setFooter();
 
 //}}}</pre>
 </div>
-<div title="graphic" modifier="Hiren Patel" created="200901210238" changecount="10">
+<div title="graphic" modifier="Hiren Patel" created="200901210238" modified="200901211722" changecount="12">
 <pre>1. Go to the $PRET_ISS top directory.
 {{{
 $ cd $PRET_ISS
 }}}
 2. Compile the example.
+* When the source is untarred from the tarball:
 {{{
 $ ./scripts/compile_threads.py examples/graphic/
 }}}
+* When the source is checked out from SVN:
+{{{
+$ ./scripts/compile_threads.py tests/tests/pret/dma/graphic/graphic/
+}}}
 3. Executing the example.
+* When the source is untarred from the tarball:
 {{{
 $ ./src/pret.exe examples/graphic 450000000
-
+}}}
+* When the source is checked out from SVN:
+{{{
+$ ./src/pret.exe tests/tests/pret/dma/graphic/graphic/ 450000000
+}}}
+4. Sample output.
+{{{
 ----------------------------------------------------
 	PRET Configuration
 ----------------------------------------------------
@@ -3474,15 +3490,15 @@ thread[4], # instructions: 789474
 thread[5], , # cycles: 89999994
 thread[5], # instructions: 789473
 }}}
-4. Output file is stored in a dump out_fd.dmp. Rename to pbm file.
+5. Output file is stored in a dump out_fd.dmp. Rename to pbm file.
 {{{
 $ mv out_fd.dmp out_fd.pbm.
 }}}
 {{{
-5. Use a PBM viewer to open the file.
+6. Use a PBM viewer to open the file.
 }}}</pre>
 </div>
-<div title="janne" modifier="Hiren Patel" created="200901210230" modified="200901211550" tags="Janne Example" changecount="20">
+<div title="janne" modifier="Hiren Patel" created="200901210230" modified="200901211543" tags="Janne Example" changecount="18">
 <pre>1. Go to the $PRET_ISS top directory.
 {{{
 $ cd $PRET_ISS
@@ -3494,7 +3510,7 @@ $ ./scripts/compile_threads.py examples/janne/
 }}}
 * When the source is checked out from SVN:
 {{{
-$ ./scripts/compile_threads.py tests/tests/pret/dma/janne/janne/
+$ ./scripts/compile_threads.py tests/tests/pret/dma/janne/
 }}}
 3. Executing the example.
 * When the source is untarred from the tarball:
@@ -3503,7 +3519,7 @@ $ ./src/pret.exe examples/janne -1
 }}}
 * When the source is checked out from SVN:
 {{{
-$ ./src/pret.exe tests/tests/pret/dma/janne/janne/
+$ ./src/pret.exe tests/tests/pret/dma/janne/
 }}}
 4. Sample output
 {{{
@@ -3556,19 +3572,31 @@ thread[5], # instructions: 1000
 }}}
 </pre>
 </div>
-<div title="smile" modifier="Hiren Patel" created="200901210234" modified="200901210235" tags="smile Example" changecount="10">
+<div title="smile" modifier="Hiren Patel" created="200901210234" modified="200901211547" tags="smile Example" changecount="12">
 <pre>1. Go to the $PRET_ISS top directory.
 {{{
 $ cd $PRET_ISS
 }}}
 2. Compile the example.
+* When the source is untarred from the tarball:
 {{{
 $ ./scripts/compile_threads.py examples/smile/
 }}}
+* When the source is checked out from SVN:
+{{{
+$ ./scripts/compile_threads.py tests/tests/pret/sys/smile/smile/
+}}}
 3. Executing the example.
+* When the source is untarred from the tarball:
 {{{
 $ ./src/pret.exe examples/smile/ 60000000
-
+}}}
+* When the source is checked out from SVN:
+{{{
+$ ./src/pret.exe tests/tests/pret/sys/smile/smile/ 60000000
+}}}
+4. Sample output.
+{{{
 ----------------------------------------------------
         PRET Configuration
 ----------------------------------------------------
@@ -3635,19 +3663,31 @@ thread[5], , # cycles: 11999994
 thread[5], # instructions: 5148
 }}}</pre>
 </div>
-<div title="sync_example_cases" modifier="Hiren Patel" created="200901210237" changecount="10">
+<div title="sync_example_cases" modifier="Hiren Patel" created="200901210237" modified="200901211548" changecount="11">
 <pre>1. Go to the $PRET_ISS top directory.
 {{{
 $ cd $PRET_ISS
 }}}
 2. Compile the example.
+* When the source is untarred from the tarball:
 {{{
 $ ./scripts/compile_threads.py examples/sync_example_cases/
 }}}
+* When the source is checked out from SVN:
+{{{
+$ ./scripts/compile_threads.py tests/tests/pret/dma/sync_example_cases/
+}}}
 3. Executing the example.
+* When the source is untarred from the tarball:
 {{{
 $ ./src/pret.exe examples/sync_example_cases/ -1
-
+}}}
+* When the source is checked out from SVN:
+{{{
+$ ./src/pret.exe tests/tests/pret/dma/sync_example_cases/ -1
+}}}
+4. Sample output.
+{{{
 ----------------------------------------------------
 	PRET Configuration
 ----------------------------------------------------
