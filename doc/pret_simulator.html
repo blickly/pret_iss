@@ -934,7 +934,7 @@ config.macros.bibtex.handler = function(place,macroName,params) {
 // //===</pre>
 </div>
 <div title="CSIM" modifier="Hiren Patel" created="200812302256" modified="200901171230" tags="CSIM" changecount="10">
-<pre>A debugging interface to our simulator called CSIM is provided in the PRET release.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
+<pre>A debugging interface to our simulator called CSIM is provided in the PRET relaese.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
 
 From inside CSIM, one can type help to get a list of the valid commands.  Many of the commands use a similar syntax to TSIM, the simulator for the SPARC soft-core from Gaisler Research.  The most commonly used ones are as follows.
 * break/lbreak/unbreak: Create or remove breakpoints at a given address or label.
@@ -982,7 +982,7 @@ $ make
 {{{
 $ export SYSTEMC=&lt;path-to-systemc&gt;
 }}}
-* Configure PRET with SystemC and enable debugger
+* Configure with SystemC and enable debugger
 {{{
 $ ./configure --enable-systemc 
 }}}
@@ -1025,7 +1025,7 @@ Note that ''deadline.h'' contains the macros for inlining the deadline instructi
 </pre>
 </div>
 <div title="Contact" modifier="Hiren Patel" created="200901161933" changecount="1">
-<pre>Visit the [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
+<pre>Visit [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
 </div>
 <div title="DefaultOptions" modifier="Isaac Liu" created="200901171752" modified="200901180224" tags="systemConfig" changecount="8">
 <pre>config.options.chkSearchListTiddler = true;
@@ -1426,8 +1426,8 @@ config.macros.gotoTiddler= {
 	}
 //}}}</pre>
 </div>
-<div title="Home" modifier="Hiren Patel" created="200809260133" modified="200901181816" tags="Welcome" changecount="32">
-<pre>The PRET project is a collaborative effort led by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/]].
+<div title="Home" modifier="Hiren Patel" created="200809260133" modified="200901210221" tags="Welcome" changecount="35">
+<pre>The PRET project is a collaborative effort lead by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/]].
 
 This documentation provides information about installing, and running the PRET simulator. The most recent release documentation for the PRET simulator is at [[PRET Documentation |http://chess.eecs.berkeley.edu/pret/release]]
 </pre>
@@ -2151,26 +2151,15 @@ Revisions:
 ! Optional
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
 </div>
-<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200901171230" tags="Running" changecount="8">
-<pre>The pret executable is compiled in src/. The arguments for the simulator are a file name followed by a cycle number. The file name points to a file that contains the directory with the SREC files. The cycle number is optional and used to run the simulator for that many number of cycles. The file pointed by file name only needs the directory path.
+<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200901210241" tags="Running" changecount="12">
+<pre>The pret executable is compiled in $PRET_ISS/src/. [[Usage]] how to execute the simulator.
 
-Three examples are provided with this release. They are:
-# janne: A multimedia algorithm,
-# smile : An example using timing instructions that produces a smiley face,
-# sync_example_cases: A mutual exclusion example using timing instructions.
-# graphic: The video game graphic drawing.
-
-There are two steps in running the examples. The first is to compile the example, and the second is to use the PRET simulator to execute the compiled binaries. We provide a script
-($PRET_ISS/scripts/compile_threads.py) that takes the directory as an argument to compile the example. Executing the simulator takes two arguments: the directory of the compiled binaries and the number of cycles to execute the simulator.
-
-Procedure to run smile example:
-{{{
-$ cd $PRET_ISS
-$ ./scripts/compile_threads.py examples/smile
-$ src/pret examples/smile -1
-}}}
-
-Note that each of these examples has a file with an ''.ispm'' or ''.dspm'' extension. Those indicate the instructions and data that are loaded onto the scratchpad memories during initialization. Removing those files results in loading the instructions and data from the main memory.</pre>
+We provide three examples. The steps needed to run them are described in the links below:
+# [[janne]]: A multimedia algorithm,
+# [[smile]] : An example using timing instructions that produces a smiley face,
+# [[sync_example_cases]]: A mutual exclusion example using timing instructions.
+# [[graphic]]: The video game graphic drawing.
+</pre>
 </div>
 <div title="SearchOptionPlugin" modifier="Isaac Liu" created="200901180135" modified="200901180232" tags="systemConfig" changecount="18">
 <pre>/***
@@ -3295,7 +3284,7 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 </div>
 <div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901171231" tags="Usage" changecount="8">
 <pre>* The simulator binary is compiled in ''$PRET_ISS/src/''. The simulator must be executed with the following arguments:
-** {{{&lt;path-to-srec-folder&gt;}}}: A folder location with the programs that are going to be loaded in the simulator. For every thread there is a ''.c'' file. We compile this into SREC files. Please look at one of the samples in ''$PRET_ISS/examples''. The ''Makefile''s can be reused from there. 
+** {{{&lt;path-to-srec-folder&gt;}}}: A folder location with the programs that are going to be loaded in the simulator. For every thread there is a ''.c'' file. We compile this into SREC files. Please look at one of the samples in ''$PRET_ISS/samples''. The ''Makefile''s can be reused from there. 
 ** {{{&lt;# cycles&gt;}}}: An integer value for the number of cycles the simulation must execute. To continue execution until the termination of a program use ''-1''.
 * The usage is as follows:
 {{{
@@ -3366,6 +3355,284 @@ setFooter();
    return theTiddler;}
 
 //}}}</pre>
+</div>
+<div title="graphic" modifier="Hiren Patel" created="200901210238" changecount="10">
+<pre>1. Go to the $PRET_ISS top directory.
+{{{
+$ cd $PRET_ISS
+}}}
+2. Compile the example.
+{{{
+$ ./scripts/compile_threads.py examples/graphic/
+}}}
+3. Executing the example.
+{{{
+$ ./src/pret.exe examples/graphic 450000000
+
+----------------------------------------------------
+	PRET Configuration
+----------------------------------------------------
+Number of threads         : 6
+Number of register windows: 128
+Number of deadline timers : 8
+Number of PLL timers      : 1
+
+Clock setup
+
+Memory hierarchy
+Main memory delay          : 15
+Instruction/Data scratchpads
+----------------------------------------------------
+
+----------------------------------------------------
+         Start Simulation
+----------------------------------------------------
+VGA emul mode
+
+vga initial refresh
+
+vga refreshed
+
+vga refreshed
+
+vga refreshed
+
+start dump
+
+end dump
+
+vga refreshed
+
+vga refreshed
+
+vga refreshed
+
+vga refreshed
+
+----------------------------------------------------
+
+----------------------------------------------------
+         Simulation Statistics
+----------------------------------------------------
+Cycles executed : 450000000
+
+thread[0], , # cycles: 89999994
+thread[0], # instructions: 14999999
+thread[1], , # cycles: 89999994
+thread[1], # instructions: 14999999
+thread[2], , # cycles: 89999994
+thread[2], # instructions: 14388455
+thread[3], , # cycles: 89999994
+thread[3], # instructions: 789474
+thread[4], , # cycles: 89999994
+thread[4], # instructions: 789474
+thread[5], , # cycles: 89999994
+thread[5], # instructions: 789473
+}}}
+4. Output file is stored in a dump out_fd.dmp. Rename to pbm file.
+{{{
+$ mv out_fd.dmp out_fd.pbm.
+}}}
+{{{
+5. Use a PBM viewer to open the file.
+}}}</pre>
+</div>
+<div title="janne" modifier="Hiren Patel" created="200901210230" modified="200901210236" tags="Janne Example" changecount="10">
+<pre>1. Go to the $PRET_ISS top directory.
+{{{
+$ cd $PRET_ISS
+}}}
+2. Compile the example.
+{{{
+$ ./scripts/compile_threads.py examples/janne/
+}}}
+3. Executing the example.
+{{{
+$ ./src/pret.exe examples/janne -1
+
+----------------------------------------------------
+	PRET Configuration
+----------------------------------------------------
+
+Number of threads         : 6
+Number of register windows: 128
+Number of deadline timers : 8
+Number of PLL timers      : 1
+
+Clock setup
+
+Memory hierarchy
+Main memory delay          : 15
+Instruction/Data scratchpads
+----------------------------------------------------
+
+----------------------------------------------------
+         Start Simulation
+----------------------------------------------------
+(a,b) = (3,-9)
+(a,b) = (14,11)
+(a,b) = (17,23)
+(a,b) = (19,13)
+(a,b) = (22,29)
+(a,b) = (24,19)
+(a,b) = (27,47)
+(a,b) = (29,37)
+(a,b) = (31,27)
+----------------------------------------------------
+----------------------------------------------------
+         Simulation Statistics
+----------------------------------------------------
+Cycles executed : -1
+
+thread[0], , # cycles: 114024
+thread[0], # instructions: 19004
+thread[1], , # cycles: 114024
+thread[1], # instructions: 1001
+thread[2], , # cycles: 114018
+thread[2], # instructions: 1000
+thread[3], , # cycles: 114018
+thread[3], # instructions: 1000
+thread[4], , # cycles: 114018
+thread[4], # instructions: 1000
+thread[5], , # cycles: 114018
+thread[5], # instructions: 1000
+}}}
+</pre>
+</div>
+<div title="smile" modifier="Hiren Patel" created="200901210234" modified="200901210235" tags="smile Example" changecount="10">
+<pre>1. Go to the $PRET_ISS top directory.
+{{{
+$ cd $PRET_ISS
+}}}
+2. Compile the example.
+{{{
+$ ./scripts/compile_threads.py examples/smile/
+}}}
+3. Executing the example.
+{{{
+$ ./src/pret.exe examples/smile/ 60000000
+
+----------------------------------------------------
+        PRET Configuration
+----------------------------------------------------
+
+Number of threads         : 6
+Number of register windows: 128
+Number of deadline timers : 8
+Number of PLL timers      : 1
+
+Clock setup
+
+Memory hierarchy
+Main memory delay          : 15
+Instruction/Data scratchpads
+----------------------------------------------------
+         Start Simulation
+----------------------------------------------------
+   ooooo
+  /     \
+ |  o o  |
+(|   |   |)
+ |  ___  |
+  \ \_/ /
+   \___/
+   ooooo
+  /     \
+ |  o o  |
+(|   |   |)
+ |  ___  |
+  \ \_/ /
+   \___/
+   ooooo
+  /     \
+ |  o o  |
+(|   |   |)
+ |  ___  |
+  \ \_/ /
+   \___/
+   ooooo
+  /     \
+ |  ^ ^  |
+(|   |   |)
+ |  ___  |
+  \ \_/ /
+   \___/
+----------------------------------------------------
+
+----------------------------------------------------
+         Simulation Statistics
+----------------------------------------------------
+Cycles executed : 60000000
+
+thread[0], , # cycles: 11999994
+thread[0], # instructions: 3012
+thread[1], , # cycles: 11999994
+thread[1], # instructions: 3016
+thread[2], , # cycles: 11999994
+thread[2], # instructions: 3053
+thread[3], , # cycles: 11999994
+thread[3], # instructions: 3016
+thread[4], , # cycles: 11999994
+thread[4], # instructions: 5173
+thread[5], , # cycles: 11999994
+thread[5], # instructions: 5148
+}}}</pre>
+</div>
+<div title="sync_example_cases" modifier="Hiren Patel" created="200901210237" changecount="10">
+<pre>1. Go to the $PRET_ISS top directory.
+{{{
+$ cd $PRET_ISS
+}}}
+2. Compile the example.
+{{{
+$ ./scripts/compile_threads.py examples/sync_example_cases/
+}}}
+3. Executing the example.
+{{{
+$ ./src/pret.exe examples/sync_example_cases/ -1
+
+----------------------------------------------------
+	PRET Configuration
+----------------------------------------------------
+
+Number of threads         : 6
+Number of register windows: 128
+Number of deadline timers : 8
+Number of PLL timers      : 1
+
+Clock setup
+
+Memory hierarchy
+Main memory delay          : 15
+Instruction/Data scratchpads
+----------------------------------------------------
+
+----------------------------------------------------
+         Start Simulation
+----------------------------------------------------
+ !&quot;#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}\
+~
+ 
+----------------------------------------------------
+
+----------------------------------------------------
+         Simulation Statistics
+----------------------------------------------------
+Cycles executed : -1
+
+thread[0], , # cycles: 21600
+thread[0], # instructions: 480
+thread[1], , # cycles: 21600
+thread[1], # instructions: 954
+thread[2], , # cycles: 21600
+thread[2], # instructions: 676
+thread[3], , # cycles: 21600
+thread[3], # instructions: 190
+thread[4], , # cycles: 21594
+thread[4], # instructions: 189
+thread[5], , # cycles: 21594
+thread[5], # instructions: 189
+}}}</pre>
 </div>
 </div>
 <!--POST-STOREAREA-->
