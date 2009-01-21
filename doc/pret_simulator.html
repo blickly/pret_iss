@@ -934,7 +934,7 @@ config.macros.bibtex.handler = function(place,macroName,params) {
 // //===</pre>
 </div>
 <div title="CSIM" modifier="Hiren Patel" created="200812302256" modified="200901171230" tags="CSIM" changecount="10">
-<pre>A debugging interface to our simulator called CSIM is provided in the PRET relaese.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
+<pre>A debugging interface to our simulator called CSIM is provided in the PRET release.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
 
 From inside CSIM, one can type help to get a list of the valid commands.  Many of the commands use a similar syntax to TSIM, the simulator for the SPARC soft-core from Gaisler Research.  The most commonly used ones are as follows.
 * break/lbreak/unbreak: Create or remove breakpoints at a given address or label.
@@ -982,7 +982,7 @@ $ make
 {{{
 $ export SYSTEMC=&lt;path-to-systemc&gt;
 }}}
-* Configure with SystemC and enable debugger
+* Configure PRET with SystemC and enable debugger
 {{{
 $ ./configure --enable-systemc 
 }}}
@@ -1025,7 +1025,7 @@ Note that ''deadline.h'' contains the macros for inlining the deadline instructi
 </pre>
 </div>
 <div title="Contact" modifier="Hiren Patel" created="200901161933" changecount="1">
-<pre>Visit [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
+<pre>Visit the [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
 </div>
 <div title="DefaultOptions" modifier="Isaac Liu" created="200901171752" modified="200901180224" tags="systemConfig" changecount="8">
 <pre>config.options.chkSearchListTiddler = true;
@@ -1427,7 +1427,7 @@ config.macros.gotoTiddler= {
 //}}}</pre>
 </div>
 <div title="Home" modifier="Hiren Patel" created="200809260133" modified="200901181816" tags="Welcome" changecount="32">
-<pre>The PRET project is a collaborative effort lead by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/]].
+<pre>The PRET project is a collaborative effort led by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/]].
 
 This documentation provides information about installing, and running the PRET simulator. The most recent release documentation for the PRET simulator is at [[PRET Documentation |http://chess.eecs.berkeley.edu/pret/release]].
 </pre>
@@ -3295,7 +3295,7 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 </div>
 <div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901171231" tags="Usage" changecount="8">
 <pre>* The simulator binary is compiled in ''$PRET_ISS/src/''. The simulator must be executed with the following arguments:
-** {{{&lt;path-to-srec-folder&gt;}}}: A folder location with the programs that are going to be loaded in the simulator. For every thread there is a ''.c'' file. We compile this into SREC files. Please look at one of the samples in ''$PRET_ISS/samples''. The ''Makefile''s can be reused from there. 
+** {{{&lt;path-to-srec-folder&gt;}}}: A folder location with the programs that are going to be loaded in the simulator. For every thread there is a ''.c'' file. We compile this into SREC files. Please look at one of the samples in ''$PRET_ISS/examples''. The ''Makefile''s can be reused from there. 
 ** {{{&lt;# cycles&gt;}}}: An integer value for the number of cycles the simulation must execute. To continue execution until the termination of a program use ''-1''.
 * The usage is as follows:
 {{{
