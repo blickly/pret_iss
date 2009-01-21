@@ -933,6 +933,31 @@ config.macros.bibtex.handler = function(place,macroName,params) {
 //}}}
 // //===</pre>
 </div>
+<div title="Building sparc toolchains for Mac users" modifier="Isaac Liu" created="200901211816" modified="200901211826" changecount="7">
+<pre>* Download the source code from the [[here|ftp://gaisler.com/gaisler.com/bcc/src]]. You want to download the newest version of the bcc-src.
+* untar bcc-src-x.x.xx to a folder where you want to keep the binaries
+* download all the GNU sources by typing 'make download' in the bcc-src folder. 
+* get a cup of coffee and wait for all the sources to finish downloading (takes a while)
+* Once the GNU sources finish downloading, set the env variable CURDIR to the bcc-src folder by typing:
+/*{{{*/
+export CURDIR=`pwd`
+/*}}}*/
+* Now type the following commands.
+/*{{{*/
+$mkdir $(CURDIR)/toolchains/sparc-elf-3.2.3
+$mkdir $(CURDIR)/toolchains/sparc-elf-3.4.4
+$cd /opt
+$ln -s $(CURDIR)/toolchains/sparc-elf-3.2.3 sparc-elf-3.2.3
+$ln -s $(CURDIR)/toolchains/sparc-elf-3.4.4 sparc-elf-3.4.4
+$cd $(CURDIR)
+$make all
+/*}}}*/
+* Once this is finished, add $(CURDIR)/toolchains/sparc-elf-4.4.4/bin to your path by typing
+/*{{{*/
+export PATH=$(CURDIR)/toolchains/sparc-elf-3.4.4/bin:$PATH
+/*}}}*/
+* Now you should be able to build progarms using the sparc-elf toolchains!</pre>
+</div>
 <div title="CSIM" modifier="Hiren Patel" created="200812302256" modified="200901171230" tags="CSIM" changecount="10">
 <pre>A debugging interface to our simulator called CSIM is provided in the PRET relaese.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
 
@@ -2186,7 +2211,7 @@ Revisions:
 	}
 &lt;/script&gt;</pre>
 </div>
-<div title="Requirements" modifier="Hiren Patel" created="200809261818" modified="200901211727" tags="Requirements" changecount="20">
+<div title="Requirements" modifier="Isaac Liu" created="200809261818" modified="200901211826" tags="Requirements" changecount="24">
 <pre>! Supported Platforms
 The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-15), Linux, and Mac OSX. 
 ! Build Tools
@@ -2196,6 +2221,7 @@ The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-
 # [[Perl 5.8.8|http://www.perl.org/]] or higher  
 ! SPARC Toolchain
 # [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]]
+** Note: The official download link for the toolchains only contains versions for windows and linux. We have compiled the toolchains for Mac users (on Mac OSX 10.4) and zipped up the binaries which you can download [[here|http://chess.eecs.berkeley.edu/pret/src/mac-osx-sparc-elf-3.4.4.zip]] (~55mb). If there are problems with the binaries, you may wish to build them from the source. If so, [[follow these instructions|Building sparc toolchains for Mac users]].
 ! Optional
 We provide C++ and SystemC versions of the PRET simulator.  This enables the simulator to incorporate third-party hardware components defined using SystemC.
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
