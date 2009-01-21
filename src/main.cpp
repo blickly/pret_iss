@@ -122,7 +122,7 @@ int sc_main(int argc, char * argv[]) {
     ///Print out the period.
     db.get_period();
 
-    clock_t start = clock();
+    //clock_t start = clock();
     struct timeval stv, etv, rtv;
     gettimeofday(&stv, NULL);
 
