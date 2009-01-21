@@ -979,7 +979,7 @@ csim&gt; run -1
 csim&gt; 
 }}}</pre>
 </div>
-<div title="Compiling" modifier="Hiren Patel" created="200809261830" modified="200901211540" tags="Compiling Source" changecount="50">
+<div title="Compiling" modifier="Hiren Patel" created="200809261830" modified="200901212305" tags="Compiling Source" changecount="51">
 <pre>* These instructions assume the user is using the ''bash'' shell.
 ! Untar Tarball
 * The distributed file must be untarred. The [[tar manual|http://www.gnu.org/software/tar/manual/index.html]] provides details on the tar command.
@@ -1020,10 +1020,10 @@ $ make
 ! Trying Out the Simulator
 After compiling successfully, you can run the [[regression tests|Regression Tests]], or start compiling [[your own programs|Compiling Programs]] for the PRET architecture.</pre>
 </div>
-<div title="Compiling Programs" modifier="YourName" created="200809262115" modified="200901210350" tags="Compiling Programs" changecount="10">
+<div title="Compiling Programs" modifier="Hiren Patel" created="200809262115" modified="200901212307" tags="Compiling Programs" changecount="11">
 <pre>When writing programs for the pret simulator, you may use up to six separate hardware threads.  The simulator reads a program into each hardware threads, so dummy programs should be loaded into unused threads.  
 
-These thread programs are compiled using the [[SPARC ELF|Requirements]] GCC toolchain. Ensure that the ''sparc-elf-gcc'' executable is in the $PATH environment variable.
+These thread programs are compiled using the [[SPARC ELF|Requirements]] GCC toolchain. Ensure that the ''sparc-elf-gcc'' executable is in the $PATH environment variable. Instructions for installing the toolchain are [[here.|Toolchain]]
 
 We use a script to automatically compile and map the threads to the correct address space via the ''$PRET_ISS/scripts/compile_threads.py'' script. In order for this script to correctly compile the thread programs, the correct ''.makefile'' files must exist in the folder. The easiest build configuration is to have six ''.c'' programs that are compiled and loaded into the individual threads of the PRET simulator.  In most cases, the configuration of a folder will look like this:
 {{{
@@ -1631,7 +1631,7 @@ function $() {
 [[Ptolemy|http://ptolemy.eecs.berkeley.edu]]
 </pre>
 </div>
-<div title="MainMenu" modifier="Hiren Patel" created="200809260133" modified="200901212142" tags="excludeSearch" changecount="48">
+<div title="MainMenu" modifier="Hiren Patel" created="200809260133" modified="200901212259" tags="excludeSearch" changecount="49">
 <pre>[[Home]]
 !''About Us''
 [[People]]
@@ -1639,6 +1639,7 @@ function $() {
 [[Contact]]
 !''Installation''
 [[Requirements]]
+[[Toolchain]]
 !!!Tarball
 [[Download]]
 [[Compiling]]
@@ -2145,8 +2146,9 @@ Shanna-Shaye Forbes and Hugo A. Andrade and Hiren D. Patel and Edward A. Lee, [[
 
 </pre>
 </div>
-<div title="Regression Tests" modifier="Hiren Patel" created="200901171236" modified="200901210246" tags="Regression" changecount="5">
+<div title="Regression Tests" modifier="Hiren Patel" created="200901171236" modified="200901212306" tags="Regression" changecount="7">
 <pre>In &quot;$PRET_ISS/tests&quot;, we provide a series of regression tests. 
+* Note: The [[toolchain|Toolchain]] must be installed before running the regression tests.
 !Running Regression Tests
 * Make sure the compilation is complete, and enter &quot;$PRET_ISS&quot; directory.
 {{{
@@ -2212,7 +2214,7 @@ Revisions:
 	}
 &lt;/script&gt;</pre>
 </div>
-<div title="Requirements" modifier="Isaac Liu" created="200809261818" modified="200901211826" tags="Requirements" changecount="24">
+<div title="Requirements" modifier="Hiren Patel" created="200809261818" modified="200901212312" tags="Requirements" changecount="28">
 <pre>! Supported Platforms
 The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-15), Linux, and Mac OSX. 
 ! Build Tools
@@ -2227,8 +2229,8 @@ The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-
 We provide C++ and SystemC versions of the PRET simulator.  This enables the simulator to incorporate third-party hardware components defined using SystemC.
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
 </div>
-<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200901210245" tags="Running" changecount="13">
-<pre>The pret executable is compiled in $PRET_ISS/src/. [[Usage]] describes how to execute the simulator.
+<div title="Running" modifier="Hiren Patel" created="200812300554" modified="200901212308" tags="Running" changecount="14">
+<pre>The pret executable is compiled in $PRET_ISS/src/. [[Usage]] describes how to execute the simulator. In order to compile these examples, the [[toolchain|Toolchain]] must be installed.
 
 We provide three examples. The steps needed to run them are described in the links below:
 # [[janne]]: A multimedia algorithm,
@@ -3357,6 +3359,29 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 <div title="ToolbarCommands" modifier="Isaac Liu" created="200901171836" modified="200901180222" tags="excludeSearch" changecount="7">
 <pre>|~ViewToolbar|+editTiddler permalink|
 |~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|</pre>
+</div>
+<div title="Toolchain" modifier="Hiren Patel" created="200901212300" modified="200901212312" changecount="4">
+<pre>* These instructions are for the ''bash'' shell.
+* Download the version appropriate for your platform from [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]] and store it in the ''/tmp/'' path.
+* Untar the downloaded file to the directory you wish to install it.
+{{{
+$ cd &lt;path-to-install-toolchain&gt;
+$ tar -zxvf /tmp/&lt;name-of-downloaded-file&gt;
+}}}
+* Add the path of the toolchain to the ''PATH'' environment variable.
+{{{
+$ export PATH=$PATH:&lt;path-to-install-toolchain&gt;/sparc-elf-3.4.4/bin/
+}}}
+* Check if the ''sparc-elf-gcc'' binary is in the path
+{{{
+$ sparc-elf-gcc --version
+sparc-elf-gcc (GCC) 3.4.4
+Copyright (C) 2004 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+}}}
+* Note: Mac OSX users need to either recompile the toolchain from [[source|Building sparc toolchains for Mac users]]or use our [[precompiled binaries|http://chess.eecs.berkeley.edu/pret/src/mac-osx-sparc-elf-3.4.4.zip]]. 
+</pre>
 </div>
 <div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901171231" tags="Usage" changecount="8">
 <pre>* The simulator binary is compiled in ''$PRET_ISS/src/''. The simulator must be executed with the following arguments:
