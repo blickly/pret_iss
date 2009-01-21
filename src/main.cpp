@@ -175,8 +175,8 @@ int sc_main(int argc, char * argv[]) {
             total_cycles += hp->get_handle()->cnt_cycles;
         }
         cout << endl;
-        cout << "Core 0: # instructions: " << total_instr << ", CPI: " << double(total_cycles / 6) / total_instr << endl;
-        cout << "Time elapsed: " << (((double)clock() - start) / CLOCKS_PER_SEC) << " seconds" << endl;
+	//        cout << "Core 0: # instructions: " << total_instr << ", CPI: " << double(total_cycles / 6) / total_instr << endl;
+	//        cout << "Time elapsed: " << (((double)clock() - start) / CLOCKS_PER_SEC) << " seconds" << endl;
 
     } else {
         cout << "Error: num_cycles is 0" << endl;
