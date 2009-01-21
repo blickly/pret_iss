@@ -66,5 +66,3 @@ thread[4], # instructions: 1000
 thread[5], , # cycles: 114018
 thread[5], # instructions: 1000
 
-Core 0: # instructions: 24005, CPI: 4.74984
-Time elapsed: 0.188 seconds
