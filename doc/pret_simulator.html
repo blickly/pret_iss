@@ -954,7 +954,7 @@ csim&gt; run -1
 csim&gt; 
 }}}</pre>
 </div>
-<div title="Compiling" modifier="Hiren Patel" created="200809261830" modified="200901171231" tags="Compiling Source" changecount="27">
+<div title="Compiling" modifier="YourName" created="200809261830" modified="200901210354" tags="Compiling Source" changecount="29">
 <pre>! Setup Environment Variables
 * Assuming a ''bash'' shell. 
 {{{
@@ -995,14 +995,16 @@ $ make
 {{{
 $ ./bootstrap.sh
 }}}
-* Follow the above mentioned steps</pre>
+* Follow the above mentioned steps
+! Trying Out the Simulator
+After compiling successfully, you can run the [[regression tests|Regression Tests]], or start compiling [[your own programs|Compiling Programs]] for the PRET architecture.</pre>
 </div>
-<div title="Compiling Programs" modifier="Hiren Patel" created="200809262115" modified="200901171231" tags="Compiling Programs" changecount="9">
-<pre>There are six ''.c'' programs that are compiled and loaded into the individual threads of the PRET simulator. We have a naming convention with ''thread0.c'' being the program for the 0th thread. There must be C programs for each thread; so, ''thread0.c'' to ''thread5.c'' should be defined.
+<div title="Compiling Programs" modifier="YourName" created="200809262115" modified="200901210350" tags="Compiling Programs" changecount="10">
+<pre>When writing programs for the pret simulator, you may use up to six separate hardware threads.  The simulator reads a program into each hardware threads, so dummy programs should be loaded into unused threads.  
 
 These thread programs are compiled using the [[SPARC ELF|Requirements]] GCC toolchain. Ensure that the ''sparc-elf-gcc'' executable is in the $PATH environment variable.
 
-We use a script to automatically compile and map the threads to the correct address space via the ''$PRET_ISS/scripts/compile_threads.py'' script. In order for this script to correctly compile the thread programs, the correct ''Makefile'' and ''.c'' files must exist in the folder. The necessary files in the folder are:
+We use a script to automatically compile and map the threads to the correct address space via the ''$PRET_ISS/scripts/compile_threads.py'' script. In order for this script to correctly compile the thread programs, the correct ''.makefile'' files must exist in the folder. The easiest build configuration is to have six ''.c'' programs that are compiled and loaded into the individual threads of the PRET simulator.  In most cases, the configuration of a folder will look like this:
 {{{
 |-- Makefile
 |-- deadline.h
@@ -1021,8 +1023,9 @@ We use a script to automatically compile and map the threads to the correct addr
 |-- thread_common.makefile
 }}}
 
-Note that ''deadline.h'' contains the macros for inlining the deadline instruction. 
-</pre>
+Note that ''deadline.h'' contains the macros for defining the deadline instructions. 
+
+After successfully compiling your program, you will want to use the [[standalone simulator|Usage]], or debug with [[CSIM]]</pre>
 </div>
 <div title="Contact" modifier="Hiren Patel" created="200901161933" changecount="1">
 <pre>Visit [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
