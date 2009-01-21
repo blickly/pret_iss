@@ -87,11 +87,6 @@ void print_setup(core * c) {
 
     cout << "Instruction/Data scratchpads  " << endl;
     
-//     cout << "Starting PC for each thread: " << endl;
-//     for (unsigned int i = 0; i < NUM_THREADS; i++ ) {
-//       cout << " +thread " << i << ": " << hex << c->get_pc(i) << endl;
-//     }
-//     cout << endl;
     cout << "---------------------------------------------------- " << endl;
 }
 
@@ -122,7 +117,6 @@ int sc_main(int argc, char * argv[]) {
     ///Print out the period.
     db.get_period();
 
-    //clock_t start = clock();
     struct timeval stv, etv, rtv;
     gettimeofday(&stv, NULL);
 
@@ -148,12 +142,6 @@ int sc_main(int argc, char * argv[]) {
     cout << "\t Simulation Statistics" << endl;
     cout << "---------------------------------------------------- " << endl;
 
-    /* This is another method for generating execution time values */
-    /*
-       printf("end time usec: %ld, sec: %ld\n", etv.tv_usec, etv.tv_sec);
-       printf("start time usec: %ld, sec: %ld\n", stv.tv_usec, stv.tv_sec);
-       printf("difference time usec: %ld, sec: %ld\n", rtv.tv_usec, rtv.tv_sec);
-    */
     if ((num_cycles > 0) || (num_cycles == -1)) {
         int total_instr = 0;
         int total_cycles = 0;
@@ -164,24 +152,19 @@ int sc_main(int argc, char * argv[]) {
         cout << "Cycles executed : " << dec << num_cycles << endl;
         cout << endl;
         for (int i = 0; i < NUM_THREADS; i++) {
-            hw_thread_ptr * hp = db.get_thread(i); //db.thread_pool->pool[i];
-            cout << "thread[" << i << "], " //<< "# instructions: "
-                 //          << hp->handle->cnt_instr <<
+            hw_thread_ptr * hp = db.get_thread(i); 
+            cout << "thread[" << i << "], "
                  << ", # cycles: " << hp->get_handle()->cnt_cycles << endl;
-            //    << ", CPI: " << (double(hp->cnt_cycles)/hp->cnt_instr) << endl;
             cout << "thread[" << i << "], " << "# instructions: "
                  << hp->get_handle()->cnt_instr << endl;
             total_instr += hp->get_handle()->cnt_instr;
             total_cycles += hp->get_handle()->cnt_cycles;
         }
         cout << endl;
-	//        cout << "Core 0: # instructions: " << total_instr << ", CPI: " << double(total_cycles / 6) / total_instr << endl;
-	//        cout << "Time elapsed: " << (((double)clock() - start) / CLOCKS_PER_SEC) << " seconds" << endl;
 
     } else {
         cout << "Error: num_cycles is 0" << endl;
     }
 
-    //db.print_memory();
     return 0;
 };
