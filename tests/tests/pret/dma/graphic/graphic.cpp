@@ -35,6 +35,31 @@
    following files that are used below. */
 #include "regression.h"
 
+void spit_binary_to_ascii() {
+    //system("pwd");
+    ifstream result("out_fd.dmp", ios::in | ios::binary);
+    if (!result) {
+        cerr << "File out_fd.dmp not generated" << endl;
+        return;
+    }
+
+    ios::pos_type size = 0;
+    result.seekg(0,ios::end);
+    size = result.tellg();
+
+    cout << "size of result: " << size << ", " << result.tellg() << endl;
+    char * block = new char[size];
+    result.seekg(0,ios::beg);
+    result.read(block, size);
+    result.close();
+
+    for (int i = 0; i < size; i++) {
+        cout << int(block[i]) << " " ;
+    }
+    cout << endl;
+    delete block;
+}
+
 
 #ifndef _NO_SYSTEMC_
 int
@@ -82,8 +107,8 @@ int main(int argc, char *argv[])
         //cout << "compile command: " << compile_srec << endl;
         system(compile_srec.c_str());
         core db(otxt_name.c_str());
-        db.run(1000000);
-        //db.run(450000000);
+        db.run(450000000);
+        spit_binary_to_ascii();
     } else {
         cout << "Error: regression.h has not set the pret_iss_path string correctly" << endl;
     }
