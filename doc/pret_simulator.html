@@ -958,26 +958,16 @@ export PATH=$(CURDIR)/toolchains/sparc-elf-3.4.4/bin:$PATH
 /*}}}*/
 * Now you should be able to build progarms using the sparc-elf toolchains!</pre>
 </div>
-<div title="CSIM" modifier="Hiren Patel" created="200812302256" modified="200901171230" tags="CSIM" changecount="10">
-<pre>A debugging interface to our simulator called CSIM is provided in the PRET relaese.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
+<div title="CSIM" modifier="Hiren Patel" created="200812302256" modified="200901222127" tags="CSIM" changecount="14">
+<pre>A debugging interface to our simulator called CSIM is provided in the PRET release.  It is located in the scripts/ directory.  When run, it must be given an argument of the directory containing the SREC files to run.
 
-From inside CSIM, one can type help to get a list of the valid commands.  Many of the commands use a similar syntax to TSIM, the simulator for the SPARC soft-core from Gaisler Research.  The most commonly used ones are as follows.
-* break/lbreak/unbreak: Create or remove breakpoints at a given address or label.
-* run: Run the program for a specified number of cycles.
-* tra: Trace through the program for a specified number of cycles, printing out each instruction. 
-* reg/dt:  Print the contents of the normal registers, special registers, and deadline timers.
-* thread/unthread: Change which threads are being observed.
-* cycle:  Print out the current clock cycle.
-
-Example running the synchronization example:
-{{{
-$ cd $PRET_ISS
-$ ./scripts/compile_threads.py examples/synchronization
-$ scripts/csim.py examples/synchronization
-csim&gt; run -1
-()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-csim&gt; 
-}}}</pre>
+From inside CSIM, one can type help to get a list of the valid commands.  Many of the commands use a similar syntax to TSIM, the simulator for the SPARC soft-core from [[Aeroflex Gaisler|http://www.gaisler.com/cms/]].  The most commonly used ones are as follows.
+* ''break/lbreak/unbreak'': Create or remove breakpoints at a given address or label.
+* ''run'': Run the program for a specified number of cycles.
+* ''tra'': Trace through the program for a specified number of cycles, printing out each instruction. 
+* ''reg/dt'':  Print the contents of the normal registers, special registers, and deadline timers.
+* ''thread/unthread'': Change which threads are being observed.
+* ''cycle'':  Print out the current clock cycle.</pre>
 </div>
 <div title="Compiling" modifier="Isaac Liu" created="200809261830" modified="200901221854" tags="Compiling Source" changecount="53">
 <pre>* These instructions assume the user is using the ''bash'' shell.
@@ -1097,9 +1087,8 @@ config.options.txtSearchExcludeTags = &quot;excludeSearch systemConfig script&qu
 <div title="DefaultTiddlers" modifier="Isaac Liu" created="200809260134" modified="200901180223" tags="excludeSearch" changecount="10">
 <pre>[[Home]]</pre>
 </div>
-<div title="Direct Memory Access" modifier="Hiren Patel" created="200809282154" modified="200901171227" tags="DMA" changecount="19">
+<div title="Direct Memory Access" modifier="Hiren Patel" created="200809282154" modified="200901222117" tags="DMA" changecount="20">
 <pre>The current method to load instructions and data into the scratchpads is to statically load the contents during initialization. 
-
 ! Static Memory Allocation for Instruction and Data
 A static memory allocation map can be specified in text files. We have certain naming conventions; ''thread0.c'' has an instruction memory allocation file ''thread0.ispm'' and data memory allocation in file ''thread0.dspm''. Every thread can have a corresponding allocation file for instruction and/or data. The file format is simple. It accepts a pair of addresses that form an address range to be loaded into the scratchpad memories. The first address specifies the start of the allocation, and the second address specifies one past the end of the allocation. If the allocation files exist in the directory with the SREC files, then they will be loaded; otherwise, no instructions and data are preloaded into the scratchpad memory.
 !! Example of a simple ''thread0.ispm''
@@ -1614,8 +1603,9 @@ function $() {
 }
 //}}}</pre>
 </div>
-<div title="Installation" modifier="Isaac Liu" created="200901221742" modified="200901221859" changecount="47">
+<div title="Installation" modifier="Hiren Patel" created="200901221742" modified="200901222124" changecount="51">
 <pre>&lt;html&gt;&lt;small&gt;*Click on the links for drop down instructions&lt;/small&gt;&lt;/html&gt; 
+* Please follow these steps to ensure that the simulator installs correctly, and to ensure that it works.
 #+++[Requirements »][« Requirements]
 &lt;&lt;tiddler Requirements&gt;&gt;
 ----
@@ -1635,7 +1625,7 @@ function $() {
 !@@color:#c63;Running the Examples@@
 &lt;&lt;tiddler Running&gt;&gt;
 
-You may also try runing the [[Regression Tests]] to test the simulator.
+You may also try running the [[Regression Tests]] to test the simulator.
 ===
 
 
@@ -2051,7 +2041,7 @@ Saturday, 17 January, 2009
 &lt;div id='contentFooter' refresh='content' tiddler='contentFooter'&gt;&lt;/div&gt;
 &lt;!--}}}--&gt;</pre>
 </div>
-<div title="People" modifier="Hiren Patel" created="200809262213" modified="200901181820" changecount="16">
+<div title="People" modifier="Hiren Patel" created="200809262213" modified="200901222118" changecount="19">
 <pre>! Faculty
 &lt;&lt;person FDE &quot;Edward A. Lee&quot; http://www.eecs.berkeley.edu/~eal&gt;&gt;
 &lt;&lt;FDE&gt;&gt;
@@ -2061,7 +2051,7 @@ Edward A. Lee is the Robert S. Pepper Distinguished Professor and former chair o
  Stephen A. Edwards is a tenured associate professor in the Computer Science Department of Columbia University. He obtained his Ph.D from the University of California, Berkeley in 1997, his MS from Berkeley in 1994, and his BS from the California Institute of Technology in 1992, all in Electrical Engineering. Before pursuing his academic career in 2001, he worked for two Electronic Design Automation (EDA) companies, Simplex Solutions, now part of Cadence, and Synopsys.
 
 Professor Edwards and his group explore automating the creation of software for embedded systems: application-specific computers hiding in a growing number of industrial and consumer systems. They have developed numerous compilation techniques for the Esterel synchronous language for real-time control and are also developing domain-specific languages for device drivers and communication protocols. 
-! Postdoctoral Researchers
+! Postdoctoral Researcher
 &lt;&lt;person FDE &quot;Hiren D. Patel&quot; http://www.eecs.berkeley.edu/~hiren&gt;&gt;
 &lt;&lt;FDE&gt;&gt;
 ! Graduate Students
@@ -2069,7 +2059,7 @@ Professor Edwards and his group explore automating the creation of software for 
 &lt;&lt;FDE&gt;&gt;
 &lt;&lt;person FDE &quot;Ben Lickly&quot; http://www.eecs.berkeley.edu/~blickly&gt;&gt;
 &lt;&lt;FDE&gt;&gt;
-&lt;&lt;person FDE &quot;Sungjun Kim&quot; http://&gt;&gt;
+&lt;&lt;person FDE &quot;Sungjun Kim&quot; http://www.cs.columbia.edu/mice/persons/showPerson.php?personID=16150&amp;base=%2Fmice%2Fpersons%2F&amp;&gt;&gt;
 &lt;&lt;FDE&gt;&gt;
 &lt;&lt;person FDE &quot;Shanna-Shaye Forbes&quot; http://www.eecs.berkeley.edu/~sssf&gt;&gt;
 &lt;&lt;FDE&gt;&gt;</pre>
@@ -2146,17 +2136,17 @@ config.macros.personLookup.handler = function(place,macroName,params) {
 //}}}
 </pre>
 </div>
-<div title="References" modifier="Hiren Patel" created="200809262246" modified="200901171248" tags="References" changecount="64">
+<div title="References" modifier="Hiren Patel" created="200809262246" modified="200901222120" tags="References" changecount="67">
 <pre>Edward A. Lee, [[The Case for Precision Timed (PRET) Machines|http://chess.eecs.berkeley.edu/pubs/203.html]], November, 2006.
 
 Stephen A. Edwards and Edward A. Lee, [[The Case for Precision Timed (PRET) Machines|http://www.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-149.html]], EECS Department
-University of California, Berkeley Technical Report No. UCB/EECS-2006-149, November 17, 2006
+University of California, Berkeley Technical Report No. &quot;&quot;&quot;UCB/EECS-2006-149&quot;&quot;&quot;, November 17, 2006
 
 Ben Lickly and Isaac Liu and Sungjun Kim and Hiren D. Patel and Stephen A. Edwards and Edward A. Lee, [[Predictable Programming on a Precision Timed Architecture|{http://chess.eecs.berkeley.edu/pubs/475.html]], in proceedings of International Conference on Compilers, Architecture, and Synthesis from Embedded Systems (CASES), October, 2008. 
 
-Hiren D. Patel and Ben Lickly and Bas Burgers and Edward A. Lee, [[A Timing Requirements-Aware Scratchpad Memory Allocation Scheme for a Precision Timed Architecture|http://www.eecs.berkeley.edu/Pubs/TechRpts/2008/EECS-2008-115.html]], EECS Department University of California, Berkeley Technical Report No. UCB/EECS-2008-115, September 12, 2008.
+Hiren D. Patel and Ben Lickly and Bas Burgers and Edward A. Lee, [[A Timing Requirements-Aware Scratchpad Memory Allocation Scheme for a Precision Timed Architecture|http://www.eecs.berkeley.edu/Pubs/TechRpts/2008/EECS-2008-115.html]], EECS Department University of California, Berkeley Technical Report No. &quot;&quot;&quot;UCB/EECS-2008-115&quot;&quot;&quot;, September 12, 2008.
 
-Shanna-Shaye Forbes and Hugo A. Andrade and Hiren D. Patel and Edward A. Lee, [[An Automated Mapping of Timed Functional Specification to A Precision Timed Architecture|http://chess.eecs.berkeley.edu/pubs/482.html]], in proceedings of the 12-th IEEE International Symposium on Distributed Simulation and Real Time Applications, October, 2008. 
+&quot;&quot;&quot;Shanna-Shaye Forbes&quot;&quot;&quot; and Hugo A. Andrade and Hiren D. Patel and Edward A. Lee, [[An Automated Mapping of Timed Functional Specification to A Precision Timed Architecture|http://chess.eecs.berkeley.edu/pubs/482.html]], in proceedings of the 12-th IEEE International Symposium on Distributed Simulation and Real Time Applications, October, 2008. 
 
 </pre>
 </div>
@@ -2228,7 +2218,7 @@ Revisions:
 	}
 &lt;/script&gt;</pre>
 </div>
-<div title="Requirements" modifier="Isaac Liu" created="200809261818" modified="200901221754" tags="Requirements" changecount="30">
+<div title="Requirements" modifier="Hiren Patel" created="200809261818" modified="200901222122" tags="Requirements" changecount="31">
 <pre>! Supported Platforms
 The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-15), Linux, and Mac OSX (10.4). 
 ! Build Tools
@@ -3375,9 +3365,9 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 <pre>|~ViewToolbar|+editTiddler permalink|
 |~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|</pre>
 </div>
-<div title="Toolchain" modifier="YourName" created="200901212300" modified="200901221740" changecount="6">
+<div title="Toolchain" modifier="Hiren Patel" created="200901212300" modified="200901222122" changecount="7">
 <pre>* These instructions are for the ''bash'' shell.
-* Download the version appropriate for your platform from [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]] and store it in the ''/tmp/'' path.
+* Download the version appropriate for your platform from [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]] and store it in a temporary path such as ''/tmp''.
 * Untar the downloaded file to the directory you wish to install it.
 {{{
 $ cd &lt;path-to-install-toolchain&gt;
@@ -3398,7 +3388,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * Note: Mac OSX users need to either recompile the toolchain from [[source|Building sparc toolchains for Mac users]] or use our [[precompiled binaries|http://chess.eecs.berkeley.edu/pret/src/mac-osx-sparc-elf-3.4.4.zip]]. 
 </pre>
 </div>
-<div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901212323" tags="Usage" changecount="9">
+<div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901222124" tags="Usage" changecount="10">
 <pre>* The simulator binary is compiled in ''$PRET_ISS/src/''. The simulator must be executed with the following arguments:
 ** {{{&lt;path-to-srec-folder&gt;}}}: A folder location with the programs that are going to be loaded in the simulator. For every thread there is a ''.c'' file. We compile this into [[SREC files|http://en.wikipedia.org/wiki/SREC_(file_format)]]. Please look at one of the samples in ''$PRET_ISS/examples''. The ''Makefile''s can be reused from there. 
 ** {{{&lt;# cycles&gt;}}}: An integer value for the number of cycles the simulation must execute. To continue execution until the termination of a program use ''-1''.
