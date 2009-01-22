@@ -34,7 +34,7 @@ int SEND_GO_TO_IDLE_STATE(){
 int SEND_OP_CONDITIONS(){
 	printf("Writing cmd1 to writebuffer \n");
 	Send_CMD(CMD1);
-	if(get_response(0x00,10000)==1)
+	if(get_response(0x00,100)==1)	//the actual delay is 1 second so the value should be 50000
 		{ return 1;}
 	return 0;
 }
@@ -42,7 +42,7 @@ int SEND_OP_CONDITIONS(){
 int SET_BLOCK_LEN_CMD(){
 	printf("Writing cmd16 to writebuffer \n");
 	Send_CMD(CMD16);
-	if(get_response(0x00,10)==1)
+	if(get_response(0x00,8)==1)
 		{ return 1;}
 	return 0;
 }
@@ -58,7 +58,7 @@ int SEND_READ_CSD_CMD(unsigned int count){
 		if(Responseflag!=0){
 			if (*Readflag==0){		
 					if((char)*Readbuffer==(char)0xFE){	
-					printf(" THE RESPONSE RECEIVED IS %x \n",*Readbuffer);
+					printf(" DESIRED RESPONSE RECEIVED\n");
 					Responseflag=0;
 					}
 					*Readflag=1;
@@ -91,7 +91,7 @@ int SEND_READ_BLOCK_CMD(unsigned int count){
 		if(Responseflag!=0){	
 			if (*Readflag==0){		
 					if((char)*Readbuffer==(char)0xFE){	
-					printf(" THE RESPONSE RECEIVED IS %x \n",*Readbuffer);
+					printf(" DESIRED RESPONSE RECEIVED \n");
 					Responseflag=0;
 					}
 					*Readflag=1;

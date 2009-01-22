@@ -50,13 +50,13 @@ int main(){
 	}	
 
 	Transaction_speed=Cal_Trans_speed();
-	if(Transaction_speed<20000)	// check if the Transfer speed required by the card is less than 20MHz
+	if(Transaction_speed<20000)	// check if the Transfer speed required by the card is less than 20000 KHz
 	{printf("MMC card with a transfer speeds less than 20Mhz are not supported");
 	}	
 	
 	Frequency_MMC=HIGH;				// set the frequency to 20MHz
 	
-	Access_time=Cal_Access_time(20);
+	Access_time=Cal_Access_time(20); //send the set frequency as parameter
 	if(Access_time>150000){
 	printf("MMC card with access times greater than 150000 clock cycles are not supported");
 	}	
@@ -67,7 +67,8 @@ int main(){
 	return (1);
 	}	
 
-	Error=SEND_READ_BLOCK_CMD(10);
+	Error=SEND_READ_BLOCK_CMD(10);	// the actual read access time is 10/8*150000 clock cycles the value 
+												//	10 is used only for simulation	
 	if(Error!=NO_ERROR){		
 	printf("ERROR in response for SEND_READ_BLOCK_CMD command\n");
 	return (1);

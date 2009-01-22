@@ -26,8 +26,8 @@ int main(){
 		printf("Error in SEND_OP_CONDITIONS command \n");
 		return (1);
 	}
-	Wait_for_delay(200);
-	Send_Response(CMD1_response); // sends a response after 200*8 clock cycles
+	Wait_for_delay(20);
+	Send_Response(CMD1_response); // sends a response after 20*8 clock cycles
 	
    Read_CMD();
 	if(Equal_buffers(CMD9)!=0){	
