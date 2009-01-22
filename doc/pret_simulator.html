@@ -979,8 +979,10 @@ csim&gt; run -1
 csim&gt; 
 }}}</pre>
 </div>
-<div title="Compiling" modifier="Hiren Patel" created="200809261830" modified="200901212305" tags="Compiling Source" changecount="51">
+<div title="Compiling" modifier="Isaac Liu" created="200809261830" modified="200901221807" tags="Compiling Source" changecount="52">
 <pre>* These instructions assume the user is using the ''bash'' shell.
+! Download Tarball
+Download [[pret-1.0.tar.gz|http://chess.eecs.berkeley.edu/pret/src/pret-1.0/pret-1.0.tar.gz]]
 ! Untar Tarball
 * The distributed file must be untarred. The [[tar manual|http://www.gnu.org/software/tar/manual/index.html]] provides details on the tar command.
 {{{
@@ -1126,9 +1128,6 @@ To load all instruction and data onto the scratchpad memories, we provide memory
 400F8000 40100000
 }}}
 </pre>
-</div>
-<div title="Download" modifier="Hiren Patel" created="200901211730" modified="200901212235" changecount="3">
-<pre>Download [[pret-1.0.tar.gz|http://chess.eecs.berkeley.edu/pret/src/pret-1.0/pret-1.0.tar.gz]]</pre>
 </div>
 <div title="GotoPlugin" modifier="YourName" created="200901171610" tags="systemConfig" changecount="2">
 <pre>/***
@@ -1619,38 +1618,51 @@ function $() {
 }
 //}}}</pre>
 </div>
-<div title="LeftBarMenu" modifier="Hiren Patel" created="200901171755" modified="200901212142" tags="excludeSearch" changecount="25">
-<pre>!''Debugger''
-[[CSIM]]
-!''Examples''
-[[Running]]
-!!''Links''
+<div title="Installation" modifier="Isaac Liu" created="200901221742" modified="200901221814" changecount="43">
+<pre>&lt;html&gt;&lt;small&gt;*Click on the links for drop down instructions&lt;/small&gt;&lt;/html&gt; 
+#+++[Requirements »][« Requirements]
+&lt;&lt;tiddler Requirements&gt;&gt;
+----
+===
+
+#Building the PRET simulator from +++[SVN source »][« SVN source]
+!@@color:#CC6633;Source Checkout@@
+&lt;&lt;tiddler &quot;Source Checkout&quot;&gt;&gt;
+!@@color:#CC6633;Compiling Source@@
+&lt;&lt;tiddler &quot;Compiling Source&quot;&gt;&gt;
+----
+=== or +++[Tarball »][« Tarball]
+
+&lt;&lt;tiddler Compiling&gt;&gt;
+===
+
+
+</pre>
+</div>
+<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901221813" tags="excludeSearch" changecount="28">
+<pre>!!''Links''
 [[University of California, Berkeley, EECS Dept.|http://eecs.berkeley.edu]]
 [[University of Columbia, CS Dept.|http://www.cs.columbia.edu/]] 
 [[PRET|http://chess.eecs.berkeley.edu/pret/]]
 [[Ptolemy|http://ptolemy.eecs.berkeley.edu]]
 </pre>
 </div>
-<div title="MainMenu" modifier="Hiren Patel" created="200809260133" modified="200901212259" tags="excludeSearch" changecount="49">
+<div title="MainMenu" modifier="Isaac Liu" created="200809260133" modified="200901221813" tags="excludeSearch" changecount="55">
 <pre>[[Home]]
 !''About Us''
 [[People]]
 [[References]]
 [[Contact]]
-!''Installation''
-[[Requirements]]
-[[Toolchain]]
-!!!Tarball
-[[Download]]
-[[Compiling]]
-!!!SVN
-[[Source Checkout]]
-[[Compiling Source]]
 !''Simulator''
+[[Installation]]
 [[Usage]]
 [[Compiling Programs]]
 [[Direct Memory Access]]
 [[Regression Tests]]
+!''Debugger''
+[[CSIM]]
+!''Examples''
+[[Running]]
 
 </pre>
 </div>
@@ -2214,17 +2226,16 @@ Revisions:
 	}
 &lt;/script&gt;</pre>
 </div>
-<div title="Requirements" modifier="Hiren Patel" created="200809261818" modified="200901212312" tags="Requirements" changecount="28">
+<div title="Requirements" modifier="Isaac Liu" created="200809261818" modified="200901221754" tags="Requirements" changecount="30">
 <pre>! Supported Platforms
-The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-15), Linux, and Mac OSX. 
+The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-15), Linux, and Mac OSX (10.4). 
 ! Build Tools
 # [[Autoconf 2.59|http://www.gnu.org/software/autoconf/]] or higher
 # [[Automake 1.9.6|http://www.gnu.org/software/automake/]] or higher
 # [[Python 2.4.3|http://www.python.org/]] or higher
 # [[Perl 5.8.8|http://www.perl.org/]] or higher  
 ! SPARC Toolchain
-# [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]]
-** Note: The official download link for the toolchains only contains versions for windows and linux. We have compiled the toolchains for Mac users (on Mac OSX 10.4) and zipped up the binaries which you can download [[here|http://chess.eecs.berkeley.edu/pret/src/mac-osx-sparc-elf-3.4.4.zip]] (~55mb). If there are problems with the binaries, you may wish to build them from the source. If so, [[follow these instructions|Building sparc toolchains for Mac users]].
+&lt;&lt;tiddler Toolchain&gt;&gt;
 ! Optional
 We provide C++ and SystemC versions of the PRET simulator.  This enables the simulator to incorporate third-party hardware components defined using SystemC.
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
@@ -3094,8 +3105,10 @@ h3 {font-size: 14px;}
 #header {display:inline-block;}
 /*}}}*/</pre>
 </div>
-<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901181938" tags="excludeSearch" changecount="82">
+<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901221800" tags="excludeSearch" changecount="96">
 <pre>/*{{{*/
+#tiddlerInstallation a{font-size: 1.3em; line-height: 2em;}
+#tiddlerInstallation .toolbar a{font-size: 1em; margin-bottom: 0;}
 .searchButton {display: block;}
 #siteNav {font-size: .9em;}
 #siteNav .button {color:#999; border: 0px solid #000;}
@@ -3360,7 +3373,7 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 <pre>|~ViewToolbar|+editTiddler permalink|
 |~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|</pre>
 </div>
-<div title="Toolchain" modifier="Hiren Patel" created="200901212300" modified="200901212318" changecount="5">
+<div title="Toolchain" modifier="YourName" created="200901212300" modified="200901221740" changecount="6">
 <pre>* These instructions are for the ''bash'' shell.
 * Download the version appropriate for your platform from [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]] and store it in the ''/tmp/'' path.
 * Untar the downloaded file to the directory you wish to install it.
@@ -3380,7 +3393,7 @@ Copyright (C) 2004 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 }}}
-* Note: Mac OSX users need to either recompile the toolchain from [[source|Building sparc toolchains for Mac users]]or use our [[precompiled binaries|http://chess.eecs.berkeley.edu/pret/src/mac-osx-sparc-elf-3.4.4.zip]]. 
+* Note: Mac OSX users need to either recompile the toolchain from [[source|Building sparc toolchains for Mac users]] or use our [[precompiled binaries|http://chess.eecs.berkeley.edu/pret/src/mac-osx-sparc-elf-3.4.4.zip]]. 
 </pre>
 </div>
 <div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901212323" tags="Usage" changecount="9">
