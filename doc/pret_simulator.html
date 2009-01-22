@@ -979,7 +979,7 @@ csim&gt; run -1
 csim&gt; 
 }}}</pre>
 </div>
-<div title="Compiling" modifier="Isaac Liu" created="200809261830" modified="200901221807" tags="Compiling Source" changecount="52">
+<div title="Compiling" modifier="Isaac Liu" created="200809261830" modified="200901221854" tags="Compiling Source" changecount="53">
 <pre>* These instructions assume the user is using the ''bash'' shell.
 ! Download Tarball
 Download [[pret-1.0.tar.gz|http://chess.eecs.berkeley.edu/pret/src/pret-1.0/pret-1.0.tar.gz]]
@@ -1018,9 +1018,7 @@ $ ./configure --enable-systemc
 * Build the simulator.
 {{{
 $ make
-}}}
-! Trying Out the Simulator
-After compiling successfully, you can run the [[regression tests|Regression Tests]], or start compiling [[your own programs|Compiling Programs]] for the PRET architecture.</pre>
+}}}</pre>
 </div>
 <div title="Compiling Programs" modifier="Hiren Patel" created="200809262115" modified="200901212307" tags="Compiling Programs" changecount="11">
 <pre>When writing programs for the pret simulator, you may use up to six separate hardware threads.  The simulator reads a program into each hardware threads, so dummy programs should be loaded into unused threads.  
@@ -1050,7 +1048,7 @@ Note that ''deadline.h'' contains the macros for defining the deadline instructi
 
 After successfully compiling your program, you will want to use the [[standalone simulator|Usage]], or debug with [[CSIM]]</pre>
 </div>
-<div title="Compiling Source" modifier="Hiren Patel" created="200901211502" modified="200901211541" changecount="12">
+<div title="Compiling Source" modifier="Isaac Liu" created="200901211502" modified="200901221854" changecount="13">
 <pre>* These instructions assume the user is using the ''bash'' shell.
 ! Compiling Source from SVN
 * Execute the ''bootstrap.sh'' script to generate ''configure''.
@@ -1086,9 +1084,7 @@ $ ./configure --enable-systemc
 * Build the simulator.
 {{{
 $ make
-}}}
-! Trying Out the Simulator
-After compiling successfully, you can run the [[regression tests|Regression Tests]], or start compiling [[your own programs|Compiling Programs]] for the PRET architecture.</pre>
+}}}</pre>
 </div>
 <div title="Contact" modifier="Hiren Patel" created="200901161933" modified="200901211728" changecount="2">
 <pre>Visit the [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
@@ -1618,7 +1614,7 @@ function $() {
 }
 //}}}</pre>
 </div>
-<div title="Installation" modifier="Isaac Liu" created="200901221742" modified="200901221814" changecount="43">
+<div title="Installation" modifier="Isaac Liu" created="200901221742" modified="200901221859" changecount="47">
 <pre>&lt;html&gt;&lt;small&gt;*Click on the links for drop down instructions&lt;/small&gt;&lt;/html&gt; 
 #+++[Requirements »][« Requirements]
 &lt;&lt;tiddler Requirements&gt;&gt;
@@ -1632,8 +1628,14 @@ function $() {
 &lt;&lt;tiddler &quot;Compiling Source&quot;&gt;&gt;
 ----
 === or +++[Tarball »][« Tarball]
-
 &lt;&lt;tiddler Compiling&gt;&gt;
+===
+
+#+++[Trying out the Simulator »][« Trying out the Simulator]
+!@@color:#c63;Running the Examples@@
+&lt;&lt;tiddler Running&gt;&gt;
+
+You may also try runing the [[Regression Tests]] to test the simulator.
 ===
 
 
