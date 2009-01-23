@@ -56,14 +56,14 @@ static BOOL vga_emul_plot_pixel( DWORD color )
 		
 		if( i == 14 )
 		{
-			file_write( &c, 1 );
+			file_write( ( char * ) &c, 1 );
 			//sprintf( buffer, "%02X ", c );
 			//file_write( buffer, strlen( buffer ) );
 			c = 0x00;
 		}
 		else if( i == 30 )
 		{
-			file_write( &c, 1 );
+			file_write( ( char * ) &c, 1 );
 			//sprintf( buffer, "%02X ", c );
 			//file_write( buffer, strlen( buffer ) );
 		}

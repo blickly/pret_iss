@@ -126,7 +126,7 @@ INT main( )
 				DEADPLLI( "10" );
 				IOWR_32DIRECT( IO_ADDR_VGA, 0, *p_color_line );
 #endif
-			} while( p_color_line++ < limit );
+			} while( ( int ) p_color_line++ < ( int ) limit );
 
 			// process front-porch pixel
 			DEADPLL( N_VGA_CLK_H_FP );
