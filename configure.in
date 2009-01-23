@@ -98,7 +98,7 @@ AC_SUBST(PYMOD)
 
 
 #####################################################################
-BEGIN SystemC copyrighted material.
+dnl BEGIN SystemC copyrighted material.
 #####################################################################
 dnl ***************************************************************************
 dnl
@@ -274,7 +274,7 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
 esac
 
 #####################################################################
-END SystemC copyrighted material.
+dnl END SystemC copyrighted material.
 #####################################################################
 
 AC_ARG_ENABLE(debugger,
