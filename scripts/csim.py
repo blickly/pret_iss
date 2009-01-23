@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 ####################################################################
-#Copyright (c) 2007-2008 The Regents of the University of California.
+#Copyright (c) 2007-2009 The Regents of the University of California.
 #All rights reserved.
 #
 #Permission is hereby granted, without written agreement and without
@@ -49,7 +49,7 @@ pret = libpretdbg
 class CalSim(cmd.Cmd):
    """
    csim: A processor simulator for a precision timed processor.
-   (c) 2008 PRET group at UC Berkeley
+   (c) 2008-2009 PRET group at UC Berkeley
 
    csim is modeled after the existing SPARC processor simulator tsim,
    from Gaisler Research.
