@@ -40,6 +40,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <stdint.h>
 using namespace std;
 
 #include "instruction_defs.h"
