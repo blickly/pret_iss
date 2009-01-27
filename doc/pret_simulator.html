@@ -969,7 +969,7 @@ From inside CSIM, one can type help to get a list of the valid commands.  Many o
 * ''thread/unthread'': Change which threads are being observed.
 * ''cycle'':  Print out the current clock cycle.</pre>
 </div>
-<div title="Compiling" modifier="Isaac Liu" created="200809261830" modified="200901221854" tags="Compiling Source" changecount="53">
+<div title="Compiling" modifier="Isaac Liu" created="200809261830" modified="200901272202" tags="Compiling Source" changecount="54">
 <pre>* These instructions assume the user is using the ''bash'' shell.
 ! Download Tarball
 Download [[pret-1.0.tar.gz|http://chess.eecs.berkeley.edu/pret/src/pret-1.0/pret-1.0.tar.gz]]
@@ -1078,6 +1078,49 @@ $ make
 </div>
 <div title="Contact" modifier="Hiren Patel" created="200901161933" modified="200901211728" changecount="2">
 <pre>Visit the [[PRET Project |http://chess.eecs.berkeley.edu/pret/]] website.</pre>
+</div>
+<div title="Copyright" modifier="Isaac Liu" created="200901230132" modified="200901230145" changecount="4">
+<pre>Copyright (c) 2007-2009 The Regents of the University of California.
+All rights reserved.
+
+Permission is hereby granted, without written agreement and without
+license or royalty fees, to use, copy, modify, and distribute this
+software and its documentation for any purpose, provided that the
+above copyright notice and the following two paragraphs appear in all
+copies of this software.
+
+IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY
+FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE
+PROVIDED HEREUNDER IS ON AN &quot;AS IS&quot; BASIS, AND THE UNIVERSITY OF
+CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
+ENHANCEMENTS, OR MODIFICATIONS.
+                                                                                                
+The regression test infrastructure includes code from SystemC with the
+following license:
+
+  Copyright (c) 1996-2002 by all Contributors.
+  All Rights reserved.
+
+  The contents of this file are subject to the restrictions and limitations
+  set forth in the SystemC Open Source License Version 2.3 (the &quot;License&quot;);
+  You may not use this file except in compliance with such restrictions and
+  limitations. You may obtain instructions on how to receive a copy of the
+  License at http://www.systemc.org/. Software distributed by Contributors
+  under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific
+  language governing rights and limitations under the License.
+
+For your convenience the PRET team has included the license.pdf file that
+we received with SystemC as [[systemc_license.pdf|systemc_license.pdf]]
+
+</pre>
 </div>
 <div title="DefaultOptions" modifier="Isaac Liu" created="200901171752" modified="200901180224" tags="systemConfig" changecount="8">
 <pre>config.options.chkSearchListTiddler = true;
@@ -1339,7 +1382,7 @@ config.macros.gotoTiddler= {
 }
 //}}}</pre>
 </div>
-<div title="HistoryPlugin" modifier="Isaac Liu" created="200901171611" modified="200901171622" tags="systemConfig" changecount="3">
+<div title="HistoryPlugin" modifier="Isaac Liu" created="200901171611" modified="200901171622" tags="systemConfig systemConfigDisable" changecount="4">
 <pre>/***
 |''Name:''|HistoryPlugin|
 |''Description:''|Limits to only one tiddler open. Manages an history stack and provides macro to navigate in this history (&lt;&lt;history&gt;&gt;&lt;&lt;back&gt;&gt;&lt;&lt;forward&gt;&gt;).|
@@ -1477,10 +1520,12 @@ config.macros.gotoTiddler= {
 	}
 //}}}</pre>
 </div>
-<div title="Home" modifier="Hiren Patel" created="200809260133" modified="200901210221" tags="Welcome" changecount="35">
+<div title="Home" modifier="Isaac Liu" created="200809260133" modified="200901272202" tags="Welcome" changecount="39">
 <pre>The PRET project is a collaborative effort lead by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/]].
 
 This documentation provides information about installing, and running the PRET simulator. The most recent release documentation for the PRET simulator is at [[PRET Documentation |http://chess.eecs.berkeley.edu/pret/release]]
+
+![[Download Here|http://chess.eecs.berkeley.edu/pret/src/pret-1.0/pret-1.0.tar.gz]]
 </pre>
 </div>
 <div title="InlineJavascriptPlugin" modifier="Isaac Liu" created="200901171747" tags="systemConfig" changecount="2">
@@ -1631,10 +1676,10 @@ You may also try running the [[Regression Tests]] to test the simulator.
 
 </pre>
 </div>
-<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901221813" tags="excludeSearch" changecount="28">
+<div title="LeftBarMenu" modifier="Isaac Liu" created="200901171755" modified="200901272121" tags="excludeSearch" changecount="29">
 <pre>!!''Links''
 [[University of California, Berkeley, EECS Dept.|http://eecs.berkeley.edu]]
-[[University of Columbia, CS Dept.|http://www.cs.columbia.edu/]] 
+[[Columbia University, CS Dept.|http://www.cs.columbia.edu/]] 
 [[PRET|http://chess.eecs.berkeley.edu/pret/]]
 [[Ptolemy|http://ptolemy.eecs.berkeley.edu]]
 </pre>
@@ -2014,7 +2059,7 @@ Saturday, 17 January, 2009
 <div title="PRET_ISS" modifier="YourName" created="200901171218" changecount="3">
 <pre>Environment variable set to the directory of the PRET simulator.</pre>
 </div>
-<div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200901181939" tags="MochaTheme excludeSearch" changecount="74">
+<div title="PageTemplate" modifier="Isaac Liu" created="200701130013" modified="200901272225" tags="MochaTheme excludeSearch" changecount="75">
 <pre>&lt;!--{{{--&gt;
 &lt;div id='header' class='header'&gt;
 &lt;div id='contentHeader' refresh='content' tiddler='contentHeader' &gt;&lt;/div&gt;
@@ -2033,7 +2078,6 @@ Saturday, 17 January, 2009
 &lt;span id='noticeBoard' refresh='content' tiddler='NoticeBoard'&gt;&lt;/span&gt;
 &lt;/div&gt;
 &lt;div id='displayArea'&gt;
-&lt;div id='siteNav' refresh='content' tiddler='Navigation'&gt;&lt;/div&gt;
 &lt;div id='messageArea'&gt;&lt;/div&gt;
 &lt;div id='tiddlersBar' refresh='none' ondblclick='config.macros.tiddlersBar.onTiddlersBarAction(event)'&gt;&lt;/div&gt;
 &lt;div id='tiddlerDisplay'&gt;&lt;/div&gt;
@@ -2718,6 +2762,169 @@ if (!window.discardSearchResults) window.discardSearchResults=function()
 <pre>&lt;&lt;tiddler SideBarOptions&gt;&gt;
 +++[index »]&lt;&lt;tiddler SideBarTabs&gt;&gt;===</pre>
 </div>
+<div title="SinglePageModePlugin" modifier="Isaac Liu" created="200901272216" tags="systemConfig" changecount="3">
+<pre>/***
+|Name|SinglePageModePlugin|
+|Source|http://www.TiddlyTools.com/#SinglePageModePlugin|
+|Documentation|http://www.TiddlyTools.com/#SinglePageModePluginInfo|
+|Version|2.9.6|
+|Author|Eric Shulman - ELS Design Studios|
+|License|http://www.TiddlyTools.com/#LegalStatements &lt;br&gt;and [[Creative Commons Attribution-ShareAlike 2.5 License|http://creativecommons.org/licenses/by-sa/2.5/]]|
+|~CoreVersion|2.1|
+|Type|plugin|
+|Requires||
+|Overrides|Story.prototype.displayTiddler(), Story.prototype.displayTiddlers()|
+|Options|##Configuration|
+|Description|Show tiddlers one at a time with automatic permalink, or always open tiddlers at top/bottom of page.|
+This plugin allows you to configure TiddlyWiki to navigate more like a traditional multipage web site with only one tiddler displayed at a time.
+!!!!!Documentation
+&gt;see [[SinglePageModePluginInfo]]
+!!!!!Configuration
+&lt;&lt;&lt;
+&lt;&lt;option chkSinglePageMode&gt;&gt; Display one tiddler at a time
+&gt;&lt;&lt;option chkSinglePagePermalink&gt;&gt; Automatically permalink current tiddler
+&gt;&lt;&lt;option chkSinglePageKeepFoldedTiddlers&gt;&gt; Don't close tiddlers that are folded
+&gt;&lt;&lt;option chkSinglePageKeepEditedTiddlers&gt;&gt; Don't close tiddlers that are being edited
+&lt;&lt;option chkTopOfPageMode&gt;&gt; Open tiddlers at the top of the page
+&lt;&lt;option chkBottomOfPageMode&gt;&gt; Open tiddlers at the bottom of the page
+&lt;&lt;option chkSinglePageAutoScroll&gt;&gt; Automatically scroll tiddler into view (if needed)
+
+Notes:
+* The &quot;display one tiddler at a time&quot; option can also be //temporarily// set/reset by including a 'paramifier' in the document URL: {{{#SPM:true}}} or {{{#SPM:false}}}.
+* If more than one display mode is selected, 'one at a time' display takes precedence over both 'top' and 'bottom' settings, and if 'one at a time' setting is not used, 'top of page' takes precedence over 'bottom of page'.
+* When using Apple's Safari browser, automatically setting the permalink causes an error and is disabled.
+&lt;&lt;&lt;
+!!!!!Revisions
+&lt;&lt;&lt;
+2008.10.17 [2.9.6] changed chkSinglePageAutoScroll default to false
+| Please see [[SinglePageModePluginInfo]] for previous revision details |
+2005.08.15 [1.0.0] Initial Release.  Support for BACK/FORWARD buttons adapted from code developed by Clint Checketts.
+&lt;&lt;&lt;
+!!!!!Code
+***/
+//{{{
+version.extensions.SinglePageModePlugin= {major: 2, minor: 9, revision: 6, date: new Date(2008,10,17)};
+//}}}
+//{{{
+config.paramifiers.SPM = { onstart: function(v) {
+	config.options.chkSinglePageMode=eval(v);
+	if (config.options.chkSinglePageMode &amp;&amp; config.options.chkSinglePagePermalink &amp;&amp; !config.browser.isSafari) {
+		config.lastURL = window.location.hash;
+		if (!config.SPMTimer) config.SPMTimer=window.setInterval(function() {checkLastURL();},1000);
+	}
+} };
+//}}}
+//{{{
+if (config.options.chkSinglePageMode==undefined)
+	config.options.chkSinglePageMode=false;
+if (config.options.chkSinglePagePermalink==undefined)
+	config.options.chkSinglePagePermalink=true;
+if (config.options.chkSinglePageKeepFoldedTiddlers==undefined)
+	config.options.chkSinglePageKeepFoldedTiddlers=false;
+if (config.options.chkSinglePageKeepEditedTiddlers==undefined)
+	config.options.chkSinglePageKeepEditedTiddlers=false;
+if (config.options.chkTopOfPageMode==undefined)
+	config.options.chkTopOfPageMode=false;
+if (config.options.chkBottomOfPageMode==undefined)
+	config.options.chkBottomOfPageMode=false;
+if (config.options.chkSinglePageAutoScroll==undefined)
+	config.options.chkSinglePageAutoScroll=false;
+//}}}
+//{{{
+config.SPMTimer = 0;
+config.lastURL = window.location.hash;
+function checkLastURL()
+{
+	if (!config.options.chkSinglePageMode)
+		{ window.clearInterval(config.SPMTimer); config.SPMTimer=0; return; }
+	if (config.lastURL == window.location.hash) return; // no change in hash
+	var tids=decodeURIComponent(window.location.hash.substr(1)).readBracketedList();
+	if (tids.length==1) // permalink (single tiddler in URL)
+		story.displayTiddler(null,tids[0]);
+	else { // restore permaview or default view
+		config.lastURL = window.location.hash;
+		if (!tids.length) tids=store.getTiddlerText(&quot;DefaultTiddlers&quot;).readBracketedList();
+		story.closeAllTiddlers();
+		story.displayTiddlers(null,tids);
+	}
+}
+
+
+if (Story.prototype.SPM_coreDisplayTiddler==undefined)
+	Story.prototype.SPM_coreDisplayTiddler=Story.prototype.displayTiddler;
+Story.prototype.displayTiddler = function(srcElement,tiddler,template,animate,slowly)
+{
+	var title=(tiddler instanceof Tiddler)?tiddler.title:tiddler;
+	var tiddlerElem=document.getElementById(story.idPrefix+title); // ==null unless tiddler is already displayed
+	var opt=config.options;
+	var single=opt.chkSinglePageMode &amp;&amp; !startingUp;
+	var top=opt.chkTopOfPageMode &amp;&amp; !startingUp;
+	var bottom=opt.chkBottomOfPageMode &amp;&amp; !startingUp;
+	if (single) {
+		story.forEachTiddler(function(tid,elem) {
+			// skip current tiddler and, optionally, tiddlers that are folded.
+			if (	tid==title
+				|| (opt.chkSinglePageKeepFoldedTiddlers &amp;&amp; elem.getAttribute(&quot;folded&quot;)==&quot;true&quot;))
+				return;
+			// if a tiddler is being edited, ask before closing
+			if (elem.getAttribute(&quot;dirty&quot;)==&quot;true&quot;) {
+				if (opt.chkSinglePageKeepEditedTiddlers) return;
+				// if tiddler to be displayed is already shown, then leave active tiddler editor as is
+				// (occurs when switching between view and edit modes)
+				if (tiddlerElem) return;
+				// otherwise, ask for permission
+				var msg=&quot;'&quot;+tid+&quot;' is currently being edited.\n\n&quot;;
+				msg+=&quot;Press OK to save and close this tiddler\nor press Cancel to leave it opened&quot;;
+				if (!confirm(msg)) return; else story.saveTiddler(tid);
+			}
+			story.closeTiddler(tid);
+		});
+	}
+	else if (top)
+		arguments[0]=null;
+	else if (bottom)
+		arguments[0]=&quot;bottom&quot;;
+	if (single &amp;&amp; opt.chkSinglePagePermalink &amp;&amp; !config.browser.isSafari) {
+		window.location.hash = encodeURIComponent(String.encodeTiddlyLink(title));
+		config.lastURL = window.location.hash;
+		document.title = wikifyPlain(&quot;SiteTitle&quot;) + &quot; - &quot; + title;
+		if (!config.SPMTimer) config.SPMTimer=window.setInterval(function() {checkLastURL();},1000);
+	}
+	if (tiddlerElem &amp;&amp; tiddlerElem.getAttribute(&quot;dirty&quot;)==&quot;true&quot;) { // editing... move tiddler without re-rendering
+		var isTopTiddler=(tiddlerElem.previousSibling==null);
+		if (!isTopTiddler &amp;&amp; (single || top))
+			tiddlerElem.parentNode.insertBefore(tiddlerElem,tiddlerElem.parentNode.firstChild);
+		else if (bottom)
+			tiddlerElem.parentNode.insertBefore(tiddlerElem,null);
+		else this.SPM_coreDisplayTiddler.apply(this,arguments); // let CORE render tiddler
+	} else
+		this.SPM_coreDisplayTiddler.apply(this,arguments); // let CORE render tiddler
+	var tiddlerElem=document.getElementById(story.idPrefix+title);
+	if (tiddlerElem&amp;&amp;opt.chkSinglePageAutoScroll) {
+		// scroll to top of page or top of tiddler
+		var isTopTiddler=(tiddlerElem.previousSibling==null);
+		var yPos=isTopTiddler?0:ensureVisible(tiddlerElem);
+		// if animating, defer scroll until after animation completes
+		var delay=opt.chkAnimate?config.animDuration+10:0;
+		setTimeout(&quot;window.scrollTo(0,&quot;+yPos+&quot;)&quot;,delay); 
+	}
+}
+
+if (Story.prototype.SPM_coreDisplayTiddlers==undefined)
+	Story.prototype.SPM_coreDisplayTiddlers=Story.prototype.displayTiddlers;
+Story.prototype.displayTiddlers = function() {
+	// suspend single/top/bottom modes when showing multiple tiddlers
+	var opt=config.options;
+	var saveSPM=opt.chkSinglePageMode; opt.chkSinglePageMode=false;
+	var saveTPM=opt.chkTopOfPageMode; opt.chkTopOfPageMode=false;
+	var saveBPM=opt.chkBottomOfPageMode; opt.chkBottomOfPageMode=false;
+	this.SPM_coreDisplayTiddlers.apply(this,arguments);
+	opt.chkBottomOfPageMode=saveBPM;
+	opt.chkTopOfPageMode=saveTPM;
+	opt.chkSinglePageMode=saveSPM;
+}
+//}}}</pre>
+</div>
 <div title="SiteSubtitle" modifier="Hiren D. Patel" created="200809260133" modified="200809271556" changecount="9">
 <pre>A Simulator for a Precision Timed (PRET) Architecture</pre>
 </div>
@@ -3361,6 +3568,14 @@ config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&
 
 //}}}</pre>
 </div>
+<div title="Todo" modifier="Isaac Liu" created="200901272128" modified="200901272144" changecount="3">
+<pre>* Have a big download link in the front page
+* circular link in the front
+* Move download link to the sparc toolchains in the top and then add the path
+* Console instructions with wget tar(unzip) or curl
+* explain more about examples
+</pre>
+</div>
 <div title="ToolbarCommands" modifier="Isaac Liu" created="200901171836" modified="200901180222" tags="excludeSearch" changecount="7">
 <pre>|~ViewToolbar|+editTiddler permalink|
 |~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|</pre>
@@ -3407,11 +3622,11 @@ $ ./src/pret &lt;path-to-srec-folder&gt; &lt;# cycles&gt;
 &lt;div class='tagClear'&gt;&lt;/div&gt;
 &lt;!--}}}--&gt;</pre>
 </div>
-<div title="contentFooter" modifier="Hiren Patel" created="200701130013" modified="200901211732" tags="MochaTheme" changecount="6">
-<pre>Copyright © 2008 - 2009 UC Regents; all rights reserved. </pre>
+<div title="contentFooter" modifier="Isaac Liu" created="200701130013" modified="200901230132" tags="MochaTheme" changecount="7">
+<pre>[[Copyright © 2008 - 2009 UC Regents; all rights reserved.|Copyright]] </pre>
 </div>
-<div title="contentHeader" modifier="Isaac Liu" created="200901171934" modified="200901181847" changecount="5">
-<pre>University of California, Berkeley EECS Dept. &amp; University of Columbia CS Dept.</pre>
+<div title="contentHeader" modifier="Isaac Liu" created="200901171934" modified="200901272120" changecount="6">
+<pre>University of California, Berkeley EECS Dept. &amp; Columbia University CS Dept.</pre>
 </div>
 <div title="coreTweaks" modifier="Isaac Liu" created="200901171624" modified="200901181919" tags="systemConfig" changecount="7">
 <pre>/*{{{*/
