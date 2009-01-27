@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
             otxt.close();
         }
         /* Generate the SREC files*/
-        string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str();
+        string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str() + " -q";
         //cout << "compile command: " << compile_srec << endl;
         system(compile_srec.c_str());
         core db(otxt_name.c_str());

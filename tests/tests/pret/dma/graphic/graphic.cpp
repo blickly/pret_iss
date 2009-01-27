@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
             otxt.close();
         }
         /* Generate the SREC files*/
-        string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str();
+        string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str() + " -q";
         // Pipe cerr to /dev/null
         compile_srec = compile_srec + " 2>/dev/null";
         //cout << "compile command: " << compile_srec  << endl;

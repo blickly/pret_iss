@@ -45,7 +45,7 @@ thread_spacing = '0x00100000'
 # Realistic scratchpad sized spacing.
 #thread_spacing = '0x00010000'
 
-quiet = True
+quiet = False
          
 def make_c_file(thread_num, options):
    os.putenv('CFLAGS', options)
@@ -135,4 +135,6 @@ if __name__ == "__main__":
    else:
       if "-v" in sys.argv:
          quiet = False
+      elif "-q" in sys.argv:
+         quiet = True
       compile_all(sys.argv[1])

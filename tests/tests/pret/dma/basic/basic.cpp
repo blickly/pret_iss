@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     if (pret_iss_path != "") {
         load_file = pret_iss_path + file_name;
         /* Generate the SREC files*/
-        string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str();
+        string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str() + " -q";
         //cout << "compile command: " << compile_srec << endl;
 #ifdef USE_CSIM
         system(compile_srec.c_str());
