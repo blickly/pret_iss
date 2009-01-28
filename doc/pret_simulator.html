@@ -1382,150 +1382,14 @@ config.macros.gotoTiddler= {
 }
 //}}}</pre>
 </div>
-<div title="HistoryPlugin" modifier="Isaac Liu" created="200901171611" modified="200901171622" tags="systemConfig systemConfigDisable" changecount="4">
-<pre>/***
-|''Name:''|HistoryPlugin|
-|''Description:''|Limits to only one tiddler open. Manages an history stack and provides macro to navigate in this history (&lt;&lt;history&gt;&gt;&lt;&lt;back&gt;&gt;&lt;&lt;forward&gt;&gt;).|
-|''Version:''|1.0.0|
-|''Date:''|2008-03-23|
-|''Source:''|http://tiddlywiki.bidix.info/#HistoryPlugin|
-|''Author:''|BidiX (BidiX (at) bidix (dot) info)|
-|''[[License]]:''|[[BSD open source license|http://tiddlywiki.bidix.info/#%5B%5BBSD%20open%20source%20license%5D%5D ]]|
-|''~CoreVersion:''|2.3.0|
-***/
-//{{{
-	Story.prototype.tiddlerHistory = [];
-	Story.prototype.historyCurrentPos = -1;
-	Story.prototype.currentTiddler = null;
-	Story.prototype.maxPos = 11;
-
-	Story.prototype.old_history_displayTiddler = Story.prototype.displayTiddler;
-	Story.prototype.displayTiddler = function(srcElement,title,template,animate,slowly)
-	{
-		title = ((typeof title === &quot;string&quot;) ? title : title.title);
-		//SinglePageMode
-		if (this.currentTiddler) this.closeTiddler(this.currentTiddler);
-		if (template == 2) {
-			//switch to Edit mode : don't manage
-			story.old_history_displayTiddler(null,title,template,animate,slowly);
-			return; 
-		}
-		// if same tiddler no change
-		if (this.tiddlerHistory[this.historyCurrentPos] == title) {
-			this.currentTiddler = title;
-			story.old_history_displayTiddler(null,title,template,animate,slowly);
-			return;
-		}
-		if (this.historyCurrentPos == this.tiddlerHistory.length -1) {
-			// bottom of stack
-	    	this.tiddlerHistory.push(title);
-		   	if (this.tiddlerHistory.length &gt; 11) {
-	                 this.tiddlerHistory.shift();
-	       	} else {
-		    this.historyCurrentPos += 1;
-	            }
-
-		} else {
-			// middle of stack
-		    this.historyCurrentPos += 1;
-			if (this.tiddlerHistory[this.historyCurrentPos] != title) {
-				// path change =&gt; cut history
-				this.tiddlerHistory[this.historyCurrentPos] = title;
-				var a = [];
-				for(var i = 0; i &lt;= this.historyCurrentPos;i++) {
-					a[i] = this.tiddlerHistory[i];
-				}
-				this.tiddlerHistory = a;
-			}
-		}
-		this.currentTiddler = title;
-		story.old_history_displayTiddler(null,title,template,animate,true);
-	        scrollTo(0, 1);
-	}
-
-	Story.prototype.old_history_closeTiddler = Story.prototype.closeTiddler;
-	Story.prototype.closeTiddler = function(title,animate,slowly)
-	{
-		this.currentTiddler = null;
-	    story.old_history_closeTiddler.apply(this,arguments);
-	}
-
-	config.macros.history = {};
-	config.macros.history.action = function(event) {
-	var popup = Popup.create(this);
-		if(popup)
-			{
-	        if (!story.tiddlerHistory.length)
-	            createTiddlyText(popup,&quot;No history&quot;);
-	        else
-	           {
-	           var c = story.tiddlerHistory.length;
-			   for (i=0; i&lt;c;i++ )
-	               {
-					var elmt = createTiddlyElement(popup,&quot;li&quot;);
-				   	var btn = createTiddlyButton(elmt,story.tiddlerHistory[i],story.tiddlerHistory[i],config.macros.history.onClick);
-					btn.setAttribute(&quot;historyPos&quot;,i);
-			       }
-	           }
-	        }
-		Popup.show(popup,false);
-		event.cancelBubble = true;
-		if (event.stopPropagation) event.stopPropagation();
-		return false;
-	}
-	config.macros.history.handler = function(place,macroName,params)
-	{
-		createTiddlyButton(place, 'history', 'history', config.macros.history.action);
-	}
-
-	config.macros.history.onClick = function(ev)
-	{
-		var e = ev ? ev : window.event;
-		var historyPos = this.getAttribute(&quot;historyPos&quot;);
-		story.historyCurrentPos = historyPos -1;
-		story.displayTiddler(null,story.tiddlerHistory[historyPos]);
-		return false;
-	};
-
-	config.macros.back = {};
-	config.macros.back.action = function() {
-	       if (story.historyCurrentPos &gt; 0) {
-				if (story.currentTiddler) story.closeTiddler(story.currentTiddler);
-				story.historyCurrentPos = story.historyCurrentPos -2;
-				story.displayTiddler(null,story.tiddlerHistory[story.historyCurrentPos+1]);
-			} else {
-				//if (story.currentTiddler) story.old_history_displayTiddler(null,story.currentTiddler);
-				};
-		return false;
-	}
-	config.macros.back.handler = function(place,macroName,params)
-	{
-		createTiddlyButton(place, '« back', 'back', config.macros.back.action,&quot;backButton&quot;);
-	}
-
-	config.macros.forward = {};
-	config.macros.forward.action = function() {
-	       if (story.historyCurrentPos &lt; story.tiddlerHistory.length -1) {
-				if (story.currentTiddler) story.closeTiddler(story.currentTiddler);
-				//story.historyCurrentPos = story.historyCurrentPos;
-				story.displayTiddler(null,story.tiddlerHistory[story.historyCurrentPos+1]);
-			} else {
-				//if (story.currentTiddler) story.old_history_displayTiddler(null,story.currentTiddler);
-			}
-		return false;
-	}
-	config.macros.forward.handler = function(place,macroName,params)
-	{
-		createTiddlyButton(place, 'forward »', 'forward', config.macros.forward.action, &quot;ibutton&quot;);
-	}
-//}}}</pre>
-</div>
-<div title="Home" modifier="Isaac Liu" created="200809260133" modified="200901280041" tags="Welcome" changecount="40">
+<div title="Home" modifier="Isaac Liu" created="200809260133" modified="200901280217" tags="Welcome" changecount="46">
 <pre>The PRET project is a collaborative effort lead by [[Prof. Edward A. Lee|http://ptolemy.eecs.berkeley.edu/~eal/]] at U. C. Berkeley, and [[Prof. Stephen A. Edwards|http://www1.cs.columbia.edu/~sedwards/]] at Columbia University.  Our goal is to reintroduce timing predictability and repeatability by judiciously adopting architectural optimization techniques to deliver performance enhancements without sacrificing timing predictability and repeatability.  The project website is at [[PRET Project|http://chess.eecs.berkeley.edu/pret/]].
 
 This documentation provides information about installing, and running the PRET simulator. The most recent release documentation for the PRET simulator is at [[PRET Documentation |http://chess.eecs.berkeley.edu/pret/release]]
 
-!!!![[Download Here|http://chess.eecs.berkeley.edu/pret/src/pret-1.0/pret-1.0.tar.gz]]
+
+
+{{downloadButton{[[Download|http://chess.eecs.berkeley.edu/pret/src/pret-1.0/pret-1.0.tar.gz]]}}} and {{downloadButton{[[Install|Installation]]}}}
 </pre>
 </div>
 <div title="InlineJavascriptPlugin" modifier="Isaac Liu" created="200901171747" tags="systemConfig" changecount="2">
@@ -1648,25 +1512,25 @@ function $() {
 }
 //}}}</pre>
 </div>
-<div title="Installation" modifier="Hiren Patel" created="200901221742" modified="200901222124" changecount="51">
+<div title="Installation" modifier="Isaac Liu" created="200901221742" modified="200901280153" changecount="52">
 <pre>&lt;html&gt;&lt;small&gt;*Click on the links for drop down instructions&lt;/small&gt;&lt;/html&gt; 
 * Please follow these steps to ensure that the simulator installs correctly, and to ensure that it works.
-#+++[Requirements »][« Requirements]
+#++++(cookie_require)[Requirements »][« Requirements]
 &lt;&lt;tiddler Requirements&gt;&gt;
 ----
 ===
 
-#Building the PRET simulator from +++[SVN source »][« SVN source]
+#Building the PRET simulator from +++(cookie_svn)[SVN source »][« SVN source]
 !@@color:#CC6633;Source Checkout@@
 &lt;&lt;tiddler &quot;Source Checkout&quot;&gt;&gt;
 !@@color:#CC6633;Compiling Source@@
 &lt;&lt;tiddler &quot;Compiling Source&quot;&gt;&gt;
 ----
-=== or +++[Tarball »][« Tarball]
+=== or +++(cookie_tarball)[Tarball »][« Tarball]
 &lt;&lt;tiddler Compiling&gt;&gt;
 ===
 
-#+++[Trying out the Simulator »][« Trying out the Simulator]
+#+++(cookie_tryout)[Trying out the Simulator »][« Trying out the Simulator]
 !@@color:#c63;Running the Examples@@
 &lt;&lt;tiddler Running&gt;&gt;
 
@@ -3304,9 +3168,10 @@ h3 {font-size: 14px;}
 #header {display:inline-block;}
 /*}}}*/</pre>
 </div>
-<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901221800" tags="excludeSearch" changecount="96">
+<div title="StyleSheetCustom" modifier="Isaac Liu" created="200901171625" modified="200901280216" tags="excludeSearch" changecount="100">
 <pre>/*{{{*/
-#tiddlerInstallation a{font-size: 1.3em; line-height: 2em;}
+.downloadButton {font-size: 2em; border: 1px dotted; padding: 5px;}
+#tiddlerInstallation .button{font-size: 1.3em; line-height: 2em;}
 #tiddlerInstallation .toolbar a{font-size: 1em; margin-bottom: 0;}
 .searchButton {display: block;}
 #siteNav {font-size: .9em;}
@@ -3372,217 +3237,17 @@ h3 {font-size: 14px;}
 <div title="SystemC" modifier="YourName" created="200901171218" changecount="3">
 <pre>OSCI SystemC simulator available for download from [[SystemC Website|http://www.systemc.org.]]</pre>
 </div>
-<div title="TiddlersBarPlugin" modifier="Isaac Liu" created="200809262253" modified="200809270702" tags="systemConfig systemConfigDisable" changecount="4">
-<pre>/***
-|''Name:''|TiddlersBarPlugin|
-|''Description:''|A bar to switch between tiddlers through tabs (like browser tabs bar).|
-|''Version:''|1.2.5|
-|''Date:''|Jan 18,2008|
-|''Source:''|http://visualtw.ouvaton.org/VisualTW.html|
-|''Author:''|Pascal Collin|
-|''License:''|[[BSD open source license|License]]|
-|''~CoreVersion:''|2.1.0|
-|''Browser:''|Firefox 2.0; InternetExplorer 6.0, others|
-!Demos
-On [[homepage|http://visualtw.ouvaton.org/VisualTW.html]], open several tiddlers to use the tabs bar.
-!Installation
-#import this tiddler from [[homepage|http://visualtw.ouvaton.org/VisualTW.html]] (tagged as systemConfig)
-#save and reload
-#''if you're using a custom [[PageTemplate]]'', add {{{&lt;div id='tiddlersBar' refresh='none' ondblclick='config.macros.tiddlersBar.onTiddlersBarAction(event)'&gt;&lt;/div&gt;}}} before {{{&lt;div id='tiddlerDisplay'&gt;&lt;/div&gt;}}}
-#optionally, adjust StyleSheetTiddlersBar
-!Tips
-*Doubleclick on the tiddlers bar (where there is no tab) create a new tiddler.
-*Tabs include a button to close {{{x}}} or save {{{!}}} their tiddler.
-*By default, click on the current tab close all others tiddlers.
-!Configuration options 
-&lt;&lt;option chkDisableTabsBar&gt;&gt; Disable the tabs bar (to print, by example).
-&lt;&lt;option chkHideTabsBarWhenSingleTab &gt;&gt; Automatically hide the tabs bar when only one tiddler is displayed. 
-&lt;&lt;option txtSelectedTiddlerTabButton&gt;&gt; ''selected'' tab command button.
-&lt;&lt;option txtPreviousTabKey&gt;&gt; previous tab access key.
-&lt;&lt;option txtNextTabKey&gt;&gt; next tab access key.
-!Code
-***/
-//{{{
-config.options.chkDisableTabsBar = config.options.chkDisableTabsBar ? config.options.chkDisableTabsBar : false;
-config.options.chkHideTabsBarWhenSingleTab  = config.options.chkHideTabsBarWhenSingleTab  ? config.options.chkHideTabsBarWhenSingleTab  : false;
-config.options.txtSelectedTiddlerTabButton = config.options.txtSelectedTiddlerTabButton ? config.options.txtSelectedTiddlerTabButton : &quot;closeOthers&quot;;
-config.options.txtPreviousTabKey = config.options.txtPreviousTabKey ? config.options.txtPreviousTabKey : &quot;&quot;;
-config.options.txtNextTabKey = config.options.txtNextTabKey ? config.options.txtNextTabKey : &quot;&quot;;
-config.macros.tiddlersBar = {
-	tooltip : &quot;see &quot;,
-	tooltipClose : &quot;click here to close this tab&quot;,
-	tooltipSave : &quot;click here to save this tab&quot;,
-	promptRename : &quot;Enter tiddler new name&quot;,
-	currentTiddler : &quot;&quot;,
-	previousState : false,
-	previousKey : config.options.txtPreviousTabKey,
-	nextKey : config.options.txtNextTabKey,	
-	tabsAnimationSource : null, //use document.getElementById(&quot;tiddlerDisplay&quot;) if you need animation on tab switching.
-	handler: function(place,macroName,params) {
-		var previous = null;
-		if (config.macros.tiddlersBar.isShown())
-			story.forEachTiddler(function(title,e){
-				if (title==config.macros.tiddlersBar.currentTiddler){
-					var d = createTiddlyElement(null,&quot;span&quot;,null,&quot;tab tabSelected&quot;);
-					config.macros.tiddlersBar.createActiveTabButton(d,title);
-					if (previous &amp;&amp; config.macros.tiddlersBar.previousKey) previous.setAttribute(&quot;accessKey&quot;,config.macros.tiddlersBar.nextKey);
-					previous = &quot;active&quot;;
-				}
-				else {
-					var d = createTiddlyElement(place,&quot;span&quot;,null,&quot;tab tabUnselected&quot;);
-					var btn = createTiddlyButton(d,title,config.macros.tiddlersBar.tooltip + title,config.macros.tiddlersBar.onSelectTab);
-					btn.setAttribute(&quot;tiddler&quot;, title);
-					if (previous==&quot;active&quot; &amp;&amp; config.macros.tiddlersBar.nextKey) btn.setAttribute(&quot;accessKey&quot;,config.macros.tiddlersBar.previousKey);
-					previous=btn;
-				}
-				var isDirty =story.isDirty(title);
-				var c = createTiddlyButton(d,isDirty ?&quot;!&quot;:&quot;x&quot;,isDirty?config.macros.tiddlersBar.tooltipSave:config.macros.tiddlersBar.tooltipClose, isDirty ? config.macros.tiddlersBar.onTabSave : config.macros.tiddlersBar.onTabClose,&quot;tabButton&quot;);
-				c.setAttribute(&quot;tiddler&quot;, title);
-				if (place.childNodes) {
-					place.insertBefore(document.createTextNode(&quot; &quot;),place.firstChild); // to allow break line here when many tiddlers are open
-					place.insertBefore(d,place.firstChild); 
-				}
-				else place.appendChild(d);
-			})
-	}, 
-	refresh: function(place,params){
-		removeChildren(place);
-		config.macros.tiddlersBar.handler(place,&quot;tiddlersBar&quot;,params);
-		if (config.macros.tiddlersBar.previousState!=config.macros.tiddlersBar.isShown()) {
-			story.refreshAllTiddlers();
-			if (config.macros.tiddlersBar.previousState) story.forEachTiddler(function(t,e){e.style.display=&quot;&quot;;});
-			config.macros.tiddlersBar.previousState = !config.macros.tiddlersBar.previousState;
-		}
-	},
-	isShown : function(){
-		if (config.options.chkDisableTabsBar) return false;
-		if (!config.options.chkHideTabsBarWhenSingleTab) return true;
-		var cpt=0;
-		story.forEachTiddler(function(){cpt++});
-		return (cpt&gt;1);
-	},
-	selectNextTab : function(){  //used when the current tab is closed (to select another tab)
-		var previous=&quot;&quot;;
-		story.forEachTiddler(function(title){
-			if (!config.macros.tiddlersBar.currentTiddler) {
-				story.displayTiddler(null,title);
-				return;
-			}
-			if (title==config.macros.tiddlersBar.currentTiddler) {
-				if (previous) {
-					story.displayTiddler(null,previous);
-					return;
-				}
-				else config.macros.tiddlersBar.currentTiddler=&quot;&quot;; 	// so next tab will be selected
-			}
-			else previous=title;
-			});		
-	},
-	onSelectTab : function(e){
-		var t = this.getAttribute(&quot;tiddler&quot;);
-		if (t) story.displayTiddler(null,t);
-		return false;
-	},
-	onTabClose : function(e){
-		var t = this.getAttribute(&quot;tiddler&quot;);
-		if (t) {
-			if(story.hasChanges(t) &amp;&amp; !readOnly) {
-				if(!confirm(config.commands.cancelTiddler.warning.format([t])))
-				return false;
-			}
-			story.closeTiddler(t);
-		}
-		return false;
-	},
-	onTabSave : function(e) {
-		var t = this.getAttribute(&quot;tiddler&quot;);
-		if (!e) e=window.event;
-		if (t) config.commands.saveTiddler.handler(e,null,t);
-		return false;
-	},
-	onSelectedTabButtonClick : function(event,src,title) {
-		var t = this.getAttribute(&quot;tiddler&quot;);
-		if (!event) event=window.event;
-		if (t &amp;&amp; config.options.txtSelectedTiddlerTabButton &amp;&amp; config.commands[config.options.txtSelectedTiddlerTabButton])
-			config.commands[config.options.txtSelectedTiddlerTabButton].handler(event, src, t);
-		return false;
-	},
-	onTiddlersBarAction: function(event) {
-		var source = event.target ? event.target.id : event.srcElement.id; // FF uses target and IE uses srcElement;
-		if (source==&quot;tiddlersBar&quot;) story.displayTiddler(null,'New Tiddler',DEFAULT_EDIT_TEMPLATE,false,null,null);
-	},
-	createActiveTabButton : function(place,title) {
-		if (config.options.txtSelectedTiddlerTabButton &amp;&amp; config.commands[config.options.txtSelectedTiddlerTabButton]) {
-			var btn = createTiddlyButton(place, title, config.commands[config.options.txtSelectedTiddlerTabButton].tooltip ,config.macros.tiddlersBar.onSelectedTabButtonClick);
-			btn.setAttribute(&quot;tiddler&quot;, title);
-		}
-		else
-			createTiddlyText(place,title);
-	}
-}
-
-story.coreCloseTiddler = story.coreCloseTiddler? story.coreCloseTiddler : story.closeTiddler;
-story.coreDisplayTiddler = story.coreDisplayTiddler ? story.coreDisplayTiddler : story.displayTiddler;
-
-story.closeTiddler = function(title,animate,unused) {
-	if (title==config.macros.tiddlersBar.currentTiddler)
-		config.macros.tiddlersBar.selectNextTab();
-	story.coreCloseTiddler(title,false,unused); //disable animation to get it closed before calling tiddlersBar.refresh
-	var e=document.getElementById(&quot;tiddlersBar&quot;);
-	if (e) config.macros.tiddlersBar.refresh(e,null);
-}
-
-story.displayTiddler = function(srcElement,tiddler,template,animate,unused,customFields,toggle){
-	story.coreDisplayTiddler(config.macros.tiddlersBar.tabsAnimationSource,tiddler,template,animate,unused,customFields,toggle);
-	var title = (tiddler instanceof Tiddler)? tiddler.title : tiddler;  
-	if (config.macros.tiddlersBar.isShown()) {
-		story.forEachTiddler(function(t,e){
-			if (t!=title) e.style.display=&quot;none&quot;;
-			else e.style.display=&quot;&quot;;
-		})
-		config.macros.tiddlersBar.currentTiddler=title;
-	}
-	var e=document.getElementById(&quot;tiddlersBar&quot;);
-	if (e) config.macros.tiddlersBar.refresh(e,null);
-}
-
-var coreRefreshPageTemplate = coreRefreshPageTemplate ? coreRefreshPageTemplate : refreshPageTemplate;
-refreshPageTemplate = function(title) {
-	coreRefreshPageTemplate(title);
-	if (config.macros.tiddlersBar) config.macros.tiddlersBar.refresh(document.getElementById(&quot;tiddlersBar&quot;));
-}
-
-ensureVisible=function (e) {return 0} //disable bottom scrolling (not useful now)
-
-config.shadowTiddlers.StyleSheetTiddlersBar = &quot;/*{{{*/\n&quot;;
-config.shadowTiddlers.StyleSheetTiddlersBar += &quot;#tiddlersBar .button {border:0}\n&quot;;
-config.shadowTiddlers.StyleSheetTiddlersBar += &quot;#tiddlersBar .tab {white-space:nowrap}\n&quot;;
-config.shadowTiddlers.StyleSheetTiddlersBar += &quot;#tiddlersBar {padding : 1em 0.5em 2px 0.5em}\n&quot;;
-config.shadowTiddlers.StyleSheetTiddlersBar += &quot;.tabUnselected .tabButton, .tabSelected .tabButton {padding : 0 2px 0 2px; margin: 0 0 0 4px;}\n&quot;;
-config.shadowTiddlers.StyleSheetTiddlersBar += &quot;.tiddler, .tabContents {border:1px [[ColorPalette::TertiaryPale]] solid;}\n&quot;;
-config.shadowTiddlers.StyleSheetTiddlersBar +=&quot;/*}}}*/&quot;;
-store.addNotification(&quot;StyleSheetTiddlersBar&quot;, refreshStyles);
-
-config.refreshers.none = function(){return true;}
-config.shadowTiddlers.PageTemplate=config.shadowTiddlers.PageTemplate.replace(/&lt;div id='tiddlerDisplay'&gt;&lt;\/div&gt;/m,&quot;&lt;div id='tiddlersBar' refresh='none' ondblclick='config.macros.tiddlersBar.onTiddlersBarAction(event)'&gt;&lt;/div&gt;\n&lt;div id='tiddlerDisplay'&gt;&lt;/div&gt;&quot;);
-
-//}}}</pre>
-</div>
-<div title="Todo" modifier="Isaac Liu" created="200901272128" modified="200901272144" changecount="3">
-<pre>* Have a big download link in the front page
-* circular link in the front
-* Move download link to the sparc toolchains in the top and then add the path
-* Console instructions with wget tar(unzip) or curl
-* explain more about examples
+<div title="Todo" modifier="Isaac Liu" created="200901272128" modified="200901280225" tags="excludeSearch" changecount="4">
+<pre>* explain more about examples
 </pre>
 </div>
 <div title="ToolbarCommands" modifier="Isaac Liu" created="200901171836" modified="200901180222" tags="excludeSearch" changecount="7">
 <pre>|~ViewToolbar|+editTiddler permalink|
 |~EditToolbar|+saveTiddler -cancelTiddler deleteTiddler|</pre>
 </div>
-<div title="Toolchain" modifier="Hiren Patel" created="200901212300" modified="200901222122" changecount="7">
+<div title="Toolchain" modifier="Isaac Liu" created="200901212300" modified="200901280213" changecount="19">
 <pre>* These instructions are for the ''bash'' shell.
-* Download the version appropriate for your platform from [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]] and store it in a temporary path such as ''/tmp''.
+* Download the version appropriate for your platform from [[SPARC ELF GCC 3.4.4|ftp://gaisler.com/gaisler.com/bcc/bin/]] (Windows and linux), or [[SPARC ELF GCC 3.4.4|http://chess.eecs.berkeley.edu/pret/src/sparc-elf-3.4.4.tar.bz2]] (Mac OSX or [[build from source|Building sparc toolchains for Mac users]])  and store it in a temporary path such as ''/tmp''.
 * Untar the downloaded file to the directory you wish to install it.
 {{{
 $ cd &lt;path-to-install-toolchain&gt;
@@ -3600,7 +3265,6 @@ Copyright (C) 2004 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 }}}
-* Note: Mac OSX users need to either recompile the toolchain from [[source|Building sparc toolchains for Mac users]] or use our [[precompiled binaries|http://chess.eecs.berkeley.edu/pret/src/mac-osx-sparc-elf-3.4.4.zip]]. 
 </pre>
 </div>
 <div title="Usage" modifier="Hiren Patel" created="200809262106" modified="200901222124" tags="Usage" changecount="10">
