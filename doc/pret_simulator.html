@@ -1916,7 +1916,7 @@ if (version.major+.1*version.minor+.01*version.revision&gt;=2.2) {
 <div title="NoticeBoard" modifier="Isaac Liu" created="200701130013" modified="200901181934" tags="MochaTheme" changecount="11">
 <pre>[img[chesslogo.jpg][http://chess.eecs.berkeley.edu]][img[callogo.jpg][http://www.berkeley.edu]][img[culogo.jpg][http://www.columbia.edu]]
 Last Updated: 
-Monday, 2 January, 2009.
+Saturday, 17 January, 2009
 </pre>
 </div>
 <div title="PRET_ISS" modifier="YourName" created="200901171218" changecount="3">
@@ -2139,14 +2139,14 @@ The PRET simulator has been tested on [[Cygwin|http://www.cygwin.com/]] (1.5.25-
 We provide C++ and SystemC versions of the PRET simulator.  This enables the simulator to incorporate third-party hardware components defined using SystemC.
 # [[SystemC 2.2.0|http://systemc.org]]</pre>
 </div>
-<div title="Running" modifier="YourName" created="200812300554" modified="200902022029" tags="Running" changecount="17">
+<div title="Running" modifier="YourName" created="200812300554" modified="200902022235" tags="Running" changecount="20">
 <pre>The pret executable is compiled in $PRET_ISS/src/. [[Usage]] describes how to execute the simulator. In order to compile these examples, the [[toolchain|Toolchain]] must be installed.
 
 We provide four examples. The steps needed to run them are described in the links below:
-# [[smile]] : An example using timing instructions that produces a smiley face,
-# [[sync_example_cases]]: A mutual exclusion example using timing instructions.
-# [[graphic]]: The video game graphic drawing,
-# [[janne]]: A test taken from the [[Malardalen WCET|http://www.mrtc.mdh.se/projects/wcet/benchmarks.html]] benchmarks.
+# [[smile]] : This example draws a smiley face.  It demonstrates the use of timing instructions. The face is separated into segments, and the printing of these segments is distributed across multiple hardware threads. The timing instructions are used to output the face segments at the correct times to get the correct output.
+# [[sync_example_cases]]: This example shows how mutual exclusion can be performed by the sole use of timing instructions. Three hardware threads are used. The first is a producer that writes values to a shared memory location, and the second is a consumer that receives these values and stores it in an array.  The third thread is an observer and prints out the value seen in the shared resource. 
+# [[graphic]]: This example implements the graphic rendering components for a video game. There is a game control thread, that hard codes the moves a game player makes. The control thread sends messages to a graphic thread that generates pixel framebuffers, and sends them to the VGA driver thread. The VGA driver thread writes to the VGA port.
+# [[janne]]: This is a test taken from the [[Malardalen WCET|http://www.mrtc.mdh.se/projects/wcet/benchmarks.html]] benchmarks.
 </pre>
 </div>
 <div title="SearchOptionPlugin" modifier="Isaac Liu" created="200901180135" modified="200901180232" tags="systemConfig" changecount="18">
