@@ -41,8 +41,6 @@ AM_INIT_AUTOMAKE
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
-# Check for python
-AM_PATH_PYTHON([2.3])
 
 # Check for program "sed"
 AC_CHECK_PROGS([SED],[sed],[:])
@@ -55,6 +53,15 @@ AC_CHECK_PROGS([PERL],[perl],[:])
 if test "$PERL" = :; then
   AC_MSG_WARN([Program perl not found. Cannot run regression.])
 fi
+
+# Check for python
+PY_FOUND="no"
+AM_PATH_PYTHON([2.3],
+	[ AC_MSG_WARN([Python is found.])
+	  PY_FOUND="yes"],
+	[ AC_MSG_ERROR([Python is required for debugger.])
+	  PY_FOUND="no"
+	  ])
 
 # Checks for libraries.
 
@@ -277,6 +284,7 @@ esac
 dnl END SystemC copyrighted material.
 #####################################################################
 
+if test "$PY_FOUND" == "yes"; then
 AC_ARG_ENABLE(debugger,
 [  --disable-debugger          Do not compile debugger ],
 [case "${enableval}" in
@@ -285,6 +293,10 @@ AC_ARG_ENABLE(debugger,
   *) AC_MSG_ERROR(bad value ${enableval} for --disable-debugger) ;;
 esac],[debugger=true])
 AM_CONDITIONAL(DEBUGGER, test x$debugger = xtrue)
+else
+AM_CONDITIONAL(DEBUGGER, false)
+fi
+
 
 AC_ARG_ENABLE(systemc,
 [  --enable-systemc          Compile with SystemC ],
@@ -310,7 +322,6 @@ current_dir=`pwd`; cd $prefix; prefix=`pwd`; cd $current_dir
 
 # Setup the with argument for SystemC and Python PATH setup
 SYSTEMC_FOUND="no"
-PY_FOUND="no"
 FAILED="no"
 
 # Check if environment variables SYSTEMC and PRET_ISS are set.
@@ -375,15 +386,16 @@ fi
 	
 if test "$FAILED" == "no" 
 then
-# Christopher: Remove the tests/Makefile target for the release.
-AC_OUTPUT([Makefile
-	   src/Makefile
-	   src/core/Makefile
-	   src/debugger/Makefile
+AC_OUTPUT([Makefile 
+	   src/Makefile 
+	   src/core/Makefile 
+	   src/debugger/Makefile 
 	   scripts/Makefile 
-	   tests/Makefile ])
+	   tests/Makefile
+	   ])
 fi
 
+	   
 # dnl Dump a summary of configure process
 echo ""
 echo "------------------------------------------------"
@@ -399,10 +411,16 @@ then
 else
   echo " - libsystemc.a not found"
 fi
-else
-  echo " + None"
 fi
-	
+
+# Python dependency.
+if test "$PY_FOUND" != "no"
+then
+  echo " + Python: Found."
+else
+  echo " + Python: Not found. Debugger not being compiled."
+fi
+
 echo " Environment Variables:"
 if test x$systemc = xtrue
 then     
@@ -411,7 +429,7 @@ then
   echo " + SYSTEMC: $SCVAR"
 fi
 fi
-		
+
 if test "$ISSVAR" != ""
 then 
   echo " + PRET_ISS: $ISSVAR"
@@ -428,7 +446,7 @@ else
   echo " + Director    : ${prefix}"
 fi
 echo " Extra Programs:"
-if test x$debugger = xtrue 
+if test x$debugger = xtrue && test "$PY_FOUND" == "yes"
 then
   echo " + Debugger: Yes"
 else
