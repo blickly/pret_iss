@@ -154,7 +154,7 @@ int sc_main(int argc, char * argv[]) {
         for (int i = 0; i < NUM_THREADS; i++) {
             hw_thread_ptr * hp = db.get_thread(i); 
             cout << "thread[" << i << "], "
-                 << ", # cycles: " << hp->get_handle()->cnt_cycles << endl;
+                 << "# cycles: " << hp->get_handle()->cnt_cycles << endl;
             cout << "thread[" << i << "], " << "# instructions: "
                  << hp->get_handle()->cnt_instr << endl;
             total_instr += hp->get_handle()->cnt_instr;
