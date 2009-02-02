@@ -3,7 +3,7 @@
 # Creation date: March 2, 2008
 # Last Modified: $Date$ 
 ####################################################################
-#Copyright (c) 2007-2008 The Regents of the University of California.
+#Copyright (c) 2007-2009 The Regents of the University of California.
 #All rights reserved.
 #
 #Permission is hereby granted, without written agreement and without
@@ -45,7 +45,7 @@ thread_spacing = '0x00100000'
 # Realistic scratchpad sized spacing.
 #thread_spacing = '0x00010000'
 
-quiet = True
+quiet = False
          
 def make_c_file(thread_num, options):
    os.putenv('CFLAGS', options)
@@ -134,4 +134,6 @@ if __name__ == "__main__":
    else:
       if "-v" in sys.argv:
          quiet = False
+      elif "-q" in sys.argv:
+         quiet = True
       compile_all(sys.argv[1])
