@@ -4,7 +4,7 @@ compile:
 	python ${PRET_ISS}/scripts/compile_threads.py . -v
 
 clean:
-	$(RM) *.exe *.o bare_thread*.srec bare_thread*.dump prom*.srec prom.h
+	$(RM) *.exe *.o thread*.srec thread*.dump prom*.srec prom.h
 	
 distclean: clean
 	$(RM) *.srec 

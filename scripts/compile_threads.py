@@ -3,7 +3,7 @@
 # Creation date: March 2, 2008
 # Last Modified: $Date$ 
 ####################################################################
-#Copyright (c) 2007-2009 The Regents of the University of California.
+#Copyright (c) 2007-2008 The Regents of the University of California.
 #All rights reserved.
 #
 #Permission is hereby granted, without written agreement and without
@@ -45,7 +45,7 @@ thread_spacing = '0x00100000'
 # Realistic scratchpad sized spacing.
 #thread_spacing = '0x00010000'
 
-quiet = False
+quiet = True
          
 def make_c_file(thread_num, options):
    os.putenv('CFLAGS', options)
@@ -114,9 +114,8 @@ def compile_threads(num_threads):
          print "Thread %d alignments are: %s" % (thread, prog_ops)
       make_c_file(thread, prog_ops)
       prog_addr = align(prog_addr + int(thread_spacing, 16))
-      assert get_max_address('bare_thread%d.srec' % thread) < prog_addr, \
+      assert get_max_address('thread%d.srec' % thread) < prog_addr, \
              "Thread %d is too large to fit in ram" % thread
-      shutil.copy('bare_thread%d.srec' % thread, 'thread%d.srec' %thread)
 
 def compile_all(working_dir):
    olddir = os.path.abspath(os.curdir)
@@ -135,6 +134,4 @@ if __name__ == "__main__":
    else:
       if "-v" in sys.argv:
          quiet = False
-      elif "-q" in sys.argv:
-         quiet = True
       compile_all(sys.argv[1])

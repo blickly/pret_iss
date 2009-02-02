@@ -1,8 +1,8 @@
 LDFLAGS=$(CFLAGS)
 CCFLAGS=$(CFLAGS) -msoft-float
-SREC=bare_thread$(THREAD_NUM).srec
-EXE=bare_thread$(THREAD_NUM).exe
-DUMP=bare_thread$(THREAD_NUM).dump
+SREC=thread$(THREAD_NUM).srec
+EXE=thread$(THREAD_NUM).exe
+DUMP=thread$(THREAD_NUM).dump
 CC=sparc-elf-gcc
 LD=sparc-elf-ld
 

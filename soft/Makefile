@@ -31,7 +31,7 @@ compile:
 	python $(PRET_ISS)/scripts/compile_threads.py . -v
 
 clean:
-	$(RM) *.exe *.o bare_thread*.srec prom*.srec prom.h bare_thread*.dump prom*.dump
+	$(RM) *.exe *.o thread*.srec prom*.srec prom.h thread*.dump prom*.dump
 	
 distclean: clean
 	$(RM) *.srec

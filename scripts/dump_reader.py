@@ -47,7 +47,7 @@ class DumpReader:
     self.labels = []
 
   def parse_dumps(self, dump_dir):
-    thread_list = [os.path.join(dump_dir, "bare_thread%d.dump" % i) 
+    thread_list = [os.path.join(dump_dir, "thread%d.dump" % i) 
                                                           for i in range(6)]
     for tfile in thread_list:
        (tlines, tlabels) = self.parse_dump(tfile)

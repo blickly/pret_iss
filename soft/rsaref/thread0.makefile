@@ -61,9 +61,9 @@ encrypt.$(O) : $(RDEMODIR)encrypt.c $(RSAREFDIR)global.h $(RSAREFDIR)rsaref.h
 	$(CC) $(CFLAGS) $(RDEMODIR)encrypt.c
 
 thread$(THREAD_NUM) : encrypt
-	mv encrypt bare_thread$(THREAD_NUM).exe
-	$(BUILDTOOL_PREFIX)objcopy -O srec bare_thread$(THREAD_NUM).exe bare_thread$(THREAD_NUM).srec
-	$(BUILDTOOL_PREFIX)objdump -D bare_thread$(THREAD_NUM).exe > bare_thread$(THREAD_NUM).dump
+	mv encrypt thread$(THREAD_NUM).exe
+	$(BUILDTOOL_PREFIX)objcopy -O srec thread$(THREAD_NUM).exe thread$(THREAD_NUM).srec
+	$(BUILDTOOL_PREFIX)objdump -D thread$(THREAD_NUM).exe > thread$(THREAD_NUM).dump
 
 
 include $(RSAREFDIR)targets.mak

@@ -169,10 +169,10 @@ def compile_threads(num_threads, delete_exes=True):
          print "Thread %d alignments are: %s" % (thread, prog_ops)
       make_c_file(thread, prog_ops)
       prog_addr = align(prog_addr + int(thread_spacing, 16))
-      assert get_max_address('bare_thread%d.srec' % thread) < prog_addr, \
+      assert get_max_address('thread%d.srec' % thread) < prog_addr, \
              "Thread %d is too large to fit in ram" % thread
       merge_srec_files('prom%d.srec' % thread, 
-                       'bare_thread%d.srec' % thread, 
+                       'thread%d.srec' % thread, 
                        'thread%d.srec' %thread )
 
 def compile_all(working_dir, delete_exes = True):
