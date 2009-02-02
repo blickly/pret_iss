@@ -23,6 +23,4 @@ all:
 	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
 
 clean: 
-	$(RM) *.exe *.dmp *.o *~
-distclean: 
 	$(RM) *.exe *.dmp *.o *~ *.srec *.dump
