@@ -11,7 +11,7 @@ run: compile
 	$(PRET_ISS)/src/pret . -1
 
 debug: compile
-	$(PRET_ISS)/scripts/csim/py .
+	$(PRET_ISS)/scripts/csim.py .
 
 %.exe: %.o
 #	# This is more lightweight by not linking in any libraries
@@ -25,7 +25,7 @@ debug: compile
 %.dump: %.exe
 	sparc-elf-objdump -D $< > $@
 
-%.o: $(C_FILES) 
+*.o: $(C_FILES) 
 	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
 
 clean: 
