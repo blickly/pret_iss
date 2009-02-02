@@ -60,7 +60,8 @@ def system(command, abort_on_fail=True):
 
 def make_c_file(thread_num, options):
    os.putenv('CFLAGS', options)
-   system('make -f thread%d.makefile' % thread_num)
+   system('make thread%d.srec' % thread_num)
+   system('make thread%d.dump' % thread_num)
 
 def generate_srec_dump(exe_file, srec_file, dump_file):
    """Generate the srec and dump files from a given source file"""
@@ -93,7 +94,7 @@ def compile_threads(num_threads):
    """Compile the final simluation-loadable SREC files for each thread"""
    prog_addr = int(thread_start, 16)
    for thread in range(num_threads):
-      prog_ops = start_at(prog_addr)
+      prog_ops = start_at(prog_addr) + " -DPROC_%d " % thread
       if not quiet:
          print "Thread %d alignments are: %s" % (thread, prog_ops)
       make_c_file(thread, prog_ops)
