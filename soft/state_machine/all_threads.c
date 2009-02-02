@@ -91,7 +91,7 @@ int main()
   END_SIMULATION;
 }
 
-#elif defined(PROC_0)
+#elif defined(PROC_1)
 int main()
 {
   int i;
