@@ -47,12 +47,6 @@ thread_spacing = '0x00100000'
 
 quiet = False
          
-def make_c_file(thread_num, options):
-   os.putenv('CFLAGS', options)
-   if quiet:
-      system('make -f thread%d.makefile > /dev/null' % thread_num)
-   else:
-      system('make -f thread%d.makefile' % thread_num)
 
 def system(command, abort_on_fail=True):
    """Runs a system call and checks for errors"""
@@ -64,26 +58,16 @@ def system(command, abort_on_fail=True):
       if abort_on_fail:
          sys.exit(1)
 
+def make_c_file(thread_num, options):
+   os.putenv('CFLAGS', options)
+   system('make -f thread%d.makefile' % thread_num)
+
 def generate_srec_dump(exe_file, srec_file, dump_file):
    """Generate the srec and dump files from a given source file"""
    assert os.path.exists(exe_file), "Cannot find " + exe_file
    system('sparc-elf-objcopy -O srec %s %s' % (exe_file, srec_file))
    system('sparc-elf-objdump -D %s > %s' % (exe_file, dump_file))
 
-def augment_h_file(h_file, prog_addr):
-   generator_file = h_file + '.generator'
-   assert os.path.exists(generator_file), "Cannot find " + generator_file
-   write_file = open(h_file, "w")
-   for in_line in open(generator_file, "rb"):
-      if 'RAMSTART' in in_line:
-         write_file.write("#define RAMSTART   0x%X\n" % prog_addr)
-      elif 'RAMSIZE' in in_line:
-         write_file.write("#define RAMSIZE   %s\n" % thread_spacing)
-      else:
-         write_file.write(in_line)
-   write_file.close()
-   assert os.path.exists(h_file), "Could not create " + h_file
-     
 def get_max_address(srec_file):
    """Find the address one past the end of the given SREC file"""
    max_addr = 0
