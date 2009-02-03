@@ -10,7 +10,7 @@ enum STATE {RAISE, LOWER, LOG};
 // By putting it on the scratchpad, thread0 is able to execute 
 // faster than thread1 and win the race condition on value.
 
-#if defined(PROC_0)
+#if defined(THREAD_0)
 /* Produce very simple stream of "random" data.
  */
 int getState()
@@ -86,7 +86,7 @@ int main()
   END_SIMULATION;
 }
 
-#elif defined(PROC_1)
+#elif defined(THREAD_1)
 #define WAIT( time ) DEAD3( time );DEAD3(0)
 int main()
 {
@@ -105,7 +105,7 @@ int main()
   //END_SIMULATION;
 }
 
-// more #elif defined(PROC_?) cases can go here
+// more #elif defined(THREAD_?) cases can go here
 #else
 int main() { WAIT_FOR_END_SIMULATION; }
 #endif
