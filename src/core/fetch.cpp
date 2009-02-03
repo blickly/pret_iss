@@ -46,6 +46,7 @@ void fetch::behavior() {
     hw_thread_ptr input_thread = in.read();
 #endif /* _NO_SYSTEMC_ */
 
+
     if (_is_not_valid_hardware_thread(input_thread)) {
 #ifdef _NO_SYSTEMC_
         output_thread = input_thread;
@@ -55,6 +56,20 @@ void fetch::behavior() {
         return;
     }
 
+    input_thread->spec_regs.decrement_deadline_timers();
+    /* If we had a previously dead_stalled set, then we will reset it in
+       the register access stage when we identify what particular
+       register it is that we are considered with. */
+    input_thread->set_deadline_stalled(false);
+
+    if (input_thread->is_memory_stalled()) {
+#ifdef _NO_SYSTEMC_
+        output_thread = input_thread;
+#else
+        out.write(input_thread);
+#endif /* _NO_SYSTEMC_ */
+      return;
+    }
     //    cout << hex << ht->PC << "\t" << ht->PC << endl;
     bool fetch_stall = false;
     uint32_t instruction_bits =
@@ -75,12 +90,6 @@ void fetch::behavior() {
     }
 
     _debug_pipeline(input_thread);
-
-    input_thread->spec_regs.decrement_deadline_timers();
-    /* If we had a previously dead_stalled set, then we will reset it in
-       the register access stage when we identify what particular
-       register it is that we are considered with. */
-    input_thread->set_deadline_stalled(false);
 
 #ifdef _NO_SYSTEMC_
     output_thread = input_thread;
@@ -103,6 +112,5 @@ void fetch::_debug_pipeline(const hw_thread_ptr& hardware_thread) {
 }
 
 bool fetch::_is_not_valid_hardware_thread(const hw_thread_ptr& hardware_thread) {
-    return (hardware_thread.is_null() || !hardware_thread->is_enabled()
-            || hardware_thread->is_memory_stalled());
+    return (hardware_thread.is_null() || !hardware_thread->is_enabled());
 }
