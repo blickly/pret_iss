@@ -95,6 +95,14 @@
  */
 #define SCRATCH_SIZE 0x10000 /* Normal size (0x10000 = 64 KB) */
 
+/** The size of a thread's local memory.
+ */
+#define THREAD_MEM_SIZE 0x100000 /* Normal size (0x100000 = 1 MB) */
+
+/** The starting location of thread0.
+ */
+#define THREAD0_START 0x40000000
+
 /** Access delay from the programmable DMA.
  */
 #define BURST_DELAY 4

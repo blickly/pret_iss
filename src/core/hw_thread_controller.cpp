@@ -147,6 +147,10 @@ void hw_thread_controller::parse_srec_files(srec_parser& parser,
         bound_parser.load_inst_spm(i, file_ispm);
         bound_parser.load_data_spm(i, file_dspm);
 
+        uint32_t stack_top = THREAD0_START + THREAD_MEM_SIZE * i - 4;
+        _pool[i]->get_handle()->regs.set_reg(30, stack_top, 0);
+        _pool[i]->get_handle()->regs.set_reg(14, stack_top, 0);
+
 #ifdef DBG_THREAD_CONT
         cout << "Starting PC for thread " << i << " is " << hex << starting_addr << endl;;
 #endif /* DBG_THREAD_CONT */
