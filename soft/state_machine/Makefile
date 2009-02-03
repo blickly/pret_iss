@@ -4,29 +4,28 @@ C_FILES=all_threads.c
 CC=sparc-elf-gcc
 LD=sparc-elf-ld
 
+all: clean compile
+
 compile:
 	$(PRET_ISS)/scripts/compile_threads.py .
 
-run: compile
+run:
 	$(PRET_ISS)/src/pret . -1
 
-debug: compile
+debug:
 	$(PRET_ISS)/scripts/csim.py .
 
-%.exe: %.o
-#	# This is more lightweight by not linking in any libraries
-#	$(LD) $(LDFLAGS) $^ -o $@ -e main
-	# This is a normal configuration that supports libraries
+thread%.o: $(C_FILES) 
+	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
+
+thread%.exe: thread%.o
 	$(CC) $(CCFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
 
-%.srec: %.exe
+thread%.srec: thread%.exe
 	sparc-elf-objcopy -O srec $< $@
 
-%.dump: %.exe
+thread%.dump: thread%.exe
 	sparc-elf-objdump -D $< > $@
-
-*.o: $(C_FILES) 
-	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
 
 clean: 
 	$(RM) *.exe *.dmp *.o *~ *.srec *.dump
