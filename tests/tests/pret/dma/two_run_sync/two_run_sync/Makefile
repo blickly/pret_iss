@@ -1,28 +1,37 @@
-all: compile clean
+LDFLAGS=$(filter-out -D%,$(CFLAGS))
+#LDFLAGS=$(CFLAGS)
+CCFLAGS=$(CFLAGS) -msoft-float -O1
+C_FILES=all_threads.c
+CC=sparc-elf-gcc
+LD=sparc-elf-ld
+
+all: clean compile
 
 compile:
-	python ${PRET_ISS}/scripts/compile_threads.py . -v
+	$(PRET_ISS)/scripts/compile_threads.py .
 
-thread0.srec thread0.dump:
-	make -f thread0.makefile
+run:
+	$(PRET_ISS)/src/pret . -1
 
-thread1.srec thread1.dump:
-	make -f thread1.makefile
+debug:
+	$(PRET_ISS)/scripts/csim.py .
 
-thread2.srec thread2.dump:
-	make -f thread2.makefile
+thread%.o: $(C_FILES) 
+	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
 
-thread3.srec thread3.dump:
-	make -f thread3.makefile
+thread%.exe: thread%.o
+# This is more lightweight by not linking in any libraries
+	$(LD) $(LDFLAGS) $^ -o $@ -e main
+# This is a normal configuration that supports libraries	
+#	$(CC) $(LDFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
 
-thread4.srec thread4.dump:
-	make -f thread4.makefile
+thread%.srec: thread%.exe
+	sparc-elf-objcopy -O srec $< $@
 
-thread5.srec thread5.dump:
-	make -f thread5.makefile
+thread%.dump: thread%.exe
+	sparc-elf-objdump -D $< > $@
 
-clean:
-	$(RM) *.exe *.o prom*.srec prom.h
-	
-distclean: clean
-	$(RM) *.srec 
+clean: 
+	$(RM) *.exe *.dmp *.o *~ *.srec *.dump
+
+.PHONY: compile run debug clean
