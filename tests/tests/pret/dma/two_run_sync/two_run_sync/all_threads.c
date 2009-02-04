@@ -34,7 +34,7 @@ int main()
 #elif defined(THREAD_1)
 int main()
 {
-  DEAD(0x310);
+  DEAD(0x300);
   int i;
   for (i = 0; i < 2; ++i) {  
     DEAD(PERIOD);
