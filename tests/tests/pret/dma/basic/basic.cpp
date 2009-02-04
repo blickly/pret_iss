@@ -66,9 +66,13 @@ int main(int argc, char *argv[])
         load_file = pret_iss_path + file_name;
         /* Generate the SREC files*/
         string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str() + " -q";
-        //cout << "compile command: " << compile_srec << endl;
+        compile_srec = compile_srec + " 2>/dev/null";//cout << "compile command: " << compile_srec << endl;
 #ifdef USE_CSIM
-        system(compile_srec.c_str());
+        int failed = system(compile_srec.c_str());
+	if (failed) {
+	  cout << "Error: system() failed." << endl;
+	}
+
         string csim_cmd = pret_iss_path + "/scripts/csim.py " + load_file.c_str() + " <" + pret_iss_path + cmd_file;
         // cout << "Command: " << csim_cmd.c_str() << endl;
         system(csim_cmd.c_str());
