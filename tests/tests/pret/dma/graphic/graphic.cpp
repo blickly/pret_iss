@@ -109,8 +109,8 @@ int main(int argc, char *argv[])
         //cout << "compile command: " << compile_srec  << endl;
         system(compile_srec.c_str());
         core db(otxt_name.c_str());
-	//db.run(450000000);
-	db.run(900000000);
+	db.run(450000000);
+	//db.run(900000000);
         spit_binary_to_ascii();
     } else {
         cout << "Error: regression.h has not set the pret_iss_path string correctly" << endl;
