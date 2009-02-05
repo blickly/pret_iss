@@ -55,7 +55,6 @@ void fetch::behavior() {
 #endif /* _NO_SYSTEMC_ */
         return;
     }
-
     input_thread->spec_regs.decrement_deadline_timers();
     /* If we had a previously dead_stalled set, then we will reset it in
        the register access stage when we identify what particular
@@ -69,13 +68,15 @@ void fetch::behavior() {
         out.write(input_thread);
 #endif /* _NO_SYSTEMC_ */
       return;
-    }
+   }
     //    cout << hex << ht->PC << "\t" << ht->PC << endl;
     bool fetch_stall = false;
     uint32_t instruction_bits =
         instruction_memory->read_inst(input_thread->get_id(), input_thread->get_pc(), fetch_stall);
     input_thread->set_fetch_stalled(fetch_stall);
     input_thread->inst.set_inst(instruction_bits);
+
+    
 
     //    cout << "fetch:: stalled: " << input_thread->fetch_stalled << endl;
     /** FIXME: This should be handled by throwing a trap and catching
@@ -112,5 +113,6 @@ void fetch::_debug_pipeline(const hw_thread_ptr& hardware_thread) {
 }
 
 bool fetch::_is_not_valid_hardware_thread(const hw_thread_ptr& hardware_thread) {
-    return (hardware_thread.is_null() || !hardware_thread->is_enabled());
+  return (hardware_thread.is_null() || !hardware_thread->is_enabled());
+
 }

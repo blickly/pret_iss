@@ -154,6 +154,7 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
     /*  If the deadline is less than or equal to 0 then we
     *  should reset it if there is a new one availabile.
     */
+
     if (hardware_thread->spec_regs.get_dt(hardware_thread->inst.get_rd()) <= 0) {
         hardware_thread->inst.set_write_special_registers(true);
     } else {

@@ -262,7 +262,7 @@ void except::inc_pc(const hw_thread_ptr& hardware_thread) {
     } else {
         hardware_thread->set_pc(hardware_thread->get_pc() + 4);
     }
-
+    
     if (branch_check(hardware_thread)) {
         //    if (branch_check(hardware_thread->inst, hardware_thread->spec_regs.icc)) {
         if (!(hardware_thread->inst.is_branch() && hardware_thread->inst.is_annul() && hardware_thread->inst.get_conditional_branch() == BRCH_BA)) {
@@ -342,8 +342,13 @@ void except::write_regs(const hw_thread_ptr& hardware_thread) {
 
 void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
 
+//   if (hardware_thread->inst.get_select_special_register() == SREG_MEM2SP) {
+//     cout << "write_special: " << true<< endl;
+//     cout << "MEM2SP, is_write: " << hardware_thread->inst.is_write_special_registers() << endl;
+//   }
     if (hardware_thread->inst.is_write_special_registers()) {
         switch (hardware_thread->inst.get_select_special_register()) {
+	
         case SREG_Y:
             hardware_thread->spec_regs.set_y(hardware_thread->inst.get_alu_result());
             break;
@@ -377,6 +382,7 @@ void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
             break;
         case SREG_MEM2SP:
             /*FIXME: Hiren More DMA to its own arch.version */
+	  //	  cout << "DMA: Perform DMA functions" << endl;
                 coproc_dma->set_mem_source(hardware_thread->get_id(), hardware_thread->inst.get_alu_result());
                 coproc_dma->set_spm_target(hardware_thread->get_id(), hardware_thread->inst.get_op3_value());
                 coproc_dma->make_transfer(hardware_thread);

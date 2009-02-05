@@ -270,7 +270,8 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
         _memory_size = MEM_UNSIGNED_BYTE;
         break;
     case OP3_STD:
-        _aluop = ALU_ADD;
+
+      _aluop = ALU_ADD;
         _write_memory = true;
         _db_word_instruction = true;
         break;
@@ -323,8 +324,9 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
         // These are opcodes added for DMA coprocessor instructions.
     case OP3_MEM2SP:
         // FIXME: Why do deadline and DMA use _select_special_register?
-        //        cout << "COPROC: STC" << endl;
-        _aluop = ALU_ADD;
+      //      cout << "COPROC: STC" << endl;
+        _write_special_registers = true;
+        _aluop = ALU_ADD; 
         _select_special_register = SREG_MEM2SP;
         break;
     default:
