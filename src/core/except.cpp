@@ -105,6 +105,7 @@ void except::behavior() {
     hw_thread_ptr hardware_thread = in.read();
 #endif /* _NO_SYSTEMC_ */
 
+    
     /* Check if the hardware thread is enabled */
     if (_is_not_valid_hwthread(hardware_thread)) {
         return;
@@ -113,11 +114,14 @@ void except::behavior() {
        cycle count to 6 */
     hardware_thread->cnt_cycles += 6;
 
+
     /* If fetch stage is stalled then just increment the cycle count
     and return. */
     if (hardware_thread->is_fetch_stalled()) {
         return;
     }
+
+    hardware_thread->set_fetch_stalled(false);
 
     debug(hardware_thread);
 
