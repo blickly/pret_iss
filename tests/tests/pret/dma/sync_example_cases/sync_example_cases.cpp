@@ -79,7 +79,25 @@ int main(int argc, char *argv[])
         }
         /* Generate the SREC files*/
         string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str() + " -q";
-        compile_srec = compile_srec + " 2>/dev/null";//cout << "compile command: " << compile_srec << endl;
+	string log_file = "compile.log";
+        compile_srec = compile_srec + " 2>" + log_file;
+	//cout << "compile command: " << compile_srec << endl;
+        ifstream log(log_file.c_str());
+        if (log.is_open()) {
+            string line;
+            getline(log, line);
+            if (line.size() > 0) {
+	      if (line.find("Error")) {
+		cout << "Error: Test compilation failed" << endl;
+		return;
+	      }
+	    }
+	    log.close();
+	} else {
+	  cout << "Log file not open" << endl;
+	}
+	
+	
         int failed = system(compile_srec.c_str());
 	if (failed) {
 	  cout << "Error: system() failed." << endl;
