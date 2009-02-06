@@ -59,7 +59,7 @@ void fetch::behavior() {
     /* If we had a previously dead_stalled set, then we will reset it in
        the register access stage when we identify what particular
        register it is that we are considered with. */
-    input_thread->set_deadline_stalled(false);
+    //input_thread->set_deadline_stalled(false);
 
     if (input_thread->is_memory_stalled()) {
 #ifdef _NO_SYSTEMC_
@@ -69,14 +69,18 @@ void fetch::behavior() {
 #endif /* _NO_SYSTEMC_ */
       return;
    }
-    //    cout << hex << ht->PC << "\t" << ht->PC << endl;
-    bool fetch_stall = false;
-    uint32_t instruction_bits =
-        instruction_memory->read_inst(input_thread->get_id(), input_thread->get_pc(), fetch_stall);
-    input_thread->set_fetch_stalled(fetch_stall);
-    input_thread->inst.set_inst(instruction_bits);
 
-    
+    if(!input_thread->is_deadline_stalled()){
+    //    cout << hex << ht->PC << "\t" << ht->PC << endl;
+      bool fetch_stall = false;
+      uint32_t instruction_bits =
+        instruction_memory->read_inst(input_thread->get_id(), input_thread->get_pc(), fetch_stall);
+      input_thread->set_fetch_stalled(fetch_stall);
+      input_thread->inst.set_inst(instruction_bits);
+    }
+
+    if (input_thread->get_id()== 1)
+      printf("%d = f:%d, d:%d, pc:0x%x, inst:0x%x\n", input_thread->cnt_cycles, input_thread->is_fetch_stalled(), input_thread->is_deadline_stalled(), input_thread->get_pc(), input_thread->inst.get_instruction());
 
     //    cout << "fetch:: stalled: " << input_thread->fetch_stalled << endl;
     /** FIXME: This should be handled by throwing a trap and catching
