@@ -1,4 +1,4 @@
-LDFLAGS=$(CFLAGS)
+LDFLAGS=$(filter-out -D%,$(CFLAGS))
 CCFLAGS=$(CFLAGS) -msoft-float
 SREC=thread$(THREAD_NUM).srec
 EXE=thread$(THREAD_NUM).exe
