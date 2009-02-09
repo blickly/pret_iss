@@ -86,9 +86,9 @@ int main(int argc, char *argv[])
         if (log.is_open()) {
             string line;
             getline(log, line);
-	    cout << "-->" << line << endl;
+	    //	    cout << "-->" << line << endl;
             if (line.size() > 0) {
-	      if (line.find("Error")) {
+	      if (line.find("Error")==true) {
 		cout << "Error: Test failed" << endl;
 		return 0;
 	      }
