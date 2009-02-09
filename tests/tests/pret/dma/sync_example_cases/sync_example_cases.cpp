@@ -86,10 +86,11 @@ int main(int argc, char *argv[])
         if (log.is_open()) {
             string line;
             getline(log, line);
+	    cout << "-->" << line << endl;
             if (line.size() > 0) {
 	      if (line.find("Error")) {
-		cout << "Error: Test compilation failed" << endl;
-		return;
+		cout << "Error: Test failed" << endl;
+		return 0;
 	      }
 	    }
 	    log.close();
