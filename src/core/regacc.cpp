@@ -155,7 +155,12 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
     *  should reset it if there is a new one availabile.
     */
 
-    if (hardware_thread->spec_regs.get_dt(hardware_thread->inst.get_rd()) <= 0) {
+  //FOR DEADLOAD, USE THE FIRST BIT OF RS1 (XXXX1)
+  bool deadload = hardware_thread->inst.get_rs1() & 0x1; 
+  //FOR DEADBRANCH, USE SECOND BIT OF RS1 (XXX1X)
+  bool deadbranch = hardware_thread->inst.get_rs1() & 0x2;
+
+    if (hardware_thread->spec_regs.get_dt(hardware_thread->inst.get_rd()) <= 0 || deadload) {
         hardware_thread->inst.set_write_special_registers(true);
 	hardware_thread->set_deadline_stalled(false);
     } else {
