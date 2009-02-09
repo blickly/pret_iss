@@ -55,12 +55,65 @@
   asm volatile (pret_label"_loop_end:"); \
   asm volatile ("nop");
 
+#define DEADLOAD( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC3604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
 #define DEAD( timeout )                               \
    asm volatile ("mov %0, %%g1 \n\t .word 0xC3600001" \
                   : /* no outputs */                  \
                   : "r" (timeout)                     \
                   : "g1")
 
+#define DEADLOAD0( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC1604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOAD1( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC3604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOAD2( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC5604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOAD3( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC7604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOAD4( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC9604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOAD5( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCB604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOAD6( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCD604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOAD7( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCF604001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
 
 /*Loop deadlines are defined */
 #define DEAD0( timeout )                               \
@@ -213,7 +266,10 @@
  asm volatile(".word 0xD1602" hexstr);
 
 #define END_SIMULATION \
-  asm(".word 0x22222222");
+  asm(".word 0x22222222"); return 0
+
+#define WAIT_FOR_END_SIMULATION \
+  for(;;); return 0
 
 #define WRITE(c)                              \
  (*((volatile int*)0x80000100) = (c))
