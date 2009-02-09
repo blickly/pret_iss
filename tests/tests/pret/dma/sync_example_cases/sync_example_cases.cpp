@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
         compile_srec = compile_srec + " 2>" + log_file;
 	//cout << "compile command: " << compile_srec << endl;
         ifstream log(log_file.c_str());
-        if (log.is_open()) {
+        if (log.is_open() == true) {
             string line;
             getline(log, line);
 	    //	    cout << "-->" << line << endl;
