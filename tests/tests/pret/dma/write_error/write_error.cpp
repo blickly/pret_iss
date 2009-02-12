@@ -81,6 +81,8 @@ int main(int argc, char *argv[])
         string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str() + " -q";
 	string log_file = "compile.log";
         compile_srec = compile_srec + " 2>" + log_file;
+
+        int failed = system(compile_srec.c_str());
         ifstream log(log_file.c_str());
         if (log.is_open() == true) {
             string line;
@@ -97,7 +99,6 @@ int main(int argc, char *argv[])
 	  cout << "Log file not open" << endl;
 	}
 
-        int failed = system(compile_srec.c_str());
 	if (failed) {
 	  cout << "Error: system() failed." << endl;
 	}
