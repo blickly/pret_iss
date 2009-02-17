@@ -62,7 +62,7 @@ void regacc::behavior() {
     _deadline_instruction(input_thread);
     
     //CURRENT HACK TO THROW EXCEPTION WHEN TIMER IS ZERO!
-    _check_deadline(input_thread);
+    //_check_deadline(input_thread);
 
 //     /* Store g1 to DMA controller register. */
 //     _make_dma_transfer(input_thread);
