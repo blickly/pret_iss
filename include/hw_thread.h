@@ -94,6 +94,18 @@ public:
     */
     uint32_t get_delayed_branch_address() const;
 
+    /** Returns the trap type of the current thread
+    *
+    * @return trap type
+    */
+    short get_trap_type() const;
+
+    /** Returns true if an exception occurred during the execution
+    *
+    * @return True if an exception occurred 
+    */
+    bool is_trapped() const;
+
     /** Returns true if stall is caused by a double word instruction.
     *
     * @return True if double word instruction caused the stall, else false.
@@ -169,6 +181,12 @@ public:
     }
 #endif /* _NO_SYSTEMC_ */
 
+    /** Sets the trap type of this thread from an exception
+    *
+    * @param type The trap number that occured
+    */
+    void set_trap_type(const bool& type);
+
 
     /** Set the state if stall is caused by a double word instruction.
      *
@@ -214,6 +232,13 @@ public:
      */
     void set_memory_stalled(const bool& stall);
 
+    /** Set processor trapped if an exception occurred
+    *
+    * @param trapped True if exception occurred, else false
+    */
+    void set_trapped(const bool& trapped);
+
+
     /** Set the thread's program counter.
      *
      * @param pc New pc of thread.
@@ -242,6 +267,8 @@ private:
     bool _fetch_stalled;    // If the fetch stage causes a stall.
     unsigned int _id;       // Thread identifier.
     uint32_t _pc;           // Thread's current program counter.
+    bool _trapped;          // If the thread encounters an exception
+    short _trap_type;        // If the trap type of the thread
 
 };
 

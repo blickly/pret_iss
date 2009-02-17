@@ -45,6 +45,10 @@ uint32_t hw_thread::get_delayed_branch_address() const {
     return _branch_slot;
 }
 
+short hw_thread::get_trap_type() const{
+  return _trap_type;
+}
+
 hw_thread::hw_thread(): _id(MAX_THREAD) {
     _enabled = false;
 }
@@ -58,11 +62,13 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
     cnt_cycles = 0;
     cnt_instr = 0;
     _branch_slot = 0;
+    _trap_type = 0;
     _db_word_stalled = false;
     _enabled = false;
     _deadline_stalled = false;
     _memory_stalled = false;
     _fetch_stalled = false;
+    _trapped = false;
 }
 
 bool hw_thread::is_db_word_stalled() const {
@@ -85,6 +91,11 @@ bool hw_thread::is_fetch_stalled() const {
 bool hw_thread::is_memory_stalled() const {
     return _memory_stalled;
 }
+
+bool hw_thread::is_trapped() const {
+  return _trapped;
+}
+
 void hw_thread::operator=(const hw_thread & hardware_thread) {
     _id = hardware_thread._id;
     inst = hardware_thread.inst;
@@ -99,6 +110,8 @@ void hw_thread::operator=(const hw_thread & hardware_thread) {
     _deadline_stalled = hardware_thread._deadline_stalled;
     _memory_stalled = hardware_thread._memory_stalled;
     _fetch_stalled = hardware_thread._fetch_stalled;
+    _trapped = hardware_thread._trapped;
+    _trap_type = hardware_thread._trap_type;
 
 }
 
@@ -115,6 +128,8 @@ bool hw_thread::operator==(const hw_thread& hardware_thread) {
                && (_deadline_stalled == hardware_thread._deadline_stalled)
                && (_memory_stalled == hardware_thread._memory_stalled)
                && (_fetch_stalled == hardware_thread._fetch_stalled)
+	       && (_trapped == hardware_thread._trapped)
+	       && (_trap_type == hardware_thread._trap_type)
            );
 
 }
@@ -137,6 +152,11 @@ void hw_thread::regdump() {
 void hw_thread::reset_register_window() {
     regs.reset_register_window();
 }
+
+void hw_thread::set_trap_type(const bool& type) {
+  _trap_type = type;
+}
+
 
 void hw_thread::set_id(const unsigned int& in_id) {
     _id = in_id;
@@ -164,6 +184,10 @@ void hw_thread::set_fetch_stalled(const bool& stall) {
 
 void hw_thread::set_memory_stalled(const bool& stall) {
     _memory_stalled = stall;
+}
+
+void hw_thread::set_trapped(const bool& trapped) {
+  _trapped = trapped;
 }
 
 void hw_thread::set_pc(const uint32_t& pc) {

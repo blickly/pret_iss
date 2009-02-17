@@ -31,6 +31,14 @@
  */
 
 
+
+/*
+TODO LIST:
+--------------
+Add instruction - RETT
+ 
+*/
+
 #include "except.h"
 #include <assert.h>
 #include <iomanip>
@@ -135,6 +143,12 @@ void except::behavior() {
         return;
     }
 
+    if (exception_occured(hardware_thread)) {
+      handle_exception(hardware_thread);
+      return;
+    }
+
+
     if (!hardware_thread->is_db_word_stalled()) {
         /* Increment the PC based */
         inc_pc(hardware_thread);
@@ -220,6 +234,10 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
      just after the deadline registers are updated */
     return (hardware_thread->is_memory_stalled());
 };
+
+bool except::exception_occurred(const hw_thread_ptr& hardware_thread){
+  return (hardware_thread->is_trapped());
+}
 
 void except::set_dword_state(const hw_thread_ptr& hardware_thread) {
 
@@ -335,6 +353,12 @@ void except::write_regs(const hw_thread_ptr& hardware_thread) {
     }
 }
 
+
+void except::jump_to_handler(const hw_thread_ptr& hardware_thread) {
+  
+}
+
+
 void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
 
 //   if (hardware_thread->inst.get_select_special_register() == SREG_MEM2SP) {
@@ -371,7 +395,7 @@ void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
 
             } else {
                 hardware_thread->spec_regs.set_pll_load(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd() - 8);
-            }
+p            }
 
             // printf("Should have written %d  to timer %d\n", hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
             break;

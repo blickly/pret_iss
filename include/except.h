@@ -131,6 +131,13 @@ public:
     */
     void set_dword_state(const hw_thread_ptr& hardware_thread);
 
+    /** Check and see if an exception occurred
+    *  @param hardware_thread The hardware thread.
+    */
+    bool exception_occurred(const hw_thread_ptr& hardware_thread);
+
+
+
     /** Update the registers from the current instruction thread. Commit
      *  the instruction
      *  @param hardware_thread The hardware thread.
@@ -141,6 +148,11 @@ public:
     *  @param hardware_thread The hardware thread.
     */
     void write_special_regs(const hw_thread_ptr& hardware_thread);
+    
+    /** Hardware handling of the exceptions
+    *  @param hardware_thread The hardware thread.
+    */
+    void jump_to_handler(const hw_thread_ptr& hardware_thread);
 
 ///////////////////////////////////////////////////////////////////////
 //                       private methods                             ///
