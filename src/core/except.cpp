@@ -130,11 +130,6 @@ void except::behavior() {
         return;
     }
 
-    /* If the instruction fetch caused a stall then skip out of this
-       stage */
-    if (fetch_stalled(hardware_thread)) {
-        return;
-    }
     /* If memory is causing a stall then skip out of this stage */
     if (mem_stalled(hardware_thread)) {
         return;
