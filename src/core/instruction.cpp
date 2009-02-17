@@ -194,6 +194,7 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         _is_rett = 1;      
         _jump = 1;
         _aluop = ALU_ADD;
+        _increment_window_pointer = 1;
         break;
     case OP3_SAVE:
         _increment_window_pointer = -1;

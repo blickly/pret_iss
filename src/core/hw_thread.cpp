@@ -68,7 +68,7 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
     _deadline_stalled = false;
     _memory_stalled = false;
     _fetch_stalled = false;
-    _trapped = false;
+    _trapped = XCPT_NORMAL;
 }
 
 bool hw_thread::is_db_word_stalled() const {
@@ -93,7 +93,7 @@ bool hw_thread::is_memory_stalled() const {
 }
 
 bool hw_thread::is_trapped() const {
-  return _trapped;
+  return _trapped > 0;
 }
 
 void hw_thread::operator=(const hw_thread & hardware_thread) {
@@ -153,7 +153,7 @@ void hw_thread::reset_register_window() {
     regs.reset_register_window();
 }
 
-void hw_thread::set_trap_type(const bool& type) {
+void hw_thread::set_trap_type(const short& type) {
   _trap_type = type;
 }
 
@@ -186,11 +186,15 @@ void hw_thread::set_memory_stalled(const bool& stall) {
     _memory_stalled = stall;
 }
 
-void hw_thread::set_trapped(const bool& trapped) {
+void hw_thread::set_trapped(const short& trapped) {
   _trapped = trapped;
 }
 
 void hw_thread::set_pc(const uint32_t& pc) {
     _pc = pc;
+
 }
 
+short hw_thread::get_trapped_state(){
+  return _trapped;
+}

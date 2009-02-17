@@ -30,8 +30,6 @@
 
  */
 
-
-
 /*
 TODO LIST:
 --------------
@@ -146,15 +144,8 @@ void except::behavior() {
 
     //Increment window pointer will be set to true if we need to 
     //increment the window pointer
-    int inc_window_pointer = 0;
     
-    //Check if instruction is RETT
-    if ( hardware_thread->inst.get_is_rett() ) {
-          return_from_trap(hardware_thread, inc_window_pointer);
-      //add on extra RETT stuff
-    }
-
-    handle_exceptions(hardware_thread, inc_window_pointer);
+    handle_exceptions(hardware_thread);
 
 
     if (!hardware_thread->is_db_word_stalled()) {
@@ -165,13 +156,10 @@ void except::behavior() {
     write_regs(hardware_thread);
     write_special_regs(hardware_thread);
 
-    //If inc_window_pointer is set, it means the exception handler
-    //needs to decrement the pointer. This has to be after writing to
-    //the registers because we need to store the PC and NPC at the
-    //right window pointer
-    hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() + inc_window_pointer);
-    hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() % REGISTER_WINDOWS);
-
+    //Check if instruction is RETT
+    if ( hardware_thread->inst.get_is_rett() ) {
+          return_from_trap(hardware_thread);
+    }
 
     /* Increment the number of instructions executed */
     hardware_thread->cnt_instr++;
@@ -251,7 +239,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     return (hardware_thread->is_memory_stalled());
 };
 
- void except::handle_exceptions(const hw_thread_ptr& hardware_thread, int& inc_window_pointer){
+ void except::handle_exceptions(const hw_thread_ptr& hardware_thread){
 
   /* 2 pass handling - 
      - First pass store the pc, and set the db_word_stalled and set pc to 0
@@ -268,58 +256,69 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     return;
 
   uint32_t current_pc = hardware_thread->get_pc();
-  hw_thread_ptr hwt = hardware_thread;
-  instruction inst = hardware_thread->inst;
+  short exception_state = hardware_thread->get_trapped_state();
   
   //Disable changing processor state from the instructions
-  inst.set_write_special_registers(false);
+  hardware_thread->inst.set_write_special_registers(false);
   //Write to register will always be set to true
   
-  if (current_pc) {
+  if (exception_state == XCPT_TRAPPED) {
     //First pass
-    // Set to store the PC in r17
-    inst.set_alu_result(current_pc);
-    inst.set_rd(17);
-    inst.set_write_registers(true);
-    // Set the processor to supervisor mode
-    hwt->spec_regs.set_ps(hwt->spec_regs.get_s());
-    hwt->spec_regs.set_s(true);
 
-    //set PC to 0 so the next time around we know it's in the second state
-    //It won't be fetched so it's ok, hacky but works
-    hwt->set_pc(0);
+    //increase register window
+    hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() - 1);
+    hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() % REGISTER_WINDOWS);
+
+    // Set to store the PC in r17
+    hardware_thread->inst.set_alu_result(current_pc);
+    hardware_thread->inst.set_rd(17);
+    hardware_thread->inst.set_write_registers(true);
+    // Set the processor to supervisor mode
+    hardware_thread->spec_regs.set_ps(hardware_thread->spec_regs.get_s());
+    hardware_thread->spec_regs.set_s(true);
+
+    //check branch delay slot and store the correct npc
+
+    //set trapped state to XCPT_TRAPPED2 so the next time around we
+    //know it's in the second state 
+    hardware_thread->set_trapped(XCPT_TRAPPED2);
   }
-  else {
+  else if ( exception_state == XCPT_TRAPPED2) {
 
     //Store branch delay slot in r18
-    inst.set_alu_result(hwt->get_delayed_branch_address());
-    inst.set_rd(18);
-    inst.set_write_registers(true);
+
+    if (hardware_thread->get_delayed_branch_address()) {
+      //FIXME: Need to check this case...
+      hardware_thread->inst.set_alu_result(hardware_thread->get_delayed_branch_address());
+    }
+    else {
+      //There might be a bug if there is a timeout on branch...
+      hardware_thread->inst.set_alu_result(current_pc + 4);
+    }
+    hardware_thread->inst.set_rd(18);
+    hardware_thread->inst.set_write_registers(true);
 
     //Now we can disable the trap and set the PC to the jump address
-    hwt->set_trapped(false);
+    hardware_thread->set_trapped(XCPT_NORMAL);
     
     //SVT is leon specific, currently not implemented
-    uint32_t trap_address = hwt->spec_regs.get_tbr();
-    uint32_t offset = (uint32_t)(hwt->get_trap_type()) << 4;
+    uint32_t trap_address = hardware_thread->spec_regs.get_tbr();
+    uint32_t offset = (uint32_t)(hardware_thread->get_trap_type()) << 4;
     
     trap_address |= offset; 
-    hwt->set_pc(trap_address);
+    hardware_thread->set_pc(trap_address);
     
     //Set disable trap on second time around so it gets passed that
     //previous if statement
     hardware_thread->spec_regs.set_et(false);
-
-    //decrement the window pointer
-    inc_window_pointer = -1;
   }
   
   //set this so the PC won't be touched
-  hwt->set_db_word_stalled(true);
+  hardware_thread->set_db_word_stalled(true);
     
 }
 
- void except::return_from_trap(const hw_thread_ptr& hardware_thread, int& inc_window_pointer) {
+ void except::return_from_trap(const hw_thread_ptr& hardware_thread) {
    //Need to check special privilege
    //Then +1 to window pointer
    // restore s and ps
@@ -341,9 +340,9 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
    //Not throwing CWP overflow exception 
    //Not throwing mem_address_not_aligned
 
-   inc_window_pointer = 1;
    hardware_thread->spec_regs.set_s(hardware_thread->spec_regs.get_ps());
    hardware_thread->spec_regs.set_et(true);
+
  }
 
 void except::set_dword_state(const hw_thread_ptr& hardware_thread) {

@@ -159,11 +159,18 @@ private:
      * param hardware_thread The hardware thread.
      */
     //  void _make_dma_transfer(const hw_thread_ptr& hardware_thread);
-
-    /** Print a warning message out if the deadlines are being
+ 
+   /** Print a warning message out if the deadlines are being
      *  missed. This is only for regular deadlines and not the PLL ones.
      *  @param hardware_thread The hardware thread.
      */
     void _warn_missing_deadlines(const hw_thread_ptr& hardware_thread);
+
+
+   /** Throw an exception if the deadlines are being
+     *  missed. This is only for regular deadlines and not the PLL ones.
+     *  @param hardware_thread The hardware thread.
+     */
+    void _check_deadline(const hw_thread_ptr& hardware_thread);
 };
 #endif /* _REGACC_H_ */

@@ -250,4 +250,18 @@ enum SREG_MUX {
 };
 
 
+///////////////////////////////////////////////////////////////////////
+/// Exception state
+/**
+ * The exception handling states
+ *
+ */
+enum EXCEPTION_STATE {
+  XCPT_NORMAL = 0,
+  XCPT_TRAPPED = 1,
+  XCPT_TRAPPED2 = 2,
+  XCPT_ERROR = 3
+};
+
+
 #endif /* _INSTRUCTION_DEFS_H_ */

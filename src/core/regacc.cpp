@@ -60,6 +60,9 @@ void regacc::behavior() {
      * also checks if the deadline has been reached.
      */
     _deadline_instruction(input_thread);
+    
+    //CURRENT HACK TO THROW EXCEPTION WHEN TIMER IS ZERO!
+    _check_deadline(input_thread);
 
 //     /* Store g1 to DMA controller register. */
 //     _make_dma_transfer(input_thread);
@@ -76,6 +79,7 @@ void regacc::behavior() {
     input_thread->inst.set_op3_value(input_thread->regs.get_reg(input_thread->inst.get_rd(), input_thread->spec_regs.get_curr_wp()));
     input_thread->spec_regs.set_curr_wp(input_thread->spec_regs.get_curr_wp() + input_thread->inst.get_increment_window_pointer());
     input_thread->spec_regs.set_curr_wp(input_thread->spec_regs.get_curr_wp() % REGISTER_WINDOWS);
+
 
     _debug_print(input_thread);
 #ifdef _NO_SYSTEMC_
@@ -196,5 +200,16 @@ void regacc::_warn_missing_deadlines(const hw_thread_ptr& hardware_thread) {
     if (missed_deadline) {
         cout << "Warning: Missed deadline in thread " << hardware_thread->get_id() << ", dt reg: "
              << dead_timer << ", pc: "  << hex << hardware_thread->get_pc() << endl;
+    }
+}
+
+void regacc::_check_deadline(const hw_thread_ptr& hardware_thread) {
+    for (uint32_t i = 0; i < NUM_DEADLINE_TIMERS; i++) {
+      if ( hardware_thread->spec_regs.missed_deadline(i) ) {
+	hardware_thread->set_trapped(XCPT_TRAPPED);
+	hardware_thread->set_trap_type(17+i);
+
+	//WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
+      }
     }
 }

@@ -82,6 +82,12 @@ public:
      */
     unsigned int get_id();
 
+    /** Returns the trapped state
+     *
+     * @return trapped state.
+     */
+    short get_trapped_state();
+
     /** Return the current thread program counter.
      *
      * @return Thread's program counter.
@@ -185,7 +191,7 @@ public:
     *
     * @param type The trap number that occured
     */
-    void set_trap_type(const bool& type);
+    void set_trap_type(const short& type);
 
 
     /** Set the state if stall is caused by a double word instruction.
@@ -236,7 +242,7 @@ public:
     *
     * @param trapped True if exception occurred, else false
     */
-    void set_trapped(const bool& trapped);
+    void set_trapped(const short& trapped);
 
 
     /** Set the thread's program counter.
@@ -267,8 +273,9 @@ private:
     bool _fetch_stalled;    // If the fetch stage causes a stall.
     unsigned int _id;       // Thread identifier.
     uint32_t _pc;           // Thread's current program counter.
-    bool _trapped;          // If the thread encounters an exception
+    short _trapped;          // If the thread encounters an exception
     short _trap_type;        // If the trap type of the thread
+    
 
 };
 
