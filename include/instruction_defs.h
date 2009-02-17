@@ -181,6 +181,7 @@ enum OP3_ARITHMETIC {
     OP3_WRWIM = 0x32,
     OP3_WRTBR = 0x33,
     OP3_JMPL = 0x38,
+    OP3_RETT = 0x39,
     OP3_SAVE = 0x3c,
     OP3_RESTORE = 0x3d,
     OP3_MULSCC = 0x24

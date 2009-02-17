@@ -134,7 +134,7 @@ public:
     /** Check and see if an exception occurred
     *  @param hardware_thread The hardware thread.
     */
-    bool exception_occurred(const hw_thread_ptr& hardware_thread);
+    void handle_exceptions(const hw_thread_ptr& hardware_thread, bool& inc_window_pointer);
 
 
 
@@ -149,10 +149,6 @@ public:
     */
     void write_special_regs(const hw_thread_ptr& hardware_thread);
     
-    /** Hardware handling of the exceptions
-    *  @param hardware_thread The hardware thread.
-    */
-    void jump_to_handler(const hw_thread_ptr& hardware_thread);
 
 ///////////////////////////////////////////////////////////////////////
 //                       private methods                             ///

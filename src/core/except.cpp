@@ -35,8 +35,8 @@
 /*
 TODO LIST:
 --------------
-Add instruction - RETT
- 
+- Add instruction - RETT
+- Add in correct mechanism for handling traps when et = 0
 */
 
 #include "except.h"
@@ -142,11 +142,11 @@ void except::behavior() {
     if (mem_stalled(hardware_thread)) {
         return;
     }
-
-    if (exception_occured(hardware_thread)) {
-      handle_exception(hardware_thread);
-      return;
-    }
+    
+    //Increment window pointer will be set to true if we need to 
+    //increment the window pointer
+    bool inc_window_pointer = false;
+    handle_exceptions(hardware_thread, inc_window_pointer);
 
 
     if (!hardware_thread->is_db_word_stalled()) {
@@ -156,6 +156,15 @@ void except::behavior() {
 
     write_regs(hardware_thread);
     write_special_regs(hardware_thread);
+
+    //If inc_window_pointer is set, it means the exception handler
+    //needs to increment the pointer. This has to be after writing to
+    //the registers because we need to store the PC and NPC at the
+    //right window pointer
+    if (inc_window_pointer) {
+      hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() + 1);
+      hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() % REGISTER_WINDOWS);
+    }
 
     /* Increment the number of instructions executed */
     hardware_thread->cnt_instr++;
@@ -235,8 +244,72 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     return (hardware_thread->is_memory_stalled());
 };
 
-bool except::exception_occurred(const hw_thread_ptr& hardware_thread){
-  return (hardware_thread->is_trapped());
+ void except::handle_exceptions(const hw_thread_ptr& hardware_thread, bool& inc_window_pointer){
+
+  /* 2 pass handling - 
+     - First pass store the pc, and set the db_word_stalled and set pc to 0
+     - Second pass detect pc is 0, so store the npc and then
+     set the PC to the right place
+   */
+
+  //If there is no exception, return and don't handle anything
+  if (!hardware_thread->is_trapped())
+    return;
+
+  //If traps aren't enabled, we also don't want to handle it
+  if (!hardware_thread->spec_regs.get_et())
+    return;
+
+  uint32_t current_pc = hardware_thread->get_pc();
+  hw_thread_ptr hwt = hardware_thread;
+  instruction inst = hardware_thread->inst;
+  
+  //Disable changing processor state from the instructions
+  inst.set_write_special_registers(false);
+  //Write to register will always be set to true
+  
+  if (current_pc) {
+    //First pass
+    // Set to store the PC in r17
+    inst.set_alu_result(current_pc);
+    inst.set_rd(17);
+    inst.set_write_registers(true);
+    // Set the processor to supervisor mode
+    hwt->spec_regs.set_ps(hwt->spec_regs.get_s());
+    hwt->spec_regs.set_s(true);
+
+    //set PC to 0 so the next time around we know it's in the second state
+    //It won't be fetched so it's ok, hacky but works
+    hwt->set_pc(0);
+  }
+  else {
+
+    //Store branch delay slot in r18
+    inst.set_alu_result(hwt->get_delayed_branch_address());
+    inst.set_rd(18);
+    inst.set_write_registers(true);
+
+    //Now we can disable the trap and set the PC to the jump address
+    hwt->set_trapped(false);
+    
+    //SVT is leon specific, currently not implemented
+    uint32_t trap_address = hwt->spec_regs.get_tbr();
+    uint32_t offset = (uint32_t)(hwt->get_trap_type()) << 4;
+    
+    trap_address |= offset; 
+    hwt->set_pc(trap_address);
+    
+    //Set disable trap on second time around so it gets passed that
+    //previous if statement
+    hardware_thread->spec_regs.set_et(false);
+
+    //Increment the window pointer
+    inc_window_pointer = true;
+  }
+  
+  //set this so the PC won't be touched
+  hwt->set_db_word_stalled(true);
+    
 }
 
 void except::set_dword_state(const hw_thread_ptr& hardware_thread) {
@@ -353,11 +426,7 @@ void except::write_regs(const hw_thread_ptr& hardware_thread) {
     }
 }
 
-
-void except::jump_to_handler(const hw_thread_ptr& hardware_thread) {
-  
-}
-
+ 
 
 void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
 
@@ -395,7 +464,7 @@ void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
 
             } else {
                 hardware_thread->spec_regs.set_pll_load(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd() - 8);
-p            }
+            }
 
             // printf("Should have written %d  to timer %d\n", hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
             break;

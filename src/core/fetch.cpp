@@ -61,7 +61,7 @@ void fetch::behavior() {
        register it is that we are considered with. */
     //input_thread->set_deadline_stalled(false);
 
-    if (input_thread->is_memory_stalled() || input_thread->is_deadline_stalled()) {
+    if (input_thread->is_memory_stalled() || input_thread->is_deadline_stalled() || input_thread->is_trapped()) {
 #ifdef _NO_SYSTEMC_
         output_thread = input_thread;
 #else
