@@ -190,6 +190,11 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         _write_registers = true;
         _aluop = ALU_ADD;
         break;
+    case OP3_RETT:
+        _is_rett = 1;      
+        _jump = 1;
+        _aluop = ALU_ADD;
+        break;
     case OP3_SAVE:
         _increment_window_pointer = -1;
         _aluop = ALU_ADD;
@@ -459,6 +464,7 @@ void instruction::operator=(const instruction & from_instruction) {
     _write_special_registers = from_instruction._write_special_registers;
     _db_word_instruction = from_instruction._db_word_instruction;
     _signed_multiply = from_instruction._signed_multiply;
+    _is_rett = from_instruction._is_rett;
 
 }
 
@@ -499,7 +505,9 @@ bool instruction::operator==(const instruction& compare_instruction) const {
            _write_special_registers == compare_instruction._write_special_registers &&
            _db_word_instruction == compare_instruction._db_word_instruction &&
            _carry == compare_instruction._carry &&
+           _is_rett == compare_instruction._is_rett &&
            _signed_multiply == compare_instruction._signed_multiply;
+    
 }
 
 
@@ -549,6 +557,7 @@ void instruction::initialize() {
     _select_special_register = 0;
     _write_special_registers = false;
     _signed_multiply = false;
+    _is_rett = false;
 }
 
 bool instruction::check_end_sim() {
@@ -794,4 +803,13 @@ void instruction::set_write_memory(const bool& write_memory) {
 
 void instruction::set_signed_multiply(const bool& signed_multiply) {
     _signed_multiply = signed_multiply;
+}
+
+void instruction::set_is_rett(const bool& is_rett){
+  _is_rett = is_rett;
+}
+
+
+bool instruction::get_is_rett() {
+  return _is_rett;
 }

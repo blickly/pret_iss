@@ -133,9 +133,16 @@ public:
 
     /** Check and see if an exception occurred
     *  @param hardware_thread The hardware thread.
+    *  @param inc_window_pointer set to -1 if decrement, +1 if increment, 0 by default
     */
-    void handle_exceptions(const hw_thread_ptr& hardware_thread, bool& inc_window_pointer);
+    void handle_exceptions(const hw_thread_ptr& hardware_thread, int& inc_window_pointer);
 
+
+    /** Return from a trap
+    *  @param hardware_thread The hardware thread.
+    *  @param inc_window_pointer set to -1 if decrement, +1 if increment, 0 by default
+    */
+    void return_from_trap(const hw_thread_ptr& hardware_thread, int& inc_window_pointer);
 
 
     /** Update the registers from the current instruction thread. Commit

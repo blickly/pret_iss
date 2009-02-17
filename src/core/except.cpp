@@ -35,6 +35,7 @@
 /*
 TODO LIST:
 --------------
+- Store TRAP_TYPES in an enum
 - Add instruction - RETT
 - Add in correct mechanism for handling traps when et = 0
 */
@@ -142,10 +143,17 @@ void except::behavior() {
     if (mem_stalled(hardware_thread)) {
         return;
     }
-    
+
     //Increment window pointer will be set to true if we need to 
     //increment the window pointer
-    bool inc_window_pointer = false;
+    int inc_window_pointer = 0;
+    
+    //Check if instruction is RETT
+    if ( hardware_thread->inst.get_is_rett() ) {
+          return_from_trap(hardware_thread, inc_window_pointer);
+      //add on extra RETT stuff
+    }
+
     handle_exceptions(hardware_thread, inc_window_pointer);
 
 
@@ -158,13 +166,12 @@ void except::behavior() {
     write_special_regs(hardware_thread);
 
     //If inc_window_pointer is set, it means the exception handler
-    //needs to increment the pointer. This has to be after writing to
+    //needs to decrement the pointer. This has to be after writing to
     //the registers because we need to store the PC and NPC at the
     //right window pointer
-    if (inc_window_pointer) {
-      hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() + 1);
-      hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() % REGISTER_WINDOWS);
-    }
+    hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() + inc_window_pointer);
+    hardware_thread->spec_regs.set_curr_wp(hardware_thread->spec_regs.get_curr_wp() % REGISTER_WINDOWS);
+
 
     /* Increment the number of instructions executed */
     hardware_thread->cnt_instr++;
@@ -244,7 +251,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     return (hardware_thread->is_memory_stalled());
 };
 
- void except::handle_exceptions(const hw_thread_ptr& hardware_thread, bool& inc_window_pointer){
+ void except::handle_exceptions(const hw_thread_ptr& hardware_thread, int& inc_window_pointer){
 
   /* 2 pass handling - 
      - First pass store the pc, and set the db_word_stalled and set pc to 0
@@ -303,14 +310,41 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     //previous if statement
     hardware_thread->spec_regs.set_et(false);
 
-    //Increment the window pointer
-    inc_window_pointer = true;
+    //decrement the window pointer
+    inc_window_pointer = -1;
   }
   
   //set this so the PC won't be touched
   hwt->set_db_word_stalled(true);
     
 }
+
+ void except::return_from_trap(const hw_thread_ptr& hardware_thread, int& inc_window_pointer) {
+   //Need to check special privilege
+   //Then +1 to window pointer
+   // restore s and ps
+   //set et to 1
+
+   if (!hardware_thread->spec_regs.get_s()){
+     hardware_thread->set_trapped(true);
+     hardware_thread->set_trap_type(0x03); // Set trap -
+					   // privileged_instruction
+     return;
+   }
+
+   if (hardware_thread->spec_regs.get_et()) {
+     hardware_thread->set_trapped(true);
+     hardware_thread->set_trap_type(0x02); // Set trap - illegal_instruction
+     return;
+   }
+
+   //Not throwing CWP overflow exception 
+   //Not throwing mem_address_not_aligned
+
+   inc_window_pointer = 1;
+   hardware_thread->spec_regs.set_s(hardware_thread->spec_regs.get_ps());
+   hardware_thread->spec_regs.set_et(true);
+ }
 
 void except::set_dword_state(const hw_thread_ptr& hardware_thread) {
 

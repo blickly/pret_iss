@@ -517,6 +517,23 @@ public:
      */
     void set_write_memory(const bool& write_memory);
 
+    /** Identifies this instruction as return from trap
+     *
+     * @param is_rett True if instruction is return from trap
+     * else false.
+     */
+    void set_is_rett(const bool& is_rett);
+
+
+    /** Returns true if instruction is return from trap
+     *
+     * @return true if instruction is return from trap
+     * else false.
+     */
+    bool get_is_rett();
+
+
+
 ///////////////////////////////////////////////////////////////////////
 //                       private methods                          ///
 private:
@@ -567,6 +584,7 @@ private:
     bool _write_registers; /// Instruction writes to the standard registers.
     bool _write_special_registers; /// Instruction writes to special registers.
     bool _write_memory; /// Instruction writes to the memory.
+    bool _is_rett; ///Instruction is return from trap
 
 };
 
