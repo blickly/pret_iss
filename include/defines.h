@@ -111,7 +111,7 @@
 //                 Register window specific defines.                ///
 /** Number of register windows.
  */
-#define REGISTER_WINDOWS 128
+#define REGISTER_WINDOWS 32
 
 ///////////////////////////////////////////////////////////////////////
 //                 Deadline timer specific defines.                 ///
