@@ -142,17 +142,13 @@ void except::behavior() {
         return;
     }
 
-    //Increment window pointer will be set to true if we need to 
-    //increment the window pointer
-    
-    handle_exceptions(hardware_thread);
-
-
-    if (!hardware_thread->is_db_word_stalled()) {
+    if (!hardware_thread->is_db_word_stalled() && !hardware_thread->is_trapped()) {
         /* Increment the PC based */
         inc_pc(hardware_thread);
     }
-
+    
+    handle_exceptions(hardware_thread);
+	
     write_regs(hardware_thread);
     write_special_regs(hardware_thread);
 
@@ -306,6 +302,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     uint32_t offset = (uint32_t)(hardware_thread->get_trap_type()) << 4;
     
     trap_address |= offset; 
+
     hardware_thread->set_pc(trap_address);
     
     //Set disable trap on second time around so it gets passed that
@@ -313,9 +310,6 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     hardware_thread->spec_regs.set_et(false);
   }
   
-  //set this so the PC won't be touched
-  hardware_thread->set_db_word_stalled(true);
-    
 }
 
  void except::return_from_trap(const hw_thread_ptr& hardware_thread) {

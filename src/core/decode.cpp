@@ -53,7 +53,7 @@ void decode::behavior() {
 
     in_thread->inst.decode();
 
-#ifdef _NO_SYSTEMC_
+ #ifdef _NO_SYSTEMC_
     out_thread = in_thread;
     _dbg_pipeline(out_thread);
 #else

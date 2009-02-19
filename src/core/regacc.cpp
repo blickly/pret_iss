@@ -80,7 +80,6 @@ void regacc::behavior() {
     input_thread->spec_regs.set_curr_wp(input_thread->spec_regs.get_curr_wp() + input_thread->inst.get_increment_window_pointer());
     input_thread->spec_regs.set_curr_wp(input_thread->spec_regs.get_curr_wp() % REGISTER_WINDOWS);
 
-
     _debug_print(input_thread);
 #ifdef _NO_SYSTEMC_
     output_thread = input_thread;
@@ -207,7 +206,7 @@ void regacc::_check_deadline(const hw_thread_ptr& hardware_thread) {
     for (uint32_t i = 0; i < NUM_DEADLINE_TIMERS; i++) {
       if ( hardware_thread->spec_regs.missed_deadline(i) ) {
 	hardware_thread->set_trapped(XCPT_TRAPPED);
-	hardware_thread->set_trap_type(17+i);
+	hardware_thread->set_trap_type(0x11+i);
 
 	//WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
       }
