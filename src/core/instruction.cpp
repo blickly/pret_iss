@@ -324,7 +324,7 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
         break;
     case OP3_DEAD:
         //cout << "DETECTED DEADLINE INSTRUCTION IN WRONG PLACE\n" ;
-        _aluop = ALU_ADD;
+        _aluop = ALU_ADD_DEAD;
         _select_special_register = SREG_DT;
         break;
         // These are opcodes added for DMA coprocessor instructions.

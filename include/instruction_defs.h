@@ -58,6 +58,7 @@ typedef short unsigned int WINDOW_POINTER;
 enum ALU {
     ALU_NOP,
     ALU_ADD,
+    ALU_ADD_DEAD,
     ALU_SUB,
     ALU_AND,
     ALU_OR,

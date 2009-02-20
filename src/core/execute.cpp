@@ -92,6 +92,9 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
         }
 
         break;
+    case ALU_ADD_DEAD:
+        hardware_thread->inst.set_alu_result(hardware_thread->inst.get_op2_value());
+	break;
     case ALU_NOP:
         hardware_thread->inst.set_alu_result(0);
         break;

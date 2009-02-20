@@ -482,13 +482,6 @@ void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
         case SREG_DT:
             if (hardware_thread->inst.get_rd() < NUM_DEADLINE_TIMERS) {
                 hardware_thread->spec_regs.set_dt(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd());
-
-                /* If the value being set is 0, then it should not cause a warning. */
-                if (hardware_thread->inst.get_alu_result() != 0) {
-                    //                    cout << "dt value: " << hex << hardware_thread->inst.get_alu_result() << endl;
-                    hardware_thread->spec_regs.set_dt_status(SET, hardware_thread->inst.get_rd());
-                }
-
             } else {
                 hardware_thread->spec_regs.set_pll_load(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd() - 8);
             }

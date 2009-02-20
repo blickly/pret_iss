@@ -61,11 +61,123 @@
                   : "r" (timeout)                     \
                   : "g1")
 
+#define DEADBRANCH( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC3608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOADBRANCH( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC360C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+
 #define DEAD( timeout )                               \
    asm volatile ("mov %0, %%g1 \n\t .word 0xC3600001" \
                   : /* no outputs */                  \
                   : "r" (timeout)                     \
                   : "g1")
+
+#define DEADBRANCH0( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC1608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADBRANCH1( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC3608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADBRANCH2( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC5608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADBRANCH3( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC7608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADBRANCH4( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC9608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADBRANCH5( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCB608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADBRANCH6( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCD608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADBRANCH7( timeout )                           \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCF608001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+
+#define DEADLOADBRANCH0( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC160C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOADBRANCH1( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC360C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOADBRANCH2( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC560C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOADBRANCH3( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC760C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOADBRANCH4( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xC960C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOADBRANCH5( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCB60C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOADBRANCH6( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCD60C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+#define DEADLOADBRANCH7( timeout )		      \
+   asm volatile ("mov %0, %%g1 \n\t .word 0xCF60C001" \
+                  : /* no outputs */                  \
+                  : "r" (timeout)                     \
+                  : "g1")
+
+
 
 #define DEADLOAD0( timeout )                           \
    asm volatile ("mov %0, %%g1 \n\t .word 0xC1604001" \

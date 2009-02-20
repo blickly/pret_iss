@@ -61,8 +61,8 @@ void regacc::behavior() {
      */
     _deadline_instruction(input_thread);
     
-    //CURRENT HACK TO THROW EXCEPTION WHEN TIMER IS ZERO!
-    //_check_deadline(input_thread);
+    //Check for deadlines that are set but have missed
+    _check_deadline(input_thread);
 
 //     /* Store g1 to DMA controller register. */
 //     _make_dma_transfer(input_thread);
@@ -144,6 +144,8 @@ void regacc::_destination_phaselockloop_deadlines(const hw_thread_ptr& hardware_
         hardware_thread->set_deadline_stalled(true);
         hardware_thread->inst.set_write_special_registers(true);
         hardware_thread->spec_regs.set_pll_loaded(true);
+
+
     }
     //IF WE LOADED SOMETHING ALREADY, AND MAILBOX IS CLEARED, WE ARE GOOD TO GO
     else if (hardware_thread->spec_regs.get_pll_load(hardware_thread->inst.get_rd() - 8) == 0 && hardware_thread->spec_regs.get_pll_loaded()) {
@@ -166,6 +168,12 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
     if (hardware_thread->spec_regs.get_dt(hardware_thread->inst.get_rd()) <= 0 || deadload) {
         hardware_thread->inst.set_write_special_registers(true);
 	hardware_thread->set_deadline_stalled(false);
+	//If deadbranch, then we SET the dt_status so we will be informed
+	//on a miss
+	if ( deadbranch )
+	  hardware_thread->spec_regs.set_dt_status(SET, hardware_thread->inst.get_rd());
+	else
+	  hardware_thread->spec_regs.set_dt_status(UNSET, hardware_thread->inst.get_rd());
     } else {
         hardware_thread->set_deadline_stalled(true);
     }
@@ -208,7 +216,7 @@ void regacc::_check_deadline(const hw_thread_ptr& hardware_thread) {
 	hardware_thread->set_trapped(XCPT_TRAPPED);
 	hardware_thread->set_trap_type(0x11+i);
 
-	//WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
+	//FIXME: WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
       }
     }
 }
