@@ -142,12 +142,12 @@ void except::behavior() {
         return;
     }
 
-    if (!hardware_thread->is_db_word_stalled() && !hardware_thread->is_trapped()) {
+    if (handle_exceptions(hardware_thread) && !hardware_thread->is_db_word_stalled()) {
         /* Increment the PC based */
         inc_pc(hardware_thread);
     }
     
-    handle_exceptions(hardware_thread);
+
 	
     write_regs(hardware_thread);
     write_special_regs(hardware_thread);
@@ -235,7 +235,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     return (hardware_thread->is_memory_stalled());
 };
 
- void except::handle_exceptions(const hw_thread_ptr& hardware_thread){
+ bool except::handle_exceptions(const hw_thread_ptr& hardware_thread){
 
   /* 2 pass handling - 
      - First pass store the pc, and set the db_word_stalled and set pc to 0
@@ -245,11 +245,15 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
 
   //If there is no exception, return and don't handle anything
   if (!hardware_thread->is_trapped())
-    return;
+    return true;
 
   //If traps aren't enabled, we also don't want to handle it
-  if (!hardware_thread->spec_regs.get_et())
-    return;
+  if (!hardware_thread->spec_regs.get_et()) {
+    //Enter error mode for certain exceptions?
+    hardware_thread->set_trapped(XCPT_NORMAL);
+    return true;
+  }
+
 
   uint32_t current_pc = hardware_thread->get_pc();
   short exception_state = hardware_thread->get_trapped_state();
@@ -299,22 +303,25 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     
     //SVT is leon specific, currently not implemented
     uint32_t trap_address = hardware_thread->spec_regs.get_tbr();
-    uint32_t offset = (uint32_t)(hardware_thread->get_trap_type()) << 4;
+    uint32_t offset = (uint32_t)(hardware_thread->get_trap_type());
     
-    trap_address |= offset; 
+    trap_address |= (offset << 4); 
 
     hardware_thread->set_pc(trap_address);
+    hardware_thread->set_delayed_branch_address(0);
     
     //Set disable trap on second time around so it gets passed that
     //previous if statement
     hardware_thread->spec_regs.set_et(false);
   }
   
+  return false;
+
 }
 
  void except::return_from_trap(const hw_thread_ptr& hardware_thread) {
    //Need to check special privilege
-   //Then +1 to window pointer
+   //Then +1 to window pointer (done in the regacc stage)
    // restore s and ps
    //set et to 1
 

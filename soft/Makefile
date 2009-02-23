@@ -1,37 +1,37 @@
-####################################################################
-#Copyright (c) 2007-2009 The Regents of the University of California.
-#All rights reserved.
-#
-#Permission is hereby granted, without written agreement and without
-#license or royalty fees, to use, copy, modify, and distribute this
-# software and its documentation for any purpose, provided that the
-# above copyright notice and the following two paragraphs appear in all
-# copies of this software.
-#
-# IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY
-# FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
-# ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-# THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF
-# SUCH DAMAGE.
-#
-# THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
-# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE
-# PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
-# CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
-# ENHANCEMENTS, OR MODIFICATIONS.
-#
-# 						PT_COPYRIGHT_VERSION_2
-# 						COPYRIGHTENDKEY
-####################################################################
+LDFLAGS=$(filter-out -D%,$(CFLAGS))
+#LDFLAGS=$(CFLAGS)
+CCFLAGS=$(CFLAGS) -msoft-float -O1
+C_FILES=all_threads.c
+CC=sparc-elf-gcc
+LD=sparc-elf-ld
 
-all: compile 
+all: clean compile
 
 compile:
-	python $(PRET_ISS)/scripts/compile_threads.py . -v
+	$(PRET_ISS)/scripts/compile_threads.py .
 
-clean:
-	$(RM) *.exe *.o thread*.srec prom*.srec prom.h thread*.dump prom*.dump
-	
-distclean: clean
-	$(RM) *.srec
+run:
+	$(PRET_ISS)/src/pret . -1
+
+debug:
+	$(PRET_ISS)/scripts/csim.py .
+
+thread%.o: $(C_FILES) 
+	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
+
+thread%.exe: thread%.o
+# This is more lightweight by not linking in any libraries
+#	$(LD) $(LDFLAGS) $^ -o $@ -e main
+# This is a normal configuration that supports libraries	
+	$(CC) $(LDFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
+
+thread%.srec: thread%.exe
+	sparc-elf-objcopy -O srec $< $@
+
+thread%.dump: thread%.exe
+	sparc-elf-objdump -D $< > $@
+
+clean: 
+	$(RM) *.exe *.dmp *.o *~ *.srec *.dump
+
+.PHONY: compile run debug clean

@@ -396,6 +396,39 @@
                   : "r" (mem_addr), "r" (spm_addr) \
                   : "g1", "g2")
 
+#define PRET_RETT                              \
+  asm volatile(".word 0x81cc8000");
+
+
+#define LONGJMP                              \
+  asm volatile(".word 0x11100203");   \
+  asm volatile(".word 0x90122258");   \
+  asm volatile(".word 0x92102001");   \
+  asm volatile(".word 0x8c102001");   \
+  asm volatile(".word 0xdc020000");   \
+  asm volatile(".word 0xe01b8000");   \
+  asm volatile(".word 0xe41ba008");   \
+  asm volatile(".word 0xe81ba010");   \
+  asm volatile(".word 0xec1ba018");   \
+  asm volatile(".word 0xf01ba020");   \
+  asm volatile(".word 0xf41ba028");   \
+  asm volatile(".word 0xf81ba030");   \
+  asm volatile(".word 0xfe022004");   \
+  asm volatile(".word 0xfc022008");   \
+  asm volatile(".word 0xde02200c");   \
+  asm volatile(".word 0x90100006");   \
+  asm volatile(".word 0x81cc8000");   \
+  asm volatile(".word 0x81c3e008");   \
+  asm volatile(".word 0x81c3e008");   \
+
+
+
+  
+
+  
+
+
+
 //#ifndef _DEADLINE_H
 //#define _DEADLINE_H
 /*

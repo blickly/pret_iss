@@ -134,7 +134,7 @@ public:
     /** Check and see if an exception occurred
     *  @param hardware_thread The hardware thread.
     */
-    void handle_exceptions(const hw_thread_ptr& hardware_thread);
+    bool handle_exceptions(const hw_thread_ptr& hardware_thread);
 
 
     /** Return from a trap

@@ -211,12 +211,12 @@ void regacc::_warn_missing_deadlines(const hw_thread_ptr& hardware_thread) {
 }
 
 void regacc::_check_deadline(const hw_thread_ptr& hardware_thread) {
-    for (uint32_t i = 0; i < NUM_DEADLINE_TIMERS; i++) {
-      if ( hardware_thread->spec_regs.missed_deadline(i) ) {
-	hardware_thread->set_trapped(XCPT_TRAPPED);
-	hardware_thread->set_trap_type(0x11+i);
-
-	//FIXME: WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
-      }
-    }
+  
+  uint32_t i;
+  if ( hardware_thread->spec_regs.missed_deadline(i) ) {
+    hardware_thread->set_trapped(XCPT_TRAPPED);
+    hardware_thread->set_trap_type(0x11+i);
+    
+    //FIXME: WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
+  }
 }
