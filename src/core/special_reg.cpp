@@ -118,7 +118,7 @@ bool special_reg::missed_deadline(uint32_t& deadline_register_num) {
             //            dt_status[i] = MISSED;
             missed = true;
             deadline_register_num = i;
-            _dt_status[i] = UNSET;
+	    _dt_status[i] = UNSET;
         }
     }
     return missed;

@@ -311,6 +311,9 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
 
     hardware_thread->set_pc(trap_address);
     hardware_thread->set_delayed_branch_address(0);
+
+    //if (offset >= 0x11 && offset < 0x19) 
+    //hardware_thread->spec_regs.set_dt_status(UNSET, offset - 0x11);
     
     //Set disable trap on second time around so it gets passed that
     //previous if statement

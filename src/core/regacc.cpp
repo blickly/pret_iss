@@ -211,6 +211,7 @@ void regacc::_warn_missing_deadlines(const hw_thread_ptr& hardware_thread) {
 }
 
 void regacc::_check_deadline(const hw_thread_ptr& hardware_thread) {
+<<<<<<< HEAD:src/core/regacc.cpp
   
   uint32_t i;
   if ( hardware_thread->spec_regs.missed_deadline(i) ) {
