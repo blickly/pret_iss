@@ -60,6 +60,8 @@ void special_reg::set_psr(uint32_t from_register) {
     _et = (from_register & 0x00000020) >> 5;
     // Store the current window pointer (cwp)
     _curr_wp = from_register & 0x0000001F;
+
+    //        printf("set_psr, _et: %d\n", _et);
 }
 
 uint32_t special_reg::get_psr() {
@@ -281,6 +283,7 @@ void special_reg::set_wim(uint32_t wim) {
 }
 
 void special_reg::set_et(bool et) {
+  // printf("et set: %d\n", et);
     _et = et;
 }
 
@@ -362,6 +365,7 @@ uint32_t special_reg::get_wim() {
 }
 
 bool special_reg::get_et() {
+  //  printf("get_et: %d\n", _et);
     return _et;
 }
 

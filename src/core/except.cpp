@@ -30,14 +30,6 @@
 
  */
 
-/*
-TODO LIST:
---------------
-- Store TRAP_TYPES in an enum
-- Add instruction - RETT
-- Add in correct mechanism for handling traps when et = 0
-*/
-
 #include "except.h"
 #include <assert.h>
 #include <iomanip>
@@ -142,13 +134,19 @@ void except::behavior() {
         return;
     }
 
+    //    if ( hardware_thread->inst.get_is_rett() ) {
+    //  printf("RETT PC 0x%x\n", hardware_thread->get_pc());
+    //  printf("RETT jump to 0x%x\n", hardware_thread->inst.get_alu_result());
+    //    }
+    
+    //        if ( hardware_thread->inst.is_write_special_registers() && hardware_thread->inst .get_select_special_register() == SREG_PSR)
+    //    printf("set_psr pc: 0x%x\n", hardware_thread->get_pc());
+
     if (handle_exceptions(hardware_thread) && !hardware_thread->is_db_word_stalled()) {
         /* Increment the PC based */
         inc_pc(hardware_thread);
     }
     
-
-	
     write_regs(hardware_thread);
     write_special_regs(hardware_thread);
 
@@ -247,17 +245,21 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
   if (!hardware_thread->is_trapped())
     return true;
 
+  //  printf("exception hit! %d\n", hardware_thread->get_trap_type());
+
   //If traps aren't enabled, we also don't want to handle it
   if (!hardware_thread->spec_regs.get_et()) {
+    //printf("trap not enabled even though we hit one 0x%x!\n", hardware_thread->get_pc());
     //Enter error mode for certain exceptions?
     hardware_thread->set_trapped(XCPT_NORMAL);
     return true;
   }
 
-
   uint32_t current_pc = hardware_thread->get_pc();
   short exception_state = hardware_thread->get_trapped_state();
   
+
+
   //Disable changing processor state from the instructions
   hardware_thread->inst.set_write_special_registers(false);
   //Write to register will always be set to true
@@ -314,9 +316,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     //previous if statement
     hardware_thread->spec_regs.set_et(false);
   }
-  
   return false;
-
 }
 
  void except::return_from_trap(const hw_thread_ptr& hardware_thread) {
@@ -329,12 +329,14 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
      hardware_thread->set_trapped(true);
      hardware_thread->set_trap_type(0x03); // Set trap -
 					   // privileged_instruction
+     printf("privileged_instruction trap \n");
      return;
    }
 
    if (hardware_thread->spec_regs.get_et()) {
      hardware_thread->set_trapped(true);
      hardware_thread->set_trap_type(0x02); // Set trap - illegal_instruction
+     printf("illegal instruction trap \n");
      return;
    }
 
@@ -343,6 +345,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
 
    hardware_thread->spec_regs.set_s(hardware_thread->spec_regs.get_ps());
    hardware_thread->spec_regs.set_et(true);
+   //   printf("return from trap set et true\n");
 
  }
 
