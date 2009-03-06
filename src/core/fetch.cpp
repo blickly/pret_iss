@@ -78,6 +78,10 @@ void fetch::behavior() {
       input_thread->set_fetch_stalled(fetch_stall);
       input_thread->inst.set_inst(instruction_bits);
 
+//       if (!input_thread->is_fetch_stalled())
+// 	    if ( input_thread->get_id() == 0)
+// 	      printf("PC: 0x%x, inst: 0x%x\n", input_thread->get_pc(), input_thread->inst.get_instruction());
+
     //    cout << "fetch:: stalled: " << input_thread->fetch_stalled << endl;
     /** FIXME: This should be handled by throwing a trap and catching
        it to terminate the simulation.  Currently, for the sake of

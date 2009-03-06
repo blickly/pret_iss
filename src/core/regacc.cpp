@@ -172,7 +172,7 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
 	//on a miss
 	if ( deadbranch ) {
 	  hardware_thread->spec_regs.set_dt_status(SET, hardware_thread->inst.get_rd());
-	  printf("setting deadline reg %d to SET\n", hardware_thread->inst.get_rd());
+	  //printf("PIPELINE: setting deadline reg %d to SET\n", hardware_thread->inst.get_rd());
 	}
 	else
 	  hardware_thread->spec_regs.set_dt_status(UNSET, hardware_thread->inst.get_rd());
@@ -218,7 +218,7 @@ void regacc::_check_deadline(const hw_thread_ptr& hardware_thread) {
   if ( hardware_thread->spec_regs.missed_deadline(i) ) {
     hardware_thread->set_trapped(XCPT_TRAPPED);
     hardware_thread->set_trap_type(0x70+i);
-    
+    //printf("PIPEINE: deadling missed %d\n", i);
     //FIXME: WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
   }
 }

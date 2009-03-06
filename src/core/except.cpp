@@ -276,8 +276,11 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     hardware_thread->inst.set_rd(17);
     hardware_thread->inst.set_write_registers(true);
     // Set the processor to supervisor mode
-    hardware_thread->spec_regs.set_ps(hardware_thread->spec_regs.get_s());
-    hardware_thread->spec_regs.set_s(true);
+    if ( hardware_thread->get_trap_type() > 0x7F && hardware_thread->get_trap_type() < 0x70) { 
+      //The above makes sure its not a deadline exception
+      hardware_thread->spec_regs.set_ps(hardware_thread->spec_regs.get_s());
+      hardware_thread->spec_regs.set_s(true);
+    }
 
     //check branch delay slot and store the correct npc
 
@@ -317,7 +320,9 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     
     //Set disable trap on second time around so it gets passed that
     //previous if statement
-    hardware_thread->spec_regs.set_et(false);
+    if ( hardware_thread->get_trap_type() > 0x7F && hardware_thread->get_trap_type() < 0x70) 
+      //above checks if it's not a deadline exception
+      hardware_thread->spec_regs.set_et(false);
   }
   return false;
 }

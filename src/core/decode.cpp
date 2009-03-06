@@ -52,6 +52,9 @@ void decode::behavior() {
     }
 
     in_thread->inst.decode();
+    
+    //    if (in_thread->inst.is_unimplemented())
+    //  printf("UIMP instruction! PC: 0x%x, inst: 0x%x\n", in_thread->get_pc(), in_thread->inst.get_instruction());
 
  #ifdef _NO_SYSTEMC_
     out_thread = in_thread;
