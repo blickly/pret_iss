@@ -170,8 +170,10 @@ void regacc::_destination_regular_deadlines(const hw_thread_ptr& hardware_thread
 	hardware_thread->set_deadline_stalled(false);
 	//If deadbranch, then we SET the dt_status so we will be informed
 	//on a miss
-	if ( deadbranch )
+	if ( deadbranch ) {
 	  hardware_thread->spec_regs.set_dt_status(SET, hardware_thread->inst.get_rd());
+	  printf("setting deadline reg %d to SET\n", hardware_thread->inst.get_rd());
+	}
 	else
 	  hardware_thread->spec_regs.set_dt_status(UNSET, hardware_thread->inst.get_rd());
     } else {
@@ -215,7 +217,7 @@ void regacc::_check_deadline(const hw_thread_ptr& hardware_thread) {
   uint32_t i;
   if ( hardware_thread->spec_regs.missed_deadline(i) ) {
     hardware_thread->set_trapped(XCPT_TRAPPED);
-    hardware_thread->set_trap_type(0x11+i);
+    hardware_thread->set_trap_type(0x70+i);
     
     //FIXME: WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
   }
