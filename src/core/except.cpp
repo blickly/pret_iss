@@ -329,14 +329,14 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
      hardware_thread->set_trapped(true);
      hardware_thread->set_trap_type(0x03); // Set trap -
 					   // privileged_instruction
-     printf("privileged_instruction trap \n");
+     //printf("privileged_instruction trap \n");
      return;
    }
 
    if (hardware_thread->spec_regs.get_et()) {
      hardware_thread->set_trapped(true);
      hardware_thread->set_trap_type(0x02); // Set trap - illegal_instruction
-     printf("illegal instruction trap \n");
+     //printf("illegal instruction trap \n");
      return;
    }
 
