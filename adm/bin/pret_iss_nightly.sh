@@ -7,6 +7,11 @@
 #   $PRET_ISS/logs/pret_issbuild.txt
 #   $PRET_ISS/logs/pret_issnightly.txt
 
+if [ -z "$PRETCFE" ]; then
+    export PRETCFE=/home/bldmastr/pretcfe/llvm/llvm-objs/Debug/bin
+    echo "$0: the PRETCFE environment variable set"
+fi
+	 
 if [ -z "$PRET_ISS" ]; then
     export PRET_ISS=/home/bldmastr/pret_iss
     echo "$0: the PRET_ISS environment variable set"
@@ -37,6 +42,7 @@ echo "# Output in ${PRET_ISS_LOGS}/pret_issbuild.txt"
 make clean all >> "${PRET_ISS_LOGS}/pret_issbuild.txt" 2>&1
 
 source tests/exports.sh
+export PATH=$PATH:$PRETCFE
 echo "SYSTEMC_HOME:  $SYSTEMC_HOME"
 echo "CXXFLAGS:      $CXXFLAGS"
 echo "RT_ADDLD_LIBS: $RT_ADD_LDLIBS"
