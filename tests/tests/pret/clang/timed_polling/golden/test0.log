@@ -1,0 +1,19 @@
+SystemC Simulation
+Starting Timed Read Test
+Read value 50
+Read value 60
+Read value 70
+No value read! Using default (70)
+Read value 70
+Read value 100
+Read value 110
+No value read! Using default (110)
+Read value 110
+Read value 130
+No value read! Using default (130)
+Read value 130
+Read value 150
+No value read! Using default (150)
+Read value 150
+Read value 180
+done with main
