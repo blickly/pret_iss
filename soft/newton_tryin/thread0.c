@@ -23,9 +23,10 @@ void newton(int num_cycles) {
 int main() {
   int num_cycles = 1000000;
   printf("Starting Newton's Method\n");
-//  for (num_cycles = 0; num_cycles < 5000000; num_cycles += 1000000) {
+  for (num_cycles = 0; num_cycles < 2000000; num_cycles += 500000) {
+  //for (num_cycles = 50; num_cycles < 2000000; num_cycles += 50) {
     newton(num_cycles);
-//  }
+  }
   printf("done with main\n");
   exit(0);
 }

@@ -1,5 +1,5 @@
 LDFLAGS=$(CFLAGS)
-CCFLAGS=$(CFLAGS) -msoft-float
+CCFLAGS=$(CFLAGS) -msoft-float -mflat
 C_FILES=all_threads.c
 CC=sparc-elf-gcc
 LD=sparc-elf-ld
