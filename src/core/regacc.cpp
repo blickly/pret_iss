@@ -216,8 +216,10 @@ void regacc::_check_deadline(const hw_thread_ptr& hardware_thread) {
   
   uint32_t i;
   if ( hardware_thread->spec_regs.missed_deadline(i) ) {
+    if ( !hardware_thread->is_trapped() ) {
     hardware_thread->set_trapped(XCPT_TRAPPED);
     hardware_thread->set_trap_type(0x70+i);
+    }
     //printf("PIPEINE: deadling missed %d\n", i);
     //FIXME: WHAT HAPPENS IF MULTIPLE DEADLINES THROW EXCEPTION AT THE SAME TIME?
   }
