@@ -933,7 +933,7 @@ config.macros.bibtex.handler = function(place,macroName,params) {
 //}}}
 // //===</pre>
 </div>
-<div title="Building sparc toolchains for Mac users" modifier="Isaac Liu" created="200901211816" modified="200901211826" changecount="7">
+<div title="Building sparc toolchains for Mac users" modifier="Isaac Liu" created="200901211816" modified="200903060228" changecount="8">
 <pre>* Download the source code from the [[here|ftp://gaisler.com/gaisler.com/bcc/src]]. You want to download the newest version of the bcc-src.
 * untar bcc-src-x.x.xx to a folder where you want to keep the binaries
 * download all the GNU sources by typing 'make download' in the bcc-src folder. 
@@ -950,6 +950,10 @@ $cd /opt
 $ln -s $(CURDIR)/toolchains/sparc-elf-3.2.3 sparc-elf-3.2.3
 $ln -s $(CURDIR)/toolchains/sparc-elf-3.4.4 sparc-elf-3.4.4
 $cd $(CURDIR)
+/*}}}*/
+* 
+/*{{{*/
+$make install
 $make all
 /*}}}*/
 * Once this is finished, add $(CURDIR)/toolchains/sparc-elf-4.4.4/bin to your path by typing
