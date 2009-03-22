@@ -9,7 +9,7 @@ import simulator
 class Game:
   """Game - This class interfaces simulator to pygame."""
     
-  def __init__(self, width=640,height=480):
+  def __init__(self, width=1200,height=800):
     """Initialize screen"""
     pygame.init()
     self.width = width
@@ -45,8 +45,9 @@ class Game:
         textpos = text.get_rect(x=300)
         self.screen.blit(text, textpos)
 
-      pygame.draw.circle(self.screen, pygame.color.Color("white"), 
-          (self.sim.get_robot().get_x(), self.sim.get_robot().get_y()), 10)
+      pygame.draw.circle(self.screen, pygame.color.Color("white"),
+                         (int(self.sim.get_robot().get_x()),
+		          int(self.sim.get_robot().get_y())), 10)
       pygame.display.flip()
       self.sim.increment_time()
 

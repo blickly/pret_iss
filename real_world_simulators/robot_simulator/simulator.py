@@ -19,7 +19,9 @@ class Simulator:
   def increment_time(self):
     """Increment simulation time"""
     self.time = self.time + 1
-    self.robot.increment_time()
+    if not self.robot.crashed():
+      self.robot.increment_time()
+
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
@@ -36,7 +38,6 @@ class Robot:
     self.wheel_increment = 0.005
     self.speed_increment = 0.05
  
-
   def steer_left(self):
     """Move steering to the left"""
     self.wheel_dir = self.wheel_dir + self.wheel_increment
@@ -72,3 +73,10 @@ class Robot:
     self.heading = self.heading + self.wheel_dir
     self.x = self.x + math.sin(self.heading) * self.speed
     self.y = self.y + math.cos(self.heading) * self.speed
+
+  def crashed(self):
+    """Return if the robot has crashed into a wall"""
+    if 10 < self.x < 1190 and 10 < self.y < 790:
+	    return False
+    else:
+	    return True
