@@ -108,6 +108,7 @@ void except::behavior() {
     if (_is_not_valid_hwthread(hardware_thread)) {
         return;
     }
+
     /* Everytime an instruction goes through this stage, increase its
        cycle count to 6 */
     hardware_thread->cnt_cycles += 6;
@@ -138,7 +139,7 @@ void except::behavior() {
     //  printf("RETT PC 0x%x\n", hardware_thread->get_pc());
     //  printf("RETT jump to 0x%x\n", hardware_thread->inst.get_alu_result());
     //    }
-    
+
     //        if ( hardware_thread->inst.is_write_special_registers() && hardware_thread->inst .get_select_special_register() == SREG_PSR)
     //    printf("set_psr pc: 0x%x\n", hardware_thread->get_pc());
 
@@ -146,7 +147,7 @@ void except::behavior() {
         /* Increment the PC based */
         inc_pc(hardware_thread);
     }
-    
+
     write_regs(hardware_thread);
     write_special_regs(hardware_thread);
 
@@ -173,7 +174,7 @@ bool except::dead_stalled(const hw_thread_ptr& hardware_thread) {
         hardware_thread->spec_regs.dump_deadline_timers();
 
 #endif
-        //HACK!!! NEED TO CHANGE!!
+        //FIXME: HACK!!! NEED TO CHANGE!!
         //STALLED BUT WANT TO UPDATE MAILBOX
         if (hardware_thread->spec_regs.get_pll_loaded() && hardware_thread->inst.is_write_special_registers()) {
             hardware_thread->spec_regs.set_pll_load(hardware_thread->inst.get_alu_result(), hardware_thread->inst.get_rd() - 8);
@@ -235,7 +236,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
 
  bool except::handle_exceptions(const hw_thread_ptr& hardware_thread){
 
-  /* 2 pass handling - 
+  /* 2 pass handling -
      - First pass store the pc, and set the db_word_stalled and set pc to 0
      - Second pass detect pc is 0, so store the npc and then
      set the PC to the right place
@@ -257,13 +258,13 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
 
   uint32_t current_pc = hardware_thread->get_pc();
   short exception_state = hardware_thread->get_trapped_state();
-  
+
 
 
   //Disable changing processor state from the instructions
   hardware_thread->inst.set_write_special_registers(false);
   //Write to register will always be set to true
-  
+
   if (exception_state == XCPT_TRAPPED) {
     //First pass
 
@@ -276,7 +277,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     hardware_thread->inst.set_rd(17);
     hardware_thread->inst.set_write_registers(true);
     // Set the processor to supervisor mode
-    if ( hardware_thread->get_trap_type() > 0x7F && hardware_thread->get_trap_type() < 0x70) { 
+    if ( hardware_thread->get_trap_type() > 0x7F && hardware_thread->get_trap_type() < 0x70) {
       //The above makes sure its not a deadline exception
       hardware_thread->spec_regs.set_ps(hardware_thread->spec_regs.get_s());
       hardware_thread->spec_regs.set_s(true);
@@ -285,7 +286,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
     //check branch delay slot and store the correct npc
 
     //set trapped state to XCPT_TRAPPED2 so the next time around we
-    //know it's in the second state 
+    //know it's in the second state
     hardware_thread->set_trapped(XCPT_TRAPPED2);
   }
   else if ( exception_state == XCPT_TRAPPED2) {
@@ -305,22 +306,22 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
 
     //Now we can disable the trap and set the PC to the jump address
     hardware_thread->set_trapped(XCPT_NORMAL);
-    
+
     //SVT is leon specific, currently not implemented
     uint32_t trap_address = hardware_thread->spec_regs.get_tbr();
     uint32_t offset = (uint32_t)(hardware_thread->get_trap_type());
-    
-    trap_address |= (offset << 4); 
+
+    trap_address |= (offset << 4);
 
     hardware_thread->set_pc(trap_address);
     hardware_thread->set_delayed_branch_address(0);
 
-    if (offset >= 0x70 && offset < 0x79) 
+    if (offset >= 0x70 && offset < 0x79)
       hardware_thread->spec_regs.set_dt_status(UNSET, offset - 0x70);
-    
+
     //Set disable trap on second time around so it gets passed that
     //previous if statement
-    if ( hardware_thread->get_trap_type() > 0x7F && hardware_thread->get_trap_type() < 0x70) 
+    if ( hardware_thread->get_trap_type() > 0x7F && hardware_thread->get_trap_type() < 0x70)
       //above checks if it's not a deadline exception
       hardware_thread->spec_regs.set_et(false);
   }
@@ -348,7 +349,7 @@ bool except::mem_stalled(const hw_thread_ptr& hardware_thread) {
      return;
    }
 
-   //Not throwing CWP overflow exception 
+   //Not throwing CWP overflow exception
    //Not throwing mem_address_not_aligned
 
    hardware_thread->spec_regs.set_s(hardware_thread->spec_regs.get_ps());
@@ -393,7 +394,7 @@ void except::inc_pc(const hw_thread_ptr& hardware_thread) {
     } else {
         hardware_thread->set_pc(hardware_thread->get_pc() + 4);
     }
-    
+
     if (branch_check(hardware_thread)) {
         //    if (branch_check(hardware_thread->inst, hardware_thread->spec_regs.icc)) {
         if (!(hardware_thread->inst.is_branch() && hardware_thread->inst.is_annul() && hardware_thread->inst.get_conditional_branch() == BRCH_BA)) {
@@ -471,7 +472,7 @@ void except::write_regs(const hw_thread_ptr& hardware_thread) {
     }
 }
 
- 
+
 
 void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
 
@@ -481,7 +482,7 @@ void except::write_special_regs(const hw_thread_ptr& hardware_thread) {
 //   }
     if (hardware_thread->inst.is_write_special_registers()) {
         switch (hardware_thread->inst.get_select_special_register()) {
-	
+
         case SREG_Y:
             hardware_thread->spec_regs.set_y(hardware_thread->inst.get_alu_result());
             break;
