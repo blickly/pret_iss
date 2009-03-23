@@ -48,7 +48,8 @@ class Game:
 
       for robot in self.sim.get_robots():
         pygame.draw.circle(self.screen, pygame.color.Color("white"),
-                           (int(robot.get_x()), int(robot.get_y())), 
+                           (int(robot.get_x()), 
+                             self.height - int(robot.get_y())), 
                            robot.radius)
       pygame.display.flip()
       self.sim.increment_time()

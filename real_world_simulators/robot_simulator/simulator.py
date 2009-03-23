@@ -28,18 +28,18 @@ class Simulator:
 class Robot:
   """Robot - This class provides a robot abstraction"""
 
-  def __init__(self, simulator, radius=10):
+  def __init__(self, simulator, radius=10, x=20, y=20, heading=0):
     """Initialize robot parameters"""
     self.radius = radius
     self.sim = simulator
-    self.x = 20
-    self.y = 20
+    self.x = x
+    self.y = y
+    self.heading = heading
     self.speed = 0
-    self.heading = 0
     self.wheel_dir = 0
-    self.max_wheel_angle = 0.1
-    self.wheel_increment = 0.005
-    self.speed_increment = 0.05
+    self.max_wheel_angle = 0.02
+    self.wheel_increment = 0.001
+    self.speed_increment = 0.02
  
   def steer_left(self):
     """Move steering to the left"""
@@ -73,8 +73,8 @@ class Robot:
   def increment_time(self):
     """Move the robot by a single time unit"""
     self.heading = self.heading + self.wheel_dir
-    self.x = self.x + math.sin(self.heading) * self.speed
-    self.y = self.y + math.cos(self.heading) * self.speed
+    self.x = self.x + math.cos(self.heading) * self.speed
+    self.y = self.y + math.sin(self.heading) * self.speed
 
   def crashed(self):
     """Return if the robot has crashed into a wall"""
