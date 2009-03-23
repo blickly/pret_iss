@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
         }
         /* Generate the SREC files*/
         string compile_srec = pret_iss_path + "/scripts/compile_threads.py " + load_file.c_str() + " -q";
-        compile_srec = compile_srec + " &2>/dev/null";
+        //compile_srec = compile_srec + " &2>/dev/null";
 cout << "compile command: " << compile_srec << endl;
         int failed = system(compile_srec.c_str());
 	if (failed) {
