@@ -8,11 +8,12 @@ class Simulator:
     self.time = 0
     self.width = width
     self.height = height
-    self.robot = Robot(self)
+    self.robots = [Robot(self), 
+        Robot(self, x=width-20, y=height-20, heading=math.pi)]
 
   def get_robots(self):
     """Get a given robot"""
-    yield self.robot
+    return self.robots
 
   def get_time(self):
     """Get current simulation time"""
@@ -20,13 +21,16 @@ class Simulator:
 
   def increment_time(self):
     """Increment simulation time"""
-    if not self.robot.crashed():
-      self.time = self.time + 1
-      self.robot.increment_time()
-
+    self.time = self.time + 1
+    for robot in self.get_robots():
+      if not robot.crashed():
+        robot.increment_time()
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
+  max_wheel_angle = 0.02
+  wheel_increment = 0.001
+  speed_increment = 0.02
 
   def __init__(self, simulator, radius=10, x=20, y=20, heading=0):
     """Initialize robot parameters"""
@@ -37,30 +41,27 @@ class Robot:
     self.heading = heading
     self.speed = 0
     self.wheel_dir = 0
-    self.max_wheel_angle = 0.02
-    self.wheel_increment = 0.001
-    self.speed_increment = 0.02
  
   def steer_left(self):
     """Move steering to the left"""
     self.wheel_dir = self.wheel_dir + self.wheel_increment
-    if self.wheel_dir > self.max_wheel_angle:
-      self.wheel_dir = self.max_wheel_angle
+    if self.wheel_dir > Robot.max_wheel_angle:
+      self.wheel_dir = Robot.max_wheel_angle
 
   def steer_right(self):
     """Move steering to the right"""
     self.wheel_dir = self.wheel_dir - self.wheel_increment
-    if self.wheel_dir < -self.max_wheel_angle:
-      self.wheel_dir = -self.max_wheel_angle
+    if self.wheel_dir < -Robot.max_wheel_angle:
+      self.wheel_dir = -Robot.max_wheel_angle
 
   def speed_up(self):
     """Accelerate"""
-    self.speed = self.speed + self.speed_increment
+    self.speed = self.speed + Robot.speed_increment
 
   def slow_down(self):
     """Decelerate"""
     if self.speed > 0:
-      self.speed = self.speed - self.speed_increment
+      self.speed = self.speed - Robot.speed_increment
 
   def get_x(self):
     """Get x coordinate"""
