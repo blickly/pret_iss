@@ -16,7 +16,7 @@ class Game:
     self.height = height
     self.screen = pygame.display.set_mode((self.width, self.height))
 
-    self.sim = simulator.Simulator()
+    self.sim = simulator.Simulator(width, height)
 
   def MainLoop(self):
     """Run the main loop"""

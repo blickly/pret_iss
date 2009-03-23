@@ -3,10 +3,12 @@ import math
 class Simulator:
   """Simulator - This class provides a simulation of our robot example"""
 
-  def __init__(self):
+  def __init__(self, width, height):
     """Initialize time and a single robot"""
     self.time = 0
-    self.robot = Robot()
+    self.width = width
+    self.height = height
+    self.robot = Robot(self)
 
   def get_robot(self):
     """Get a given robot"""
@@ -26,9 +28,9 @@ class Simulator:
 class Robot:
   """Robot - This class provides a robot abstraction"""
 
-  def __init__(self):
+  def __init__(self, simulator):
     """Initialize robot parameters"""
-    #self.time = 0
+    self.sim = simulator
     self.x = 20
     self.y = 20
     self.speed = 0
@@ -76,7 +78,7 @@ class Robot:
 
   def crashed(self):
     """Return if the robot has crashed into a wall"""
-    if 10 < self.x < 1190 and 10 < self.y < 790:
-	    return False
+    if 10 < self.x < self.sim.width-10 and 10 < self.y < self.sim.height-10:
+      return False
     else:
-	    return True
+      return True
