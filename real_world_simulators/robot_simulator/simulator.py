@@ -10,9 +10,9 @@ class Simulator:
     self.height = height
     self.robot = Robot(self)
 
-  def get_robot(self):
+  def get_robots(self):
     """Get a given robot"""
-    return self.robot
+    yield self.robot
 
   def get_time(self):
     """Get current simulation time"""
@@ -20,16 +20,17 @@ class Simulator:
 
   def increment_time(self):
     """Increment simulation time"""
-    self.time = self.time + 1
     if not self.robot.crashed():
+      self.time = self.time + 1
       self.robot.increment_time()
 
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
 
-  def __init__(self, simulator):
+  def __init__(self, simulator, radius=10):
     """Initialize robot parameters"""
+    self.radius = radius
     self.sim = simulator
     self.x = 20
     self.y = 20
@@ -71,14 +72,14 @@ class Robot:
 
   def increment_time(self):
     """Move the robot by a single time unit"""
-    #self.time = self.time + 1
     self.heading = self.heading + self.wheel_dir
     self.x = self.x + math.sin(self.heading) * self.speed
     self.y = self.y + math.cos(self.heading) * self.speed
 
   def crashed(self):
     """Return if the robot has crashed into a wall"""
-    if 10 < self.x < self.sim.width-10 and 10 < self.y < self.sim.height-10:
+    if (self.radius < self.x < self.sim.width-self.radius and
+        self.radius < self.y < self.sim.height-self.radius):
       return False
     else:
       return True
