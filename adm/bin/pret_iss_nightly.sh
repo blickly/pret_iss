@@ -23,7 +23,7 @@ if [ -z "$SYSTEMC" ]; then
 fi 
 
 export SPARC_TOOLCHAIN=$PRET_ISS/toolchain/sparc-elf-3.4.4/bin
-export PATH=$PATH:$SPARC_TOOLCHAIN
+export PATH=$PATH:$SPARC_TOOLCHAIN:$PRETCFE
 export PRET_ISS_LOGS="${PRET_ISS}/logs"
 
 cd $PRET_ISS
