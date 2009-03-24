@@ -126,7 +126,7 @@ public:
      *  @param addr Address in memory.
      *  @return The memory contents at address addr.
      */
-    uint32_t get_memory_data(uint32_t addr) const;
+    uint32_t read_memory(uint32_t addr) const;
 
     /** Return the program counter for a specific thread.
      *  @param thread_id The thread number.

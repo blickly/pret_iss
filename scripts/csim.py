@@ -301,7 +301,7 @@ class CalSim(cmd.Cmd):
       end_addr = start_addr + bytes
       start_addr = (start_addr / 4) * 4
       for addr in range(start_addr, end_addr, 4):
-         data = pret.get_memory_data(addr)
+         data = pret.read_memory(addr)
          print "%8x: %08x" % (addr, data) 
 
    def do_reg(self, args):

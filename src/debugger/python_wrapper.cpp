@@ -127,12 +127,12 @@ pret_get_instruction_count(PyObject *self, PyObject *args) {
 }
 
 static PyObject *
-pret_get_memory_data(PyObject *self, PyObject *args) {
+pret_read_memory(PyObject *self, PyObject *args) {
     uint32_t addr;
     uint32_t data;
     if (!PyArg_ParseTuple(args, "I", &addr))
         return NULL;
-    data = get_dbg()->get_memory_data(addr);
+    data = get_dbg()->read_memory(addr);
     return Py_BuildValue("I", data);
 }
 
@@ -204,7 +204,7 @@ static PyMethodDef PretMethods[] = {
     {"get_pc",  pret_get_pc, METH_VARARGS, "Return the PC of this thread."},
     {"get_cycle_count",  pret_get_cycle_count, METH_VARARGS, "Return the cycle count."},
     {"get_period",  pret_get_period, METH_VARARGS, "Return the period of main clock."},
-    {"get_memory_data",  pret_get_memory_data, METH_VARARGS, "Return the word at the given address."},
+    {"read_memory",  pret_read_memory, METH_VARARGS, "Return the word at the given address."},
     {"is_fetch_stalled",  pret_is_fetch_stalled, METH_VARARGS, "Return whether fetch stage has caused a stall for this thread."},
     {"is_memory_stalled",  pret_is_memory_stalled, METH_VARARGS, "Return whether memory stage has caused a stall for this thread."},
     {"reg",  pret_reg, METH_VARARGS, "Print the registers of this thread."},

@@ -209,7 +209,7 @@ unsigned int core::get_cycle_count() const {
     return _cycle_counter->get_cycles();
 }
 
-uint32_t core::get_memory_data(uint32_t addr) const {
+uint32_t core::read_memory(uint32_t addr) const {
     //return mem_cont
     //->get_addr(addr);
     //FIXME: get ^ this to work by changing interface to take thread id
