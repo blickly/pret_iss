@@ -1,4 +1,5 @@
-LDFLAGS=$(CFLAGS)
+LDFLAGS=$(filter-out -D%,$(CFLAGS))   
+#LDFLAGS=$(CFLAGS)
 CCFLAGS=$(CFLAGS) -msoft-float
 C_FILES=all_threads.c
 CC=sparc-elf-gcc
@@ -21,7 +22,8 @@ thread%.o: $(C_FILES)
 	rm deadline.h
 
 thread%.exe: thread%.o
-	$(CC) $(CCFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
+	$(LD) $(LDFLAGS) $^ -o $@ -e main  
+#	$(CC) $(CCFLAGS) $(INCDIR) $(LIBDIR) $^ -o $@ $(LIBS)
 
 thread%.srec: thread%.exe
 	sparc-elf-objcopy -O srec $< $@

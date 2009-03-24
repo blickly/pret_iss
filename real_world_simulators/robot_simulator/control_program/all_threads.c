@@ -9,9 +9,11 @@ int main() {
 	while (*SPEED); // wait for the data to be read and reset to zero
 
 	for (;;) {
-	 *WHEEL = 1;
-  }
+		*WHEEL = 1;
+	}
+	return *SPEED;
+
 #else
-  WAIT_FOR_END_SIMULATION;
+	WAIT_FOR_END_SIMULATION;
 #endif
 }

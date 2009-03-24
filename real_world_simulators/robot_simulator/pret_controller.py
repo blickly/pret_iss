@@ -80,11 +80,11 @@ class PretController():
       if command != 0:
         print "Command was %d" % command
         pret.write_memory(PretController.speed_address, 0)
-        robot.speed_increment =  command / 1000;
-        if robot.speed_increment > 0:
-            robot.speed_up()
-        elif robot.speed_increment < 0:
-            robot.speed_increment = -robot.speed_increment
-            robot.slow_down()
+        self.robot.speed_increment =  command / 1000;
+        if self.robot.speed_increment > 0:
+            self.robot.speed_up()
+        elif self.robot.speed_increment < 0:
+            self.robot.speed_increment = -robot.speed_increment
+            self.robot.slow_down()
         
 
