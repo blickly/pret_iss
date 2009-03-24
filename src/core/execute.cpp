@@ -60,6 +60,11 @@ void execute::behavior() {
 
     perform_alu_operations(hardware_thread);
 
+    hw_thread_ptr* ptr = const_cast<hw_thread_ptr*>(&hardware_thread);
+    if (hardware_thread->inst.get_alu_result() == 0xf34010e0) {
+      cout << "pc: " << hex << ptr->get_handle()->get_pc() << endl;
+    }
+    
     #ifdef DBG_PIPE
     cout << "*execute*" << " (" << sc_time_stamp() << ") ";
     cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex << hardware_thread.get_handle()->PC << hex <<  ", " << hardware_thread->inst;
@@ -174,25 +179,29 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 
             /// Used in step (6) to replace MSB of (y) with LSB of rs1
             /// (unshifted)
-            bool lsb_rs1 = rs1 & 1; //rs1[0];
+            bool lsb_rs1 = bool(rs1 & 1); //rs1[0];
             /// Page 110 from Sparc v8 manual
             /// (1): Select immediate or rs2's value.
             /// rs2 holds the appropriate value.
             /// (2): Righardware_thread shift by one
             rs1 = rs1 >> 1;
             /// Replace MSB with N xor V
-	    bool n = hardware_thread->spec_regs.get_icc() & 0x08;
-	    bool v = hardware_thread->spec_regs.get_icc() & 0x02;
-            bool b = n ^ v;
-	    // Hiren: I'm a little confused why the below does not work.	    // (hardware_thread->spec_regs.get_icc() & 0x08) ^ (hardware_thread->spec_regs.get_icc() & 0x02);
+//  	    bool n = hardware_thread->spec_regs.get_icc() & 0x08;
+//  	    bool v = hardware_thread->spec_regs.get_icc() & 0x02;
+//              bool b = n ^ v;
+	    
+	    // Hiren: I'm a little confused why the below does not work.
+	    bool b =  bool(hardware_thread->spec_regs.get_icc() & 0x08) ^
+	    	      bool(hardware_thread->spec_regs.get_icc() & 0x02);
             rs1 |= (b << 31) ; //rs1.set(32, b);
             /// (3): Check if LSB of Y reg is 1.
             if (!(y & 0x00000001)) { // if (y[0] == false) {
                 /// Add 0 to the shifted value in rs1 ?
-                temp_rsd = rs1;
+	      temp_rsd = rs1;
             } else {
                 /// rs1 is added to the multiplier (rs2)
 	      temp_rsd = rs1 + rs2;
+
             }
             /// Step (4)
             rsd = temp_rsd;
