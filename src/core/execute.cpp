@@ -60,7 +60,7 @@ void execute::behavior() {
 
     perform_alu_operations(hardware_thread);
 
-#ifdef DBG_PIPE
+    #ifdef DBG_PIPE
     cout << "*execute*" << " (" << sc_time_stamp() << ") ";
     cout << "hw_thread's id: " << hardware_thread->get_id() << ", pc: 0x" << hex << hardware_thread.get_handle()->PC << hex <<  ", " << hardware_thread->inst;
     cout << "\t+ " << hex << "alu_result: "
@@ -181,15 +181,19 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
             /// (2): Righardware_thread shift by one
             rs1 = rs1 >> 1;
             /// Replace MSB with N xor V
-            bool b = (hardware_thread->spec_regs.get_icc() & 0x08) ^(hardware_thread->spec_regs.get_icc() & 0x02);
+	    bool n = hardware_thread->spec_regs.get_icc() & 0x08;
+	    bool v = hardware_thread->spec_regs.get_icc() & 0x02;
+            bool b = n ^ v;
+	    // error code 
+	    // (hardware_thread->spec_regs.get_icc() & 0x08) ^ (hardware_thread->spec_regs.get_icc() & 0x02);
             rs1 |= (b << 31) ; //rs1.set(32, b);
             /// (3): Check if LSB of Y reg is 1.
-            if ((y & 1) == false) { // if (y[0] == false) {
+            if (!(y & 0x00000001)) { // if (y[0] == false) {
                 /// Add 0 to the shifted value in rs1 ?
                 temp_rsd = rs1;
             } else {
                 /// rs1 is added to the multiplier (rs2)
-                temp_rsd = rs1 + rs2;
+	      temp_rsd = rs1 + rs2;
             }
             /// Step (4)
             rsd = temp_rsd;
@@ -211,6 +215,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 
     //write to the icc
     if (hardware_thread->inst.is_write_icc()) {
+
         hardware_thread->inst.set_icc(geticc(hardware_thread));
     }
 
