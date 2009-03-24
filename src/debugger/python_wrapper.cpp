@@ -216,7 +216,7 @@ static PyMethodDef PretMethods[] = {
     {"get_cycle_count",  pret_get_cycle_count, METH_VARARGS, "Return the cycle count."},
     {"get_period",  pret_get_period, METH_VARARGS, "Return the period of main clock."},
     {"read_memory",  pret_read_memory, METH_VARARGS, "Return the word at the given address."},
-    {"write_memory",  pret_read_memory, METH_VARARGS, "Write the given word at the given address."},
+    {"write_memory",  pret_write_memory, METH_VARARGS, "Write the given word at the given address."},
     {"is_fetch_stalled",  pret_is_fetch_stalled, METH_VARARGS, "Return whether fetch stage has caused a stall for this thread."},
     {"is_memory_stalled",  pret_is_memory_stalled, METH_VARARGS, "Return whether memory stage has caused a stall for this thread."},
     {"reg",  pret_reg, METH_VARARGS, "Print the registers of this thread."},

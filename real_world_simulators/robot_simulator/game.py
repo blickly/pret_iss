@@ -5,12 +5,14 @@ import pygame
 from pygame.locals import *
 
 import simulator
+import pret_controller
 
 class Game:
   """Game - This class interfaces simulator to pygame."""
     
-  def __init__(self, width=640, height=480, boxsize = 40):
-    """Initialize screen"""
+  def __init__(self, width=640, height=480, boxsize=40, filename=""):
+    """Initialize screen, real world simulator, and, if needed,
+    PRET core simulator to control a robot"""
     pygame.init()
     self.width = width
     self.height = height
@@ -18,6 +20,16 @@ class Game:
     self.screen = pygame.display.set_mode((self.width, self.height))
 
     self.sim = simulator.Simulator(width / boxsize, self.height / boxsize)
+
+    if filename == "":
+      self.control = self.keyboard_control
+    else:
+      self.control = self.pret_control
+      for r in self.sim.get_robots():
+        pret_robot = r
+        break
+      self.controller = pret_controller.PretController(pret_robot,
+                                                       filename)
 
   def keyboard_control(self):
     """Do keyboard-based control"""
@@ -34,6 +46,15 @@ class Game:
             robot.speed_up()
           elif event.key == K_DOWN:
             robot.slow_down()
+
+  def pret_control(self):
+    """Do control based on output of a PRET core"""
+    self.controller.run_one_cycle()
+
+    # (but also end the simulation if the window close button is clicked)
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT: 
+        sys.exit()
 
   def display(self):
     """Display current simulation configuration graphically"""
@@ -71,10 +92,10 @@ class Game:
     self.background.fill((0,0,0))
     self.time = 0
     while 1:
-      self.keyboard_control()
+      self.control()
       self.display()
       self.sim.increment_time()
 
 if __name__ == "__main__":
-    window = Game()
+    window = Game(filename = "blank" )
     window.MainLoop()
