@@ -8,23 +8,26 @@ class Simulator:
 
   def __init__(self, width, height):
     """Initialize time and a single robot"""
-    e = Simulator.empty
-    w = Simulator.wall
-    r = Simulator.robot
-    self.grid = [[w,w,w,w,w,w,w,w,w,w,w,w,w,w,w],
-                  [w,e,e,e,e,e,e,e,e,e,e,e,e,e,w],
-                  [w,e,e,e,w,e,e,w,e,w,e,e,e,e,w],
-                  [w,e,e,e,w,e,e,e,e,e,e,e,e,e,w],
-                  [w,w,e,e,w,e,e,w,e,e,w,w,w,e,w],
-                  [w,e,e,e,e,w,e,e,e,e,e,e,e,w,w],
-                  [w,e,e,e,w,e,e,w,e,w,e,e,e,e,w],
-                  [w,w,w,e,w,e,e,w,e,e,w,e,w,e,w],
-                  [w,e,e,e,e,e,e,e,e,e,e,e,e,e,w],
-                  [w,w,w,w,w,w,w,w,w,w,w,w,w,w,w,w]]
+    self.grid = self.parse_grid_file("grid.txt")
     self.time = 0
     self.width = width
     self.height = height
     self.robots = [Robot(self)]
+
+  def parse_grid_file(self, filename):
+    e = Simulator.empty
+    w = Simulator.wall
+    r = Simulator.robot
+    grid = []
+    for line in open(filename):
+      gridrow = []
+      for box in line:
+        if box == "w":
+          gridrow.append(w)
+        elif box == "e":
+          gridrow.append(e)
+      grid.insert(0, gridrow)
+    return grid
 
   def read_grid(self, x, y):
     try:
