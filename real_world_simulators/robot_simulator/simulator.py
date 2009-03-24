@@ -15,6 +15,7 @@ class Simulator:
     self.robots = [Robot(self)]
 
   def parse_grid_file(self, filename):
+    """Pasre a text file that contains the maze setup"""
     e = Simulator.empty
     w = Simulator.wall
     r = Simulator.robot
@@ -24,12 +25,13 @@ class Simulator:
       for box in line:
         if box == "w":
           gridrow.append(w)
-        elif box == "e":
+        elif box == " ":
           gridrow.append(e)
       grid.insert(0, gridrow)
     return grid
 
   def read_grid(self, x, y):
+    """Read the contents of a given grid cell"""
     try:
       return self.grid[y][x]
     except:
