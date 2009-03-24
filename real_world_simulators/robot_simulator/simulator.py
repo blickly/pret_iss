@@ -2,14 +2,35 @@ import math
 
 class Simulator:
   """Simulator - This class provides a simulation of our robot example"""
+  empty = 0
+  block = 1
+  robot = 2
 
   def __init__(self, width, height):
     """Initialize time and a single robot"""
+    e = Simulator.empty
+    b = Simulator.block
+    r = Simulator.robot
+    self.world = [[b,b,b,b,b,b,b,b,b,b,b,b,b,b,b],
+                  [b,e,e,e,e,e,e,e,e,e,e,e,e,e,b],
+                  [b,e,e,e,b,e,e,b,e,b,e,e,e,e,b],
+                  [b,e,e,e,b,e,e,e,e,e,e,e,e,e,b],
+                  [b,b,e,e,b,e,e,b,e,e,b,b,b,e,b],
+                  [b,e,e,e,e,b,e,e,e,e,e,e,e,b,b],
+                  [b,e,e,e,b,e,e,b,e,b,e,e,e,e,b],
+                  [b,b,b,e,b,e,e,b,e,e,b,e,b,e,b],
+                  [b,e,e,e,e,e,e,e,e,e,e,e,e,e,b],
+                  [b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b]]
     self.time = 0
     self.width = width
     self.height = height
-    self.robots = [Robot(self), 
-        Robot(self, x=width-20, y=height-20, heading=math.pi)]
+    self.robots = [Robot(self)]
+
+  def read_grid(self, x, y):
+    try:
+      return self.world[y][x]
+    except:
+      return Simulator.block
 
   def get_robots(self):
     """Get a given robot"""
@@ -28,31 +49,27 @@ class Simulator:
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
-  max_wheel_angle = 0.02
-  wheel_increment = 0.001
-  speed_increment = 0.02
+  speed_increment = 0.001
 
-  def __init__(self, simulator, radius=10, x=20, y=20, heading=0):
+  def __init__(self, simulator, x=1, y=1, heading=(1,0)):
     """Initialize robot parameters"""
-    self.radius = radius
     self.sim = simulator
     self.x = x
     self.y = y
     self.heading = heading
-    self.speed = 0
-    self.wheel_dir = 0
+    self.speed = 0.001
  
   def steer_left(self):
     """Move steering to the left"""
-    self.wheel_dir = self.wheel_dir + self.wheel_increment
-    if self.wheel_dir > Robot.max_wheel_angle:
-      self.wheel_dir = Robot.max_wheel_angle
+    (hx, hy) = self.heading
+    (hx, hy) = (-hy, hx) # Rotate 90 degrees to left
+    self.heading = (hx,hy)
 
   def steer_right(self):
     """Move steering to the right"""
-    self.wheel_dir = self.wheel_dir - self.wheel_increment
-    if self.wheel_dir < -Robot.max_wheel_angle:
-      self.wheel_dir = -Robot.max_wheel_angle
+    (hx, hy) = self.heading
+    (hx, hy) = (hy, -hx) # Rotate 90 degrees to right
+    self.heading = (hx,hy)
 
   def speed_up(self):
     """Accelerate"""
@@ -73,14 +90,13 @@ class Robot:
 
   def increment_time(self):
     """Move the robot by a single time unit"""
-    self.heading = self.heading + self.wheel_dir
-    self.x = self.x + math.cos(self.heading) * self.speed
-    self.y = self.y + math.sin(self.heading) * self.speed
+    dx, dy = self.heading
+    self.x = self.x + dx * self.speed
+    self.y = self.y + dy * self.speed
 
   def crashed(self):
     """Return if the robot has crashed into a wall"""
-    if (self.radius < self.x < self.sim.width-self.radius and
-        self.radius < self.y < self.sim.height-self.radius):
+    if self.sim.world[int(self.y+0.5)][int(self.x+0.5)] == Simulator.empty:
       return False
     else:
       return True
