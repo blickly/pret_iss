@@ -68,7 +68,7 @@ class PretController():
         print "Command was %d" % command
       pret.write_memory(PretController.actuator_address, 0)
       if command & PretController.dir_mask == PretController.left:
-        robot.steer_left()
+        self.robot.steer_left()
       elif command & PretController.dir_mask == PretController.right:
-        robot.steer_right()
+        self.robot.steer_right()
 
