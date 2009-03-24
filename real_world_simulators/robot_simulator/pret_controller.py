@@ -22,8 +22,8 @@
 # CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 # ENHANCEMENTS, OR MODIFICATIONS.
 #
-# 						PT_COPYRIGHT_VERSION_2
-# 						COPYRIGHTENDKEY
+#                         PT_COPYRIGHT_VERSION_2
+#                         COPYRIGHTENDKEY
 ####################################################################
 
 import sys
@@ -39,6 +39,10 @@ pret = libpretdbg
 class PretController():
    """Controller for the robot that is controlled by our PRET core"""
    actuator_address = 0x80000400
+   left_bump_sensor_address = 0x80000500
+   right_bump_sensor_address = 0x80000504
+   speed_address = 0x80000404
+   
    left = 0x01
    right = 0x02
    dir_mask = 0x0f
@@ -71,4 +75,11 @@ class PretController():
         self.robot.steer_left()
       elif command & PretController.dir_mask == PretController.right:
         self.robot.steer_right()
+    
+      command = pret.read_memory(PretController.speed_address)
+      if command != 0:
+        print "Command was %d" % command
+        pret.write_memory(PretController.speed_address, 0)
+        robot.speed_increment =  command / 1000;
+        
 
