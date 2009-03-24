@@ -62,7 +62,7 @@ class Robot:
     self.x = x
     self.y = y
     self.heading = heading
-    self.speed = 0
+    self.speed = 0.0
  
   def steer_left(self):
     """Move steering to the left"""
@@ -78,12 +78,12 @@ class Robot:
 
   def speed_up(self):
     """Accelerate"""
-    self.speed = self.speed + Robot.speed_increment
+    self.speed = self.speed + self.speed_increment
 
   def slow_down(self):
     """Decelerate"""
     if self.speed > 0:
-      self.speed = self.speed - Robot.speed_increment
+      self.speed = self.speed - self.speed_increment
 
   def get_x(self):
     """Get x coordinate"""

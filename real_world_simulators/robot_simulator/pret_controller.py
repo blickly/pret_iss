@@ -69,18 +69,18 @@ class PretController():
 
       command = pret.read_memory(PretController.actuator_address)
       if command != 0:
-        print "Command was %d" % command
-      pret.write_memory(PretController.actuator_address, 0)
-      if command & PretController.dir_mask == PretController.left:
-        self.robot.steer_left()
-      elif command & PretController.dir_mask == PretController.right:
-        self.robot.steer_right()
+        print "Actuator command was %d" % command          
+        pret.write_memory(PretController.actuator_address, 0)
+        if command & PretController.dir_mask == PretController.left:
+            self.robot.steer_left()
+        elif command & PretController.dir_mask == PretController.right:
+            self.robot.steer_right()
     
       command = pret.read_memory(PretController.speed_address)
       if command != 0:
-        print "Command was %d" % command
+        print "Speed command was %d" % command
         pret.write_memory(PretController.speed_address, 0)
-        self.robot.speed_increment =  command / 1000;
+        self.robot.speed_increment =  float(command)/float(100);
         if self.robot.speed_increment > 0:
             self.robot.speed_up()
         elif self.robot.speed_increment < 0:
