@@ -54,7 +54,7 @@ class Simulator:
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
-  speed_increment = 0.001
+  speed_increment = 0
 
   def __init__(self, simulator, x=1, y=1, heading=(1,0)):
     """Initialize robot parameters"""
@@ -62,7 +62,7 @@ class Robot:
     self.x = x
     self.y = y
     self.heading = heading
-    self.speed = 0.001
+    self.speed = 0
  
   def steer_left(self):
     """Move steering to the left"""
