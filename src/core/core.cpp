@@ -210,10 +210,11 @@ unsigned int core::get_cycle_count() const {
 }
 
 uint32_t core::read_memory(uint32_t addr) const {
-    //return mem_cont
-    //->get_addr(addr);
-    //FIXME: get ^ this to work by changing interface to take thread id
     return _memory_controller->get_main_mem_loc(addr).mem[addr];
+}
+
+void core::write_memory(const uint32_t addr, const uint32_t data) {
+    _memory_controller->get_main_mem_loc(addr).mem.add_address(addr, data);
 }
 
 uint32_t core::get_pc(int thread_id) const {

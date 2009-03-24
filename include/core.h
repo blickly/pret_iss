@@ -128,6 +128,12 @@ public:
      */
     uint32_t read_memory(uint32_t addr) const;
 
+    /** Write the specified value at the specified memory address.
+     *  @param data Value to be written.
+     *  @param addr Address in memory.
+     */
+    void write_memory(const uint32_t addr, const uint32_t data);
+
     /** Return the program counter for a specific thread.
      *  @param thread_id The thread number.
      *  @return The program counter for thread thread_id.
