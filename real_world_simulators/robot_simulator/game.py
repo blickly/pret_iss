@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os,sys
+import getopt
 import pygame
 from pygame.locals import *
 
@@ -10,7 +11,8 @@ import pret_controller
 class Game:
   """Game - This class interfaces simulator to pygame."""
     
-  def __init__(self, width=640, height=480, boxsize=40, filename=""):
+  def __init__(self, width=640, height=480, boxsize=40, 
+               srec_files="", grid_file="grid.txt"):
     """Initialize screen, real world simulator, and, if needed,
     PRET core simulator to control a robot"""
     pygame.init()
@@ -19,17 +21,16 @@ class Game:
     self.boxsize = boxsize
     self.screen = pygame.display.set_mode((self.width, self.height))
 
-    self.sim = simulator.Simulator(width / boxsize, self.height / boxsize)
-
-    if filename == "":
+    self.sim = simulator.Simulator(width/boxsize, self.height/boxsize,
+                                   grid_file)
+    if srec_files == "":
       self.control = self.keyboard_control
     else:
       self.control = self.pret_control
       for r in self.sim.get_robots():
         pret_robot = r
         break
-      self.controller = pret_controller.PretController(pret_robot,
-                                                       filename)
+      self.controller = pret_controller.PretController(pret_robot, srec_files)
 
   def keyboard_control(self):
     """Do keyboard-based control"""
@@ -96,6 +97,22 @@ class Game:
       self.display()
       self.sim.increment_time()
 
+def main(argv):
+  srec_foldername = ""
+  grid = "grid.txt"
+  try:                                
+    opts, args = getopt.getopt(argv, "p:g:", ["pret=", "grid="])
+  except getopt.GetoptError:
+    print "Invalid arguments: %s" % argv
+    sys.exit(2)  
+  for opt, arg in opts:
+    if opt in ("-p", "--pret"):
+      srec_foldername = arg
+    elif opt in ("-g", "--grid"):
+      grid = arg
+
+  window = Game(srec_files = srec_foldername, grid_file = grid)
+  window.MainLoop()
+
 if __name__ == "__main__":
-    window = Game(filename = "control_program")
-    window.MainLoop()
+  main(sys.argv[1:])

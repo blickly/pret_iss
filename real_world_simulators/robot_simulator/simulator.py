@@ -6,9 +6,9 @@ class Simulator:
   wall = 1
   robot = 2
 
-  def __init__(self, width, height):
+  def __init__(self, width, height, grid_file = "grid.txt"):
     """Initialize time and a single robot"""
-    self.grid = self.parse_grid_file("grid.txt")
+    self.grid = self.parse_grid_file(grid_file)
     self.time = 0
     self.width = width
     self.height = height
