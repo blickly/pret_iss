@@ -47,7 +47,7 @@ class Game:
       for x in xrange(self.width / self.boxsize):
         for y in xrange(self.height / self.boxsize):
           box = self.sim.read_grid(x,y)
-          if box == simulator.Simulator.block:
+          if box == simulator.Simulator.wall:
             pygame.draw.circle(self.screen, pygame.color.Color("gray"),
                                (self.boxsize*x, self.height - self.boxsize*y), 
                                self.boxsize/2)

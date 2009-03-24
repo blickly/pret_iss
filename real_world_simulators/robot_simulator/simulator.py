@@ -3,24 +3,24 @@ import math
 class Simulator:
   """Simulator - This class provides a simulation of our robot example"""
   empty = 0
-  block = 1
+  wall = 1
   robot = 2
 
   def __init__(self, width, height):
     """Initialize time and a single robot"""
     e = Simulator.empty
-    b = Simulator.block
+    w = Simulator.wall
     r = Simulator.robot
-    self.world = [[b,b,b,b,b,b,b,b,b,b,b,b,b,b,b],
-                  [b,e,e,e,e,e,e,e,e,e,e,e,e,e,b],
-                  [b,e,e,e,b,e,e,b,e,b,e,e,e,e,b],
-                  [b,e,e,e,b,e,e,e,e,e,e,e,e,e,b],
-                  [b,b,e,e,b,e,e,b,e,e,b,b,b,e,b],
-                  [b,e,e,e,e,b,e,e,e,e,e,e,e,b,b],
-                  [b,e,e,e,b,e,e,b,e,b,e,e,e,e,b],
-                  [b,b,b,e,b,e,e,b,e,e,b,e,b,e,b],
-                  [b,e,e,e,e,e,e,e,e,e,e,e,e,e,b],
-                  [b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b]]
+    self.grid = [[w,w,w,w,w,w,w,w,w,w,w,w,w,w,w],
+                  [w,e,e,e,e,e,e,e,e,e,e,e,e,e,w],
+                  [w,e,e,e,w,e,e,w,e,w,e,e,e,e,w],
+                  [w,e,e,e,w,e,e,e,e,e,e,e,e,e,w],
+                  [w,w,e,e,w,e,e,w,e,e,w,w,w,e,w],
+                  [w,e,e,e,e,w,e,e,e,e,e,e,e,w,w],
+                  [w,e,e,e,w,e,e,w,e,w,e,e,e,e,w],
+                  [w,w,w,e,w,e,e,w,e,e,w,e,w,e,w],
+                  [w,e,e,e,e,e,e,e,e,e,e,e,e,e,w],
+                  [w,w,w,w,w,w,w,w,w,w,w,w,w,w,w,w]]
     self.time = 0
     self.width = width
     self.height = height
@@ -28,9 +28,9 @@ class Simulator:
 
   def read_grid(self, x, y):
     try:
-      return self.world[y][x]
+      return self.grid[y][x]
     except:
-      return Simulator.block
+      return Simulator.wall
 
   def get_robots(self):
     """Get a given robot"""
@@ -96,7 +96,7 @@ class Robot:
 
   def crashed(self):
     """Return if the robot has crashed into a wall"""
-    if self.sim.world[int(self.y+0.5)][int(self.x+0.5)] == Simulator.empty:
+    if self.sim.grid[int(self.y+0.5)][int(self.x+0.5)] == Simulator.empty:
       return False
     else:
       return True
