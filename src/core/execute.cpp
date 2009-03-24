@@ -184,8 +184,7 @@ void execute::perform_alu_operations(const hw_thread_ptr& hardware_thread) {
 	    bool n = hardware_thread->spec_regs.get_icc() & 0x08;
 	    bool v = hardware_thread->spec_regs.get_icc() & 0x02;
             bool b = n ^ v;
-	    // error code 
-	    // (hardware_thread->spec_regs.get_icc() & 0x08) ^ (hardware_thread->spec_regs.get_icc() & 0x02);
+	    // Hiren: I'm a little confused why the below does not work.	    // (hardware_thread->spec_regs.get_icc() & 0x08) ^ (hardware_thread->spec_regs.get_icc() & 0x02);
             rs1 |= (b << 31) ; //rs1.set(32, b);
             /// (3): Check if LSB of Y reg is 1.
             if (!(y & 0x00000001)) { // if (y[0] == false) {
