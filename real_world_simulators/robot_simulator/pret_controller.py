@@ -39,13 +39,16 @@ pret = libpretdbg
 class PretController():
    """Controller for the robot that is controlled by our PRET core"""
    wheel_actuator_address = 0x80000400
-   motor_actuator_address = 0x80000404
-   
    left = 0x01
    right = 0x02
-
+   motor_actuator_address = 0x80000404
    stop = 0x01
    go = 0x02
+
+   x_sensor_address = 0x80000500
+   y_sensor_address = 0x80000504
+
+   block_length = 1024
 
    def __init__(self, robot, filename):
       """Initialize robot as well as PRET simulator"""
@@ -67,6 +70,7 @@ class PretController():
         print "Robot crashed!"
         sys.exit()
 
+      # Pull commands out of actuators
       wheel_command = pret.read_memory(PretController.wheel_actuator_address)
       if wheel_command != 0:
         print "Wheel command was %d" % wheel_command          
@@ -84,5 +88,12 @@ class PretController():
             self.robot.go()
         elif motor_command == PretController.stop:
             self.robot.stop()
+
+      # Push data into sensors
+      pret.write_memory(PretController.x_sensor_address,
+                        int(PretController.block_length * self.robot.get_x()))
+      pret.write_memory(PretController.y_sensor_address,
+                        int(PretController.block_length * self.robot.get_y()))
+
         
 
