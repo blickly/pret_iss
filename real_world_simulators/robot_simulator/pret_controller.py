@@ -38,14 +38,14 @@ pret = libpretdbg
 
 class PretController():
    """Controller for the robot that is controlled by our PRET core"""
-   actuator_address = 0x80000400
-   left_bump_sensor_address = 0x80000500
-   right_bump_sensor_address = 0x80000504
-   speed_address = 0x80000404
+   wheel_actuator_address = 0x80000400
+   motor_actuator_address = 0x80000404
    
    left = 0x01
    right = 0x02
-   dir_mask = 0x0f
+
+   stop = 0x01
+   go = 0x02
 
    def __init__(self, robot, filename):
       """Initialize robot as well as PRET simulator"""
@@ -67,24 +67,22 @@ class PretController():
         print "Robot crashed!"
         sys.exit()
 
-      command = pret.read_memory(PretController.actuator_address)
-      if command != 0:
-        print "Actuator command was %d" % command          
-        pret.write_memory(PretController.actuator_address, 0)
-        if command & PretController.dir_mask == PretController.left:
+      wheel_command = pret.read_memory(PretController.wheel_actuator_address)
+      if wheel_command != 0:
+        print "Wheel command was %d" % wheel_command          
+        pret.write_memory(PretController.wheel_actuator_address, 0)
+        if wheel_command == PretController.left:
             self.robot.steer_left()
-        elif command & PretController.dir_mask == PretController.right:
+        elif wheel_command == PretController.right:
             self.robot.steer_right()
     
-      command = pret.read_memory(PretController.speed_address)
-      if command != 0:
-        print "Speed command was %d" % command
-        pret.write_memory(PretController.speed_address, 0)
-        self.robot.speed_increment =  float(command)/float(100);
-        if self.robot.speed_increment > 0:
-            self.robot.speed_up()
-        elif self.robot.speed_increment < 0:
-            self.robot.speed_increment = -robot.speed_increment
-            self.robot.slow_down()
+      motor_command = pret.read_memory(PretController.motor_actuator_address)
+      if motor_command != 0:
+        print "Motor command was %d" % motor_command
+        pret.write_memory(PretController.motor_actuator_address, 0)
+        if motor_command == PretController.go:
+            self.robot.go()
+        elif motor_command == PretController.stop:
+            self.robot.stop()
         
 

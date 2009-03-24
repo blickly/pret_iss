@@ -108,6 +108,7 @@ def main(argv):
   for opt, arg in opts:
     if opt in ("-p", "--pret"):
       srec_foldername = arg
+      print arg
     elif opt in ("-g", "--grid"):
       grid = arg
 

@@ -54,7 +54,7 @@ class Simulator:
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
-  speed_increment = 0
+  speed_increment = 0.001
 
   def __init__(self, simulator, x=1, y=1, heading=(1,0)):
     """Initialize robot parameters"""
@@ -75,6 +75,14 @@ class Robot:
     (hx, hy) = self.heading
     (hx, hy) = (hy, -hx) # Rotate 90 degrees to right
     self.heading = (hx,hy)
+
+  def go(self):
+    """Start robot"""
+    self.speed = self.speed_increment
+
+  def stop(self):
+    """Stop robot"""
+    self.speed = 0
 
   def speed_up(self):
     """Accelerate"""
