@@ -9,15 +9,13 @@ enum speed {STOP = 1, GO = 2};
 
 int main() {
 #if defined(THREAD_0)
-	*SPEED = GO;
-	while (*SPEED); // wait for the data to be read and reset to zero
-
-	for (;;) {
-		*WHEEL = LEFT;
-	}
-	return *SPEED;
-
-#else
-	WAIT_FOR_END_SIMULATION;
+  int i;
+  *SPEED = GO;
+  for (i = 0; i < 10; i++) {
+    *WHEEL = LEFT;
+    *WHEEL = RIGHT;
+  }
+  *SPEED = STOP;
 #endif
+  WAIT_FOR_END_SIMULATION;
 }
