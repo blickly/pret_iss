@@ -97,5 +97,5 @@ class Game:
       self.sim.increment_time()
 
 if __name__ == "__main__":
-    window = Game(filename = "blank" )
+    window = Game(filename = "control_program")
     window.MainLoop()

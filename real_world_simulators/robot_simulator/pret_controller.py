@@ -56,12 +56,16 @@ class PretController():
    def run_one_cycle(self):
       """Run one cycle of the PRET processor simulation, and then use the
       output there to drive the robot"""
-      simend = pret.run(1)
-      if not simend:
+      if not pret.run(1):
         print "Requested end of simulation"
+        sys.exit()
+      if self.robot.crashed():
+        print "Robot crashed!"
         sys.exit()
 
       command = pret.read_memory(PretController.actuator_address)
+      if command != 0:
+        print "Command was %d" % command
       pret.write_memory(PretController.actuator_address, 0)
       if command & PretController.dir_mask == PretController.left:
         robot.steer_left()
