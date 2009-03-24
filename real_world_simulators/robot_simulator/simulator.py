@@ -15,7 +15,7 @@ class Simulator:
     self.robots = [Robot(self)]
 
   def parse_grid_file(self, filename):
-    """Pasre a text file that contains the maze setup"""
+    """Parse a text file that contains the maze configuration"""
     e = Simulator.empty
     w = Simulator.wall
     r = Simulator.robot
@@ -38,7 +38,7 @@ class Simulator:
       return Simulator.wall
 
   def get_robots(self):
-    """Get a given robot"""
+    """Get a list of all the robots"""
     return self.robots
 
   def get_time(self):
