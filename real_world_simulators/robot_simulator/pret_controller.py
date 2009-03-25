@@ -39,16 +39,18 @@ pret = libpretdbg
 class PretController():
    """Controller for the robot that is controlled by our PRET core"""
    wheel_actuator_address = 0x80000400
-   bump_sensor_address = 0x80000508
    left = 0x01
    right = 0x02
+   wheel_print_string= ["", "left", "right"]
    motor_actuator_address = 0x80000404
    stop = 0x01
    go = 0x02
    reverse = 0x03
+   motor_print_string = ['',"stop", "go", "backup"]
 
    x_sensor_address = 0x80000500
    y_sensor_address = 0x80000504
+   bump_sensor_address = 0x80000508
 
    block_length = 1024
 
@@ -75,16 +77,13 @@ class PretController():
       if self.robot.wall_detection():
         print "Detected crash"
         command = pret.read_memory(PretController.bump_sensor_address)
-        if command == 0:
+        if command != 1:
             pret.write_memory(PretController.bump_sensor_address, 1);
         
-      
-        
-
       # Pull commands out of actuators
       wheel_command = pret.read_memory(PretController.wheel_actuator_address)
       if wheel_command != 0:
-        print "Wheel command was %d" % wheel_command          
+        print "Wheel command was " + PretController.wheel_print_string[wheel_command]          
         pret.write_memory(PretController.wheel_actuator_address, 0)
         if wheel_command == PretController.left:
             self.robot.steer_left()
@@ -93,7 +92,7 @@ class PretController():
     
       motor_command = pret.read_memory(PretController.motor_actuator_address)
       if motor_command != 0:
-        print "Motor command was %d" % motor_command
+        print "Motor command was " + PretController.motor_print_string[motor_command]
         pret.write_memory(PretController.motor_actuator_address, 0)
         if motor_command == PretController.go:
             self.robot.go()

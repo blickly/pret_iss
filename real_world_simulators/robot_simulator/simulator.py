@@ -54,9 +54,10 @@ class Simulator:
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
-  speed_increment = 0.01
+  speed_increment = 0.005
   motor_normal = 0
   motor_reverse = 1
+  bump_sensor_sensitivity = 50
 
   def __init__(self, simulator, x=1, y=1, heading=(1, 0)):
     """Initialize robot parameters"""
@@ -131,8 +132,8 @@ class Robot:
     """Trying to emulate a bump sensor, very hacky way right now,
     just see's if the next step hits a wall"""
     dx, dy = self.heading
-    next_x = self.x + dx * self.speed
-    next_y = self.y + dy * self.speed
-    if self.sim.grid[int(next_y + 1.5)][int(next_x + 1.5)] != Simulator.empty:
-        return True
+    next_x = self.x + dx * self.speed * self.bump_sensor_sensitivity
+    next_y = self.y + dy * self.speed * self.bump_sensor_sensitivity
+    if self.sim.grid[int(math.ceil(next_y))][int(math.ceil(next_x))] != Simulator.empty:
+        return True and self.motor_direction != Robot.motor_reverse
     return False
