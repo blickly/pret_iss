@@ -10,8 +10,8 @@ all: clean compile
 compile:
 	$(PRET_ISS)/scripts/compile_threads.py .
 
-run:
-	$(PRET_ISS)/src/pret . -1
+simulate:
+	$(PRET_ISS)/real_world_simulators/robot_simulator/game.py -p .
 
 debug:
 	$(PRET_ISS)/scripts/csim.py .
