@@ -39,6 +39,7 @@ pret = libpretdbg
 class PretController():
    """Controller for the robot that is controlled by our PRET core"""
    wheel_actuator_address = 0x80000400
+   bump_sensor_address = 0x80000508
    left = 0x01
    right = 0x02
    motor_actuator_address = 0x80000404
@@ -69,6 +70,15 @@ class PretController():
       if self.robot.crashed():
         print "Robot crashed!"
         sys.exit()
+      
+      if self.robot.wall_detection():
+        print "Detected crash"
+        command = pret.read_memory(PretController.bump_sensor_address)
+        if command == 0:
+            pret.write_memory(PretController.bump_sensor_address, 1);
+        
+      
+        
 
       # Pull commands out of actuators
       wheel_command = pret.read_memory(PretController.wheel_actuator_address)

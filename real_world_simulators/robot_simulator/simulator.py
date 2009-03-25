@@ -113,3 +113,13 @@ class Robot:
       return False
     else:
       return True
+  
+  def wall_detection(self):
+    """Trying to emulate a bump sensor, very hacky way right now,
+    just see's if the next step hits a wall"""
+    dx, dy = self.heading
+    next_x = self.x + dx * self.speed
+    next_y = self.y + dy * self.speed
+    if self.sim.grid[int(next_y+1.5)][int(next_x+1.5)] != Simulator.empty:
+        return True
+    return False
