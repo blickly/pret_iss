@@ -6,7 +6,7 @@ class Simulator:
   wall = 1
   robot = 2
 
-  def __init__(self, width, height, grid_file = "grid.txt"):
+  def __init__(self, width, height, grid_file="grid.txt"):
     """Initialize time and a single robot"""
     self.grid = self.parse_grid_file(grid_file)
     self.time = 0
@@ -54,35 +54,44 @@ class Simulator:
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
-  speed_increment = 0.001
+  speed_increment = 0.01
+  motor_normal = 0
+  motor_reverse = 1
 
-  def __init__(self, simulator, x=1, y=1, heading=(1,0)):
+  def __init__(self, simulator, x=1, y=1, heading=(1, 0)):
     """Initialize robot parameters"""
     self.sim = simulator
     self.x = x
     self.y = y
     self.heading = heading
     self.speed = 0.0
+    self.motor_direction = Robot.motor_normal
  
   def steer_left(self):
     """Move steering to the left"""
     (hx, hy) = self.heading
     (hx, hy) = (-hy, hx) # Rotate 90 degrees to left
-    self.heading = (hx,hy)
+    self.heading = (hx, hy)
 
   def steer_right(self):
     """Move steering to the right"""
     (hx, hy) = self.heading
-    (hx, hy) = (hy, -hx) # Rotate 90 degrees to right
-    self.heading = (hx,hy)
+    (hx, hy) = (hy, - hx) # Rotate 90 degrees to right
+    self.heading = (hx, hy)
 
   def go(self):
     """Start robot"""
     self.speed = self.speed_increment
+    self.motor_direction = Robot.motor_normal
 
   def stop(self):
     """Stop robot"""
     self.speed = 0
+    
+  def backup(self):
+    """Make the robot back up"""
+    self.speed = self.speed_increment
+    self.motor_direction = Robot.motor_reverse
 
   def speed_up(self):
     """Accelerate"""
@@ -104,12 +113,16 @@ class Robot:
   def increment_time(self):
     """Move the robot by a single time unit"""
     dx, dy = self.heading
-    self.x = self.x + dx * self.speed
-    self.y = self.y + dy * self.speed
+    if self.motor_direction == Robot.motor_normal:
+      self.x = self.x + dx * self.speed
+      self.y = self.y + dy * self.speed
+    else:
+      self.x = self.x - dx * self.speed
+      self.y = self.y - dy * self.speed
 
   def crashed(self):
     """Return if the robot has crashed into a wall"""
-    if self.sim.grid[int(self.y+0.5)][int(self.x+0.5)] == Simulator.empty:
+    if self.sim.grid[int(self.y + 0.5)][int(self.x + 0.5)] == Simulator.empty:
       return False
     else:
       return True
@@ -120,6 +133,6 @@ class Robot:
     dx, dy = self.heading
     next_x = self.x + dx * self.speed
     next_y = self.y + dy * self.speed
-    if self.sim.grid[int(next_y+1.5)][int(next_x+1.5)] != Simulator.empty:
+    if self.sim.grid[int(next_y + 1.5)][int(next_x + 1.5)] != Simulator.empty:
         return True
     return False

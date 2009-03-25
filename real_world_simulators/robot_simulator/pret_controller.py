@@ -45,6 +45,7 @@ class PretController():
    motor_actuator_address = 0x80000404
    stop = 0x01
    go = 0x02
+   reverse = 0x03
 
    x_sensor_address = 0x80000500
    y_sensor_address = 0x80000504
@@ -98,6 +99,9 @@ class PretController():
             self.robot.go()
         elif motor_command == PretController.stop:
             self.robot.stop()
+        elif motor_command == PretController.reverse:
+            self.robot.backup()
+            
 
       # Push data into sensors
       pret.write_memory(PretController.x_sensor_address,
