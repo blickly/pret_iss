@@ -19,16 +19,9 @@ void uturnright() {
    *WHEEL = RIGHT; *WHEEL = RIGHT;
 }
 
-int main() {
-#if defined(THREAD_0)
-  unsigned int addr;
-  for (addr = &uturnleft; addr < &main; addr += 16) {
-    DMAMV(addr, addr % 0x1000);
-  }
-
-  enum {L, R} state;
+void mainloop() {
+  enum {L, R} state = R;
   *MOTOR = GO;
-  state = R;
 
   for (;;) {
     switch (state) {
@@ -45,6 +38,20 @@ int main() {
     }
   }
   *MOTOR = STOP;
+}
+
+int main() {
+#if defined(THREAD_0)
+  void* addr;
+  for (addr = (void*)&uturnleft; addr < (void*)&mainloop; addr += 16) {
+    DMAMV(addr, (unsigned int)addr % 0x1000);
+  }
+  mainloop();
+#endif
+  WAIT_FOR_END_SIMULATION;
+}
+
+void sentinal() {}
 #endif
   WAIT_FOR_END_SIMULATION;
 }
