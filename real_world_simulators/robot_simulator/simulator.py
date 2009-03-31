@@ -54,9 +54,7 @@ class Simulator:
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
-  speed_increment = 0.005
-  motor_normal = 0
-  motor_reverse = 1
+  speed_increment = 0.001
   bump_sensor_sensitivity = 100
 
   def __init__(self, simulator, x=1, y=1, heading=(1, 0)):
@@ -66,7 +64,6 @@ class Robot:
     self.y = y
     self.heading = heading
     self.speed = 0.0
-    self.motor_direction = Robot.motor_normal
  
   def steer_left(self):
     """Move steering to the left"""
@@ -83,7 +80,6 @@ class Robot:
   def go(self):
     """Start robot"""
     self.speed = self.speed_increment
-    self.motor_direction = Robot.motor_normal
 
   def stop(self):
     """Stop robot"""
@@ -91,8 +87,7 @@ class Robot:
     
   def backup(self):
     """Make the robot back up"""
-    self.speed = self.speed_increment
-    self.motor_direction = Robot.motor_reverse
+    self.speed = -self.speed_increment
 
   def speed_up(self):
     """Accelerate"""
@@ -100,8 +95,7 @@ class Robot:
 
   def slow_down(self):
     """Decelerate"""
-    if self.speed > 0:
-      self.speed = self.speed - self.speed_increment
+    self.speed = self.speed - self.speed_increment
 
   def get_x(self):
     """Get x coordinate"""
@@ -114,12 +108,8 @@ class Robot:
   def increment_time(self):
     """Move the robot by a single time unit"""
     dx, dy = self.heading
-    if self.motor_direction == Robot.motor_normal:
-      self.x = self.x + dx * self.speed
-      self.y = self.y + dy * self.speed
-    else:
-      self.x = self.x - dx * self.speed
-      self.y = self.y - dy * self.speed
+    self.x = self.x + dx * self.speed
+    self.y = self.y + dy * self.speed
 
   def crashed(self):
     """Return if the robot has crashed into a wall"""
