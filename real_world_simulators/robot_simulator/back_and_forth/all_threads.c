@@ -21,7 +21,7 @@ void uturnright() {
 
 int main() {
 #if defined(THREAD_0)
-  int addr;
+  unsigned int addr;
   for (addr = &uturnleft; addr < &main; addr += 16) {
     DMAMV(addr, addr % 0x1000);
   }
