@@ -52,8 +52,3 @@ int main() {
 }
 
 void sentinal() {}
-#endif
-  WAIT_FOR_END_SIMULATION;
-}
-
-void sentinal() {}
