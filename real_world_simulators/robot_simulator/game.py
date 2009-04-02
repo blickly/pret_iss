@@ -3,7 +3,6 @@
 import os,sys
 import getopt
 import pygame
-from pygame.locals import *
 
 import simulator
 import pret_controller
@@ -23,34 +22,20 @@ class Game:
 
     self.sim = simulator.Simulator(width/boxsize, self.height/boxsize,
                                    grid_file)
+
+    # Only use specified controller for first robot
+    for r in self.sim.get_robots():
+      control_robot = r
+      break
     if srec_files == "":
-      self.control = self.keyboard_control
+      self.controller = pret_controller.KeyboardController(control_robot)
     else:
-      self.control = self.pret_control
-      for r in self.sim.get_robots():
-        pret_robot = r
-        break
-      self.controller = pret_controller.PretController(pret_robot, srec_files)
+      self.controller = pret_controller.PretController(control_robot,
+                                                       srec_files)
 
-  def keyboard_control(self):
-    """Do keyboard-based control"""
-    for event in pygame.event.get():
-      if event.type == pygame.QUIT: 
-        sys.exit()
-      elif event.type == KEYDOWN:
-        for robot in self.sim.get_robots():
-          if event.key == K_LEFT:
-            robot.steer_left()
-          elif event.key == K_RIGHT:
-            robot.steer_right()
-          elif event.key == K_UP:
-            robot.speed_up()
-          elif event.key == K_DOWN:
-            robot.slow_down()
-
-  def pret_control(self):
-    """Do control based on output of a PRET core"""
-    self.controller.run_one_cycle()
+  def control(self):
+    """Get control decisions based on active controller"""
+    self.controller.run_controller()
 
     # (but also end the simulation if the window close button is clicked)
     for event in pygame.event.get():

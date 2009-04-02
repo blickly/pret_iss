@@ -36,7 +36,7 @@ sys.path.append(debugger_dir)
 import libpretdbg
 pret = libpretdbg
 
-class PretController():
+class PretController:
    """Controller for the robot that is controlled by our PRET core"""
    wheel_actuator_address = 0x80000400
    left = 0x01
@@ -64,7 +64,7 @@ class PretController():
       assert os.path.exists(filename), "Unable to find file " + filename
       pret.load(filename)
 
-   def run_one_cycle(self):
+   def run_controller(self):
       """Run one cycle of the PRET processor simulation, and then use the
       output there to drive the robot"""
       if not pret.run(1):
@@ -107,3 +107,27 @@ class PretController():
         pret.write_memory(PretController.bump_sensor_address, 1);
         
 
+import pygame
+from pygame.locals import *
+
+class KeyboardController:
+   """Controller for the robot that is controlled by a user's keyboard"""
+
+   def __init__(self, robot):
+      """Initialize robot we are controlling"""
+      self.robot = robot
+
+   def run_controller(self):
+      """Read input from the keyboard, and use it to drive the robot"""
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          sys.exit()
+        elif event.type == KEYDOWN:
+          if event.key == K_LEFT:
+            self.robot.steer_left()
+          elif event.key == K_RIGHT:
+            self.robot.steer_right()
+          elif event.key == K_UP:
+            self.robot.speed_up()
+          elif event.key == K_DOWN:
+            self.robot.slow_down()
