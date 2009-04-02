@@ -2,13 +2,13 @@
 
 import os,sys
 import getopt
-import pygame
 
 import simulator
 import pret_controller
+import view
 
 class Game:
-  """Game - This class interfaces simulator to pygame."""
+  """Game - This class interfaces simulator to the controller and view."""
     
   def __init__(self, width=640, height=480, boxsize=40, 
                srec_files="", grid_file="grid.txt"):
@@ -18,10 +18,10 @@ class Game:
     self.height = height
     self.boxsize = boxsize
 
-    self.display_init()
-
     self.sim = simulator.Simulator(width/boxsize, height/boxsize,
                                    grid_file)
+
+    self.view = view.DisplayView(self.sim, width, height, boxsize)
 
     # Only use specified controller for first robot
     for r in self.sim.get_robots():
@@ -33,58 +33,12 @@ class Game:
       self.controller = pret_controller.PretController(control_robot,
                                                        srec_files)
 
-  def control(self):
-    """Get control decisions based on active controller"""
-    self.controller.run_controller()
-
-    # (but also end the simulation if the window close button is clicked)
-    for event in pygame.event.get():
-      if event.type == pygame.QUIT: 
-        sys.exit()
-
-  def display_init(self):
-    """Initialize pygame display"""
-    pygame.init()
-    self.screen = pygame.display.set_mode((self.width, self.height))
-    self.background = pygame.Surface(self.screen.get_size())
-    self.background = self.background.convert()
-    self.background.fill((0,0,0))
-
-  def display(self):
-    """Display current simulation configuration graphically"""
-    # Clear screen
-    self.screen.blit(self.background, (0, 0))
-
-    # Display walls
-    for x in xrange(self.width / self.boxsize):
-      for y in xrange(self.height / self.boxsize):
-        box = self.sim.read_grid(x,y)
-        if box == simulator.Simulator.wall:
-          pygame.draw.circle(self.screen, pygame.color.Color("gray"),
-                             (self.boxsize*x, self.height - self.boxsize*y),
-                             self.boxsize/2)
-    # Print time
-    if pygame.font:
-      font = pygame.font.Font(None, 36)
-      text = font.render("Time %d" % self.sim.get_time(), 1, (255, 0, 0))
-      textpos = text.get_rect(x=self.width-200)
-      self.screen.blit(text, textpos)
-
-    # Display robot(s)
-    for robot in self.sim.get_robots():
-      pygame.draw.circle(self.screen, pygame.color.Color("white"),
-                 (robot.get_x() * self.boxsize,
-                  self.height - robot.get_y() * self.boxsize),
-                         self.boxsize/2)
-
-    pygame.display.flip()
-
   def MainLoop(self):
     """Run the main loop"""
     self.time = 0
     while 1:
-      self.control()
-      self.display()
+      self.controller.run_controller()
+      self.view.display()
       self.sim.increment_time()
 
 def main(argv):
