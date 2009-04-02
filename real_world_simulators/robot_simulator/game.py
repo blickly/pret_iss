@@ -14,13 +14,13 @@ class Game:
                srec_files="", grid_file="grid.txt"):
     """Initialize screen, real world simulator, and, if needed,
     PRET core simulator to control a robot"""
-    pygame.init()
     self.width = width
     self.height = height
     self.boxsize = boxsize
-    self.screen = pygame.display.set_mode((self.width, self.height))
 
-    self.sim = simulator.Simulator(width/boxsize, self.height/boxsize,
+    self.display_init()
+
+    self.sim = simulator.Simulator(width/boxsize, height/boxsize,
                                    grid_file)
 
     # Only use specified controller for first robot
@@ -41,6 +41,14 @@ class Game:
     for event in pygame.event.get():
       if event.type == pygame.QUIT: 
         sys.exit()
+
+  def display_init(self):
+    """Initialize pygame display"""
+    pygame.init()
+    self.screen = pygame.display.set_mode((self.width, self.height))
+    self.background = pygame.Surface(self.screen.get_size())
+    self.background = self.background.convert()
+    self.background.fill((0,0,0))
 
   def display(self):
     """Display current simulation configuration graphically"""
@@ -73,9 +81,6 @@ class Game:
 
   def MainLoop(self):
     """Run the main loop"""
-    self.background = pygame.Surface(self.screen.get_size())
-    self.background = self.background.convert()
-    self.background.fill((0,0,0))
     self.time = 0
     while 1:
       self.control()
