@@ -1,12 +1,12 @@
 import sys
 import simulator
-import pygame
 
 class DisplayView:
   """Use pygame to display the simulation to the screen"""
 
   def __init__(self, sim, width, height, boxsize):
     """Initialize pygame display"""
+    import pygame
     self.sim = sim
     self.width, self.height = width, height
     self.boxsize = boxsize
@@ -19,6 +19,7 @@ class DisplayView:
 
   def display(self):
     """Display current simulation configuration graphically"""
+    import pygame
     # Close screen if quit button is clicked
     for event in pygame.event.get():
       if event.type == pygame.QUIT: 

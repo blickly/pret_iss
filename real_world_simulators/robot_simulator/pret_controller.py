@@ -107,8 +107,6 @@ class PretController:
         pret.write_memory(PretController.bump_sensor_address, 1);
         
 
-import pygame
-from pygame.locals import *
 
 class KeyboardController:
    """Controller for the robot that is controlled by a user's keyboard"""
@@ -119,15 +117,16 @@ class KeyboardController:
 
    def run_controller(self):
       """Read input from the keyboard, and use it to drive the robot"""
+      import pygame
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           sys.exit()
-        elif event.type == KEYDOWN:
-          if event.key == K_LEFT:
+        elif event.type == pygame.KEYDOWN:
+          if event.key == pygame.K_LEFT:
             self.robot.steer_left()
-          elif event.key == K_RIGHT:
+          elif event.key == pygame.K_RIGHT:
             self.robot.steer_right()
-          elif event.key == K_UP:
+          elif event.key == pygame.K_UP:
             self.robot.speed_up()
-          elif event.key == K_DOWN:
+          elif event.key == pygame.K_DOWN:
             self.robot.slow_down()
