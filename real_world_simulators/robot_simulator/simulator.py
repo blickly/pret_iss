@@ -125,5 +125,5 @@ class Robot:
     next_x = self.x + dx * self.speed * self.bump_sensor_sensitivity
     next_y = self.y + dy * self.speed * self.bump_sensor_sensitivity
     if self.sim.grid[int(next_y + 0.5)][int(next_x + 0.5)] != Simulator.empty:
-        return True and self.motor_direction != Robot.motor_reverse
+        return True
     return False
