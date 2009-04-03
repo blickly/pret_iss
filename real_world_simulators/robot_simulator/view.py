@@ -19,8 +19,6 @@ class DisplayView:
 
   def display(self):
     """Display current simulation configuration graphically"""
-    if self.sim.get_time() % 1000 != 0:
-      return
     import pygame
     # Close screen if quit button is clicked
     for event in pygame.event.get():
@@ -54,7 +52,14 @@ class DisplayView:
 
     pygame.display.flip()
 
-class NoView:
+class SaveView:
+  def __init__(self, sim):
+    """Initialize simulator with this view"""
+    self.sim = sim
+
   def display(self):
-    """Do nothing"""
-    pass
+    """Save current robot locations to a file"""
+    print self.sim.get_time(),
+    for r in self.sim.get_robots():
+      print "[%f,%f] " % (r.get_x(), r.get_y()),
+    print ""

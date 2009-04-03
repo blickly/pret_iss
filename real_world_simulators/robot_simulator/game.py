@@ -22,6 +22,7 @@ class Game:
                                    grid_file)
 
     self.view = view.DisplayView(self.sim, width, height, boxsize)
+    #self.view = view.SaveView(self.sim)
 
     # Only use specified controller for first robot
     for r in self.sim.get_robots():
@@ -38,7 +39,8 @@ class Game:
     self.time = 0
     while 1:
       self.controller.run_controller()
-      self.view.display()
+      if self.sim.get_time() % 1000 == 0:
+        self.view.display()
       self.sim.increment_time()
 
 def main(argv):
