@@ -54,7 +54,7 @@ class Simulator:
 
 class Robot:
   """Robot - This class provides a robot abstraction"""
-  speed_increment = 0.001
+  speed_increment = 0.0001
   bump_sensor_sensitivity = 100
 
   def __init__(self, simulator, x=1, y=1, heading=(1, 0)):

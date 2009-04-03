@@ -19,6 +19,8 @@ class DisplayView:
 
   def display(self):
     """Display current simulation configuration graphically"""
+    if self.sim.get_time() % 1000 != 0:
+      return
     import pygame
     # Close screen if quit button is clicked
     for event in pygame.event.get():
@@ -52,4 +54,7 @@ class DisplayView:
 
     pygame.display.flip()
 
-
+class NoView:
+  def display(self):
+    """Do nothing"""
+    pass

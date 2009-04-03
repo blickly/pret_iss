@@ -54,10 +54,11 @@ class PretController:
 
    block_length = 1024
 
-   def __init__(self, robot, filename):
+   def __init__(self, robot, filename, debug = False):
       """Initialize robot as well as PRET simulator"""
       self.load(filename)
       self.robot = robot
+      self.debug = debug
 
    def load(self, filename):
       """Load the text file containing the names of the SREC files to run."""
@@ -77,8 +78,9 @@ class PretController:
       # Pull commands out of actuators
       wheel_command = pret.read_memory(PretController.wheel_actuator_address)
       if wheel_command != 0:
-        print "Wheel command was " \
-            + PretController.wheel_print_string[wheel_command]          
+        if self.debug:
+          print "Wheel command was " \
+              + PretController.wheel_print_string[wheel_command]
         pret.write_memory(PretController.wheel_actuator_address, 0)
         if wheel_command == PretController.left:
             self.robot.steer_left()
@@ -87,8 +89,9 @@ class PretController:
     
       motor_command = pret.read_memory(PretController.motor_actuator_address)
       if motor_command != 0:
-        print "Motor command was " \
-            + PretController.motor_print_string[motor_command]
+        if self.debug:
+          print "Motor command was " \
+              + PretController.motor_print_string[motor_command]
         pret.write_memory(PretController.motor_actuator_address, 0)
         if motor_command == PretController.go:
             self.robot.go()
@@ -106,7 +109,6 @@ class PretController:
       if self.robot.wall_detection():
         pret.write_memory(PretController.bump_sensor_address, 1);
         
-
 
 class KeyboardController:
    """Controller for the robot that is controlled by a user's keyboard"""
