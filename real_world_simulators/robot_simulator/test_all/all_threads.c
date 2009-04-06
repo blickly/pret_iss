@@ -1,5 +1,7 @@
 #include "deadline.h"
 
+#define BLOCK_LENGTH 1024
+
 #define WHEEL ((volatile unsigned int*) 0x80000400)
 enum direction {
   LEFT = 1, RIGHT = 2
@@ -8,17 +10,18 @@ enum direction {
 enum speed {
   STOP = 1, GO = 2, BACKUP = 3
 };
+#define X_COORD ((volatile unsigned int*) 0x80000500)
+#define Y_COORD ((volatile unsigned int*) 0x80000504)
 
 int main() {
 #if defined(THREAD_0)
-  int i;
-  for (i = 0; i < 10; ++i) {
+  while (*Y_COORD < 2 * BLOCK_LENGTH) {
     *SPEED = GO;
     *WHEEL = LEFT;
     *WHEEL = RIGHT;
   }
   while (1){
-    DEAD(100);
+    DEAD(30000);
     *SPEED = STOP;
     *WHEEL = LEFT;
     *WHEEL = LEFT;
