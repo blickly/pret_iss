@@ -35,7 +35,6 @@
 #define INST_SCRATCH_START 0
 #define DATA_SCRATCH_START (SCRATCH_SIZE / 2)
 
-
 void static_bound_parser::set_memory_controller(memory_controller* memc) {
     _mem_cont = memc;
 }
