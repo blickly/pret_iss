@@ -4,17 +4,9 @@
 #define HEIGHT 11
 
 char maze[HEIGHT][WIDTH] =
-{"wwwwwwwwwwwwwww",
-"w   w         w",
-"w            ww",
-"w             w",
-"w  w      w   w",
-"w             w",
-"w         w   w",
-"w          w  w",
-"w           w w",
-"w             w",
-"wwwwwwwwwwwwwww"};
+{
+#include "grid.txt"
+};
 
 char dfsvisited[HEIGHT][WIDTH];
 char bfsvisited[HEIGHT][WIDTH];
@@ -117,7 +109,7 @@ void printlocme() {
 
 void printpath(int y, int x, char visited[HEIGHT][WIDTH]) {
   printloc(y, x);
-  while (x != 5 || y != 5) {
+  while (!(y == othery && x == otherx)) {
     switch (visited[y][x]) {
        case 'l':
          x -= 1;
@@ -131,6 +123,8 @@ void printpath(int y, int x, char visited[HEIGHT][WIDTH]) {
        case 'd':
          y += 1;
          break;
+       case '^':
+         return;
     }
     printloc(y, x);
   }
@@ -148,8 +142,8 @@ void initialize() {
 }
 
 int main() {
-  myx = 2; myy = 9;
-  otherx = 5, othery = 5;
+  myx = 2; myy = 2;
+  otherx = 12, othery = 5;
   initialize();
   printany(maze);
   dfsvisited[othery][otherx] = '^';
@@ -158,9 +152,11 @@ int main() {
     printany(dfsvisited);
     printpath(myy, myx, dfsvisited);
   }
+  bfsvisited[othery][otherx] = '^';
   if (bfs(othery,otherx)) {
     puts("BFS results:\n");
     printany(bfsvisited);
+    printpath(myy, myx, bfsvisited);
   }
   return 0;
 }
