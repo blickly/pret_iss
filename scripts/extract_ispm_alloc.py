@@ -69,7 +69,7 @@ def read_ispm_file(ispm_file, find_address):
 def rewrite_ispm(ispm_file, find_address):
   backup_file = ispm_file 
   ifile = open(backup_file, 'r')
-  ofile = open(ispm_file, 'w')
+  ofile = open(ispm_file.rstrip('.conf'), 'w')
   pattern = re.compile('\D')
   while 1:
     line = ifile.readline()
