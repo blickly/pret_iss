@@ -37,6 +37,7 @@
 
 #include "module_base.h"
 #include "hw_thread_ptr.h"
+#include "hw_thread_controller.h"
 #include "dma.h"
 ///////////////////////////////////////////////////////////////////////
 /// exception
@@ -153,7 +154,7 @@ public:
     *  @param hardware_thread The hardware thread.
     */
     void write_special_regs(const hw_thread_ptr& hardware_thread);
-    
+
 
 ///////////////////////////////////////////////////////////////////////
 //                       private methods                             ///

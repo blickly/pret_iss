@@ -191,7 +191,7 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         _aluop = ALU_ADD;
         break;
     case OP3_RETT:
-        _is_rett = 1;      
+        _is_rett = 1;
         _jump = 1;
         _aluop = ALU_ADD;
         _increment_window_pointer = 1;
@@ -257,6 +257,9 @@ void instruction::decode_arithmetic(const OP3_ARITHMETIC& op3) {
         _aluop = ALU_XOR;
         _write_special_registers = true;
         break;
+    case OP3_SYNC:
+    	_sync_instruction = true;
+    	break;
     default:
         _unimplemented = true;
         break;
@@ -332,7 +335,7 @@ void instruction::decode_memory(const OP3_MEMORY& op3) {
         // FIXME: Why do deadline and DMA use _select_special_register?
       //      cout << "COPROC: STC" << endl;
         _write_special_registers = true;
-        _aluop = ALU_ADD; 
+        _aluop = ALU_ADD;
         _select_special_register = SREG_MEM2SP;
         break;
     default:
@@ -466,6 +469,7 @@ void instruction::operator=(const instruction & from_instruction) {
     _db_word_instruction = from_instruction._db_word_instruction;
     _signed_multiply = from_instruction._signed_multiply;
     _is_rett = from_instruction._is_rett;
+    _sync_instruction = from_instruction._sync_instruction;
 
 }
 
@@ -507,8 +511,9 @@ bool instruction::operator==(const instruction& compare_instruction) const {
            _db_word_instruction == compare_instruction._db_word_instruction &&
            _carry == compare_instruction._carry &&
            _is_rett == compare_instruction._is_rett &&
-           _signed_multiply == compare_instruction._signed_multiply;
-    
+           _signed_multiply == compare_instruction._signed_multiply &&
+           _sync_instruction == compare_instruction._sync_instruction;
+
 }
 
 
@@ -559,6 +564,7 @@ void instruction::initialize() {
     _write_special_registers = false;
     _signed_multiply = false;
     _is_rett = false;
+    _sync_instruction = false;
 }
 
 bool instruction::check_end_sim() {
@@ -572,6 +578,10 @@ bool instruction::check_end_sim() {
 
 bool instruction::is_annul() const {
     return _annul;
+}
+
+bool instruction::is_sync_instruction() const {
+    return _sync_instruction;
 }
 
 bool instruction::is_carry() const {

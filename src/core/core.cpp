@@ -267,6 +267,10 @@ void core::print_timers(int thread_id) {
     _thread_controller->get_thread(thread_id)->get_handle()->spec_regs.dump_deadline_timers();
 }
 
+void core::print_sync_table() {
+	_thread_controller->print_sync_table();
+}
+
 bool core::run(int cycle_count) {
 #ifdef _NO_SYSTEMC_
     if (cycle_count == -1) {

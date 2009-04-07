@@ -377,15 +377,11 @@
 #define DEADPLLI(hexstr)                              \
  asm volatile(".word 0xD1602" hexstr);
 
-#define SYNC(hexstr)                                 \
-  asm volatile(".word 0x816820" hexstr);
-
-
 #define END_SIMULATION \
-  asm(".word 0x22222222"); exit(0)
+  asm(".word 0x22222222"); return 0
 
 #define WAIT_FOR_END_SIMULATION \
-  for(;;); exit(1)
+  for(;;); return 0
 
 #define WRITE(c)                              \
  (*((volatile int*)0x80000100) = (c))
@@ -400,6 +396,7 @@
                   : "r" (mem_addr), "r" (spm_addr) \
                   : "g1", "g2")
 
+
 #define ENABLE_TRAPS   \
   asm volatile ("rd %psr, %l1"); \
   asm volatile ("or %l1, 0x20, %l1");		\
@@ -411,6 +408,9 @@
   asm volatile ("andn %l1, 0x20, %l1"); \
   asm volatile ("mov %l1, %psr");
 
+
+#define SYNC(hexstr)                                 \
+  asm volatile(".word 0x816820" hexstr);
 
 //#ifndef _DEADLINE_H
 //#define _DEADLINE_H

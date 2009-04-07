@@ -86,7 +86,7 @@ void print_setup(core * c) {
     cout << "Main memory delay          : " << MEM_DELAY << endl;
 
     cout << "Instruction/Data scratchpads  " << endl;
-    
+
     cout << "---------------------------------------------------- " << endl;
 }
 
@@ -152,7 +152,7 @@ int sc_main(int argc, char * argv[]) {
         cout << "Cycles executed : " << dec << num_cycles << endl;
         cout << endl;
         for (int i = 0; i < NUM_THREADS; i++) {
-            hw_thread_ptr * hp = db.get_thread(i); 
+            hw_thread_ptr * hp = db.get_thread(i);
             cout << "thread[" << i << "], "
                  << "# cycles: " << hp->get_handle()->cnt_cycles << endl;
             cout << "thread[" << i << "], " << "# instructions: "

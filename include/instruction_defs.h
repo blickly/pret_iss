@@ -185,8 +185,8 @@ enum OP3_ARITHMETIC {
     OP3_RETT = 0x39,
     OP3_SAVE = 0x3c,
     OP3_RESTORE = 0x3d,
-    OP3_MULSCC = 0x24
-
+    OP3_MULSCC = 0x24,
+    OP3_SYNC = 0x2d
 };
 
 ///////////////////////////////////////////////////////////////////////

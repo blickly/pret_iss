@@ -160,6 +160,10 @@ public:
      */
     void print_memory();
 
+    /** Print the contents of sync table.
+      */
+    void print_sync_table();
+
     /** Print the contents of the registers for a thread.
      *  @param thread_id The thread number.
      */

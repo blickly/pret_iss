@@ -300,6 +300,12 @@ public:
      */
     bool is_write_registers() const;
 
+    /** Returns true if instruction is a sync instruction.
+     *
+     * @return True if instruction is a sync instruction, else false.
+     */
+    bool is_sync_instruction() const;
+
     /** Returns true if instruction writes to special registers such
     * as deadline timers.
     *
@@ -585,6 +591,7 @@ private:
     bool _write_special_registers; /// Instruction writes to special registers.
     bool _write_memory; /// Instruction writes to the memory.
     bool _is_rett; ///Instruction is return from trap
+    bool _sync_instruction; //Instruction is a sync instruction
 
 };
 

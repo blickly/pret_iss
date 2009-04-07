@@ -42,6 +42,7 @@
 #include "memory_controller.h"
 #include "register_file.h"
 #include "special_reg.h"
+
 ///////////////////////////////////////////////////////////////////////
 /// hw_thread
 /**
@@ -64,8 +65,9 @@ public:
      *
      * @param in_id Thread id.
      * @param pc Starting program counter.
+     * @param thread_control The hardware thread controller
      */
-    hw_thread(unsigned int in_id, uint32_t pc);
+    hw_thread(unsigned int in_id, uint32_t pc, void* thread_control);
 
     /** Copy constructor.
      *
@@ -108,7 +110,7 @@ public:
 
     /** Returns true if an exception occurred during the execution
     *
-    * @return True if an exception occurred 
+    * @return True if an exception occurred
     */
     bool is_trapped() const;
 
@@ -260,6 +262,7 @@ public:
     instruction inst; // Instruction data structure.
     register_file regs; // Registers.
     special_reg spec_regs; // Special registers with timers.
+    void* controller; //The thread controller
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -275,7 +278,7 @@ private:
     uint32_t _pc;           // Thread's current program counter.
     short _trapped;          // If the thread encounters an exception
     short _trap_type;        // If the trap type of the thread
-    
+
 
 };
 

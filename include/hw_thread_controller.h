@@ -110,6 +110,23 @@ public:
        */
     hw_thread_ptr* get_thread(unsigned int id) const;
 
+    /** Checks the sync table to see if current sync instruction is cleared
+       * to execute or not. If not, it adds an entry to the sync table.
+       * The return value is a boolean that tells the thread to continue to
+       * execute or not.
+       *
+       *  @param mask Sync instruction mask.
+       *  @param id The thread id.
+       *  @return True if thread is cleared to execute
+       */
+    bool check_sync_table(unsigned short mask, unsigned int id);
+
+
+    /** Prints the sync table for debugging purposes
+       *
+       */
+    void print_sync_table();
+
     /** Parse the SREC files specified by <i>_txt_str</i> and load it
      * into the respective scratchpad memory units.
      *
@@ -128,6 +145,8 @@ public:
       * @param str The name of the file with the location of SREC files.
       */
     void set_txtname(const string& str);
+
+
 
 #ifndef _NO_SYSTEMC_
     /** SystemC specific macro that creates a SystemC process for this class.
@@ -159,6 +178,7 @@ private:
     /** Disable the default constructor.
      */
     hw_thread_controller();
+    int bitCount(unsigned int);
 
 ///////////////////////////////////////////////////////////////////////
 //                       private variables                          ///
@@ -168,6 +188,7 @@ private:
      *  set in defines.h.
      */
     hw_thread_ptr* _pool[NUM_THREADS];
+    unsigned short _sync_table[NUM_THREADS][3];
     /** File name of location with SREC files.
      */
     string _txt_str;

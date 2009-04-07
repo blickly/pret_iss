@@ -143,7 +143,16 @@ void except::behavior() {
     //        if ( hardware_thread->inst.is_write_special_registers() && hardware_thread->inst .get_select_special_register() == SREG_PSR)
     //    printf("set_psr pc: 0x%x\n", hardware_thread->get_pc());
 
-    if (handle_exceptions(hardware_thread) && !hardware_thread->is_db_word_stalled()) {
+    bool sync_not_stalled = true;
+    if ( hardware_thread->inst.is_sync_instruction() ) {
+    	sync_not_stalled = ((hw_thread_controller*)(hardware_thread->controller))->check_sync_table(hardware_thread->inst.get_immediate_value(), hardware_thread->get_id());
+		//printf("id: %d, hardware_control 0x%x, sync results: %d\n", hardware_thread->get_id(), hardware_thread->controller, sync_not_stalled);
+
+		//((hw_thread_controller*)(hardware_thread->controller))->print_sync_table();
+    }
+
+
+    if (handle_exceptions(hardware_thread) && !hardware_thread->is_db_word_stalled() && sync_not_stalled) {
         /* Increment the PC based */
         inc_pc(hardware_thread);
     }

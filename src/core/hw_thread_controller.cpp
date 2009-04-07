@@ -46,7 +46,7 @@ hw_thread_controller::hw_thread_controller(const sc_module_name& name)  {
 
     unsigned int i;
     for (i = 0; i < NUM_THREADS; i++) {
-        hw_thread* hardware_thread = new hw_thread(i, 0x40000000);
+        hw_thread* hardware_thread = new hw_thread(i, 0x40000000, (void*)this);
         hardware_thread->set_enabled(true);
         hw_thread_ptr* hp = new hw_thread_ptr(hardware_thread);
 
@@ -55,6 +55,12 @@ hw_thread_controller::hw_thread_controller(const sc_module_name& name)  {
              << ", pointer = " << hp->get_handle() << endl;
 #endif /* DBG_THREAD_CONT */
         _pool[i] = hp;
+    }
+
+    for (i = 0; i < NUM_THREADS; i++) {
+    	_sync_table[i][0] = 0;
+    	_sync_table[i][1] = 0;
+    	_sync_table[i][2] = 0;
     }
     _tcount = 0;
 
@@ -104,6 +110,52 @@ hw_thread_ptr* hw_thread_controller::get_thread(unsigned int id) const {
         return NULL;
     }
 }
+
+
+bool hw_thread_controller::check_sync_table(unsigned short mask, unsigned int id){
+	int first_free = -1;
+
+	for (int i = 0; i < NUM_THREADS; i++) {
+		if ( _sync_table[i][0] == mask) {
+			// Entry has been cleared, return true so thread moves on
+			if (_sync_table[i][1] == 0) {
+				//Increment the number of threads that passed the barrier
+				_sync_table[i][2]++;
+				//If the number of threads that passed the barrier is the number
+				// of threads set waiting for it, we can clear the entry.
+				if ( _sync_table[i][2] == bitCount(_sync_table[i][0]))
+					_sync_table[i][0] = 0;
+				return true;
+			}
+			// Entry has not been cleared, clear own bit and
+			// return false so thread keeps waiting
+			else {
+				_sync_table[i][1] &= ~(0x1 << id);
+				return false;
+			}
+		}
+		//Find out where the first free entry is in case we need it
+		else if (_sync_table[i][0] == 0 && first_free == -1) {
+			first_free = i;
+		}
+	}
+	// If we reach here, this means that the mask entry was not in the table
+	_sync_table[first_free][0] = _sync_table[first_free][1] = mask;
+	_sync_table[first_free][2] = 0; //Set the threads that passed this sync to be 0
+	return false;
+}
+
+
+void hw_thread_controller::print_sync_table() {
+
+	printf("-------------------------\n");
+	printf("Sync Table\n");
+	printf("-------------------------\n");
+	for (int i = 0; i < NUM_THREADS; i++) {
+		printf("0x%x\t0x%x\n", _sync_table[i][0], _sync_table[i][1]);
+	}
+}
+
 
 void hw_thread_controller::parse_srec_files(srec_parser& parser,
         static_bound_parser& bound_parser) {
@@ -170,3 +222,14 @@ void hw_thread_controller::set_txtname(const string& str) {
     _txt_str = str;
 }
 
+
+//Taken from http://gurmeetsingh.wordpress.com/2008/08/05/fast-bit-counting-routines/
+int hw_thread_controller::bitCount(unsigned int n)
+{
+  // This is for 32 bit numbers.  Need to adjust for 64 bits
+  register unsigned int tmp;
+
+  tmp = n - ((n >> 1) & 033333333333) - ((n >> 2) & 011111111111);
+
+  return ((tmp + (tmp >> 3)) & 030707070707) % 63;
+}

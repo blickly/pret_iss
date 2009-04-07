@@ -57,7 +57,7 @@ hw_thread::hw_thread(const hw_thread& hardware_thread) {
     this->operator=(hardware_thread);
 }
 
-hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
+hw_thread::hw_thread(unsigned int in_id, uint32_t pc, void* thread_control) : _id(in_id) {
     _pc = pc;
     cnt_cycles = 0;
     cnt_instr = 0;
@@ -69,6 +69,7 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc) : _id(in_id) {
     _memory_stalled = false;
     _fetch_stalled = false;
     _trapped = XCPT_NORMAL;
+    controller = thread_control;
 }
 
 bool hw_thread::is_db_word_stalled() const {
@@ -112,6 +113,7 @@ void hw_thread::operator=(const hw_thread & hardware_thread) {
     _fetch_stalled = hardware_thread._fetch_stalled;
     _trapped = hardware_thread._trapped;
     _trap_type = hardware_thread._trap_type;
+    controller = hardware_thread.controller;
 
 }
 
@@ -130,6 +132,7 @@ bool hw_thread::operator==(const hw_thread& hardware_thread) {
                && (_fetch_stalled == hardware_thread._fetch_stalled)
 	       && (_trapped == hardware_thread._trapped)
 	       && (_trap_type == hardware_thread._trap_type)
+	       && (controller == hardware_thread.controller)
            );
 
 }
