@@ -98,11 +98,9 @@ if __name__ == '__main__':
        print "%s" %file
        function_names = {}
        read_ispm_file(file, function_names)
-       extract_addresses(file, function_names)
-       for key in function_names.keys():
-         print key
-         print function_names[key]
-       rewrite_ispm(file, function_names)
+       if len(function_names.keys())>0:
+         extract_addresses(file, function_names)
+         rewrite_ispm(file, function_names)
     else:
         print "Usage: %s <file-name1> " % sys.argv[0]
         print ""
