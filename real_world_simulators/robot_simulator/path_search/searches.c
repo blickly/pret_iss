@@ -137,7 +137,6 @@ void initialize() {
       bfsvisited[i][j] = (maze[i][j] == 'w') ? 'w' : '0';
       dfsvisited[i][j] = (maze[i][j] == 'w') ? 'w' : '0';
     }
-    putchar('\n');
   }
 }
 
@@ -145,16 +144,16 @@ int main() {
   myx = 2; myy = 2;
   otherx = 12, othery = 5;
   initialize();
-  printany(maze);
+  printlocme();
   dfsvisited[othery][otherx] = '^';
   if (dfs(othery,otherx)) {
-    puts("DFS results:\n");
+    //puts("DFS results:\n");
     printany(dfsvisited);
     printpath(myy, myx, dfsvisited);
   }
   bfsvisited[othery][otherx] = '^';
   if (bfs(othery,otherx)) {
-    puts("BFS results:\n");
+    //puts("BFS results:\n");
     printany(bfsvisited);
     printpath(myy, myx, bfsvisited);
   }
