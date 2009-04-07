@@ -33,7 +33,7 @@ import sys
 import re
 
 def extract_addresses(ispm_file, find_address):
-    part = ispm_file.rstrip('.ispm')
+    part = ispm_file.rstrip('.ispm.conf')
     dump_file = part + '.dump'
 
     ifile = open(dump_file, 'r')
@@ -63,14 +63,11 @@ def read_ispm_file(ispm_file, find_address):
       if m:
         print 'Match found: %s' %p
 	find_address[format_function_name(p)] = 0
-#      else:
-#        print 'Match NOT found: %s' %p
 
   ifile.close()
 
 def rewrite_ispm(ispm_file, find_address):
-  backup_file = ispm_file + '.orig'
-  os.system('mv ' + ispm_file + ' ' + backup_file)
+  backup_file = ispm_file 
   ifile = open(backup_file, 'r')
   ofile = open(ispm_file, 'w')
   pattern = re.compile('\D')
@@ -82,28 +79,36 @@ def rewrite_ispm(ispm_file, find_address):
     for p in part:
       m = pattern.match(p)
       if m:
-#        print 'Match found: %s' %p
 	ofile.write(find_address[format_function_name(p)] + ' ')
       else:
         ofile.write(p.rstrip('\n') + ' ')
-#        print 'Match NOT found: %s' %p
 
     ofile.write('\n')
   ifile.close()
+  ofile.close()
   
-        
+def usage():
+    print "Usage: %s <file-name1.ispm.conf> " % sys.argv[0]
+    print ""
+    print " + file-name.ispm.conf: dump file"
+
 if __name__ == '__main__':
     if len(sys.argv) == 2:
        file = sys.argv[1]
        print "%s" %file
-       function_names = {}
-       read_ispm_file(file, function_names)
-       if len(function_names.keys())>0:
-         extract_addresses(file, function_names)
-         rewrite_ispm(file, function_names)
+       if not (".ispm.conf" in file):
+           usage()
+       else:
+           # Open file for reading to see if it exists
+           if os.path.exists(file):
+               function_names = {}
+               read_ispm_file(file, function_names)
+               if len(function_names.keys())>0:
+                   extract_addresses(file, function_names)
+                   rewrite_ispm(file, function_names)
+           else:
+               print "Error: File %s not found" %file
+               usage()
     else:
-        print "Usage: %s <file-name1> " % sys.argv[0]
-        print ""
-        print " + file-name: dump file"
-
+        usage()
 
