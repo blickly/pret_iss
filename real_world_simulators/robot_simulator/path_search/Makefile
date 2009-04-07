@@ -19,6 +19,9 @@ debug:
 native: $(C_FILES)
 	gcc -D_NO_PRET_ -DTHREAD_0 $<
 
+thread%.ispm: thread%.ispm.conf
+	$(PRET_ISS)/scripts/extract_ispm_alloc.py $<
+
 thread%.o: $(C_FILES) 
 	cp $(PRET_ISS)/soft/deadline.h .
 	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
