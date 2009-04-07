@@ -32,31 +32,7 @@ import os
 import sys
 import re
 
-def read_ispm_file(ispm_file):
-  ifile = open(ispm_file, 'r')
-  pattern = re.compile('\D')
-  find_address = []
-  while 1:
-    line = ifile.readline()
-    if not line: break
-    part = line.split(' ')
-    for p in part:
-      m = pattern.match(p)
-      if m:
-        print 'Match found: %s' %p
-	find_address.append(p)
-      else:
-        print 'Match NOT found: %s' %p
-
-  ifile.close()
-  
-  for line in find_address:
-    print line
-    read_dump(ispm_file)	
-
-
-
-def read_dump(ispm_file):
+def extract_addresses(ispm_file, find_address):
     part = ispm_file.rstrip('.ispm')
     dump_file = part + '.dump'
 
@@ -64,19 +40,69 @@ def read_dump(ispm_file):
     while 1:
     	  line = ifile.readline()
 	  if not line: break
-	  if line.find("<main>:") != -1:
-	     part = line.split(' ')
-	     print line
-	     print part[0]
+          for key in find_address.keys():
+            temp_line = line
+            if temp_line.find(key) != -1:
+              part = temp_line.split(' ')
+              find_address[key] = part[0]
     ifile.close()
 
+def format_function_name(str):
+  return '<'+str.rstrip('\n')+'>:'
 
+def read_ispm_file(ispm_file, find_address):
+  ifile = open(ispm_file, 'r')
+  pattern = re.compile('\D')
+  while 1:
+    line = ifile.readline().rstrip('\n')
+    if not line: break
+    part = line.split(' ')
+
+    for p in part:
+      m = pattern.match(p)
+      if m:
+        print 'Match found: %s' %p
+	find_address[format_function_name(p)] = 0
+#      else:
+#        print 'Match NOT found: %s' %p
+
+  ifile.close()
+
+def rewrite_ispm(ispm_file, find_address):
+  backup_file = ispm_file + '.orig'
+  os.system('mv ' + ispm_file + ' ' + backup_file)
+  ifile = open(backup_file, 'r')
+  ofile = open(ispm_file, 'w')
+  pattern = re.compile('\D')
+  while 1:
+    line = ifile.readline()
+    if not line: break
+    part = line.split(' ')
+
+    for p in part:
+      m = pattern.match(p)
+      if m:
+#        print 'Match found: %s' %p
+	ofile.write(find_address[format_function_name(p)] + ' ')
+      else:
+        ofile.write(p.rstrip('\n') + ' ')
+#        print 'Match NOT found: %s' %p
+
+    ofile.write('\n')
+  ifile.close()
+  
         
 if __name__ == '__main__':
     if len(sys.argv) == 2:
        file = sys.argv[1]
        print "%s" %file
-       read_ispm_file(file)
+       function_names = {}
+       read_ispm_file(file, function_names)
+       extract_addresses(file, function_names)
+       for key in function_names.keys():
+         print key
+         print function_names[key]
+       rewrite_ispm(file, function_names)
     else:
         print "Usage: %s <file-name1> " % sys.argv[0]
         print ""
