@@ -105,6 +105,17 @@ class Robot:
     """Get y coordinate"""
     return self.y
 
+  def get_heading_string(self):
+    """Get a character that corresponds to the current heading"""
+    if self.heading == (1,0):
+      return 'r'
+    elif self.heading == (-1,0):
+      return 'l'
+    elif self.heading == (0,1):
+      return 'u'
+    elif self.heading == (0,-1):
+      return 'd'
+
   def increment_time(self):
     """Move the robot by a single time unit"""
     dx, dy = self.heading

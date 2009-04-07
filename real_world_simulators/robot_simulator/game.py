@@ -11,7 +11,8 @@ class Game:
   """Game - This class interfaces simulator to the controller and view."""
     
   def __init__(self, width=640, height=480, boxsize=40, 
-               srec_files="", grid_file="grid.txt"):
+               srec_files="", grid_file="grid.txt",
+               save = False, load = False):
     """Initialize screen, real world simulator, and, if needed,
     PRET core simulator to control a robot"""
     self.width = width
@@ -20,9 +21,10 @@ class Game:
 
     self.sim = simulator.Simulator(width/boxsize, height/boxsize,
                                    grid_file)
-
-    self.view = view.DisplayView(self.sim, width, height, boxsize)
-    #self.view = view.SaveView(self.sim)
+    if save:
+      self.view = view.SaveView(self.sim)
+    else:
+      self.view = view.DisplayView(self.sim, width, height, boxsize, load)
 
     # Only use specified controller for first robot
     for r in self.sim.get_robots():
@@ -46,8 +48,11 @@ class Game:
 def main(argv):
   srec_foldername = ""
   grid = "grid.txt"
+  save = False
+  load = False
   try:                                
-    opts, args = getopt.getopt(argv, "p:g:", ["pret=", "grid="])
+    opts, args = getopt.getopt(argv, "p:g:sl",
+                               ["pret=", "grid=", "save", "load"])
   except getopt.GetoptError:
     print "Invalid arguments: %s" % argv
     sys.exit(2)  
@@ -57,8 +62,13 @@ def main(argv):
       print arg
     elif opt in ("-g", "--grid"):
       grid = arg
+    elif opt in ("-s", "--save"):
+      save = True
+    elif opt in ("-l", "--load"):
+      load = True
 
-  window = Game(srec_files = srec_foldername, grid_file = grid)
+  window = Game(srec_files = srec_foldername, grid_file = grid,
+                save = save, load = load)
   window.MainLoop()
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@
 
 #define X_COORD ((volatile int*) 0x80000500)
 #define Y_COORD ((volatile int*) 0x80000504)
+#define HEADING ((volatile int*) 0x8000050C)
 
 #define WHEEL ((volatile int*) 0x80000400)
 enum direction {LEFT = 1, RIGHT = 2};
@@ -23,7 +24,7 @@ enum motor {STOP = 1, GO = 2};
 
 char maze[HEIGHT][WIDTH] =
 {
-#include "grid.txt"
+#include "grid.txt.h"
 };
 
 char dfsvisited[HEIGHT][WIDTH];
@@ -31,7 +32,7 @@ char bfsvisited[HEIGHT][WIDTH];
 
 void printany(char any[HEIGHT][WIDTH]) {
   int i,j;
-  for (i = 0; i < HEIGHT; i++) {
+  for (i = HEIGHT-1; i >= 0; i--) {
     for (j = 0; j < WIDTH; j++) {
       putchar(any[i][j]);
     }
@@ -64,7 +65,7 @@ bool bfs(int y, int x) {
     if (y == myy && x == myx) return true;
 
     if (empty(y+1,x)) {
-      bfsvisited[y+1][x] = 'u';
+      bfsvisited[y+1][x] = 'd';
       enqueue(y+1, x);
     }
     if (empty(y,x-1)) {
@@ -72,7 +73,7 @@ bool bfs(int y, int x) {
       enqueue(y, x-1);
     }
     if (empty(y-1,x)) {
-      bfsvisited[y-1][x] = 'd';
+      bfsvisited[y-1][x] = 'u';
       enqueue(y-1, x);
     }
     if (empty(y,x+1)) {
@@ -91,7 +92,7 @@ bool dfs(int y, int x) {
   if (y == myy && x == myx) return true;
 
   if (empty(y+1,x)) {
-    dfsvisited[y+1][x] = 'u';
+    dfsvisited[y+1][x] = 'd';
     if (dfs(y+1,x)) return true;
   }
   if (empty(y,x-1)) {
@@ -99,7 +100,7 @@ bool dfs(int y, int x) {
     if (dfs(y,x-1)) return true;
   }
   if (empty(y-1,x)) {
-    dfsvisited[y-1][x] = 'd';
+    dfsvisited[y-1][x] = 'u';
     if (dfs(y-1,x)) return true;
   }
   if (empty(y,x+1)) {
@@ -111,7 +112,7 @@ bool dfs(int y, int x) {
 
 void printloc(int y, int x) {
   int i,j;
-  for (i = 0; i < HEIGHT; i++) {
+  for (i = HEIGHT-1; i >= 0; i--) {
     for (j = 0; j < WIDTH; j++) {
       if (x == j && y == i) putchar('m');
       else if (otherx == j && othery == i) putchar('b');
@@ -135,10 +136,10 @@ void printpath(int y, int x, char visited[HEIGHT][WIDTH]) {
        case 'r':
          x += 1;
          break;
-       case 'u':
+       case 'd':
          y -= 1;
          break;
-       case 'd':
+       case 'u':
          y += 1;
          break;
        case '^':
@@ -148,7 +149,7 @@ void printpath(int y, int x, char visited[HEIGHT][WIDTH]) {
   }
 }
 
-void initialize() {
+void prefire() {
   int i,j;
   for (i = 0; i < HEIGHT; i++) {
     for (j = 0; j < WIDTH; j++) {
@@ -158,35 +159,60 @@ void initialize() {
   }
 }
 
+void turn() {
+  while (bfsvisited[myy][myx] != *HEADING) {
+    *WHEEL = LEFT;
+    myx = *X_COORD / BLOCK_LENGTH;
+    myy = *Y_COORD / BLOCK_LENGTH;
+  }
+}
+
 int mainloop() {
-  initialize();
-  printlocme();
+  prefire();
   dfsvisited[othery][otherx] = '^';
   if (dfs(othery,otherx)) {
-    //puts("DFS results:\n");
+    putchar(dfsvisited[myy][myx]);
+#   ifdef _NO_PRET_
     printany(dfsvisited);
     printpath(myy, myx, dfsvisited);
+#   endif
   }
   bfsvisited[othery][otherx] = '^';
   if (bfs(othery,otherx)) {
-    //puts("BFS results:\n");
+    putchar(bfsvisited[myy][myx]);
+#   ifdef _NO_PRET_
     printany(bfsvisited);
     printpath(myy, myx, bfsvisited);
+#   endif
   }
+# ifndef _NO_PRET_
+  *MOTOR = GO;
+  while (myx != otherx || myy != othery) {
+    turn();
+  }
+# endif
+
   return 0;
 }
 
 int main() {
+# ifdef _NO_PRET_
   myx = 2; myy = 2;
+# else
+  myx = *X_COORD / BLOCK_LENGTH;
+  myy = *Y_COORD / BLOCK_LENGTH;
+# endif
   otherx = 12, othery = 5;
 #if defined(THREAD_0)
   void* addr;
+  printlocme();
   /*
   for (addr = (void*)&uturnleft; addr < (void*)&mainloop; addr += 16) {
     DMAMV(addr, (unsigned int)addr % 0x1000);
   }
   */
   mainloop();
+  END_SIMULATION;
 #endif
   WAIT_FOR_END_SIMULATION;
 }
