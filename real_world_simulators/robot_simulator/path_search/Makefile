@@ -22,7 +22,10 @@ native: $(C_FILES)
 thread%.ispm: thread%.ispm.conf
 	$(PRET_ISS)/scripts/extract_ispm_alloc.py $<
 
-thread%.o: $(C_FILES) 
+grid.txt.h: grid.txt
+	tac $< | sed 's/^/,\n"/' | sed 's/$/"/' | tail -n +2 > $@
+
+thread%.o: $(C_FILES) grid.txt.h
 	cp $(PRET_ISS)/soft/deadline.h .
 	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
 	rm deadline.h
