@@ -62,10 +62,10 @@ void memory_controller::dump() {
 }
 
 mem_location& memory_controller::get_main_mem_loc(uint32_t addr) {
-    if (addr > 0x80000000) {
-        return *_mem_mapped_io;
-    } else {
+    if (addr < 0x80000000) {
         return *_main_mem;
+    } else {
+        return *_mem_mapped_io;
     }
 }
 
