@@ -62,10 +62,14 @@ class DisplayView:
     # Display robot(s)
     if self.load_file:
       while self.time < self.sim.get_time():
-        self.time, (robotx, roboty) = self.decode_line_from_file(
-                                             self.load_file.readline())
+        current_line = self.load_file.readline()
+        if current_line == None or current_line == '':
+          print "Simulation finished"
+          self.load_file.close()
+          exit(0)
+        self.time, (robotx, roboty) = self.decode_line_from_file(current_line)
       pygame.draw.circle(self.screen, pygame.color.Color("white"),
-                 (robotx * self.boxsize, self.height - robotx * self.boxsize),
+                 (robotx * self.boxsize, self.height - roboty * self.boxsize),
                  self.boxsize/2)
     else:
       for robot in self.sim.get_robots():
