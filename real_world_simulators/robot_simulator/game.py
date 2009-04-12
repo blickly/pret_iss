@@ -41,7 +41,7 @@ class Game:
     self.time = 0
     while 1:
       self.controller.run_controller()
-      if self.sim.get_time() % 1000 == 0:
+      if self.sim.get_time() % 10000 == 0:
         self.view.display()
       self.sim.increment_time()
 
