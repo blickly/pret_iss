@@ -12,7 +12,7 @@ class Simulator:
     self.time = 0
     self.width = width
     self.height = height
-    self.robots = [Robot(self)]
+    self.robots = [Robot(self, start=(2,2))]
 
   def parse_grid_file(self, filename):
     """Parse a text file that contains the maze configuration"""
@@ -57,11 +57,10 @@ class Robot:
   speed_increment = 0.00001
   bump_sensor_sensitivity = 100
 
-  def __init__(self, simulator, x=1, y=1, heading=(1, 0)):
+  def __init__(self, simulator, start=(1,1), heading=(1, 0)):
     """Initialize robot parameters"""
     self.sim = simulator
-    self.x = x
-    self.y = y
+    self.x, self.y = start
     self.heading = heading
     self.speed = 0.0
  

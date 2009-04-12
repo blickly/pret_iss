@@ -28,7 +28,20 @@ char maze[HEIGHT][WIDTH] =
 };
 
 char dfsvisited[HEIGHT][WIDTH];
-char bfsvisited[HEIGHT][WIDTH];
+char bfsvisited[HEIGHT][WIDTH] =
+{
+"wwwwwwwwwwwwwww",
+"w00uuuuuuulrruw",
+"wuuuuuuuuullwuw",
+"wuuuuuuuuulwulw",
+"wuuuuuuuuuwuulw",
+"wrrrrrrrrrrr^lw",
+"wrdwrrrrrdwrdlw",
+"wrrrrrrrrrrrdlw",
+"wrrrrrrrrrrrdww",
+"w0rdwrrrrrrrdlw",
+"wwwwwwwwwwwwwww"
+};
 
 void printany(char any[HEIGHT][WIDTH]) {
   int i,j;
@@ -160,14 +173,20 @@ void prefire() {
 }
 
 void turn() {
+  myx = *X_COORD / BLOCK_LENGTH;
+  myy = *Y_COORD / BLOCK_LENGTH;
+  putchar('0' + myy);
+  putchar('0' + myx);
+  putchar(bfsvisited[myy][myx]);
+  putchar(*HEADING);
+  putchar('\n');
   while (bfsvisited[myy][myx] != *HEADING) {
     *WHEEL = LEFT;
-    myx = *X_COORD / BLOCK_LENGTH;
-    myy = *Y_COORD / BLOCK_LENGTH;
   }
 }
 
 int mainloop() {
+  /*
   prefire();
   dfsvisited[othery][otherx] = '^';
   if (dfs(othery,otherx)) {
@@ -185,11 +204,13 @@ int mainloop() {
     printpath(myy, myx, bfsvisited);
 #   endif
   }
+  */
 # ifndef _NO_PRET_
   *MOTOR = GO;
   while (myx != otherx || myy != othery) {
     turn();
   }
+  *MOTOR = STOP;
 # endif
 
   return 0;
@@ -216,3 +237,5 @@ int main() {
 #endif
   WAIT_FOR_END_SIMULATION;
 }
+
+void sentinal() {}
