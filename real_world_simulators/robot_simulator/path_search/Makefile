@@ -13,10 +13,10 @@ compile:
 simulate:
 	$(PRET_ISS)/real_world_simulators/robot_simulator/game.py -p .
 
-simulate-dumpdata:
+simulatedumpdata:
 	$(PRET_ISS)/real_world_simulators/robot_simulator/game.py -p . -s
 
-simulate-fromdata:
+simulatefromdata:
 	$(PRET_ISS)/real_world_simulators/robot_simulator/game.py -l
 
 debug:
