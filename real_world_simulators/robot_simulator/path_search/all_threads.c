@@ -211,11 +211,6 @@ void turn() {
   putchar(bfsvisited[myy][myx]);
   putchar(*HEADING);
   putchar('\n');
-  /*
-  while (bfsvisited[myy][myx] != *HEADING) {
-    *WHEEL = LEFT;
-  }
-  */
   *NAV_COMMAND = bfsvisited[myy][myx];
 }
 
