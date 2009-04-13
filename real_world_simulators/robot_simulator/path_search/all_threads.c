@@ -7,7 +7,6 @@
 #  include "deadline.h"
 #endif
 
-#define BLOCK_LENGTH 1024
 
 #define X_COORD ((volatile int*) 0x80000500)
 #define Y_COORD ((volatile int*) 0x80000504)
@@ -19,6 +18,9 @@ enum direction {LEFT = 1, RIGHT = 2};
 #define MOTOR ((volatile int*) 0x80000404)
 enum motor {STOP = 1, GO = 2};
 
+#define NAV_COMMAND ((volatile int*) 0x3FFFF000)
+
+#define BLOCK_LENGTH 1024
 #define WIDTH 15
 #define HEIGHT 11
 
@@ -58,8 +60,8 @@ void printany(char any[HEIGHT][WIDTH]) {
 #define false 0
 
 #ifdef _NO_PRET_
-#  define myx 2
-#  define myy 2
+int myx = 2;
+int myy = 2;
 #else
 #  define myx (*X_COORD / BLOCK_LENGTH)
 #  define myy (*Y_COORD / BLOCK_LENGTH)
@@ -178,15 +180,43 @@ void prefire() {
   }
 }
 
+// Forward declaration of turn required to pass arguments to DMAMV
+void turn();
+void navigation_loop() {
+#ifndef _NO_PRET_
+  void* addr;
+  for (addr = (void*)&navigation_loop; addr < (void*)&turn; addr += 16) {
+    DMAMV(addr, addr - (void*)&navigation_loop);
+  }
+#endif
+  while (true) {
+    char nav_command = *NAV_COMMAND;
+    switch (nav_command) {
+      case 'u': case 'd': case 'l': case 'r':
+        while (nav_command != *HEADING) {
+          *WHEEL = LEFT;
+        }
+        *NAV_COMMAND = 0;
+        break;
+      default:
+        // Do nothing on invalid command
+        break;
+    }
+  }
+}
+
 void turn() {
   putchar('0' + myy);
   putchar('0' + myx);
   putchar(bfsvisited[myy][myx]);
   putchar(*HEADING);
   putchar('\n');
+  /*
   while (bfsvisited[myy][myx] != *HEADING) {
     *WHEEL = LEFT;
   }
+  */
+  *NAV_COMMAND = bfsvisited[myy][myx];
 }
 
 int mainloop() {
@@ -198,6 +228,8 @@ int mainloop() {
 #   ifdef _NO_PRET_
     printany(dfsvisited);
     printpath(myy, myx, dfsvisited);
+#   else
+    putchar('D');
 #   endif
   }
   bfsvisited[othery][otherx] = '^';
@@ -206,6 +238,8 @@ int mainloop() {
 #   ifdef _NO_PRET_
     printany(bfsvisited);
     printpath(myy, myx, bfsvisited);
+#   else
+    putchar('B');
 #   endif
   }
   */
@@ -226,6 +260,8 @@ int main() {
   printlocme();
   mainloop();
   END_SIMULATION;
+#elif defined(THREAD_1)
+  navigation_loop();
 #endif
   WAIT_FOR_END_SIMULATION;
 }
