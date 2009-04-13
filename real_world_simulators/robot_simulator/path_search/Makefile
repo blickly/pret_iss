@@ -1,6 +1,6 @@
 LDFLAGS=$(filter-out -D%,$(CFLAGS))   
-#LDFLAGS=$(CFLAGS)
 CCFLAGS=$(CFLAGS) -msoft-float
+CLANGFLAGS=$(filter -D%,$(CFLAGS))
 C_FILES=all_threads.c
 CC=sparc-elf-gcc
 LD=sparc-elf-ld
@@ -31,10 +31,15 @@ thread%.ispm: thread%.ispm.conf
 grid.txt.h: grid.txt
 	tac $< | sed 's/$$/"/' | sed 's/^/,\n"/' | tail -n +2 > $@
 
-thread%.o: $(C_FILES) grid.txt.h
+deadline.h:
 	cp $(PRET_ISS)/soft/deadline.h .
+
+thread%.c: $(C_FILES) deadline.h
+	clang -triple=sparc-elf-linux -rewrite-pret $(CLANGFLAGS) $(INCDIR) $<
+	mv $(<:c=rewritten.c) $@
+
+thread%.o: thread%.c grid.txt.h deadline.h
 	$(CC) $(CCFLAGS) $(INCDIR) -c $< -o $@
-	rm deadline.h
 
 thread%.exe: thread%.o
 #	$(LD) $(LDFLAGS) $^ -o $@ -e main  
