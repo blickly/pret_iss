@@ -29,7 +29,7 @@ thread%.ispm: thread%.ispm.conf
 	$(PRET_ISS)/scripts/extract_ispm_alloc.py $<
 
 grid.txt.h: grid.txt
-	tac $< | sed 's/^/,\n"/' | sed 's/$/"/' | tail -n +2 > $@
+	tac $< | sed 's/$$/"/' | sed 's/^/,\n"/' | tail -n +2 > $@
 
 thread%.o: $(C_FILES) grid.txt.h
 	cp $(PRET_ISS)/soft/deadline.h .
