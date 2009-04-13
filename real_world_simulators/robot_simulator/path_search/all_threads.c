@@ -57,7 +57,13 @@ void printany(char any[HEIGHT][WIDTH]) {
 #define true 1
 #define false 0
 
-int myx, myy;
+#ifdef _NO_PRET_
+#  define myx 2
+#  define myy 2
+#else
+#  define myx (*X_COORD / BLOCK_LENGTH)
+#  define myy (*Y_COORD / BLOCK_LENGTH)
+#endif
 int otherx, othery;
 
 #define MAXQUEUESIZE 80
@@ -173,8 +179,6 @@ void prefire() {
 }
 
 void turn() {
-  myx = *X_COORD / BLOCK_LENGTH;
-  myy = *Y_COORD / BLOCK_LENGTH;
   putchar('0' + myy);
   putchar('0' + myx);
   putchar(bfsvisited[myy][myx]);
@@ -217,21 +221,9 @@ int mainloop() {
 }
 
 int main() {
-# ifdef _NO_PRET_
-  myx = 2; myy = 2;
-# else
-  myx = *X_COORD / BLOCK_LENGTH;
-  myy = *Y_COORD / BLOCK_LENGTH;
-# endif
   otherx = 12, othery = 5;
 #if defined(THREAD_0)
-  void* addr;
   printlocme();
-  /*
-  for (addr = (void*)&uturnleft; addr < (void*)&mainloop; addr += 16) {
-    DMAMV(addr, (unsigned int)addr % 0x1000);
-  }
-  */
   mainloop();
   END_SIMULATION;
 #endif
