@@ -12,6 +12,9 @@
 #define Y_COORD ((volatile int*) 0x80000504)
 #define HEADING ((volatile int*) 0x8000050C)
 
+#define ENEMY_X ((volatile int*) 0x80000510)
+#define ENEMY_Y ((volatile int*) 0x80000514)
+
 #define WHEEL ((volatile int*) 0x80000400)
 enum direction {LEFT = 1, RIGHT = 2};
 
@@ -59,14 +62,14 @@ void printany(char any[HEIGHT][WIDTH]) {
 #define true 1
 #define false 0
 
+int otherx, othery;
 #ifdef _NO_PRET_
-int myx = 2;
-int myy = 2;
+   int myx = 2;
+   int myy = 2;
 #else
 #  define myx (*X_COORD / BLOCK_LENGTH)
 #  define myy (*Y_COORD / BLOCK_LENGTH)
 #endif
-int otherx, othery;
 
 #define MAXQUEUESIZE 80
 int queue[MAXQUEUESIZE];
@@ -215,6 +218,7 @@ void turn() {
 }
 
 int mainloop() {
+  /*
   prefire();
   dfsvisited[othery][otherx] = '^';
   if (dfs(othery,otherx)) {
@@ -236,6 +240,7 @@ int mainloop() {
     putchar('B');
 #   endif
   }
+  */
 # ifndef _NO_PRET_
   *MOTOR = GO;
   while (myx != otherx || myy != othery) {
@@ -248,7 +253,13 @@ int mainloop() {
 }
 
 int main() {
-  otherx = 12, othery = 5;
+#if _NO_PRET_
+  otherx = 12;
+  othery = 5;
+#else
+  otherx = *ENEMY_X / BLOCK_LENGTH;
+  othery = *ENEMY_Y / BLOCK_LENGTH;
+#endif
 #if defined(THREAD_0)
   printlocme();
   mainloop();

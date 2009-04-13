@@ -12,7 +12,7 @@ class Simulator:
     self.time = 0
     self.width = width
     self.height = height
-    self.robots = [Robot(self, start=(2,2))]
+    self.robots = [Robot(self, start=(2,2)), Robot(self, start=(12,5))]
 
   def parse_grid_file(self, filename):
     """Parse a text file that contains the maze configuration"""

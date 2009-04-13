@@ -52,6 +52,8 @@ class PretController:
    y_sensor_address = 0x80000504
    bump_sensor_address = 0x80000508
    heading_sensor_address = 0x8000050C
+   enemy_x_sensor_address = 0x80000510
+   enemy_y_sensor_address = 0x80000514
 
    block_length = 1024
 
@@ -109,6 +111,13 @@ class PretController:
 
       pret.write_memory(PretController.heading_sensor_address,
                         ord(self.robot.get_heading_string()))
+
+      other_robot = self.robot.sim.get_robots()[1]
+      pret.write_memory(PretController.enemy_x_sensor_address,
+                        int(PretController.block_length * other_robot.get_x()))
+      pret.write_memory(PretController.enemy_y_sensor_address,
+                        int(PretController.block_length * other_robot.get_y()))
+
 
       if self.robot.wall_detection():
         pret.write_memory(PretController.bump_sensor_address, 1);
