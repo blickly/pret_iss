@@ -220,7 +220,6 @@ void turn() {
 }
 
 int mainloop() {
-  /*
   prefire();
   dfsvisited[othery][otherx] = '^';
   if (dfs(othery,otherx)) {
@@ -242,7 +241,6 @@ int mainloop() {
     putchar('B');
 #   endif
   }
-  */
 # ifndef _NO_PRET_
   *MOTOR = GO;
   while (myx != otherx || myy != othery) {
