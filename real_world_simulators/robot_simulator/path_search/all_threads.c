@@ -7,6 +7,9 @@
 #  include "deadline.h"
 #endif
 
+#define bool int
+#define true 1
+#define false 0
 
 #define X_COORD ((volatile int*) 0x80000500)
 #define Y_COORD ((volatile int*) 0x80000504)
@@ -33,6 +36,9 @@ char maze[HEIGHT][WIDTH] =
 };
 
 char dfsvisited[HEIGHT][WIDTH];
+bool dfs_finished;
+bool bfs_finished;
+
 char bfsvisited[HEIGHT][WIDTH] =
 {
 "wwwwwwwwwwwwwww",
@@ -48,27 +54,16 @@ char bfsvisited[HEIGHT][WIDTH] =
 "wwwwwwwwwwwwwww"
 };
 
-void printany(char any[HEIGHT][WIDTH]) {
-  int i,j;
-  for (i = HEIGHT-1; i >= 0; i--) {
-    for (j = 0; j < WIDTH; j++) {
-      putchar(any[i][j]);
-    }
-    putchar('\n');
-  }
-}
-
-#define bool int
-#define true 1
-#define false 0
-
-int otherx, othery;
 #ifdef _NO_PRET_
    int myx = 2;
    int myy = 2;
+   int otherx = 12;
+   int othery = 5;
 #else
 #  define myx (*X_COORD / BLOCK_LENGTH)
 #  define myy (*Y_COORD / BLOCK_LENGTH)
+#  define otherx (*ENEMY_X / BLOCK_LENGTH)
+#  define othery (*ENEMY_Y / BLOCK_LENGTH)
 #endif
 
 #define MAXQUEUESIZE 80
@@ -134,6 +129,16 @@ bool dfs(int y, int x) {
   return false;
 }
 
+void printany(char any[HEIGHT][WIDTH]) {
+  int i,j;
+  for (i = HEIGHT-1; i >= 0; i--) {
+    for (j = 0; j < WIDTH; j++) {
+      putchar(any[i][j]);
+    }
+    putchar('\n');
+  }
+}
+
 void printloc(int y, int x) {
   int i,j;
   for (i = HEIGHT-1; i >= 0; i--) {
@@ -181,17 +186,20 @@ void prefire() {
       dfsvisited[i][j] = (maze[i][j] == 'w') ? 'w' : '0';
     }
   }
+  qhead = 0;
+  qtail = 0;
+  dfs_finished = false;
+  bfs_finished = false;
 }
 
-// Forward declaration of turn required to pass arguments to DMAMV
-void turn();
-void navigation_loop() {
-#ifndef _NO_PRET_
-  void* addr;
-  for (addr = (void*)&navigation_loop; addr < (void*)&turn; addr += 16) {
-    DMAMV(addr, addr - (void*)&navigation_loop);
+void logging_loop() {
+  while (true) {
+    // Continuously print graph of current location
+    printlocme();
   }
-#endif
+}
+
+void navigation_loop() {
   while (true) {
     char nav_command = *NAV_COMMAND;
     switch (nav_command) {
@@ -208,13 +216,21 @@ void navigation_loop() {
   }
 }
 
+#if defined(THREAD_0)
+char (*visited)[WIDTH] = bfsvisited;
+#elif defined(THREAD_1)
+char (*visited)[WIDTH] = dfsvisited;
+#else
+char (*visited)[WIDTH] = bfsvisited;
+#endif
+
 void turn() {
   putchar('0' + myy);
   putchar('0' + myx);
-  putchar(bfsvisited[myy][myx]);
+  putchar(visited[myy][myx]);
   putchar(*HEADING);
   putchar('\n');
-  *NAV_COMMAND = bfsvisited[myy][myx];
+  *NAV_COMMAND = visited[myy][myx];
 }
 
 int mainloop() {
@@ -228,46 +244,53 @@ int mainloop() {
     printpath(myy, myx, dfsvisited);
 #   else
     putchar('D');
-#   endif
-  }
-  bfsvisited[othery][otherx] = '^';
-  if (bfs(othery,otherx)) {
-    putchar(bfsvisited[myy][myx]);
-#   ifdef _NO_PRET_
-    printany(bfsvisited);
-    printpath(myy, myx, bfsvisited);
-#   else
-    putchar('B');
+    putchar('\n');
 #   endif
   }
   */
+  int goalx = otherx;
+  int goaly = othery;
+  bool path_found;
+  prefire();
+  visited[goaly][goalx] = '^';
+
+#if defined(THREAD_0)
+  path_found = bfs(goaly,goalx);
+#elif defined(THREAD_1)
+  path_found = dfs(goaly,goalx);
+#endif
+  if (path_found) {
+    putchar(visited[myy][myx]);
+#   ifdef _NO_PRET_
+    printany(visited);
+    printpath(myy, myx, visited);
+#   else
+    putchar('B');
+    putchar('\n');
+#   endif
+  }
+  // */
 # ifndef _NO_PRET_
   *MOTOR = GO;
-  while (myx != otherx || myy != othery) {
+  while (visited[myy][myx] != '^') {
     turn();
   }
   *MOTOR = STOP;
 # endif
-
   return 0;
 }
 
 int main() {
-#if _NO_PRET_
-  otherx = 12;
-  othery = 5;
-#else
-  otherx = *ENEMY_X / BLOCK_LENGTH;
-  othery = *ENEMY_Y / BLOCK_LENGTH;
-#endif
-#if defined(THREAD_0)
-  printlocme();
+#if defined(THREAD_0) || defined(THREAD_1)
   mainloop();
   END_SIMULATION;
-#elif defined(THREAD_1)
+#elif defined(THREAD_4)
   navigation_loop();
-#endif
+#elif defined(THREAD_5)
+  logging_loop();
+#else
   WAIT_FOR_END_SIMULATION;
+#endif
 }
 
 void sentinal() {}
