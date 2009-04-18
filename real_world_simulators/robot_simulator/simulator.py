@@ -12,7 +12,7 @@ class Simulator:
     self.time = 0
     self.width = width
     self.height = height
-    self.robots = [Robot(self, start=(2,2)), Robot(self, start=(12,5))]
+    self.robots = [Robot(self, start=(2,2)), RandomRobot(self, start=(12,5))]
 
   def parse_grid_file(self, filename):
     """Parse a text file that contains the maze configuration"""
@@ -137,3 +137,20 @@ class Robot:
     if self.sim.grid[int(next_y + 0.5)][int(next_x + 0.5)] != Simulator.empty:
         return True
     return False
+
+class RandomRobot(Robot):
+  """RandomRobot - This class implements a robots that moves randomly"""
+  def __init__(self, simulator, start=(1,1), heading=(1, 0)):
+    """Initialize robot parameters"""
+    self.sim = simulator
+    self.x, self.y = start
+    self.heading = heading
+    self.speed = Robot.speed_increment / 2.0
+ 
+  def increment_time(self):
+    dx, dy = self.heading
+    next_x = self.x + dx * self.speed * self.bump_sensor_sensitivity
+    next_y = self.y + dy * self.speed * self.bump_sensor_sensitivity
+    if self.sim.grid[int(next_y + 0.5)][int(next_x + 0.5)] != Simulator.empty:
+      self.steer_left()
+    Robot.increment_time(self)
