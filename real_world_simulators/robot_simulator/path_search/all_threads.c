@@ -234,31 +234,17 @@ void turn() {
 }
 
 int mainloop() {
-  /*
-  prefire();
-  dfsvisited[othery][otherx] = '^';
-  if (dfs(othery,otherx)) {
-    putchar(dfsvisited[myy][myx]);
-#   ifdef _NO_PRET_
-    printany(dfsvisited);
-    printpath(myy, myx, dfsvisited);
-#   else
-    putchar('D');
-    putchar('\n');
-#   endif
-  }
-  */
   int goalx = otherx;
   int goaly = othery;
   bool path_found;
   prefire();
   visited[goaly][goalx] = '^';
 
-#if defined(THREAD_0)
+# if defined(THREAD_0)
   path_found = bfs(goaly,goalx);
-#elif defined(THREAD_1)
+# elif defined(THREAD_1)
   path_found = dfs(goaly,goalx);
-#endif
+# endif
   if (path_found) {
     putchar(visited[myy][myx]);
 #   ifdef _NO_PRET_
@@ -269,7 +255,7 @@ int mainloop() {
     putchar('\n');
 #   endif
   }
-  // */
+
 # ifndef _NO_PRET_
   *MOTOR = GO;
   while (visited[myy][myx] != '^') {
@@ -282,7 +268,10 @@ int mainloop() {
 
 int main() {
 #if defined(THREAD_0) || defined(THREAD_1)
-  mainloop();
+  int i;
+  for (i = 0; i < 10; i++) {
+    mainloop();
+  }
   END_SIMULATION;
 #elif defined(THREAD_4)
   navigation_loop();
