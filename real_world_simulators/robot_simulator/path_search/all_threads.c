@@ -236,32 +236,37 @@ void turn() {
 int mainloop() {
   int goalx = otherx;
   int goaly = othery;
-  bool path_found;
+  bool (*search)(int,int);
+  char name;
+# if defined(THREAD_0)
+  search = &bfs;
+  name = 'B';
+# elif defined(THREAD_1)
+  search = &dfs;
+  name = 'D';
+# endif
   prefire();
   visited[goaly][goalx] = '^';
 
-# if defined(THREAD_0)
-  path_found = bfs(goaly,goalx);
-# elif defined(THREAD_1)
-  path_found = dfs(goaly,goalx);
-# endif
-  if (path_found) {
+  if (search(goaly, goalx)) {
     putchar(visited[myy][myx]);
 #   ifdef _NO_PRET_
     printany(visited);
     printpath(myy, myx, visited);
 #   else
-    putchar('B');
+    putchar(name);
     putchar('\n');
 #   endif
   }
 
 # ifndef _NO_PRET_
+# if defined(THREAD_0)
   *MOTOR = GO;
   while (visited[myy][myx] != '^') {
     turn();
   }
   *MOTOR = STOP;
+# endif
 # endif
   return 0;
 }
