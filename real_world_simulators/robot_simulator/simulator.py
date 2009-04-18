@@ -51,6 +51,18 @@ class Simulator:
     for robot in self.get_robots():
       if not robot.crashed():
         robot.increment_time()
+    if self.caught_opponent():
+      print "Caught opponent!"
+      exit(0)
+
+  def caught_opponent(self):
+    """Return whether the good robot has caught its opponent"""
+    good_robot = self.get_robots()[0]
+    bad_robot = self.get_robots()[1]
+
+    return (int(good_robot.y + 0.5) == int(bad_robot.y + 0.5) and
+            int(good_robot.x + 0.5) == int(bad_robot.x + 0.5))
+
 
 class Robot:
   """Robot - This class provides a robot abstraction"""

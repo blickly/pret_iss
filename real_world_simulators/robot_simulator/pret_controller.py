@@ -105,18 +105,22 @@ class PretController:
 
       # Push data into sensors
       pret.write_memory(PretController.x_sensor_address,
-                        int(PretController.block_length * self.robot.get_x()))
+                        int(PretController.block_length *
+                            (self.robot.get_x() + 0.5)))
       pret.write_memory(PretController.y_sensor_address,
-                        int(PretController.block_length * self.robot.get_y()))
+                        int(PretController.block_length *
+                            (self.robot.get_y() + 0.5)))
 
       pret.write_memory(PretController.heading_sensor_address,
                         ord(self.robot.get_heading_string()))
 
       other_robot = self.robot.sim.get_robots()[1]
       pret.write_memory(PretController.enemy_x_sensor_address,
-                        int(PretController.block_length * other_robot.get_x()))
+                        int(PretController.block_length *
+                            (other_robot.get_x() + 0.5)))
       pret.write_memory(PretController.enemy_y_sensor_address,
-                        int(PretController.block_length * other_robot.get_y()))
+                        int(PretController.block_length *
+                            (other_robot.get_y() + 0.5)))
 
 
       if self.robot.wall_detection():
