@@ -52,7 +52,7 @@ class Simulator:
       if not robot.crashed():
         robot.increment_time()
     if self.caught_opponent():
-      print "Caught opponent!"
+      print "Caught opponent! (time = %d)" % (self.time)
       exit(0)
 
   def caught_opponent(self):

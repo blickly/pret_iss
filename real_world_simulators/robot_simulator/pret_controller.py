@@ -75,7 +75,7 @@ class PretController:
         print "Requested end of simulation"
         sys.exit()
       if self.robot.crashed():
-        print "Robot crashed!"
+        print "Robot crashed! (time = %d)" % (self.robot.sim.time)
         sys.exit()
       
       # Pull commands out of actuators
