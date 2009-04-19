@@ -36,23 +36,14 @@ char maze[HEIGHT][WIDTH] =
 };
 
 char dfsvisited[HEIGHT][WIDTH];
-bool dfs_finished;
-bool bfs_finished;
-
-char bfsvisited[HEIGHT][WIDTH] =
-{
-"wwwwwwwwwwwwwww",
-"w00uuuuuuulrruw",
-"wuuuuuuuuullwuw",
-"wuuuuuuuuulwulw",
-"wuuuuuuuuuwuulw",
-"wrrrrrrrrrrr^lw",
-"wrdwrrrrrdwrdlw",
-"wrrrrrrrrrrrdlw",
-"wrrrrrrrrrrrdww",
-"w0rdwrrrrrrrdlw",
-"wwwwwwwwwwwwwww"
-};
+char bfsvisited[HEIGHT][WIDTH];
+#if defined(THREAD_0)
+char (*visited)[WIDTH] = bfsvisited;
+#elif defined(THREAD_1)
+char (*visited)[WIDTH] = dfsvisited;
+#else
+char (*visited)[WIDTH] = bfsvisited;
+#endif
 
 #ifdef _NO_PRET_
    int myx = 2;
@@ -182,20 +173,19 @@ void prefire() {
   int i,j;
   for (i = 0; i < HEIGHT; i++) {
     for (j = 0; j < WIDTH; j++) {
-      bfsvisited[i][j] = (maze[i][j] == 'w') ? 'w' : '0';
-      dfsvisited[i][j] = (maze[i][j] == 'w') ? 'w' : '0';
+      visited[i][j] = (maze[i][j] == 'w') ? 'w' : '0';
     }
   }
   qhead = 0;
   qtail = 0;
-  dfs_finished = false;
-  bfs_finished = false;
 }
 
 void logging_loop() {
   while (true) {
+#   ifndef NO_MAP
     // Continuously print graph of current location
     printlocme();
+#   endif
   }
 }
 
@@ -215,14 +205,6 @@ void navigation_loop() {
     }
   }
 }
-
-#if defined(THREAD_0)
-char (*visited)[WIDTH] = bfsvisited;
-#elif defined(THREAD_1)
-char (*visited)[WIDTH] = dfsvisited;
-#else
-char (*visited)[WIDTH] = bfsvisited;
-#endif
 
 void turn() {
   putchar('0' + myy);
@@ -245,38 +227,35 @@ int mainloop() {
   search = &dfs;
   name = 'D';
 # endif
-  prefire();
-  visited[goaly][goalx] = '^';
-
-  if (search(goaly, goalx)) {
-    putchar(visited[myy][myx]);
-#   ifdef _NO_PRET_
-    printany(visited);
-    printpath(myy, myx, visited);
-#   else
-    putchar(name);
-    putchar('\n');
+  int i;
+# define CYCLES_PER_METER 1000000
+  for (i = 0; i < 10; ++i) {
+    DEAD4(CYCLES_PER_METER/6);
+    tryin (CYCLES_PER_METER/8) {
+    prefire();
+    visited[goaly][goalx] = '^';
+      if (search(goaly, goalx)) {
+        putchar(visited[myy][myx]);
+        putchar(name);
+        putchar('\n');
+      }
+    } catch {
+#     if defined(THREAD_0)
+      *MOTOR = STOP;
+      putchar('F');
+#     endif
+    }
+#   if defined(THREAD_0)
+    turn();
+    *MOTOR = GO;
 #   endif
   }
-
-# ifndef _NO_PRET_
-# if defined(THREAD_0)
-  *MOTOR = GO;
-  while (visited[myy][myx] != '^') {
-    turn();
-  }
-  *MOTOR = STOP;
-# endif
-# endif
   return 0;
 }
 
 int main() {
 #if defined(THREAD_0) || defined(THREAD_1)
-  int i;
-  for (i = 0; i < 10; i++) {
-    mainloop();
-  }
+  mainloop();
   END_SIMULATION;
 #elif defined(THREAD_4)
   navigation_loop();
