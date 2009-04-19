@@ -13,14 +13,15 @@ int main() {
   int i;
   *WHEEL = LEFT;
   *SPEED = GO;
+#define CYCLESPERSQUARE 100000
   // Robot goes 1 square in 100,000 clock cycles.
   // On a virtual processor (1/6th the speed) this translates
-  // to a wait of 16,666 2/3 or ~16667 cycles
-  DEADLOAD(16667);
+  // to a wait of 16,666 2/3
+  DEADLOAD(CYCLESPERSQUARE/6);
   for (i = 0; i < 10; i++) {
-    DEAD(16667);
+    DEAD(CYCLESPERSQUARE/6);
     *WHEEL = RIGHT;
-    DEAD(16667);
+    DEAD(CYCLESPERSQUARE/6);
     *WHEEL = LEFT;
   }
   *SPEED = STOP;
