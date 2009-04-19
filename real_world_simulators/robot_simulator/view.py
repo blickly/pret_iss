@@ -33,8 +33,7 @@ class DisplayView:
       robot_pos = [(float(x),float(y)) for (x,_,y) in split_line]
       return int(time_str), robot_pos
     except:
-      print "some kinda error"
-      print line
+      print "Parsing error in save file on line '%s'" % line
 
   def display(self):
     """Display current simulation configuration graphically"""
