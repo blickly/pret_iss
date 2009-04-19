@@ -1,17 +1,55 @@
 import math
 
+class SimpleSimulator:
+  def __init__(self, width, height, grid_file="grid.txt"):
+    """Initialize time and grid (no robots)"""
+    self.time = 0
+    self.grid = self.parse_grid_file(grid_file)
+    self.time_increment = increment
+
+  def parse_grid_file(self, filename):
+    """Parse a text file that contains the maze configuration"""
+    e = Simulator.empty
+    w = Simulator.wall
+    r = Simulator.robot
+    grid = []
+    for line in open(filename):
+      gridrow = []
+      for box in line:
+        if box == "w":
+          gridrow.append(w)
+        elif box == " ":
+          gridrow.append(e)
+      grid.insert(0, gridrow)
+    return grid
+
+  def read_grid(self, x, y):
+    """Read the contents of a given grid cell"""
+    try:
+      return self.grid[y][x]
+    except:
+      return Simulator.wall
+
+  def get_robots(self):
+    """Get a list of all the robots"""
+    return self.robots
+
+  def get_time(self):
+    """Get current simulation time"""
+    return self.time
 class Simulator:
   """Simulator - This class provides a simulation of our robot example"""
   empty = 0
   wall = 1
   robot = 2
 
-  def __init__(self, width, height, grid_file="grid.txt"):
+  def __init__(self, width, height, grid_file="grid.txt", time_increment = 1):
     """Initialize time and a single robot"""
     self.grid = self.parse_grid_file(grid_file)
     self.time = 0
     self.width = width
     self.height = height
+    self.time_increment = time_increment
     self.robots = [Robot(self, start=(2,2)), RandomRobot(self, start=(12,5))]
 
   def parse_grid_file(self, filename):
@@ -47,7 +85,7 @@ class Simulator:
 
   def increment_time(self):
     """Increment simulation time"""
-    self.time = self.time + 1
+    self.time = self.time + self.time_increment
     for robot in self.get_robots():
       if not robot.crashed():
         robot.increment_time()

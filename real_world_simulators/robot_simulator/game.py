@@ -12,15 +12,20 @@ class Game:
     
   def __init__(self, width=640, height=480, boxsize=40, 
                srec_files="", grid_file="grid.txt",
-               save = False, load = False):
+               save = False, load = False, speedup = 10000):
     """Initialize screen, real world simulator, and, if needed,
     PRET core simulator to control a robot"""
     self.width = width
     self.height = height
     self.boxsize = boxsize
 
-    self.sim = simulator.Simulator(width/boxsize, height/boxsize,
-                                   grid_file)
+    self.speedup = speedup
+    if load:
+       self.sim = simulator.Simulator(width/boxsize, height/boxsize,
+                                      grid_file, speedup)
+    else:
+       self.sim = simulator.Simulator(width/boxsize, height/boxsize,
+                                      grid_file)
     if save:
       self.view = view.SaveView(self.sim)
     else:
@@ -41,7 +46,7 @@ class Game:
     self.time = 0
     while 1:
       self.controller.run_controller()
-      if self.sim.get_time() % 10000 == 0:
+      if self.sim.get_time() % self.speedup == 0:
         self.view.display()
       self.sim.increment_time()
 
@@ -50,9 +55,10 @@ def main(argv):
   grid = "grid.txt"
   save = False
   load = False
+  speedup = 1
   try:                                
-    opts, args = getopt.getopt(argv, "p:g:sl",
-                               ["pret=", "grid=", "save", "load"])
+    opts, args = getopt.getopt(argv, "p:g:sl:",
+                               ["pret=", "grid=", "save", "load="])
   except getopt.GetoptError:
     print "Invalid arguments: %s" % argv
     sys.exit(2)  
@@ -66,9 +72,10 @@ def main(argv):
       save = True
     elif opt in ("-l", "--load"):
       load = True
+      speedup = int(arg)
 
   window = Game(srec_files = srec_foldername, grid_file = grid,
-                save = save, load = load)
+                save = save, load = load, speedup = speedup)
   window.MainLoop()
 
 if __name__ == "__main__":

@@ -69,8 +69,8 @@ class DisplayView:
           print "Simulation finished"
           self.load_file.close()
           exit(0)
-        self.time, robotpos = self.decode_line_from_file(current_line)
-      for pos in robotpos:
+        self.time, self.robotpos = self.decode_line_from_file(current_line)
+      for pos in self.robotpos:
         pygame.draw.circle(self.screen, pygame.color.Color("white"),
                  (pos[0] * self.boxsize, self.height - pos[1] * self.boxsize),
                  self.boxsize/2)
