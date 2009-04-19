@@ -17,7 +17,7 @@ simulatedumpdata:
 	$(PRET_ISS)/real_world_simulators/robot_simulator/game.py -p . -s
 
 simulatefromdata:
-	$(PRET_ISS)/real_world_simulators/robot_simulator/game.py --load=10000
+	$(PRET_ISS)/real_world_simulators/robot_simulator/game.py -l
 
 debug:
 	$(PRET_ISS)/scripts/csim.py .

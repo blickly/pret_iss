@@ -22,7 +22,7 @@ class Game:
     self.speedup = speedup
     if load:
        self.sim = simulator.Simulator(width/boxsize, height/boxsize,
-                                      grid_file, speedup)
+                                      grid_file, time_increment = speedup)
     else:
        self.sim = simulator.Simulator(width/boxsize, height/boxsize,
                                       grid_file)
@@ -55,10 +55,10 @@ def main(argv):
   grid = "grid.txt"
   save = False
   load = False
-  speedup = 1
+  speedup = 10000
   try:                                
-    opts, args = getopt.getopt(argv, "p:g:sl:",
-                               ["pret=", "grid=", "save", "load="])
+    opts, args = getopt.getopt(argv, "p:g:slp:",
+                               ["pret=", "grid=", "save", "load", "speed"])
   except getopt.GetoptError:
     print "Invalid arguments: %s" % argv
     sys.exit(2)  
@@ -72,6 +72,7 @@ def main(argv):
       save = True
     elif opt in ("-l", "--load"):
       load = True
+    elif opt in ("-p", "--speed"):
       speedup = int(arg)
 
   window = Game(srec_files = srec_foldername, grid_file = grid,
