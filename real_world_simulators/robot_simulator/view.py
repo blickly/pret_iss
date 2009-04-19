@@ -25,10 +25,13 @@ class DisplayView:
 
   def decode_line_from_file(self, line):
     """Decode a line from a saved file"""
-    (time_str, _, pos_str) = line.partition(' ')
-    x_pos_str, _, y_pos_str = pos_str.lstrip('[').rstrip('] \n').partition(',')
     try:
-      return int(time_str), [float(x_pos_str), float(y_pos_str)]
+      split_line = line.split()
+      time_str = split_line.pop(0)
+      split_line = [pos_str.lstrip('[').rstrip(']').partition(',')
+                        for pos_str in split_line]
+      robot_pos = [(float(x),float(y)) for (x,_,y) in split_line]
+      return int(time_str), robot_pos
     except:
       print "some kinda error"
       print line
@@ -67,9 +70,10 @@ class DisplayView:
           print "Simulation finished"
           self.load_file.close()
           exit(0)
-        self.time, (robotx, roboty) = self.decode_line_from_file(current_line)
-      pygame.draw.circle(self.screen, pygame.color.Color("white"),
-                 (robotx * self.boxsize, self.height - roboty * self.boxsize),
+        self.time, robotpos = self.decode_line_from_file(current_line)
+      for pos in robotpos:
+        pygame.draw.circle(self.screen, pygame.color.Color("white"),
+                 (pos[0] * self.boxsize, self.height - pos[1] * self.boxsize),
                  self.boxsize/2)
     else:
       for robot in self.sim.get_robots():
