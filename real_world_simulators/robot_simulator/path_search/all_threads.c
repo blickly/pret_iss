@@ -228,7 +228,7 @@ int mainloop() {
   name = 'D';
 # endif
   int i;
-# define CYCLES_PER_METER 1000000
+# define CYCLES_PER_METER 10000000
   for (i = 0; i < 1000; ++i) {
     DEAD4(CYCLES_PER_METER/6);
     tryin (CYCLES_PER_METER/8) {

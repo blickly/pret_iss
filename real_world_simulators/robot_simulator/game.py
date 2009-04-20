@@ -55,7 +55,7 @@ def main(argv):
   grid = "grid.txt"
   save = False
   load = False
-  speedup = 10000
+  speedup = 100000
   try:                                
     opts, args = getopt.getopt(argv, "p:g:slp:",
                                ["pret=", "grid=", "save", "load", "speed"])
