@@ -4,10 +4,11 @@ CLANGFLAGS=$(filter -D%,$(CFLAGS))
 C_FILES=all_threads.c
 CC=sparc-elf-gcc
 LD=sparc-elf-ld
+ISPM_FILES=thread0.ispm thread1.ispm thread2.ispm thread3.ispm thread4.ispm thread5.ispm
 
 all: clean compile
 
-compile:
+compile: $(ISPM_FILES)
 	$(PRET_ISS)/scripts/compile_threads.py .
 
 simulate:
@@ -22,10 +23,7 @@ simulatefromdata:
 debug:
 	$(PRET_ISS)/scripts/csim.py .
 
-native: $(C_FILES)
-	gcc -D_NO_PRET_ -DTHREAD_0 $<
-
-thread%.ispm: thread%.ispm.conf
+thread%.ispm: thread%.ispm.conf thread%.dump
 	$(PRET_ISS)/scripts/extract_ispm_alloc.py $<
 
 grid.txt.h: grid.txt
@@ -34,7 +32,7 @@ grid.txt.h: grid.txt
 deadline.h:
 	cp $(PRET_ISS)/soft/deadline.h .
 
-thread%.c: $(C_FILES) deadline.h
+$(ISPM_FILES:ispm=c): $(C_FILES) deadline.h
 	clang -triple=sparc-elf-linux -rewrite-pret $(CLANGFLAGS) $(INCDIR) $<
 	mv $(<:c=rewritten.c) $@
 
