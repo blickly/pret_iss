@@ -229,7 +229,7 @@ int mainloop() {
 # endif
   int i;
 # define CYCLES_PER_METER 1000000
-  for (i = 0; i < 10; ++i) {
+  for (i = 0; i < 1000; ++i) {
     DEAD4(CYCLES_PER_METER/6);
     tryin (CYCLES_PER_METER/8) {
     prefire();
@@ -243,6 +243,7 @@ int mainloop() {
 #     if defined(THREAD_0)
       *MOTOR = STOP;
       putchar('F');
+      continue;
 #     endif
     }
 #   if defined(THREAD_0)

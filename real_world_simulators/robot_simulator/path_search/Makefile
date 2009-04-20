@@ -52,4 +52,4 @@ thread%.dump: thread%.exe
 clean: 
 	$(RM) *.exe *.dmp *.o *~ *.srec *.dump deadline.h
 
-.PHONY: compile simulate debug native clean
+.PHONY: all compile simulate simulatedumpdata simulatefromdata debug clean
