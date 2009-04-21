@@ -68,6 +68,7 @@ hw_thread::hw_thread(unsigned int in_id, uint32_t pc, void* thread_control) : _i
     _deadline_stalled = false;
     _memory_stalled = false;
     _fetch_stalled = false;
+    _fixed_schedule = true;
     _trapped = XCPT_NORMAL;
     controller = thread_control;
 }
@@ -87,6 +88,10 @@ bool hw_thread::is_enabled() const {
 
 bool hw_thread::is_fetch_stalled() const {
     return _fetch_stalled;
+}
+
+bool hw_thread::is_fixed_schedule() const {
+  return _fixed_schedule;
 }
 
 bool hw_thread::is_memory_stalled() const {
@@ -111,6 +116,7 @@ void hw_thread::operator=(const hw_thread & hardware_thread) {
     _deadline_stalled = hardware_thread._deadline_stalled;
     _memory_stalled = hardware_thread._memory_stalled;
     _fetch_stalled = hardware_thread._fetch_stalled;
+    _fixed_schedule = hardware_thread._fixed_schedule;
     _trapped = hardware_thread._trapped;
     _trap_type = hardware_thread._trap_type;
     controller = hardware_thread.controller;
@@ -130,6 +136,7 @@ bool hw_thread::operator==(const hw_thread& hardware_thread) {
                && (_deadline_stalled == hardware_thread._deadline_stalled)
                && (_memory_stalled == hardware_thread._memory_stalled)
                && (_fetch_stalled == hardware_thread._fetch_stalled)
+	       && (_fixed_schedule == hardware_thread._fixed_schedule)
 	       && (_trapped == hardware_thread._trapped)
 	       && (_trap_type == hardware_thread._trap_type)
 	       && (controller == hardware_thread.controller)
@@ -183,6 +190,10 @@ void hw_thread::set_enabled(const bool& enable) {
 
 void hw_thread::set_fetch_stalled(const bool& stall) {
     _fetch_stalled = stall;
+}
+
+void hw_thread::set_fixed_schedule(const bool& fixed_schedule) {
+  _fixed_schedule = fixed_schedule;
 }
 
 void hw_thread::set_memory_stalled(const bool& stall) {
