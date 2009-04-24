@@ -1,4 +1,4 @@
-LDFLAGS=$(filter-out -D%,$(CFLAGS))   
+LDFLAGS=$(filter-out -D%,$(CFLAGS))
 CCFLAGS=$(CFLAGS) -msoft-float
 CLANGFLAGS=$(filter -D%,$(CFLAGS))
 C_FILES=all_threads.c
@@ -21,9 +21,6 @@ simulatefromdata:
 
 debug:
 	$(PRET_ISS)/scripts/csim.py .
-
-native: $(C_FILES)
-	gcc -D_NO_PRET_ -DTHREAD_0 $<
 
 thread%.ispm: thread%.ispm.conf
 	$(PRET_ISS)/scripts/extract_ispm_alloc.py $<
@@ -51,7 +48,7 @@ thread%.srec: thread%.exe
 thread%.dump: thread%.exe
 	sparc-elf-objdump -D $< > $@
 
-clean: 
+clean:
 	$(RM) *.exe *.dmp *.o *~ *.srec *.dump deadline.h
 
-.PHONY: compile simulate debug native clean
+.PHONY: all compile simulate simulatedumpdata simulatefromdata debug clean
