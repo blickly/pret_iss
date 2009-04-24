@@ -5,11 +5,13 @@ C_FILES=all_threads.c
 CC=sparc-elf-gcc
 LD=sparc-elf-ld
 INTERMEDIATE_C_FILES=thread0.c thread1.c thread2.c thread3.c thread4.c thread5.c
+ISPM_FILES=$(INTERMEDIATE_C_FILES:c=ispm)
 
 all: clean compile
 
-compile:
+compile: $(ISPM_FILES)
 	$(PRET_ISS)/scripts/compile_threads.py .
+	for ispm in $(ISPM_FILES); do $(MAKE) $$ispm; done
 
 simulate:
 	$(PRET_ISS)/real_world_simulators/robot_simulator/game.py -p .
