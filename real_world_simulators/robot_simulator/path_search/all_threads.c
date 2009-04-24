@@ -30,23 +30,11 @@ char maze[HEIGHT][WIDTH] =
 };
 
 char dfsvisited[HEIGHT][WIDTH];
-bool dfs_finished;
-bool bfs_finished;
-
-char bfsvisited[HEIGHT][WIDTH] =
-{
-"wwwwwwwwwwwwwww",
-"w00uuuuuuulrruw",
-"wuuuuuuuuullwuw",
-"wuuuuuuuuulwulw",
-"wuuuuuuuuuwuulw",
-"wrrrrrrrrrrr^lw",
-"wrdwrrrrrdwrdlw",
-"wrrrrrrrrrrrdlw",
-"wrrrrrrrrrrrdww",
-"w0rdwrrrrrrrdlw",
-"wwwwwwwwwwwwwww"
-};
+char bfsvisited[HEIGHT][WIDTH];
+//char (*dfsvisited)[WIDTH] = ((char (*)[WIDTH]) 0x3F800000);
+//char (*bfsvisited)[WIDTH] = ((char (*)[WIDTH]) 0x3F808000);
+//#define dfsvisited ((char (*)[WIDTH]) 0x3F800000)
+//#define bfsvisited ((char (*)[WIDTH]) 0x3F808000)
 
 #define myx (*X_COORD / BLOCK_LENGTH)
 #define myy (*Y_COORD / BLOCK_LENGTH)
@@ -175,14 +163,12 @@ void prefire() {
   }
   qhead = 0;
   qtail = 0;
-  dfs_finished = false;
-  bfs_finished = false;
 }
 
 void logging_loop() {
   while (true) {
     // Continuously print graph of current location
-    printlocme();
+    //printlocme();
   }
 }
 
@@ -194,10 +180,19 @@ void navigation_loop() {
         while (nav_command != *HEADING) {
           *WHEEL = LEFT;
         }
-        *NAV_COMMAND = 0;
+        *NAV_COMMAND = '\0';
+        break;
+      case '\0':
+        // Do nothing when there is no command
         break;
       default:
-        // Do nothing on invalid command
+        // Stop on invalid command
+        *MOTOR = STOP;
+        putchar('\"');
+        putchar(nav_command);
+        putchar('\"');
+        putchar('\n');
+        printany(bfsvisited);
         break;
     }
   }
@@ -212,11 +207,13 @@ char (*visited)[WIDTH] = bfsvisited;
 #endif
 
 void turn() {
+  /*
   putchar('0' + myy);
   putchar('0' + myx);
   putchar(visited[myy][myx]);
   putchar(*HEADING);
   putchar('\n');
+  */
   *NAV_COMMAND = visited[myy][myx];
 }
 
