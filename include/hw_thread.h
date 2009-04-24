@@ -138,6 +138,12 @@ public:
      */
     bool is_fetch_stalled() const;
 
+  /** Returns true if thread is set for fixed scheduling.
+   *
+   * @return True if thread is set for fixed scheduling (default).
+   */
+
+  bool is_fixed_schedule() const;
     /** Returns true if stall is caused by a data access to memory.
      *
      * @return True if memory stage caused the stall, else false.
@@ -228,6 +234,13 @@ public:
      */
     void set_fetch_stalled(const bool& stall);
 
+  /** Set to true if this thread must be scheduled in precisely the
+   * same slot for execution.
+   *
+   * @param fixed_schedule True if thread's schedule is fixed.
+   */
+  void set_fixed_schedule(const bool& fixed_schedule);
+    
     /** Set the thread id.
     *
     * @param in_id New thread identifier.
@@ -274,11 +287,12 @@ private:
     bool _deadline_stalled; // If the thread is currently in a state of replay.
     bool _memory_stalled;   // If the memory stage causes a stall.
     bool _fetch_stalled;    // If the fetch stage causes a stall.
+  bool _fixed_schedule;   // Set to true if scheduling should not be altered (RT mode). 
     unsigned int _id;       // Thread identifier.
     uint32_t _pc;           // Thread's current program counter.
     short _trapped;          // If the thread encounters an exception
     short _trap_type;        // If the trap type of the thread
-
+    
 
 };
 
