@@ -1,11 +1,5 @@
-#ifdef _NO_PRET_
-#  include <stdio.h>
-#  define END_SIMULATION return 0
-#  define WAIT_FOR_END_SIMULATION return 0
-#else
-#  define putchar(x) WRITE(x)
-#  include "deadline.h"
-#endif
+#define putchar(x) WRITE(x)
+#include "deadline.h"
 
 #define bool int
 #define true 1
@@ -54,17 +48,10 @@ char bfsvisited[HEIGHT][WIDTH] =
 "wwwwwwwwwwwwwww"
 };
 
-#ifdef _NO_PRET_
-   int myx = 2;
-   int myy = 2;
-   int otherx = 12;
-   int othery = 5;
-#else
-#  define myx (*X_COORD / BLOCK_LENGTH)
-#  define myy (*Y_COORD / BLOCK_LENGTH)
-#  define otherx (*ENEMY_X / BLOCK_LENGTH)
-#  define othery (*ENEMY_Y / BLOCK_LENGTH)
-#endif
+#define myx (*X_COORD / BLOCK_LENGTH)
+#define myy (*Y_COORD / BLOCK_LENGTH)
+#define otherx (*ENEMY_X / BLOCK_LENGTH)
+#define othery (*ENEMY_Y / BLOCK_LENGTH)
 
 #define MAXQUEUESIZE 80
 int queue[MAXQUEUESIZE];
@@ -233,40 +220,34 @@ void turn() {
   *NAV_COMMAND = visited[myy][myx];
 }
 
-int mainloop() {
-  int goalx = otherx;
-  int goaly = othery;
+int search_loop() {
+# if defined(THREAD_0)
+#   define search(y,x) bfs(y,x)
+#   define name 'B'
+# elif defined(THREAD_1)
+#   define search(y,x) dfs(y,x)
+#   define name 'D'
+# else
   bool (*search)(int,int);
   char name;
-# if defined(THREAD_0)
-  search = &bfs;
-  name = 'B';
-# elif defined(THREAD_1)
-  search = &dfs;
-  name = 'D';
 # endif
+  int goalx = otherx;
+  int goaly = othery;
   prefire();
   visited[goaly][goalx] = '^';
 
   if (search(goaly, goalx)) {
     putchar(visited[myy][myx]);
-#   ifdef _NO_PRET_
-    printany(visited);
-    printpath(myy, myx, visited);
-#   else
     putchar(name);
     putchar('\n');
-#   endif
   }
 
-# ifndef _NO_PRET_
 # if defined(THREAD_0)
   *MOTOR = GO;
   while (visited[myy][myx] != '^') {
     turn();
   }
   *MOTOR = STOP;
-# endif
 # endif
   return 0;
 }
@@ -275,7 +256,7 @@ int main() {
 #if defined(THREAD_0) || defined(THREAD_1)
   int i;
   for (i = 0; i < 10; i++) {
-    mainloop();
+    search_loop();
   }
   END_SIMULATION;
 #elif defined(THREAD_4)
