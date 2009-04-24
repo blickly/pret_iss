@@ -4,6 +4,7 @@ CLANGFLAGS=$(filter -D%,$(CFLAGS))
 C_FILES=all_threads.c
 CC=sparc-elf-gcc
 LD=sparc-elf-ld
+INTERMEDIATE_C_FILES=thread0.c thread1.c thread2.c thread3.c thread4.c thread5.c
 
 all: clean compile
 
@@ -31,7 +32,7 @@ grid.txt.h: grid.txt
 deadline.h:
 	cp $(PRET_ISS)/soft/deadline.h .
 
-thread%.c: $(C_FILES) deadline.h
+$(INTERMEDIATE_C_FILES): $(C_FILES) deadline.h
 	clang -triple=sparc-elf-linux -rewrite-pret $(CLANGFLAGS) $(INCDIR) $<
 	mv $(<:c=rewritten.c) $@
 
