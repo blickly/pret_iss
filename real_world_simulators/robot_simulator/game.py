@@ -57,8 +57,8 @@ def main(argv):
   load = False
   speedup = 10000
   try:                                
-    opts, args = getopt.getopt(argv, "p:g:slp:",
-                               ["pret=", "grid=", "save", "load", "speed"])
+    opts, args = getopt.getopt(argv, "p:g:sld:",
+                               ["pret=", "grid=", "save", "load", "speed="])
   except getopt.GetoptError:
     print "Invalid arguments: %s" % argv
     sys.exit(2)  
